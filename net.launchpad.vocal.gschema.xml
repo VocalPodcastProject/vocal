@@ -1,0 +1,102 @@
+<schemalist>
+	<schema id="net.launchpad.vocal" path="/net/launchpad/vocal/" gettext-domain="vocal">
+		
+		<key name="auto-download" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should automatically download new episodes</summary>
+			<description>
+				Whether or not Vocal should automatically download new episodes when they are available.
+			</description>
+		</key>
+		
+		<key name="autoclean-library" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should automatically delete old downloaded episdes</summary>
+			<description>
+				Whether or not Vocal should automatically delete downloaded, played episodes that are more
+				than a week old.
+			</description>
+		</key>
+
+		<key name="window-width" type="i">
+			<default>990</default>
+			<summary>The user's last window width</summary>
+			<description>
+				The user's last window width
+			</description>
+		</key>
+
+		<key name="sidebar-width" type="i">
+			<default>325</default>
+			<summary>The user's preferred sidebar width</summary>
+			<description>
+				The preferred width of the sidebar that displays episode descriptions.
+			</description>
+		</key>
+		
+		<key name="window-height" type="i">
+			<default>550</default>
+			<summary>The user's last window height</summary>
+			<description>
+				The user's last window height
+			</description>
+		</key>
+		
+		<key name="update-interval" type="i">
+			<default>30</default>
+			<summary>The number of minutes between checking for episodes</summary>
+			<description>
+				The number of minutes to wait between checking for new episodes
+			</description>
+		</key>
+		
+		<key name="fast-forward-seconds" type="i">
+			<default>30</default>
+			<summary>The number of seconds to fast forward</summary>
+			<description>
+				The number of seconds to fast forward
+			</description>
+		</key>
+		
+		<key name="rewind-seconds" type="i">
+			<default>30</default>
+			<summary>The number of seconds to rewind</summary>
+			<description>
+				The number of seconds to rewind
+			</description>
+		</key>
+		
+		<key name="library-location" type="s">
+			<default>"~/vocal"</default>
+			<summary>The directory where podcasts are stored</summary>
+			<description>
+				The directory where podcasts are stored
+			</description>
+		</key>
+		
+		<key name="last-played-media" type="s">
+			<default>""</default>
+			<summary>The podcast and episode that was last playing</summary>
+			<description>
+				The podcast and episode that was last played, in podcast_name,episode_title format
+			</description>
+		</key>
+
+		<key name="continue-running-after-close" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should run in the background after closing</summary>
+			<description>
+				Whether or not Vocal should keep running in the background for feed updates and downloads.
+			</description>
+		</key>
+
+		<key name="hide-played" type="b">
+			<default>false</default>
+			<summary>Whether or not to hide played episodes in the sidepane</summary>
+			<description>
+				Whether or not to hide played episodes in the sidepane.
+			</description>
+		</key>
+		
+	</schema>
+</schemalist>

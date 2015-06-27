@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Vocal
+Comment=Subscribe, download, and listen to podcasts
+GenericName=Podcast Manager
+Exec=vocal
+Icon=vocal
+Terminal=false
+Categories=AudioVideo;Audio;Video;
+X-PulseAudio-Properties=media.role=music
+Actions=AboutDialog;
+
+[Desktop Action AboutDialog]
+Exec=vocal --about
+Name=About Vocal

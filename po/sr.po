@@ -1,0 +1,367 @@
+# Serbian translation for vocal
+# Copyright (c) 2015 Rosetta Contributors and Canonical Ltd 2015
+# This file is distributed under the same license as the vocal package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vocal\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2015-04-04 22:25-0400\n"
+"PO-Revision-Date: 2015-04-09 18:07+0000\n"
+"Last-Translator: Jovan Petrović <munch993@gmail.com>\n"
+"Language-Team: Serbian <sr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-04-10 05:29+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
+
+#: ../src/Utils/FeedParser.vala:288
+msgid "Selected file doesn't appear to contain podcast subscriptions."
+msgstr "Изабрани фајл не садржи подкаст претплате."
+
+#: ../src/Utils/FeedParser.vala:299
+msgid "Selected file seems to be empty."
+msgstr "Изабрани фајл је празан."
+
+#: ../src/Library.vala:152
+msgid "Unable to add podcast"
+msgstr "Неуспешно додавање подкаста"
+
+#: ../src/Vocal.vala:59
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Jovan Petrović https://launchpad.net/~munch993"
+
+#: ../src/MainWindow.vala:194
+msgid "View show notes"
+msgstr "Погледај детаље епизоде"
+
+#: ../src/MainWindow.vala:237
+msgid "Return to library view"
+msgstr "Повратак на библиотеку"
+
+#: ../src/MainWindow.vala:489
+msgid "Welcome to Vocal"
+msgstr "Добродошли у Vocal"
+
+#: ../src/MainWindow.vala:489
+msgid "Build Your Library By Adding Podcasts"
+msgstr ""
+
+#: ../src/MainWindow.vala:490
+msgid "Add a New Feed"
+msgstr "Додај нови извор"
+
+#: ../src/MainWindow.vala:490
+msgid "Provide the web address of a podcast feed."
+msgstr "Унесите веб адресу извора за подкаст."
+
+#: ../src/MainWindow.vala:493
+msgid "Import Subscriptions"
+msgstr "Учитај Претплате"
+
+#: ../src/MainWindow.vala:494
+msgid ""
+"If you have exported feeds from another podcast manager, import them here."
+msgstr ""
+"Ако сте извозили изворе из другог менаџера за подкасте, учитајте их овде."
+
+#: ../src/MainWindow.vala:495
+msgid "Check Out the Vocal Starter Pack…"
+msgstr "Испробајте Vocal Starter Pack…"
+
+#: ../src/MainWindow.vala:495
+msgid ""
+"New to podcasting? Check out our starter pack. Select individual podcasts, "
+"or download the entire pack."
+msgstr ""
+"Нови сте у слушању подкаста? Испробајте наш пакет за почетнике. Изаберите "
+"појединачне подкасте, или преузмите цели пакет."
+
+#: ../src/MainWindow.vala:526
+msgid "Export Subscriptions…"
+msgstr "Извоз Претплата..."
+
+#: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
+msgid "Preferences"
+msgstr "Поставке"
+
+#: ../src/MainWindow.vala:546
+msgid "Check Out The Vocal Starter Pack…"
+msgstr ""
+
+#: ../src/MainWindow.vala:554
+msgid "Donate…"
+msgstr "Донирај..."
+
+#: ../src/MainWindow.vala:574
+msgid "Add new podcasts to the library"
+msgstr "Додај нове подкасте у библиотеку"
+
+#: ../src/MainWindow.vala:580
+msgid "Add Podcast Feed"
+msgstr "Додај Извор Подкаста"
+
+#: ../src/MainWindow.vala:588
+msgid "Import Subscriptions…"
+msgstr "Учитај Претплате..."
+
+#: ../src/MainWindow.vala:671
+msgid "All Podcasts"
+msgstr "Сви подкасти"
+
+#: ../src/MainWindow.vala:672
+msgid "Audio"
+msgstr "Звук"
+
+#: ../src/MainWindow.vala:673
+msgid "Video"
+msgstr "Видео"
+
+#: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
+#: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
+#: ../src/Widgets/EpisodeDetailBox.vala:115
+#: ../src/Widgets/EpisodeDetailBox.vala:315
+msgid "Play"
+msgstr "Пусти"
+
+#: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
+msgid "Fast forward %d seconds"
+msgstr "Убрзај за %d секунди"
+
+#: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
+msgid "Rewind %d seconds"
+msgstr "Премотај за %d секунди"
+
+#: ../src/MainWindow.vala:709
+msgid "Check for new episodes"
+msgstr "Провери за нове епизоде"
+
+#: ../src/MainWindow.vala:737
+msgid "Downloads"
+msgstr "Преузимања"
+
+#: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
+msgid "Pause"
+msgstr "Паузирај"
+
+#: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
+#: ../src/Widgets/AddFeedDialog.vala:64
+msgid "Cancel"
+msgstr "Откажи"
+
+#: ../src/MainWindow.vala:1328
+msgid "Save"
+msgstr "Сачувај"
+
+#: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
+msgid "All files"
+msgstr "Све датотеке"
+
+#: ../src/MainWindow.vala:1335
+msgid "OPML and XML files"
+msgstr "OPML и XML датотеке"
+
+#: ../src/MainWindow.vala:1362
+msgid "Select Subscription File"
+msgstr "Изабери датотеку Претплате"
+
+#: ../src/MainWindow.vala:1366
+msgid "Open"
+msgstr "Отвори"
+
+#: ../src/MainWindow.vala:1373
+msgid "OPML files"
+msgstr "OPML фајлови"
+
+#: ../src/MainWindow.vala:1448
+msgid "Error Importing from File"
+msgstr "Грешка при учитавању из Датотеке"
+
+#: ../src/MainWindow.vala:1449
+msgid ""
+"Please check that you selected the correct file and that you are connected "
+"to the network."
+msgstr ""
+"Проверите да сте изабрали исправну датотеку и да сте повезани на мрежу."
+
+#: ../src/MainWindow.vala:1483
+msgid ""
+"Additional plugins are needed to play media. Would you like for Vocal to "
+"install them for you?"
+msgstr ""
+"Додатни плагинови су потребни за репродуковање медија. Да ли желите да их "
+"Vocal инсталира?"
+
+#: ../src/MainWindow.vala:1540
+msgid "Adding new podcast: <b>"
+msgstr "Додавање новог подкаста: <b>"
+
+#: ../src/MainWindow.vala:1604
+msgid "Error Adding Podcast"
+msgstr "Грешка при додавању Подкаста"
+
+#: ../src/MainWindow.vala:1605
+msgid ""
+"Please check that the feed is correct and that you have a network connection."
+msgstr "Проверите да је извор правилан и да сте повезани на мрежу."
+
+#: ../src/MainWindow.vala:1720
+msgid "Good Stuff is On Its Way"
+msgstr "Добре Ствари Долазе"
+
+#: ../src/MainWindow.vala:1721
+msgid ""
+"If you are importing several podcasts it can take a few minutes. Your "
+"library will be ready shortly."
+msgstr ""
+"Ако учитавате више подкаста потрајаће пар минута. Ваша библиотека ће ускоро "
+"бити спремна."
+
+#: ../src/MainWindow.vala:2163
+msgid "Fresh content has been added to your library."
+msgstr "Нови садржај је додат у вашу библиотеку."
+
+#: ../src/MainWindow.vala:2274
+msgid ""
+"Vocal is currently downloading episodes. Exiting will cause the downloads to "
+"be canceled. Are you sure you want to exit?"
+msgstr ""
+"Vocal тренутно преузима епизоде. Излажење ће прекинути преузимања. Да ли "
+"сигурно желите да изађете?"
+
+#: ../src/Widgets/DownloadDetailBox.vala:107
+msgid "Cancel Download"
+msgstr "Откажи преузимање"
+
+#: ../src/Widgets/VideoControls.vala:59
+msgid "Exit Fullscreen"
+msgstr "Изађи из мода целог екрана"
+
+#: ../src/Widgets/DownloadsPopover.vala:50
+msgid "No active downloads."
+msgstr "Нема преузимања."
+
+#: ../src/Widgets/AddFeedDialog.vala:43
+msgid "Add New Podcast"
+msgstr "Додај Нови Подкаст"
+
+#: ../src/Widgets/AddFeedDialog.vala:54
+msgid "<b>Add a new podcast feed to the library</b>"
+msgstr "<b>Додај нови подкаст у библиотеку</b>"
+
+#: ../src/Widgets/AddFeedDialog.vala:59
+msgid "Podcast feed web address"
+msgstr "Веб адреса извора Подкаста"
+
+#: ../src/Widgets/PlaybackBox.vala:39
+msgid "<b>Select an episode to start playing...</b>"
+msgstr "<b>Изабери епизоду за пуштање</b>"
+
+#: ../src/Widgets/SettingsDialog.vala:64
+msgid "Automatically download new episodes:"
+msgstr "Аутоматски преузми нове епизоде:"
+
+#: ../src/Widgets/SettingsDialog.vala:85
+msgid "Automatically delete played files:"
+msgstr "Аутоматски обриши преслушане датотеке:"
+
+#: ../src/Widgets/SettingsDialog.vala:115
+msgid "Seconds to skip back:"
+msgstr "Секунди уназад:"
+
+#: ../src/Widgets/SettingsDialog.vala:136
+msgid "Seconds to skip forward:"
+msgstr "Секунди унапред:"
+
+#: ../src/Widgets/SettingsDialog.vala:153
+msgid "Close"
+msgstr "Затвори"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:86
+msgid "This episode is currently being played"
+msgstr "Ова епизода се тренутно репродукује"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:117
+#: ../src/Widgets/EpisodeDetailBox.vala:318
+msgid "Stream Episode"
+msgstr "Пусти Епизоду Уживо"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:133
+msgid "Download Episode"
+msgstr "Преузми Епизоду"
+
+#: ../src/Widgets/Sidepane.vala:89
+msgid "Mark all episodes as played"
+msgstr "Обележи све епизоде као преслушане"
+
+#: ../src/Widgets/Sidepane.vala:101
+msgid "Download all episodes"
+msgstr "Преузми све епизоде"
+
+#: ../src/Widgets/Sidepane.vala:109
+msgid "Hide episodes that have already been played"
+msgstr "Сакриј преслушане епизоде"
+
+#: ../src/Widgets/Sidepane.vala:129
+msgid "Remove podcast from library"
+msgstr "Уклони подкаст из библиотеке"
+
+#: ../src/Widgets/Sidepane.vala:140
+msgid "More options"
+msgstr "Више подешавања"
+
+#: ../src/Widgets/Sidepane.vala:194
+msgid "Hide the episode side pane"
+msgstr "Сакриј панел са епизодама"
+
+#: ../src/Widgets/Sidepane.vala:251
+msgid "Mark selected episodes as played"
+msgstr "Обележи изабране епизоде као преслушане"
+
+#: ../src/Widgets/Sidepane.vala:281
+msgid "Mark selected episodes as unplayed"
+msgstr "Обележи изабране епизоде као непреслушане"
+
+#: ../src/Widgets/Sidepane.vala:313
+msgid "Delete local files for selected episodes"
+msgstr "Уклони локалне датотеке за изабране епизоде"
+
+#: ../src/Widgets/Sidepane.vala:317
+msgid ""
+"Are you sure you want to delete the downloaded files for the selected "
+"episodes?"
+msgstr ""
+"Да ли сте сигурни да желите да уклоните преузете датотеке за изабране "
+"епизоде?"
+
+#: ../src/Widgets/Sidepane.vala:372
+msgid "Mark as Played"
+msgstr "Означи као Репродуковано"
+
+#: ../src/Widgets/Sidepane.vala:391
+msgid "Mark as Unplayed"
+msgstr "Означи као Нерепродуковано"
+
+#: ../src/Widgets/Sidepane.vala:411
+msgid "Delete Local File"
+msgstr "Обриши Локалну Датотеку"
+
+#: ../src/Widgets/Sidepane.vala:618
+msgid "No new episodes."
+msgstr "Нема нових епизода."
+
+#: ../src/Widgets/Sidepane.vala:627
+msgid "No episodes available."
+msgstr "Нема епизода."
+
+#: ../src/Widgets/Sidepane.vala:671
+msgid "%d episodes, %d unplayed"
+msgstr "%d епизода, %d непреслушано"
+
+#: ../src/Widgets/Sidepane.vala:673
+msgid "%d episodes"
+msgstr "%d епизода"

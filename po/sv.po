@@ -1,0 +1,371 @@
+# Swedish translation for vocal
+# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
+# This file is distributed under the same license as the vocal package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: vocal\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2015-04-04 22:25-0400\n"
+"PO-Revision-Date: 2015-04-06 16:58+0000\n"
+"Last-Translator: Nathan Dyer <Unknown>\n"
+"Language-Team: Swedish <sv@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2015-04-07 05:31+0000\n"
+"X-Generator: Launchpad (build 17413)\n"
+
+#: ../src/Utils/FeedParser.vala:288
+msgid "Selected file doesn't appear to contain podcast subscriptions."
+msgstr "Den valda filen verkar inte innehålla podcastprenumerationer"
+
+#: ../src/Utils/FeedParser.vala:299
+msgid "Selected file seems to be empty."
+msgstr "Den valda filen verkar vara tom"
+
+#: ../src/Library.vala:152
+msgid "Unable to add podcast"
+msgstr "Kan ej lägga till podcast"
+
+#: ../src/Vocal.vala:59
+msgid "translator-credits"
+msgstr ""
+"Launchpad Contributions:\n"
+"  Nathan Dyer https://launchpad.net/~nathandyer\n"
+"  Niclas Lockner https://launchpad.net/~niclasl\n"
+"  Tommy Brunn https://launchpad.net/~tommybrunn"
+
+#: ../src/MainWindow.vala:194
+msgid "View show notes"
+msgstr "Se avsnittsinformation"
+
+#: ../src/MainWindow.vala:237
+msgid "Return to library view"
+msgstr "Återgå till biblioteksvy"
+
+#: ../src/MainWindow.vala:489
+msgid "Welcome to Vocal"
+msgstr "Välkommen till Vocal"
+
+#: ../src/MainWindow.vala:489
+msgid "Build Your Library By Adding Podcasts"
+msgstr "Bygg upp ditt bibliotek genom att lägga till podcasts"
+
+#: ../src/MainWindow.vala:490
+msgid "Add a New Feed"
+msgstr "Lägg till ett flöde"
+
+#: ../src/MainWindow.vala:490
+msgid "Provide the web address of a podcast feed."
+msgstr "Ange webbadressen till ett podcastflöde"
+
+#: ../src/MainWindow.vala:493
+msgid "Import Subscriptions"
+msgstr "Importera prenumerationer"
+
+#: ../src/MainWindow.vala:494
+msgid ""
+"If you have exported feeds from another podcast manager, import them here."
+msgstr ""
+"Om du har exporterat flöden från en annan podcastspelare, importera dem här."
+
+#: ../src/MainWindow.vala:495
+msgid "Check Out the Vocal Starter Pack…"
+msgstr "Kolla in Vocals startpaket…"
+
+#: ../src/MainWindow.vala:495
+msgid ""
+"New to podcasting? Check out our starter pack. Select individual podcasts, "
+"or download the entire pack."
+msgstr ""
+"Ny i podcast-världen? Kolla in vårt startpaket. Välj ut individuella "
+"podcasts eller ladda ned hela paketet."
+
+#: ../src/MainWindow.vala:526
+msgid "Export Subscriptions…"
+msgstr "Exportera prenumerationer…"
+
+#: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
+msgid "Preferences"
+msgstr "Inställningar"
+
+#: ../src/MainWindow.vala:546
+msgid "Check Out The Vocal Starter Pack…"
+msgstr "Kolla in Vocals startpaket…"
+
+#: ../src/MainWindow.vala:554
+msgid "Donate…"
+msgstr "Donera…"
+
+#: ../src/MainWindow.vala:574
+msgid "Add new podcasts to the library"
+msgstr "Lägg till nya podcasts till biblioteket"
+
+#: ../src/MainWindow.vala:580
+msgid "Add Podcast Feed"
+msgstr "Lägg till podcastflöde"
+
+#: ../src/MainWindow.vala:588
+msgid "Import Subscriptions…"
+msgstr "Importera prenumerationer…"
+
+#: ../src/MainWindow.vala:671
+msgid "All Podcasts"
+msgstr "Alla podcasts"
+
+#: ../src/MainWindow.vala:672
+msgid "Audio"
+msgstr "Ljud"
+
+#: ../src/MainWindow.vala:673
+msgid "Video"
+msgstr "Video"
+
+#: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
+#: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
+#: ../src/Widgets/EpisodeDetailBox.vala:115
+#: ../src/Widgets/EpisodeDetailBox.vala:315
+msgid "Play"
+msgstr "Spela"
+
+#: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
+msgid "Fast forward %d seconds"
+msgstr "Snabbspola %d sekunder"
+
+#: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
+msgid "Rewind %d seconds"
+msgstr "Spola tillbaka %d sekunder"
+
+#: ../src/MainWindow.vala:709
+msgid "Check for new episodes"
+msgstr "Leta efter nya avsnitt"
+
+#: ../src/MainWindow.vala:737
+msgid "Downloads"
+msgstr "Nedladdningar"
+
+#: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
+msgid "Pause"
+msgstr "Pausa"
+
+#: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
+#: ../src/Widgets/AddFeedDialog.vala:64
+msgid "Cancel"
+msgstr "Avbryt"
+
+#: ../src/MainWindow.vala:1328
+msgid "Save"
+msgstr "Spara"
+
+#: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
+msgid "All files"
+msgstr "Alla filer"
+
+#: ../src/MainWindow.vala:1335
+msgid "OPML and XML files"
+msgstr "OPML- och XML-filer"
+
+#: ../src/MainWindow.vala:1362
+msgid "Select Subscription File"
+msgstr "Välj prenumerationsfil"
+
+#: ../src/MainWindow.vala:1366
+msgid "Open"
+msgstr "Öppna"
+
+#: ../src/MainWindow.vala:1373
+msgid "OPML files"
+msgstr "OPML-filer"
+
+#: ../src/MainWindow.vala:1448
+msgid "Error Importing from File"
+msgstr "Fel vid importering från fil"
+
+#: ../src/MainWindow.vala:1449
+msgid ""
+"Please check that you selected the correct file and that you are connected "
+"to the network."
+msgstr ""
+"Var god kontrollera att du valt rätt fil och att du är ansluten till "
+"nätverket."
+
+#: ../src/MainWindow.vala:1483
+msgid ""
+"Additional plugins are needed to play media. Would you like for Vocal to "
+"install them for you?"
+msgstr ""
+"Ytterligare insticksprogram är nödvändiga för att spela upp vald media. Vill "
+"du att Vocal ska installera dem åt dig?"
+
+#: ../src/MainWindow.vala:1540
+msgid "Adding new podcast: <b>"
+msgstr "Lägger till ny podcast: <b>"
+
+#: ../src/MainWindow.vala:1604
+msgid "Error Adding Podcast"
+msgstr "Fel vid tillägg av podcast"
+
+#: ../src/MainWindow.vala:1605
+msgid ""
+"Please check that the feed is correct and that you have a network connection."
+msgstr ""
+"Var god kontrollera att flödet är korrekt och att du har en "
+"nätverksanslutning."
+
+#: ../src/MainWindow.vala:1720
+msgid "Good Stuff is On Its Way"
+msgstr "Grymma grejer är på väg"
+
+#: ../src/MainWindow.vala:1721
+msgid ""
+"If you are importing several podcasts it can take a few minutes. Your "
+"library will be ready shortly."
+msgstr ""
+"Om du importerar flera podcasts kan det ta några minuter. Ditt bibliotek "
+"kommer att vara redo inom kort."
+
+#: ../src/MainWindow.vala:2163
+msgid "Fresh content has been added to your library."
+msgstr "Nytt innehåll har lagts till i ditt bibliotek."
+
+#: ../src/MainWindow.vala:2274
+msgid ""
+"Vocal is currently downloading episodes. Exiting will cause the downloads to "
+"be canceled. Are you sure you want to exit?"
+msgstr ""
+"Vocal laddar ned avsnitt. Att avsluta kommer avbryta nedladdningarna. Är du "
+"säker på att du vill avsluta?"
+
+#: ../src/Widgets/DownloadDetailBox.vala:107
+msgid "Cancel Download"
+msgstr "Avbryt nedladdning"
+
+#: ../src/Widgets/VideoControls.vala:59
+msgid "Exit Fullscreen"
+msgstr "Lämna helskärm"
+
+#: ../src/Widgets/DownloadsPopover.vala:50
+msgid "No active downloads."
+msgstr "Inga pågående nedladdningar."
+
+#: ../src/Widgets/AddFeedDialog.vala:43
+msgid "Add New Podcast"
+msgstr "Lägg till ny podcast"
+
+#: ../src/Widgets/AddFeedDialog.vala:54
+msgid "<b>Add a new podcast feed to the library</b>"
+msgstr "<b>Lägg till ny podcast-flöde till biblioteket</b>"
+
+#: ../src/Widgets/AddFeedDialog.vala:59
+msgid "Podcast feed web address"
+msgstr "Adress till podcast-flöde"
+
+#: ../src/Widgets/PlaybackBox.vala:39
+msgid "<b>Select an episode to start playing...</b>"
+msgstr "<b>Välj ett avsnitt att börja spela…</b>"
+
+#: ../src/Widgets/SettingsDialog.vala:64
+msgid "Automatically download new episodes:"
+msgstr "Ladda automatiskt ned nya avsnitt:"
+
+#: ../src/Widgets/SettingsDialog.vala:85
+msgid "Automatically delete played files:"
+msgstr "Ta automatiskt bort spelade filer:"
+
+#: ../src/Widgets/SettingsDialog.vala:115
+msgid "Seconds to skip back:"
+msgstr "Sekunder att hoppa tillbaka:"
+
+#: ../src/Widgets/SettingsDialog.vala:136
+msgid "Seconds to skip forward:"
+msgstr "Sekunder att hoppa framåt:"
+
+#: ../src/Widgets/SettingsDialog.vala:153
+msgid "Close"
+msgstr "Stäng"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:86
+msgid "This episode is currently being played"
+msgstr "Detta avsnitt spelas just nu"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:117
+#: ../src/Widgets/EpisodeDetailBox.vala:318
+msgid "Stream Episode"
+msgstr "Strömma avsnitt"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:133
+msgid "Download Episode"
+msgstr "Ladda ned avsnitt"
+
+#: ../src/Widgets/Sidepane.vala:89
+msgid "Mark all episodes as played"
+msgstr "Markera alla avsnitt som spelade"
+
+#: ../src/Widgets/Sidepane.vala:101
+msgid "Download all episodes"
+msgstr "Ladda ned alla avsnitt"
+
+#: ../src/Widgets/Sidepane.vala:109
+msgid "Hide episodes that have already been played"
+msgstr "Göm spelade avsnitt"
+
+#: ../src/Widgets/Sidepane.vala:129
+msgid "Remove podcast from library"
+msgstr "Ta bort podcast från biblioteket"
+
+#: ../src/Widgets/Sidepane.vala:140
+msgid "More options"
+msgstr "Fler alternativ"
+
+#: ../src/Widgets/Sidepane.vala:194
+msgid "Hide the episode side pane"
+msgstr "Göm avsnittssidopanelen"
+
+#: ../src/Widgets/Sidepane.vala:251
+msgid "Mark selected episodes as played"
+msgstr "Markera valda avsnitt som spelade"
+
+#: ../src/Widgets/Sidepane.vala:281
+msgid "Mark selected episodes as unplayed"
+msgstr "Markera valda avsnitt som ospelade"
+
+#: ../src/Widgets/Sidepane.vala:313
+msgid "Delete local files for selected episodes"
+msgstr "Ta bort lokala filer för valda avsnitt"
+
+#: ../src/Widgets/Sidepane.vala:317
+msgid ""
+"Are you sure you want to delete the downloaded files for the selected "
+"episodes?"
+msgstr ""
+"Är du säker på att du vill ta bort nedladdade filer för valda avsnitt?"
+
+#: ../src/Widgets/Sidepane.vala:372
+msgid "Mark as Played"
+msgstr "Markera som spelad"
+
+#: ../src/Widgets/Sidepane.vala:391
+msgid "Mark as Unplayed"
+msgstr "Markera som ospelad"
+
+#: ../src/Widgets/Sidepane.vala:411
+msgid "Delete Local File"
+msgstr "Ta bort lokal fil"
+
+#: ../src/Widgets/Sidepane.vala:618
+msgid "No new episodes."
+msgstr "Inga nya avsnitt."
+
+#: ../src/Widgets/Sidepane.vala:627
+msgid "No episodes available."
+msgstr "Inga avsnitt tillgängliga."
+
+#: ../src/Widgets/Sidepane.vala:671
+msgid "%d episodes, %d unplayed"
+msgstr "%d avsnitt, %d ospelade"
+
+#: ../src/Widgets/Sidepane.vala:673
+msgid "%d episodes"
+msgstr "%d avsnitt"

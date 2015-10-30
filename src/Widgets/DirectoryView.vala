@@ -15,6 +15,8 @@ namespace Vocal {
 
         private Gtk.Box loading_box;
 
+        private Gtk.ScrolledWindow scrolled_window;
+
         public DirectoryView(iTunesProvider p, bool first_run = false) {
 
             this.set_orientation(Gtk.Orientation.VERTICAL);
@@ -61,8 +63,8 @@ namespace Vocal {
             });
             first_run_continue_button.sensitive = false;
 
-            banner_box.add(return_button);
-            banner_box.add(first_run_continue_button);
+            banner_box.pack_start(return_button, false, false, 12);
+            banner_box.pack_end(first_run_continue_button, false, false, 12);
 
             if(!first_run) {
                 hide_first_run_continue_button();
@@ -86,6 +88,9 @@ namespace Vocal {
             loading_box.add(loading_label);
             loading_box.add(spinner);
             this.pack_start(loading_box, true, true, 5);
+
+            scrolled_window = new Gtk.ScrolledWindow(null, null);
+            this.pack_start(scrolled_window, true, true, 15);
 
             load_top_podcasts();
         }
@@ -124,7 +129,7 @@ namespace Vocal {
             loading_box.set_no_show_all(true);
             loading_box.hide();
 
-            this.pack_start(flowbox, true, true, 5);
+            scrolled_window.add(flowbox);
             show_all();
         }
 

@@ -27,34 +27,75 @@ namespace Vocal {
 
 		private Gtk.ListBox episodes;
 		private Gee.ArrayList<QueueRow> rows;
+		private Gtk.Label label;
+		private Gtk.ScrolledWindow scrolled_window;
+		private Gtk.Box scrolled_box;
 
 		public QueuePopover(Gtk.Widget parent) {
 			this.set_relative_to(parent);
+
+			label = new Gtk.Label("No episodes in queue");
+			label.get_style_context().add_class("h3");
+			label.margin  = 12;
+
 			episodes =  new Gtk.ListBox();
-			this.add(episodes);
+
+			scrolled_window = new Gtk.ScrolledWindow(null, null);
+			scrolled_window.set_size_request(400, 50);
+
+			scrolled_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 15);
+			scrolled_window.add(scrolled_box);
+
+			scrolled_box.add(label);
+			scrolled_box.add(episodes);
+
+			this.add(scrolled_window);
+
 		}
 
 		public void set_queue(Gee.ArrayList<Episode> queue) {
-			this.remove(episodes);
+			scrolled_box.remove(episodes);
 			episodes = new Gtk.ListBox();
+			episodes.selection_mode = Gtk.SelectionMode.NONE;
 			rows = new Gee.ArrayList<QueueRow>();
 			if(queue.size > 0) {
+
+				hide_label();
+
 				foreach(Episode e in queue) {
 					QueueRow q = new QueueRow(e);
 					q.move_up.connect((e) => { move_up(e); });
 					q.move_down.connect((e) => { move_down(e); });
 					q.remove_episode.connect((e) => { remove_episode(e); });
+					
 					episodes.add(q);
 					rows.add(q);
 				}
+
+				episodes.row_activated.connect(on_row_activated);
+
+				episodes.button_press_event.connect((e) => {
+					episodes.row_activated(episodes.get_row_at_y((int)e.y));
+					return false;
+				});	
+
 			} else {
-				var label = new Gtk.Label("No episodes in queue");
-				label.get_style_context().add_class("h3");
-				label.margin  = 12;
-				episodes.add(label);
+				show_label();
 			}
-			episodes.row_activated.connect(on_row_activated);
-			this.add(episodes);
+
+			scrolled_box.add(episodes);
+		}
+
+		private void show_label() {
+			label.set_no_show_all(false);
+			label.show();
+			scrolled_window.set_size_request(400, 60);
+		}
+
+		private void hide_label() {
+			label.set_no_show_all(true);
+			label.hide();
+			scrolled_window.set_size_request(400, 225);
 		}
 
 		public void on_row_activated(Gtk.ListBoxRow row) {

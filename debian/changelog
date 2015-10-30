@@ -1,5 +1,13 @@
-vocal (1.0) trusty; urgency=low
+vocal (2.0) trusty; urgency=low
 
-  * Vocal's first release!
+  * iTunes Store integration
+  * An all-new playback queue
+  * Local and remote searching
+  * Better notification management 
+  * A new podcast view
+  * Full HTML shownotes
+  * Improvement playback support
+  * Higher resolution album art
+  * and much more!
 
- -- Nathan Dyer <mail@nathandyer.me>  Sat, 04 Apr 2015 11:30:00 -0500
+ -- Nathan Dyer <mail@nathandyer.me>  Thu, 15 Oct 2015 17:00:00 -0500

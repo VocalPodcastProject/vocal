@@ -28,7 +28,7 @@ public class Utils
 {
 
 	/*
-	 * A convenience method that sends a generic notification with a message and title 
+	 * A convenience method that sends a generic notification with a message and title
 	 * (assuming libnotify is enabled)
 	 */
     public static void send_generic_notification(string message, string? title = "Vocal")
@@ -39,7 +39,10 @@ public class Utils
 #endif
     }
 
-	/* 
+
+
+
+	/*
 	 * Strips a string of HTML tags, except for ones that are useful in markup
 	 */
     public static string html_to_markup(string original) {
@@ -84,8 +87,37 @@ public class Utils
 
             split += temp;
         }
-        
+
         return split;
+
+    }
+
+    public static string get_styled_html(string original_html) {
+
+const string STYLE = """
+<html>
+<head>
+<style>
+h1 {
+    background-color:#F8F8F8;
+    font-family:'Open Sans';
+    font-size:150%;
+}
+body {
+    background-color:#F8F8F8;
+    font-family:'Open Sans';
+    font-size:80%;
+}
+</style>
+</head>
+<body>
+""";
+
+const string CLOSE = """
+</body>
+</html>""";
+
+        return STYLE + original_html + CLOSE;
 
     }
 

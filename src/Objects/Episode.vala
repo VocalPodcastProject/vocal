@@ -22,7 +22,7 @@ using GLib;
 namespace Vocal {
 
     public class Episode {
-    
+
         public string			title;        			// the title of the episode
         public string			description;			// the description/shownotes
         public string			uri;					// the remote location for the media file
@@ -31,7 +31,7 @@ namespace Vocal {
         public string 			date_released;			// when the episode was released, in string form
         public EpisodeStatus	status;					// whether the episode is played or unplayed
         public DownloadStatus	current_download_status;// whether the episode is downloaded or not downloaded
-        
+
         public Podcast 			parent;					// the parent that the episode belongs to
         public DateTime 		datetime_released;		// the datetime corresponding the when the episode was released
 
@@ -43,35 +43,38 @@ namespace Vocal {
 		 * local or remote
 		 */
         public string playback_uri {
-        
+
             get {
 
                 GLib.File local;
 
                 if(local_uri != null) {
+                    
                     if(local_uri.contains("file://"))
                         local = GLib.File.new_for_uri(local_uri);
-                    else 
+                    else
                         local = GLib.File.new_for_uri("file://" + local_uri);
-                    if(local.query_exists()) { 
+                    if(local.query_exists()) {
+
                         if(local_uri.contains("file://"))
                             return local_uri;
                         else {
                             local_uri = "file://" + local_uri;
                             return local_uri;
                         }
-                        
+
                     } else {
+
                         return uri;
                     }
                 }
-                    
+
                 else {
                     return uri;
                 }
-                
+
             }
-            
+
             // If the URI begins with "file://" set local uri, otherwise set the remote uri
             set {
                 string[] split = value.split(":");
@@ -87,9 +90,9 @@ namespace Vocal {
                 }
             }
         }
-        
+
         /*
-         * Default constructor for an empty episode. Fields are public members and can 
+         * Default constructor for an empty episode. Fields are public members and can
          * be accessed and set directly when necessary by other classes.
          */
         public Episode() {
@@ -98,15 +101,15 @@ namespace Vocal {
             status = EpisodeStatus.UNPLAYED;
             current_download_status = DownloadStatus.NOT_DOWNLOADED;
             last_played_position = 0;
-            
+
         }
-        
+
         /*
          * Sets the local datetime based on the standardized "pubdate" as listed
          * in the feed.
          */
         public void set_datetime_from_pubdate() {
-        
+
             // Split all the fields (command, colon, and space delimited)
             string[] fields = date_released.split_set(",: ");
 
@@ -122,20 +125,20 @@ namespace Vocal {
                 offset = -2;
             }
 
-            
-        
+
+
             // Since the pubdate is a standard, we can hard-code the values where each item is located
-            
+
             int day = int.parse(fields[2 + offset]);
             int year = int.parse(fields[4 + offset]);
             int hour = int.parse(fields[5 + offset]);
             int minute = int.parse(fields[6 + offset]);
             int seconds = int.parse(fields[7 + offset]);
-                
-            
+
+
             // Determine the month number from the string as read from the pubdate
             int month = 1;
-            
+
             switch(fields[3 + offset]) {
                 case "Jan":
                     month = 1;
@@ -173,18 +176,18 @@ namespace Vocal {
                 case "Dec":
                     month = 12;
                     break;
-                
+
             }
-            
+
             // Create the datetime object (assume pubdate is UTC)
             var datetime_utc = new DateTime.utc(year, month, day, hour, minute, (double)seconds);
-            
+
             // Convert from UTC to system local time
             datetime_released = datetime_utc.to_local();
-        }   
-        
+        }
+
     }
-    
+
     /*
      * Possible episode playback statuses, either played or unplayed. In Vocal 2.0 it would be
      * beneficial to have an additional value to determine if the episode is finished
@@ -193,7 +196,7 @@ namespace Vocal {
     public enum EpisodeStatus {
         PLAYED, UNPLAYED;
     }
-    
+
     /*
      * Possible episode download statuses, either downloaded or not downloaded.
      */

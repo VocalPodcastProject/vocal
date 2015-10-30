@@ -3,346 +3,358 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-04 14:42+0000\n"
-"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
+"PO-Revision-Date: 2015-04-20 16:12+0000\n"
+"Last-Translator: Nathan Dyer <Unknown>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 05:45+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-04-21 05:39+0000\n"
+"X-Generator: Launchpad (build 17430)\n"
 
 #: ../src/Utils/FeedParser.vala:288
 msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr ""
+msgstr "Valittu tiedosto ei vaikuta sisältävän podcast-tilauksia."
 
 #: ../src/Utils/FeedParser.vala:299
 msgid "Selected file seems to be empty."
-msgstr ""
+msgstr "Valittu tiedosto vaikuttaa tyhjältä."
 
 #: ../src/Library.vala:152
 msgid "Unable to add podcast"
-msgstr ""
+msgstr "Podcastin liittäminen epäonnistui"
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Jiri Grönroos https://launchpad.net/~jiri-gronroos\n"
+"  Nathan Dyer https://launchpad.net/~nathandyer"
 
 #: ../src/MainWindow.vala:194
 msgid "View show notes"
-msgstr ""
+msgstr "Näytä ohjelman tiedot"
 
 #: ../src/MainWindow.vala:237
 msgid "Return to library view"
-msgstr ""
+msgstr "Palaa kirjastonäkymään"
 
 #: ../src/MainWindow.vala:489
 msgid "Welcome to Vocal"
-msgstr ""
+msgstr "Tervetuloa Vocalin pariin"
 
 #: ../src/MainWindow.vala:489
 msgid "Build Your Library By Adding Podcasts"
-msgstr ""
+msgstr "Rakenna kirjastosi lisäämällä podcasteja"
 
 #: ../src/MainWindow.vala:490
 msgid "Add a New Feed"
-msgstr ""
+msgstr "Lisää uusi syöte"
 
 #: ../src/MainWindow.vala:490
 msgid "Provide the web address of a podcast feed."
-msgstr ""
+msgstr "Anna podcast-syötteen osoite."
 
 #: ../src/MainWindow.vala:493
 msgid "Import Subscriptions"
-msgstr ""
+msgstr "Tuo tilauksia"
 
 #: ../src/MainWindow.vala:494
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
-msgstr ""
+msgstr "Jos olet vienyt syötteitä toisesta podcast-ohjelmasta, tuo ne tänne."
 
 #: ../src/MainWindow.vala:495
 msgid "Check Out the Vocal Starter Pack…"
-msgstr ""
+msgstr "Tutustu Vocalin aloituspakkaukseen…"
 
 #: ../src/MainWindow.vala:495
 msgid ""
 "New to podcasting? Check out our starter pack. Select individual podcasts, "
 "or download the entire pack."
 msgstr ""
+"Etkö ole vielä ehtinyt tutustua podcasteihin? Tutustu aloituspakkaukseen. "
+"Valitse yksittäisiä podcasteja tai lataa koko pakkaus."
 
 #: ../src/MainWindow.vala:526
 msgid "Export Subscriptions…"
-msgstr ""
+msgstr "Vie tilaukset…"
 
 #: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
 msgid "Preferences"
-msgstr ""
+msgstr "Asetukset"
 
 #: ../src/MainWindow.vala:546
 msgid "Check Out The Vocal Starter Pack…"
-msgstr ""
+msgstr "Tutustu Vocalin aloituspakkaukseen…"
 
 #: ../src/MainWindow.vala:554
 msgid "Donate…"
-msgstr ""
+msgstr "Lahjoita…"
 
 #: ../src/MainWindow.vala:574
 msgid "Add new podcasts to the library"
-msgstr ""
+msgstr "Lisää uusia podcasteja kirjastoon"
 
 #: ../src/MainWindow.vala:580
 msgid "Add Podcast Feed"
-msgstr ""
+msgstr "Lisää podcast-syöte"
 
 #: ../src/MainWindow.vala:588
 msgid "Import Subscriptions…"
-msgstr ""
+msgstr "Tuo tilauksia…"
 
 #: ../src/MainWindow.vala:671
 msgid "All Podcasts"
-msgstr ""
+msgstr "Kaikki podcastit"
 
 #: ../src/MainWindow.vala:672
 msgid "Audio"
-msgstr ""
+msgstr "Ääni"
 
 #: ../src/MainWindow.vala:673
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
 #: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
 #: ../src/Widgets/EpisodeDetailBox.vala:115
 #: ../src/Widgets/EpisodeDetailBox.vala:315
 msgid "Play"
-msgstr ""
+msgstr "Toista"
 
 #: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
 msgid "Fast forward %d seconds"
-msgstr ""
+msgstr "Kelaa eteenpäin %d sekuntia"
 
 #: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
 msgid "Rewind %d seconds"
-msgstr ""
+msgstr "Kelaa taaksepäin %d sekuntia"
 
 #: ../src/MainWindow.vala:709
 msgid "Check for new episodes"
-msgstr ""
+msgstr "Tarkista uudet jaksot"
 
 #: ../src/MainWindow.vala:737
 msgid "Downloads"
-msgstr ""
+msgstr "Lataukset"
 
 #: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
 msgid "Pause"
-msgstr ""
+msgstr "Keskeytä"
 
 #: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
 #: ../src/Widgets/AddFeedDialog.vala:64
 msgid "Cancel"
-msgstr ""
+msgstr "Peru"
 
 #: ../src/MainWindow.vala:1328
 msgid "Save"
-msgstr ""
+msgstr "Tallenna"
 
 #: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
 msgid "All files"
-msgstr ""
+msgstr "Kaikki tiedostot"
 
 #: ../src/MainWindow.vala:1335
 msgid "OPML and XML files"
-msgstr ""
+msgstr "OPML- ja XML-tiedostot"
 
 #: ../src/MainWindow.vala:1362
 msgid "Select Subscription File"
-msgstr ""
+msgstr "Valitse tilaustiedosto"
 
 #: ../src/MainWindow.vala:1366
 msgid "Open"
-msgstr ""
+msgstr "Avaa"
 
 #: ../src/MainWindow.vala:1373
 msgid "OPML files"
-msgstr ""
+msgstr "OPML-tiedostot"
 
 #: ../src/MainWindow.vala:1448
 msgid "Error Importing from File"
-msgstr ""
+msgstr "Virhe tiedostosta tuotaessa"
 
 #: ../src/MainWindow.vala:1449
 msgid ""
 "Please check that you selected the correct file and that you are connected "
 "to the network."
 msgstr ""
+"Varmista, että valitsit oikean tiedoston ja että käytössäsi on verkkoyhteys."
 
 #: ../src/MainWindow.vala:1483
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
 msgstr ""
+"Median toistamiseen tarvitaan erillisiä liitännäisiä. Haluatko Vocalin "
+"asentavan ne järjestelmään?"
 
 #: ../src/MainWindow.vala:1540
 msgid "Adding new podcast: <b>"
-msgstr ""
+msgstr "Lisätään uusi podcast: <b>"
 
 #: ../src/MainWindow.vala:1604
 msgid "Error Adding Podcast"
-msgstr ""
+msgstr "Virhe podcastia lisätessä"
 
 #: ../src/MainWindow.vala:1605
 msgid ""
 "Please check that the feed is correct and that you have a network connection."
-msgstr ""
+msgstr "Varmista, että syöte ja verkkoyhteytesi toimivat."
 
 #: ../src/MainWindow.vala:1720
 msgid "Good Stuff is On Its Way"
-msgstr ""
+msgstr "Hyvää tiedossa"
 
 #: ../src/MainWindow.vala:1721
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
 msgstr ""
+"Jos olet aikeissa tuoda useita podcasteja, siinä saattaa kestää hetki. "
+"Kirjastosi on valmis pian."
 
 #: ../src/MainWindow.vala:2163
 msgid "Fresh content has been added to your library."
-msgstr ""
+msgstr "Uutta sisältöä on lisätty kirjastoosi."
 
 #: ../src/MainWindow.vala:2274
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to "
 "be canceled. Are you sure you want to exit?"
 msgstr ""
+"Vocal lataa parhaillaan jaksoja. Sovelluksen sulkeminen peruu kaikki "
+"lataukset. Haluatko varmasti sulkea sovelluksen?"
 
 #: ../src/Widgets/DownloadDetailBox.vala:107
 msgid "Cancel Download"
-msgstr ""
+msgstr "Peru lataus"
 
 #: ../src/Widgets/VideoControls.vala:59
 msgid "Exit Fullscreen"
-msgstr ""
+msgstr "Poistu koko näytön tilasta"
 
 #: ../src/Widgets/DownloadsPopover.vala:50
 msgid "No active downloads."
-msgstr ""
+msgstr "Ei aktiivisia latauksia."
 
 #: ../src/Widgets/AddFeedDialog.vala:43
 msgid "Add New Podcast"
-msgstr ""
+msgstr "Lisää uusi podcast"
 
 #: ../src/Widgets/AddFeedDialog.vala:54
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr ""
+msgstr "<b>Lisää uusi podcast-syöte kirjastoosi</b>"
 
 #: ../src/Widgets/AddFeedDialog.vala:59
 msgid "Podcast feed web address"
-msgstr ""
+msgstr "Podcast-syötteen osoite"
 
 #: ../src/Widgets/PlaybackBox.vala:39
 msgid "<b>Select an episode to start playing...</b>"
-msgstr ""
+msgstr "<b>Valitse jakso aloittaaksesi toistamisen...</b>"
 
 #: ../src/Widgets/SettingsDialog.vala:64
 msgid "Automatically download new episodes:"
-msgstr ""
+msgstr "Lataa automaattisesti uudet jaksot:"
 
 #: ../src/Widgets/SettingsDialog.vala:85
 msgid "Automatically delete played files:"
-msgstr ""
+msgstr "Poista automaattisesti toistetut tiedostot:"
 
 #: ../src/Widgets/SettingsDialog.vala:115
 msgid "Seconds to skip back:"
-msgstr ""
+msgstr "Taaksepäin kelaus sekunneissa:"
 
 #: ../src/Widgets/SettingsDialog.vala:136
 msgid "Seconds to skip forward:"
-msgstr ""
+msgstr "Eteenpäin kelaus sekunneissa:"
 
 #: ../src/Widgets/SettingsDialog.vala:153
 msgid "Close"
-msgstr ""
+msgstr "Sulje"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:86
 msgid "This episode is currently being played"
-msgstr ""
+msgstr "Tätä jaksoa toistetaan parhaillaan"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:117
 #: ../src/Widgets/EpisodeDetailBox.vala:318
 msgid "Stream Episode"
-msgstr ""
+msgstr "Striimaa jakso"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:133
 msgid "Download Episode"
-msgstr ""
+msgstr "Lataa jakso"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
-msgstr ""
+msgstr "Merkitse kaikki jaksot toistetuiksi"
 
 #: ../src/Widgets/Sidepane.vala:101
 msgid "Download all episodes"
-msgstr ""
+msgstr "Lataa kaikki jaksot"
 
 #: ../src/Widgets/Sidepane.vala:109
 msgid "Hide episodes that have already been played"
-msgstr ""
+msgstr "Piilota jaksot, jotka on jo toistettu"
 
 #: ../src/Widgets/Sidepane.vala:129
 msgid "Remove podcast from library"
-msgstr ""
+msgstr "Poista podcast kirjastosta"
 
 #: ../src/Widgets/Sidepane.vala:140
 msgid "More options"
-msgstr ""
+msgstr "Lisää valintoja"
 
 #: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
-msgstr ""
+msgstr "Piilota jaksopaneeli"
 
 #: ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
-msgstr ""
+msgstr "Merkitse valitut jaksot toistetuiksi"
 
 #: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
-msgstr ""
+msgstr "Merkitse valitut jaksot toistamattomiksi"
 
 #: ../src/Widgets/Sidepane.vala:313
 msgid "Delete local files for selected episodes"
-msgstr ""
+msgstr "Poista valittujen jaksojen paikalliset tiedostot"
 
 #: ../src/Widgets/Sidepane.vala:317
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr ""
+msgstr "Haluatko varmasti poistaa valittujen jaksojen ladatut tiedostot?"
 
 #: ../src/Widgets/Sidepane.vala:372
 msgid "Mark as Played"
-msgstr ""
+msgstr "Merkitse toistetuksi"
 
 #: ../src/Widgets/Sidepane.vala:391
 msgid "Mark as Unplayed"
-msgstr ""
+msgstr "Merkitse toistamattomaksi"
 
 #: ../src/Widgets/Sidepane.vala:411
 msgid "Delete Local File"
-msgstr ""
+msgstr "Poista paikallinen tiedosto"
 
 #: ../src/Widgets/Sidepane.vala:618
 msgid "No new episodes."
-msgstr ""
+msgstr "Ei uusia jaksoja."
 
 #: ../src/Widgets/Sidepane.vala:627
 msgid "No episodes available."
-msgstr ""
+msgstr "Jaksoja ei ole saatavilla."
 
 #: ../src/Widgets/Sidepane.vala:671
 msgid "%d episodes, %d unplayed"
-msgstr ""
+msgstr "%d jaksoa, %d toistamatta"
 
 #: ../src/Widgets/Sidepane.vala:673
 msgid "%d episodes"
-msgstr ""
+msgstr "%d jaksoa"

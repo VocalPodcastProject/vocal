@@ -25,13 +25,12 @@ namespace Vocal {
     public class AddFeedDialog : Gtk.Dialog {
     
         public	Gtk.Entry 	entry;			
-        private Gtk.Button 	cancel_button;
         public	Gtk.Button 	add_feed_button;
 
-	private bool		on_elementary;
+	      private bool		on_elementary;
     
         public AddFeedDialog(Window parent, bool? using_elementary = true) {
-	    this.on_elementary = using_elementary;
+	          this.on_elementary = using_elementary;
             set_default_response(Gtk.ResponseType.OK);
             set_size_request(500, 150);
             set_modal(true);
@@ -53,7 +52,7 @@ namespace Vocal {
             
             var add_label = new Gtk.Label(_("<b>Add a new podcast feed to the library</b>"));
             add_label.use_markup = true;
-            add_label.xalign = 0;
+            add_label.set_property("xalign", 0);
             
             entry = new Gtk.Entry();
             entry.placeholder_text = _("Podcast feed web address");
@@ -61,16 +60,11 @@ namespace Vocal {
             entry.margin = 12;
             entry.changed.connect(on_entry_changed);
             
-            cancel_button = new Gtk.Button.with_label(_("Cancel"));
-            cancel_button.clicked.connect(() => {
-                this.destroy();
-            });
-            
             Gtk.Image add_img;
-	    if(on_elementary)
-	        add_img = new Gtk.Image.from_icon_name ("add", Gtk.IconSize.DIALOG);
-	    else
-		add_img = new Gtk.Image.from_icon_name ("list-add", Gtk.IconSize.DIALOG);
+      	    if(on_elementary)
+      	        add_img = new Gtk.Image.from_icon_name ("list-add-symbolic", Gtk.IconSize.DIALOG);
+      	    else
+      		      add_img = new Gtk.Image.from_icon_name ("list-add", Gtk.IconSize.DIALOG);
             add_img.margin_right = 12;
             
             content_box.add(add_img);

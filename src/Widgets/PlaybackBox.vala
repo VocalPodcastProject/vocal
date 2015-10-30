@@ -20,7 +20,7 @@
 using Gtk;
 
 namespace Vocal {
-    class PlaybackBox : Gtk.VBox {
+    public class PlaybackBox : Gtk.VBox {
         
         public signal void scale_changed();		// Fired when the scale changes (when the user seeks position)
     
@@ -35,6 +35,9 @@ namespace Vocal {
          * Default constructor for a PlaybackBox
          */
         public PlaybackBox () {
+
+            this.get_style_context().add_class("seek-bar");
+            
             this.width_request  = 300;
             this.info_label = new Gtk.Label(_("<b>Select an episode to start playing...</b>"));
             this.info_label.set_use_markup(true);

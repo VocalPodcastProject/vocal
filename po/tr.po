@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: vocal\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-04 14:42+0000\n"
-"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
+"PO-Revision-Date: 2015-04-20 16:12+0000\n"
+"Last-Translator: Ayhan Kuru <ayhankuru@yandex.com.tr>\n"
 "Language-Team: Turkish <tr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 05:53+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-04-21 05:39+0000\n"
+"X-Generator: Launchpad (build 17430)\n"
 
 #: ../src/Utils/FeedParser.vala:288
 msgid "Selected file doesn't appear to contain podcast subscriptions."
@@ -32,6 +32,8 @@ msgstr ""
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Ayhan Kuru https://launchpad.net/~ayhankuru"
 
 #: ../src/MainWindow.vala:194
 msgid "View show notes"
@@ -51,7 +53,7 @@ msgstr ""
 
 #: ../src/MainWindow.vala:490
 msgid "Add a New Feed"
-msgstr ""
+msgstr "Yeni Akış Ekle"
 
 #: ../src/MainWindow.vala:490
 msgid "Provide the web address of a podcast feed."
@@ -82,23 +84,23 @@ msgstr ""
 
 #: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
 msgid "Preferences"
-msgstr ""
+msgstr "Tercihler"
 
 #: ../src/MainWindow.vala:546
 msgid "Check Out The Vocal Starter Pack…"
-msgstr ""
+msgstr "Vocal Başlangıç Paketi"
 
 #: ../src/MainWindow.vala:554
 msgid "Donate…"
-msgstr ""
+msgstr "Bağış"
 
 #: ../src/MainWindow.vala:574
 msgid "Add new podcasts to the library"
-msgstr ""
+msgstr "Kütüphaneye yeni podcast ekle"
 
 #: ../src/MainWindow.vala:580
 msgid "Add Podcast Feed"
-msgstr ""
+msgstr "Akışa yeni podcast ekle"
 
 #: ../src/MainWindow.vala:588
 msgid "Import Subscriptions…"
@@ -106,22 +108,22 @@ msgstr ""
 
 #: ../src/MainWindow.vala:671
 msgid "All Podcasts"
-msgstr ""
+msgstr "Tüm Podcastler"
 
 #: ../src/MainWindow.vala:672
 msgid "Audio"
-msgstr ""
+msgstr "Ses"
 
 #: ../src/MainWindow.vala:673
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
 #: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
 #: ../src/Widgets/EpisodeDetailBox.vala:115
 #: ../src/Widgets/EpisodeDetailBox.vala:315
 msgid "Play"
-msgstr ""
+msgstr "Oynat"
 
 #: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
 msgid "Fast forward %d seconds"
@@ -137,24 +139,24 @@ msgstr ""
 
 #: ../src/MainWindow.vala:737
 msgid "Downloads"
-msgstr ""
+msgstr "İndirilenler"
 
 #: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
 msgid "Pause"
-msgstr ""
+msgstr "Duraklat"
 
 #: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
 #: ../src/Widgets/AddFeedDialog.vala:64
 msgid "Cancel"
-msgstr ""
+msgstr "iptal"
 
 #: ../src/MainWindow.vala:1328
 msgid "Save"
-msgstr ""
+msgstr "Kaydet"
 
 #: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
 msgid "All files"
-msgstr ""
+msgstr "Tüm dosyalar"
 
 #: ../src/MainWindow.vala:1335
 msgid "OPML and XML files"
@@ -166,7 +168,7 @@ msgstr ""
 
 #: ../src/MainWindow.vala:1366
 msgid "Open"
-msgstr ""
+msgstr "Aç"
 
 #: ../src/MainWindow.vala:1373
 msgid "OPML files"
@@ -223,11 +225,11 @@ msgstr ""
 
 #: ../src/Widgets/DownloadDetailBox.vala:107
 msgid "Cancel Download"
-msgstr ""
+msgstr "İndirmeyi İptal Et"
 
 #: ../src/Widgets/VideoControls.vala:59
 msgid "Exit Fullscreen"
-msgstr ""
+msgstr "Tam ekranı kapat"
 
 #: ../src/Widgets/DownloadsPopover.vala:50
 msgid "No active downloads."
@@ -267,7 +269,7 @@ msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:153
 msgid "Close"
-msgstr ""
+msgstr "Kapat"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:86
 msgid "This episode is currently being played"
@@ -280,7 +282,7 @@ msgstr ""
 
 #: ../src/Widgets/EpisodeDetailBox.vala:133
 msgid "Download Episode"
-msgstr ""
+msgstr "Bölümü İndir"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"

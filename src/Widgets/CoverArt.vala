@@ -31,7 +31,7 @@ namespace Vocal {
 
 	public class CoverArt : Gtk.Box {
 
-        private const int COVER_SIZE = 150;
+        private const int COVER_SIZE = 170;
 
 		private Gtk.Image 	image;					// The actual coverart image
 		private Gtk.Image 	triangle;				// The banner in the top right corner

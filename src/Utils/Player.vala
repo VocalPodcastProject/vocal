@@ -274,7 +274,7 @@ namespace Vocal {
             
             // Set the URI
             playbin.uri = episode.playback_uri;
-            info("Setting URI: %s".printf(episode.playback_uri));
+            info("Setting playback URI: %s".printf(episode.playback_uri));
             
             // If it's a video podcast, get the width and height and configure that information
             if(episode.parent.content_type == MediaType.VIDEO) {

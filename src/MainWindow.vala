@@ -25,11 +25,11 @@ using Granite.Services;
 using Granite.Widgets;
 
 namespace Vocal {
-    
+
     public class MainWindow : Gtk.Window {
-              
+
         /* Core components */
-        
+
         private VocalApp            app;
         private VocalSettings       settings;
 
@@ -37,73 +37,64 @@ namespace Vocal {
 
         public signal void track_changed(string episode_title, string podcast_name, string artwork_uri, uint64 duration);
         public signal void playback_status_changed(string status);
-        
+
         /* Primary widgets */
-        
-        private Gtk.HeaderBar       toolbar;
-        private Gtk.Menu            menu;
-        private Gtk.MenuButton      app_menu;
+
+        private Toolbar             toolbar;
         private Gtk.Box             box;
         private Welcome             welcome;
         private Library             library;
         private Player              player;
+        private DirectoryView       directory;
+        private SearchResultsView   search_results_view;
         private Gtk.Revealer        revealer;
-        private Gtk.Paned           thinpaned;
-        private PlaybackBox         playback_box;
         private Gtk.Stack           notebook;
         private Gtk.StackSwitcher   stack_switcher;
-        private Sidepane            details;
-        private Gtk.Box             headerbar_box;
+        private Granite.Widgets.ModeButton mode_button;
+        private PodcastView         details;
         private Gtk.Box             import_message_box;
-        
-        
-        /* Headerbar buttons */
-        
-        private Gtk.Button          play_pause;
-        private Gtk.Button          forward;
-        private Gtk.Button          backward;
-        private Gtk.Button          add_to_library;
-        private Gtk.Button          refresh;
-        private Gtk.Button          return_to_library;
-        private Gtk.Button          download;
-        private Gtk.Button 			shownotes_button;
-        
-        
+
         /* Secondary widgets */
-        
+
         private AddFeedDialog       add_feed;
-        private Gtk.MenuItem        export_item;
+        private CloudLoginDialog    cloud_login;
         private DownloadsPopover    downloads;
         private ShowNotesPopover    shownotes;
-        private Gtk.Popover         add_popover;
+        private QueuePopover        queue_popover;
+        private SearchResultsPopover search_results;
         private Gtk.MessageDialog   missing_dialog;
         private SettingsDialog      settings_dialog;
         private VideoControls       video_controls;
         private Gtk.Revealer        return_revealer;
-        
-        
+        private Gtk.Revealer        mode_button_revealer;
+        private Gtk.Button          return_to_library;
+        private DonateDialog        donate_dialog;
+
+
         /* Icon views and related variables */
-        
+
         private Gtk.FlowBox         all_flowbox;
         private Gtk.FlowBox         audio_flowbox;
         private Gtk.FlowBox         video_flowbox;
-        
+
         private Gtk.ScrolledWindow  all_scrolled;
         private Gtk.ScrolledWindow  audio_scrolled;
         private Gtk.ScrolledWindow  video_scrolled;
-            
-        
+        private Gtk.ScrolledWindow  directory_scrolled;
+        private Gtk.ScrolledWindow  search_results_scrolled;
+
+
         /* Video playback */
-        
+
         public Clutter.Actor        actor;
         public GtkClutter.Actor     bottom_actor;
         public GtkClutter.Actor     return_actor;
         public Clutter.Stage        stage;
         public GtkClutter.Embed     video_widget;
-        
-        
+
+
         /* Runtime flags */
-        
+
         private bool                first_run;
         private bool                newly_launched;
         private bool                library_empty;
@@ -113,37 +104,120 @@ namespace Vocal {
         private bool                checking_for_updates = false;
         private bool 				currently_repopulating = false;
         private bool                currently_importing = false;
-        
+
         public bool                 on_elementary = false;
         public bool                 open_hidden = false;
-        
+
         /* System */
-        
+
         public  GnomeMediaKeys      mediakeys;
         private Gst.PbUtils.InstallPluginsContext context;
-        
+
         /* References, pointers, and containers */
-        
+
         public Episode              current_episode;
         private Podcast             highlighted_podcast;
         private CoverArt            current_episode_art;
         private Gtk.Widget          current_widget;
+        private Gtk.Widget          previous_widget;
         private Gee.ArrayList<CoverArt>      all_art;
         private Gee.ArrayList<CoverArt>      audio_art;
         private Gee.ArrayList<CoverArt>      video_art;
-        
-        
+
+
         /* Miscellaneous global variables */
-        
+
         private string installer;
         private int minutes_elapsed_in_period;
         private uint hiding_timer = 0;
         private bool ignore_window_state_change = false;
+        iTunesProvider itunes;
+        private SecretEntryPopover secret_entry;
+        private Gtk.Box search_results_box;
 
 		/*
 		 * Constructor for the main window. Creates the window and gets everything going.
 		 */
         public MainWindow (VocalApp app, bool? open_hidden = false) {
+
+            //ab78d6;
+
+            const string ELEMENTARY_STYLESHEET = """
+                
+                @define-color colorPrimary #af81d6;
+                
+                .album-artwork {
+                    border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
+                    border-style: solid;
+                    border-width: 3px;
+
+                    background-color: #8e8e93;
+                }
+
+                .controls {
+                    background-color: #FFF;
+                }
+
+                .directory-art {
+                    background-color: #FFF;
+
+                    border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
+                    border-style: solid;
+                    border-width: 3px;
+
+                    color: #000;
+                }
+
+                .directory-flowbox {
+                    background-color: #E8E8E8;
+                }
+
+                .episode_detail_box {
+
+                }
+
+                .notebook-art {
+                    background-color: #D8D8D8;
+                }
+
+                .sidepane_listbox {
+
+                }
+
+                .sidepane-toolbar {
+                    background-color: #fff;
+                }
+
+                .vocal-headerbar {
+                    color: shade (#000, 1.60);
+                }
+
+                .vocal-headerbar-crazy {
+                    color: green;
+                    background-color: red;
+                }
+
+                .rate-button {
+                    color: shade (#000, 1.60);
+                }
+
+                .secret_entry {
+                    color: black;
+                }
+
+                .video-back-button {
+                    color: white;
+                }
+
+                .video-toolbar {
+                    background-color: shade(#BF94E4, .80);
+                }
+
+            """;
+
+            Granite.Widgets.Utils.set_theming_for_screen (this.get_screen (), ELEMENTARY_STYLESHEET,
+                                               Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
             this.app = app;
             this.set_application (app);
 
@@ -151,21 +225,21 @@ namespace Vocal {
             if(open_hidden) {
                 info("The app will open hidden in the background.");
             }
-            
+
             // Flag this as being newly launched
             this.newly_launched = true;
 
             // Check whether or not we're running on elementary
             check_elementary();
-            
+
             // Grab the current settings
             this.settings = new VocalSettings();
-            
+
             // Set window properties
             this.set_default_size (settings.window_width, settings.window_height);
             this.window_position = Gtk.WindowPosition.CENTER;
-            
-            // Set up the close event 
+
+            // Set up the close event
             this.delete_event.connect(on_window_closing);
             this.window_state_event.connect ((e) => {
                 if(!ignore_window_state_change) {
@@ -177,38 +251,11 @@ namespace Vocal {
                 return false;
             });
 
-            // Create the box that will be used for the title in the headerbar
-            headerbar_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
-
-            // Create the box to be shown during playback
-            playback_box = new PlaybackBox();
-            
-            // Set the playback box in the middle of the HeaderBar
-	        playback_box.hexpand = true;
-
-            // Create the show notes button
-	    if(on_elementary)
-            	shownotes_button = new Gtk.Button.from_icon_name("help-info-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-	    else
-     		shownotes_button = new Gtk.Button.from_icon_name("text-x-generic", Gtk.IconSize.SMALL_TOOLBAR);
-            shownotes_button.tooltip_text = _("View show notes");
-
-            // Create the show notes popover
-            shownotes = new ShowNotesPopover(shownotes_button);
-
-            headerbar_box.add(playback_box);
-            headerbar_box.add(shownotes_button);
-
-            shownotes_button.clicked.connect(() => {
-                shownotes.show_all();
-            });  
-            
             // Create the Player and Initialize GStreamer
             player = Player.get_default(app.args);
             player.stream_ended.connect(on_stream_ended);
             player.additional_plugins_required.connect(on_additional_plugins_needed);
 
-            
             // Create the drawing area for the video widget
             video_widget = new GtkClutter.Embed();
             video_widget.button_press_event.connect(on_video_button_press_event);
@@ -221,7 +268,7 @@ namespace Vocal {
 
             // Set up all the video controls
             video_controls = new VideoControls();
-            
+
             video_controls.vexpand = true;
             video_controls.set_valign (Gtk.Align.END);
             video_controls.unfullscreen.connect(on_fullscreen_request);
@@ -233,13 +280,14 @@ namespace Vocal {
             video_widget.motion_notify_event.connect(on_motion_event);
 
             return_to_library = new Gtk.Button.from_icon_name("go-jump-rtl-symbolic", Gtk.IconSize.DIALOG);
+            return_to_library.get_style_context().add_class("video-back-button");
             return_to_library.has_tooltip = true;
-            return_to_library.tooltip_text = _("Return to library view");
+            return_to_library.tooltip_text = _("Return to Library");
             return_to_library.relief = Gtk.ReliefStyle.NONE;
             return_to_library.margin = 5;
             return_to_library.set_no_show_all(false);
             return_to_library.show();
-        
+
             return_to_library.clicked.connect(on_return_to_library);
 
             return_revealer = new Gtk.Revealer();
@@ -252,35 +300,35 @@ namespace Vocal {
             // Set up the MPRIS playback functionality
             MPRIS mpris = new MPRIS(this);
             mpris.initialize();
+
             // Create the library
-            library = new Library();
-            
+            library = new Library(this);
+
             // Connect the library's signals
             library.import_status_changed.connect(on_import_status_changed);
             library.download_finished.connect(on_download_finished);
-            
+
             // Determine whether or not the local library exists
             first_run = (!library.check_database_exists());
-            
+
             library_empty = false;
-            
+
             // If the database exists refill the library and make sure that there's
             // actually something in it to display. If not, re-show the welcome screen
             if(!first_run) {
                 library.refill_library();
                 if(library.podcasts.size < 1) {
                     library_empty = true;
-                    
+
                 }
             }
-            
-            
+
             // If this is the first run, create the directories and establish the database
             if(first_run) {
                 library.setup_library();
             }
-            
-            // Initialize notifications 
+
+            // Initialize notifications
 #if HAVE_LIBNOTIFY
             Notify.init("Vocal");
 #endif
@@ -290,84 +338,84 @@ namespace Vocal {
                 player.configure_video();
             });
 
+            // Create the toolbar
+            toolbar = new Toolbar (settings);
+            toolbar.get_style_context().add_class("vocal-headerbar");
+            secret_entry = new SecretEntryPopover(toolbar.app_menu);
+            secret_entry.code_accepted.connect(on_code_accepted);
+
 
             // Connect the new player position available signal from the player
             // to set the new progress on the playback box
 
             player.new_position_available.connect(() => {
-            
+
                 int64 position = player.get_position();
                 int64 duration = player.get_duration();
-                
-                
+
+
                 // Set the current episode position (will later be saved to database when
                 // switching tracks or exiting the program)
-                
-                if(position > 0) 
+
+                if(position > 0)
                     player.current_episode.last_played_position = position;
-            
+
                 double percentage = (double) position / (double) duration;
-                
+
                 // Convert nanoseconds to seconds
                 position = position / 1000000000;
                 duration = duration / 1000000000;
-                
+
                 int mins_remaining;
                 int secs_remaining;
                 int mins_elapsed;
                 int secs_elapsed;
-                
+
                 mins_elapsed = (int) position / 60;
                 secs_elapsed = (int) position % 60;
-                
+
                 int64 remaining = duration - position;
-                
+
                 mins_remaining = (int) remaining / 60;
                 secs_remaining = (int) remaining % 60;
 
                 if(!currently_importing && position != 0) {
-                    playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);  
-                    video_controls.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);  
+                    toolbar.playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+                    video_controls.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
                 }
             });
 
-            
+
             // Set minutes elapsed to zero since the app is just now starting up
             minutes_elapsed_in_period = 0;
-            
+
             // Automatically check for new episodes
             if(settings.update_interval != 0) {
-            
+
                 //Increase count and check for match every 5 minutes
                 GLib.Timeout.add(300000, () => {
 
                     minutes_elapsed_in_period += 5;
                     if(minutes_elapsed_in_period == settings.update_interval) {
-                    
                         on_update_request();
-                        
-                    } 
-                        
+                    }
+
                     return true;
                 });
             }
-            
-            
-           
+
             // Change the player position to match scale changes
-            playback_box.scale_changed.connect( () => {
-            
+            toolbar.playback_box.scale_changed.connect( () => {
+
                 // Get the total duration in nanoseconds
-                int64 duration = player.get_duration();      
-                
-                double val = playback_box.get_progress_bar_fill();
-                
+                int64 duration = player.get_duration();
+
+                double val = toolbar.playback_box.get_progress_bar_fill();
+
                 // Multiply percentage by the duration
-                
                 double position_double = (double) duration * val;
-                
+
                 int64 position = (int64) position_double;
-                
 
                 // Set the position
                 player.set_position (position);
@@ -376,25 +424,24 @@ namespace Vocal {
 
             // Repeat for the video playback box scale
             video_controls.progress_bar_scale_changed.connect( () => {
-            
+
                 // Get the total duration in nanoseconds
-                int64 duration = player.get_duration();      
-                
+                int64 duration = player.get_duration();
+
                 double val = video_controls.progress_bar_fill;
-                
+
                 // Multiply percentage by the duration
-                
+
                 double position_double = (double) duration * val;
-                
+
                 int64 position = (int64) position_double;
-                
 
                 // Set the position
                 player.set_position (position);
                 player.play();
             });
-            
-            
+
+
             // Set up media keys and keyboard shortcuts
             try {
                 mediakeys = Bus.get_proxy_sync (BusType.SESSION,
@@ -420,9 +467,9 @@ namespace Vocal {
                 mediakeys.GrabMediaPlayerKeys("vocal", 0);
             } catch (Error e) { warning (e.message); }
 
-            
+
             this.key_press_event.connect ( (e) => {
-                
+
 
                 // Was the control key pressed?
                 if((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
@@ -431,23 +478,38 @@ namespace Vocal {
                             this.destroy();
                             break;
                         case Gdk.Key.f:
-                            this.on_fullscreen_request();
+                            if(!toolbar.search_visible) {
+                                toolbar.search_entry.can_focus = false;
+                                grab_focus();
+                                toolbar.show_search();
+
+                                // Wait for half a second before giving focus to the search entry
+                                // otherwise, it will fail to show the search entry because of mainwindow's lost focus
+                                GLib.Timeout.add(500, () => {
+                                    toolbar.search_entry.can_focus = true;
+                                    toolbar.search_entry.grab_focus();
+                                    return false;
+                                });
+                                
+                            }
+                            else 
+                                toolbar.hide_search();
+                            break;
+                        case Gdk.Key.y:
+                            secret_entry.show_all();
                             break;
                         default:
                             break;
                     }
                 }
                 else {
-                
-                    switch (e.keyval) {
-                        case Gdk.Key.p:
-                        case Gdk.Key.space:
-                            play();
-                            break;
-                            
-                        case Gdk.Key.f:
-                        case Gdk.Key.F11:
 
+                    switch (e.keyval) {
+                        case Gdk.Key.space:
+                            if(!toolbar.search_entry.has_focus && !secret_entry.visible)
+                                play();
+                            break;
+                        case Gdk.Key.F11:
                             on_fullscreen_request();
                             break;
                         case Gdk.Key.Escape:
@@ -466,165 +528,116 @@ namespace Vocal {
                         }
                 }
 
-                return true;
+                return false;
             });
 
-            
-            // Build the UI elements
-            setup_ui ();
-            
-            // Show the welcome widget if it's the first run, or if the library is empty
-            if(first_run || library_empty) {
-
-        		string add_icon, import_icon;
-        		if(on_elementary) {
-        			add_icon = "add";
-        			import_icon = "document-import";
-        		} else {
-        			add_icon = "list-add";
-        			import_icon = "document-open";
-        		}
-
-
-                 // Create a new Welcome widget
-                welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
-                welcome.append(add_icon, _("Add a New Feed"), _("Provide the web address of a podcast feed."));
-                // welcome.append("preferences-desktop-online-accounts", _("Browse Podcasts"),
-                //     _("Browse through podcasts and choose some to add to your library."));
-                welcome.append(import_icon, _("Import Subscriptions"),
-                        _("If you have exported feeds from another podcast manager, import them here."));
-                welcome.append("vocal", _("Check Out the Vocal Starter Pack…"), _("New to podcasting? Check out our starter pack. Select individual podcasts, or download the entire pack."));
-
-                
-                welcome.activated.connect(on_welcome);
-                
-                box.pack_start (welcome, true, true, 0);
-                this.current_widget = welcome;
-                
-            }
-            else {
-                setup_library_widgets();
-            }
-        }
-        
-        
-        /*
-         * Set up the UI elements for Vocal
-         */
-        private void setup_ui () {
-            
             box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+
+            // Add everything to window
+            this.add (box);
+            this.set_titlebar(toolbar);
+
+            // Create the show notes popover
+            shownotes = new ShowNotesPopover(toolbar.shownotes_button);
+            toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
+            search_results = new SearchResultsPopover(toolbar.search_entry, library);
+            search_results.modal = false;
+            search_results.show_full_results.connect(on_show_full_results);
+            search_results.episode_selected.connect(on_search_popover_episode_selected);
+            search_results.podcast_selected.connect(on_search_popover_podcast_selected);
+            search_results.subscribe_to_podcast.connect(on_new_subscription);
+            search_results.closed.connect(() => {
+                toolbar.hide_search();
+            });
+            toolbar.search_entry.activate.connect(() => {
+                search_results.full_results_button.clicked();
+            }); 
+            this.button_press_event.connect((event) => {
+                if(search_results.visible) {
+                    search_results.hide();
+                }
+                if(toolbar.search_entry.visible) {
+                    toolbar.hide_search();
+                }
+                return false;
+            }); 
             
-            // Set up the two panes
-            thinpaned = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
-            
-            // Create the toolbar
-            toolbar = new Gtk.HeaderBar ();
-            
-            // Create the menus and menuitems
-            menu = new Gtk.Menu ();
-            
-            export_item = new Gtk.MenuItem.with_label(_("Export Subscriptions…"));
-            
-            // Set refresh and export insensitive if there isn't a library to export
-            if(first_run) {
-                //refresh_item.sensitive = false;
-                export_item.sensitive = false;
-            }
-            export_item.activate.connect(export_podcasts);
-            menu.add(export_item);
-            menu.add(new Gtk.SeparatorMenuItem());
-            
-            
-            var preferences_item = new Gtk.MenuItem.with_label(_("Preferences"));
-            menu.add(preferences_item);
-            
-            preferences_item.activate.connect(() => {
+            downloads = new DownloadsPopover(toolbar.download);
+            downloads.closed.connect(() => {
+                if(downloads.downloads.size < 1)
+                    toolbar.hide_downloads_menuitem();
+            });
+            downloads.all_downloads_complete.connect(toolbar.hide_downloads_menuitem);
+
+            // Create the queue popover
+            queue_popover = new QueuePopover(toolbar.playlist_button);
+            library.queue_changed.connect(() => {
+                queue_popover.set_queue(library.queue);
+            });
+            queue_popover.set_queue(library.queue);
+            queue_popover.move_up.connect((e) => {
+                library.move_episode_up_in_queue(e);
+                queue_popover.show_all();
+            });
+            queue_popover.move_down.connect((e) => {
+                library.move_episode_down_in_queue(e);
+                queue_popover.show_all();
+            });
+            queue_popover.remove_episode.connect((e) => {
+                library.remove_episode_from_queue(e);
+                queue_popover.show_all();
+            });
+            queue_popover.play_episode_from_queue_immediately.connect(play_episode_from_queue_immediately);
+            toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
+
+            // Set up all the toolbar signals
+            toolbar.add_podcast_selected.connect(() => {
+                add_new_podcast();
+            });
+
+            toolbar.import_podcasts_selected.connect(() => {
+                import_podcasts();
+            });
+
+            toolbar.preferences_selected.connect(() => {
                 settings_dialog = new SettingsDialog(settings, this);
                 settings_dialog.show_all();
             });
 
-            var starterpack = new Gtk.MenuItem.with_label (_("Check Out The Vocal Starter Pack…"));
-            starterpack.activate.connect (() => {
+            toolbar.starterpack_selected.connect(() => {
                 try {
                     GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/starter-pack");
                 } catch (Error error) {}
             });
-            menu.add(starterpack);
-            
-            var donate = new Gtk.MenuItem.with_label (_("Donate…"));
-            donate.activate.connect (() => {
-                try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/donate");
-                } catch (Error error) {}
+
+            toolbar.donate_selected.connect(() => {
+                donate_dialog = new DonateDialog(this);
+                donate_dialog.show_all();
             });
-            menu.add(donate);
 
-            menu.show_all();
-            
-            // Create the AppMenu
-            app_menu = new Gtk.MenuButton();
-	    if(on_elementary)
-            	app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR)); 
-	    else
-     		app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.LARGE_TOOLBAR));
-            app_menu.popup = menu;   
-            
-            if(on_elementary)
-                add_to_library = new Gtk.Button.from_icon_name("document-import", Gtk.IconSize.LARGE_TOOLBAR);
-            else
-                add_to_library = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            add_to_library.has_tooltip = true;
-            add_to_library.tooltip_text = _("Add new podcasts to the library");
-            
-            // Set up the add podcasts popover
-            add_popover = new Gtk.Popover(add_to_library);
-
-
-            var add_button = new Gtk.Button.with_label(_("Add Podcast Feed"));
-            add_button.get_style_context().add_class("flat");
-            add_button.margin = 5;
-            add_button.clicked.connect(() => {
-                add_popover.hide();
-                add_new_podcast();
+            toolbar.search_changed.connect(() => {
+                search_results.set_query(toolbar.search_entry.text);
+                toolbar.search_entry.grab_focus();
+                toolbar.search_entry.set_position(toolbar.search_entry.get_text().length);
             });
-            
-            var import_button = new Gtk.Button.with_label(_("Import Subscriptions…"));
-            import_button.get_style_context().add_class("flat");
-            import_button.margin = 5;
-            import_button.margin_top = 0;
-            import_button.clicked.connect(() => {
-                add_popover.hide();
-                import_podcasts();
+
+            toolbar.refresh_selected.connect(on_update_request);
+            toolbar.play_pause_selected.connect(play);
+            toolbar.seek_forward_selected.connect(seek_forward);
+            toolbar.seek_backward_selected.connect(seek_backward);
+
+            toolbar.store_selected.connect(() => {
+                details.pane_should_hide();
+                switch_visible_page(directory_scrolled);
             });
-            
-            var add_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-            add_box.pack_start(add_button, true, true, 0);
-            add_box.pack_start(import_button, true, true, 0);
-            
-            add_popover.add(add_box);
-        
-            add_to_library.clicked.connect(() => {
-                add_popover.show_all();;
-            });
-            
 
-            // Populate the toolbar
-            toolbar.pack_end (app_menu);
-            toolbar.pack_end(add_to_library);
-            toolbar.set_custom_title(headerbar_box);
+            toolbar.export_selected.connect(export_podcasts);
+            toolbar.downloads_selected.connect(show_downloads_popover);
 
-            // Initially hide the headearbar_box
-            hide_playback_box();
-
- 
-            // Add everything to window
-            this.add (box);
-            this.set_titlebar(toolbar);
-            toolbar.show_close_button = true;
+            setup_library_widgets();
         }
-        
-        
+
+
         /*
          * Creates and configures all widgets pertaining the the library view (called either after
          * the user successfully adds content to library for the first time, or at the start of a session
@@ -632,298 +645,344 @@ namespace Vocal {
          */
         private void setup_library_widgets() {
 
-            if(current_widget == welcome)
-            {
-                // Remove the welcome
-                box.remove(welcome);
-            } else if(current_widget == import_message_box) {
-                box.remove(import_message_box);
+            // Create a welcome screen and add it to the notebook (no matter if first run or not)
+            string add_icon, import_icon;
+            if(on_elementary) {
+                add_icon = "add";
+                import_icon = "document-import";
+            } else {
+                add_icon = "list-add";
+                import_icon = "document-open";
             }
-            
+
+            welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
+            welcome.append("preferences-desktop-online-accounts", _("Browse Podcasts"),
+                 _("Browse through podcasts and choose some to add to your library."));
+            welcome.append(add_icon, _("Add a New Feed"), _("Provide the web address of a podcast feed."));
+            welcome.append(import_icon, _("Import Subscriptions"),
+                    _("If you have exported feeds from another podcast manager, import them here."));
+            welcome.append("vocal", _("Check Out the Vocal Starter Pack…"), _("New to podcasting? Check out our starter pack. Select individual podcasts, or download the entire pack."));
+
+            welcome.activated.connect(on_welcome);
+
             // Set up scrolled windows so that content will scoll instead of causing the window to expand
             all_scrolled = new Gtk.ScrolledWindow (null, null);
             audio_scrolled = new Gtk.ScrolledWindow (null, null);
-            video_scrolled = new Gtk.ScrolledWindow (null, null);           
-            
+            video_scrolled = new Gtk.ScrolledWindow (null, null);
+            directory_scrolled = new Gtk.ScrolledWindow (null, null);
+            search_results_scrolled = new Gtk.ScrolledWindow(null, null);
+
+            all_scrolled.get_style_context().add_class("notebook-art");
+            audio_scrolled.get_style_context().add_class("notebook-art");
+            video_scrolled.get_style_context().add_class("notebook-art");
+
+            search_results_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            search_results_scrolled.add(search_results_box);
+
 		    // Set up the IconView for all podcasts
 		    all_flowbox = new Gtk.FlowBox();
             all_art = new Gee.ArrayList<CoverArt>();
+            all_flowbox.get_style_context().add_class("notebook-art");
             all_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             all_flowbox.activate_on_single_click = true;
             all_flowbox.child_activated.connect(on_child_activated);
+            all_flowbox.valign = Gtk.Align.START;
 
             audio_flowbox = new Gtk.FlowBox();
             audio_art = new Gee.ArrayList<CoverArt>();
+            audio_flowbox.get_style_context().add_class("notebook-art");
+            audio_flowbox.valign = Gtk.Align.START;
+
             audio_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             audio_flowbox.activate_on_single_click = true;
             audio_flowbox.child_activated.connect(on_child_activated);
-     
+
             video_flowbox = new Gtk.FlowBox();
+            video_flowbox.get_style_context().add_class("notebook-art");
             video_art = new Gee.ArrayList<CoverArt>();
             video_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             video_flowbox.activate_on_single_click = true;
             video_flowbox.child_activated.connect(on_child_activated);
-            
+            video_flowbox.valign = Gtk.Align.START;
+
 		    all_scrolled.add(all_flowbox);
 		    audio_scrolled.add(audio_flowbox);
 		    video_scrolled.add(video_flowbox);
-             
+
             notebook = new Gtk.Stack();
             notebook.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
             notebook.transition_duration = 300;
-            
+
+            details = new PodcastView (this, null, on_elementary);
+            details.go_back.connect(() => {
+                switch(mode_button.selected) {
+                    case 0:
+                        switch_visible_page(all_scrolled);
+                        break;
+                    case 1:
+                        switch_visible_page(audio_scrolled);
+                        break;
+                    case 2:
+                        switch_visible_page(video_scrolled);
+                        break;
+                    default:
+                        switch_visible_page(all_scrolled);
+                        break;
+                }
+            });
+
+            // Set up all the signals for the new side pane
+            details.play_episode_requested.connect(play_different_track);
+            details.download_episode_requested.connect(download_episode);
+            details.enqueue_episode.connect(enqueue_episode);
+            details.mark_episode_as_played_requested.connect(on_mark_episode_as_played_request);
+            details.mark_episode_as_unplayed_requested.connect(on_mark_episode_as_unplayed_request);
+            details.delete_local_episode_requested.connect(on_episode_delete_request);
+
+            details.mark_all_episodes_as_played_requested.connect(on_mark_as_played_request);
+            details.download_all_requested.connect(on_download_all_request);
+            details.delete_podcast_requested.connect(on_remove_request);
+
+            details.delete_multiple_episodes_requested.connect(on_delete_multiple_episodes);
+            details.mark_multiple_episodes_as_played_requested.connect(on_mark_multiple_episodes_as_played);
+            details.mark_multiple_episodes_as_unplayed_requested.connect(on_mark_multiple_episodes_as_unplayed);
+
+            details.unplayed_count_changed.connect(on_unplayed_count_changed);
+
+            import_message_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 25);
+            var import_h1_label = new Gtk.Label(_("Good Stuff is On Its Way"));
+            var import_h3_label = new Gtk.Label(_("If you are importing several podcasts it can take a few minutes. Your library will be ready shortly."));
+            Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H1, import_h1_label);
+            Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, import_h3_label);
+            import_h1_label.margin_top = 200;
+            import_message_box.add(import_h1_label);
+            import_message_box.add(import_h3_label);
+            var spinner = new Gtk.Spinner();
+            spinner.active = true;
+            spinner.start();
+            import_message_box.add(spinner);
+
+            notebook.add_titled(welcome, "welcome", _("Welcome"));
+            notebook.add_titled(import_message_box, "import", _("Importing"));
             notebook.add_titled(all_scrolled, "all", _("All Podcasts"));
             notebook.add_titled(audio_scrolled, "audio", _("Audio"));
             notebook.add_titled(video_scrolled, "video", _("Video"));
-            
-            stack_switcher = new Gtk.StackSwitcher();
-            stack_switcher.set_stack(notebook);
-            
-            stack_switcher.margin = 5;
-            stack_switcher.halign = Gtk.Align.CENTER;
-            
-            // Create new icons for placback functions and downloads
-            var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            play_pause = new Gtk.Button();
-            play_pause.image = playpause_image;
-            play_pause.image = playpause_image;
-            play_pause.has_tooltip = true;
-            play_pause.tooltip_text = _("Play");
-            
-            var forward_image = new Gtk.Image.from_icon_name("media-seek-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            forward = new Gtk.Button();
-            forward.image = forward_image;
-            forward.has_tooltip = true;
-            forward.tooltip_text = _("Fast forward %d seconds".printf(settings.fast_forward_seconds));
-   
-            var backward_image = new Gtk.Image.from_icon_name("media-seek-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            backward = new Gtk.Button();
-            backward.image = backward_image;
-            backward.has_tooltip = true;
-            backward.tooltip_text = _("Rewind %d seconds".printf(settings.rewind_seconds));
+            notebook.add_titled(details, "details", _("Details"));
+            notebook.add_titled(video_widget, "video_player", _("Video"));
 
-            // Connect the changed signal for settings to update the tooltips
-            settings.changed.connect(() => {
-                forward.tooltip_text = _("Fast forward %d seconds".printf(settings.fast_forward_seconds));
-                backward.tooltip_text = _("Rewind %d seconds".printf(settings.rewind_seconds));
+            // Create the directory
+            itunes = new iTunesProvider();
+            bool show_complete_button = first_run || library_empty;
+            directory = new DirectoryView(itunes, show_complete_button);
+            directory.on_new_subscription.connect(on_new_subscription);
+            directory.return_to_library.connect(on_return_to_library);
+            directory.return_to_welcome.connect(() => {
+                switch_visible_page(welcome);
             });
-            
-            refresh = new Gtk.Button.from_icon_name("view-refresh-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            refresh.has_tooltip = true;
-            refresh.tooltip_text = _("Check for new episodes");
-        
-            refresh.clicked.connect(on_update_request);
-            
-            //TODO: Add a playback rate button to change speeds
-            
-            var rate_button = new Gtk.Button.with_label("2x");
-            rate_button.clicked.connect(() => {
-                player.set_playback_rate(2.0);
-            });
-            
-            
-            // Connect signals to appropriate handlers
-            
-            play_pause.clicked.connect(play);
-            forward.clicked.connect(seek_forward);
-            backward.clicked.connect(seek_backward);
+            directory_scrolled.add(directory);
 
-            Gtk.Image download_image;
+            notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
 
-            if(on_elementary)
-                download_image = new Gtk.Image.from_icon_name("browser-download-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            else {
-                download_image = new Gtk.Image.from_icon_name("document-save-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            }
-            download = new Gtk.Button();
-            download.image = download_image;
-            download.has_tooltip = true;
-            download.tooltip_text = _("Downloads");
-        
-            download.clicked.connect(show_downloads_popover);
-            download.set_no_show_all(true);
-            download.hide();
-            downloads = new DownloadsPopover(download);
-            downloads.closed.connect(hide_downloads_menuitem);
-            downloads.all_downloads_complete.connect(hide_downloads_menuitem);
-            
-            
-            // Add the buttons
-            toolbar.pack_start (backward);
-	        toolbar.pack_start (play_pause);
-	        toolbar.pack_start (forward);
-	        toolbar.pack_end (refresh);
-	        toolbar.pack_end (download);
-	       
-	        //toolbar.pack_start(rate_button);
-                      
-            // Add the thinpaned to the box
-            box.pack_start(thinpaned, true, true, 0);
-            current_widget = thinpaned;
-            
+            notebook.add_titled(search_results_scrolled, "search", _("Search Results"));
+
+            mode_button = new Granite.Widgets.ModeButton();
+            mode_button.append_icon("user-home-symbolic", Gtk.IconSize.BUTTON);
+            mode_button.append_icon("media-audio-symbolic", Gtk.IconSize.BUTTON);
+            mode_button.append_icon("media-video-symbolic", Gtk.IconSize.BUTTON);
+            mode_button.mode_changed.connect(on_mode_changed);
+
+            // Create a revealer for the mode button
+            mode_button_revealer = new Gtk.Revealer();
+            mode_button_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
+            mode_button_revealer.add(mode_button);
+            mode_button_revealer.reveal_child = true;
+            mode_button_revealer.transition_duration = 750;
+
             // Add the notebook
-            
+
             var library_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		    library_box.pack_start(stack_switcher, false, true, 0);
+		    library_box.pack_start(mode_button_revealer, false, true, 0);
 		    library_box.pack_start(notebook, true, true, 0);
-		    
-		    thinpaned.pack1(library_box, true, false);
-		    
+
+            // Add the thinpaned to the box
+            box.pack_start(library_box, true, true, 0);
+            current_widget = notebook;
+
+
 		    // Set up the revealer for the side pane
 		    revealer = new Gtk.Revealer();
 		    revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
-            thinpaned.pack2(revealer, true, true);
-		    
-            // Populate the three IconViews from the library
-            populate_views();
 
-            if(!open_hidden)
+            show_all();
+
+            // Show the welcome widget if it's the first run, or if the library is empty
+            if(first_run || library_empty) {
+                switch_visible_page(welcome);
+                mode_button_revealer.reveal_child = false;
                 show_all();
-            else {
-                this.iconify();
+
+            } else {
+                // Populate the three IconViews from the library
+                populate_views();
+
+                switch_visible_page(all_scrolled);
+
+                show_all();
+
+                if(!open_hidden)
+                    show_all();
+                else {
+                    this.iconify();
+                }
+
+                // Autoclean the library
+                if(settings.autoclean_library)
+                    library.autoclean_library();
+
+                // Check for updates
+                on_update_request();
             }
-            
-            // Autoclean the library 
-            if(settings.autoclean_library)
-                library.autoclean_library();
-            
-            // Check for updates 
-            on_update_request();
-            
+
+            //directory.load_top_podcasts();
         }
-        
+
         /*
          * Populates the three views (all, audio, video) from the contents of the library
          */
-        private void populate_views() {
-        	if(!currently_repopulating)
-        	{
+        private async void populate_views() {
 
-        		currently_repopulating = true;
-	            bool has_video = false;
+            SourceFunc callback = populate_views.callback;
 
-                // If it's not the first run or newly launched go ahead and remove all the widgets from the flowboxes
-                if(!first_run && !newly_launched) {
-    	            for(int i = 0; i < all_art.size; i++)
-    	            {
-    	            	all_flowbox.remove(all_flowbox.get_child_at_index(0));
+            ThreadFunc<void*> run = () => {
+
+            	if(!currently_repopulating)
+            	{
+
+            		currently_repopulating = true;
+    	            bool has_video = false;
+
+                    // If it's not the first run or newly launched go ahead and remove all the widgets from the flowboxes
+                    if(!first_run && !newly_launched) {
+        	            for(int i = 0; i < all_art.size; i++)
+        	            {
+        	            	all_flowbox.remove(all_flowbox.get_child_at_index(0));
+        	            }
+
+        	            for(int i = 0; i < audio_art.size; i++)
+        	            {
+        	            	audio_flowbox.remove(audio_flowbox.get_child_at_index(0));
+        	            }
+
+        	            for(int i = 0; i < video_art.size; i++)
+        	            {
+        	            	video_flowbox.remove(video_flowbox.get_child_at_index(0));
+        	            }
+
+                        all_art.clear();
+                        audio_art.clear();
+                        video_art.clear();
+                    }
+
+
+    	            // If the program was just launched, check to see what the last played media was
+    	            if(newly_launched) {
+
+                        current_widget = all_scrolled;
+
+    	                if(settings.last_played_media != null && settings.last_played_media.length > 1) {
+
+    	                    // Split the media into two different strings
+    	                    string[] fields = settings.last_played_media.split(",");
+    	                    bool found = false;
+    	                    foreach(Podcast podcast in library.podcasts) {
+
+    	                        if(!found) {
+    	                            if(podcast.name == fields[1]) {
+    	                                found = true;
+
+    	                                // Attempt to find the matching episode, set it as the current episode, and display the information in the box
+    	                                foreach(Episode episode in podcast.episodes) {
+    	                                    if(episode.title == fields[0]){
+    	                                        this.current_episode = episode;
+    	                                        toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+    	                                        track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+
+    	                                        string new_uri;
+
+    	                                        // Determine how long the track is and set the progress bar to match
+    	                                        if(this.current_episode.local_uri != null) {
+    	                                            new_uri = """file://""" + this.current_episode.local_uri;
+    	                                        } else {
+    	                                            new_uri = this.current_episode.uri;
+    	                                        }
+
+    	                                        bool episode_finished = false;
+    	                                        try {
+
+    	                                            Gst.PbUtils.Discoverer discoverer = new Gst.PbUtils.Discoverer(5000000000L);
+    	                                            Gst.PbUtils.DiscovererInfo disc_info = discoverer.discover_uri(new_uri);
+
+    	                                            int64 duration = (int64)disc_info.get_duration();
+    	                                            int64 position = this.current_episode.last_played_position;
+
+    	                                            // Convert nanoseconds to seconds
+    	                                            position = position / 1000000000;
+    	                                            duration = duration / 1000000000;
+
+    	                                            if(position == duration) {
+    	                                                episode_finished = true;
+    	                                            }
+
+    	                                            int mins_remaining;
+    	                                            int secs_remaining;
+    	                                            int mins_elapsed;
+    	                                            int secs_elapsed;
+
+    	                                            double percentage = (double) position / (double) duration;
+
+    	                                            mins_elapsed = (int) position / 60;
+    	                                            secs_elapsed = (int) position % 60;
+
+    	                                            int64 remaining = duration - position;
+
+    	                                            mins_remaining = (int) remaining / 60;
+    	                                            secs_remaining = (int) remaining % 60;
+
+    	                                            toolbar.playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+    	                                            shownotes.set_notes_text(episode.description);
+
+    	                                        } catch(Error e) {
+    	                                            warning(e.message);
+    	                                        }
+
+    	                                        if(current_episode.last_played_position != 0 && !episode_finished) {
+    	                                            toolbar.show_playback_box();
+    	                                        }
+    	                                        else {
+    	                                            toolbar.hide_playback_box();
+    	                                        }
+    	                                    }
+    	                                }
+    	                            }
+    	                        }
+    	                    }
+    	                }
     	            }
 
-    	            for(int i = 0; i < audio_art.size; i++)
-    	            {
-    	            	audio_flowbox.remove(audio_flowbox.get_child_at_index(0));
+
+    	            // Refill the library based on what is stored in the database (if it's not newly launched, in
+    	            // which case it has already been filled)
+    	            if(!newly_launched){
+    	                library.refill_library();
     	            }
 
-    	            for(int i = 0; i < video_art.size; i++)
-    	            {
-    	            	video_flowbox.remove(video_flowbox.get_child_at_index(0));
-    	            }
-
-                    all_art.clear();
-                    audio_art.clear();
-                    video_art.clear();
-                }
-
-	            
-	            // If the program was just launched, check to see what the last played media was
-	            if(newly_launched) {
-
-	                if(settings.last_played_media != null && settings.last_played_media.length > 1) {
-	                
-	                    // Split the media into two different strings
-	                    string[] fields = settings.last_played_media.split(",");
-	                    bool found = false;
-	                    foreach(Podcast podcast in library.podcasts) {
-
-	                        if(!found) {
-	                            if(podcast.name == fields[1]) {
-	                                found = true;
-	                                
-	                                // Attempt to find the matching episode, set it as the current episode, and display the information in the box
-	                                foreach(Episode episode in podcast.episodes) {
-	                                    if(episode.title == fields[0]){
-	                                        this.current_episode = episode;
-	                                        playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-	                                        track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
-
-	                                        string new_uri;
-
-	                                        // Determine how long the track is and set the progress bar to match
-	                                        if(this.current_episode.local_uri != null) {
-	                                            new_uri = """file://""" + this.current_episode.local_uri;
-	                                        } else {
-	                                            new_uri = this.current_episode.uri;
-	                                        }
-
-	                                        bool episode_finished = false;
-	                                        try { 
-
-	                                            Gst.PbUtils.Discoverer discoverer = new Gst.PbUtils.Discoverer(5000000000L);
-	                                            Gst.PbUtils.DiscovererInfo disc_info = discoverer.discover_uri(new_uri);
-
-	                                            int64 duration = (int64)disc_info.get_duration();
-	                                            int64 position = this.current_episode.last_played_position;
-	                
-	                                            // Convert nanoseconds to seconds
-	                                            position = position / 1000000000;
-	                                            duration = duration / 1000000000;
-
-	                                            if(position == duration) {
-	                                                episode_finished = true;
-	                                            }
-	                                            
-	                                            int mins_remaining;
-	                                            int secs_remaining;
-	                                            int mins_elapsed;
-	                                            int secs_elapsed;
-
-	                                            double percentage = (double) position / (double) duration;
-	                                            
-	                                            mins_elapsed = (int) position / 60;
-	                                            secs_elapsed = (int) position % 60;
-	                                            
-	                                            int64 remaining = duration - position;
-	                                            
-	                                            mins_remaining = (int) remaining / 60;
-	                                            secs_remaining = (int) remaining % 60;
-
-	                                            playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);  
-	                                            shownotes.set_notes_text(episode.description);
-
-	                                        } catch(Error e) {
-	                                            warning(e.message);
-	                                        }
-
-	                                        if(current_episode.last_played_position != 0 && !episode_finished) { 
-	                                            show_playback_box();
-	                                        }
-	                                        else {
-	                                            hide_playback_box();
-	                                        }
-	                                    }
-	                                }
-	                            }
-	                        }
-	                    }
-	                }
-	            }
-
-
-	            // Refill the library based on what is stored in the database (if it's not newly launched, in
-	            // which case it has already been filled)
-	            if(!newly_launched){
-	                library.refill_library();
-	            }
-	            
-	            // Clear flags since we have an established library at this point
-	            newly_launched = false;
-	            first_run = false;
-	            library_empty = false;
-	            
-	            if(library.podcasts.size > 0) {
+    	            // Clear flags since we have an established library at this point
+    	            newly_launched = false;
+    	            first_run = false;
+    	            library_empty = false;
 
 	                foreach(Podcast podcast in library.podcasts) {
-	                
+
 	                    // Determine whether or not there are video podcasts
 	                    if(podcast.content_type == MediaType.VIDEO) {
 	                        has_video = true;
@@ -952,12 +1011,19 @@ namespace Vocal {
                         }
 
                         all_art.add(a);
-                        all_flowbox.add(a);
-
-                       
                         
+                        /*
+                        GLib.Timeout.add (1000, () => {
+                            all_flowbox.add(a);
+                            a.show();
+                            return false;
+                        });
+                        */
+                        
+
+
                         // Audio podcast stuff
-                        if(podcast.content_type == MediaType.AUDIO) {  
+                        if(podcast.content_type == MediaType.AUDIO) {
                             CoverArt audio = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast);
                             if(currently_unplayed > 0)
                             {
@@ -970,14 +1036,13 @@ namespace Vocal {
                                 audio.hide_count();
                             }
                             audio_art.add(audio);
-                            audio_flowbox.add(audio);
                         }
-                        
-                        
+
+
                         // Video podcast stuff
                         if(podcast.content_type == MediaType.VIDEO) {
                             CoverArt video = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast);
-                            
+
                             if(currently_unplayed > 0)
                             {
                                 video.set_count(currently_unplayed);
@@ -989,136 +1054,133 @@ namespace Vocal {
                                 video.hide_count();
                             }
                             video_art.add(video);
-                            video_flowbox.add(video);
                         }
-	                } 
-	            } 
-	            
-	            // Determine whether or not to show the different views/stack switcher
-	            
-	            if(!has_video) {
-	                stack_switcher.set_no_show_all(true);
-	                stack_switcher.hide();
-	            } else {
-	                stack_switcher.set_no_show_all(false);
-	                stack_switcher.show();
-	            }
+	                }
+                    
+    	            currently_repopulating = false;
+            	}
+
+                    Idle.add((owned) callback);
+                    return null;
+                };
 
 
-	            currently_repopulating = false;
-        	}
-        }
-        
-        
-        
+            Thread.create<void*>(run, false);
+
+            yield;
+
+
+            
+            foreach(CoverArt a in all_art) {
+                all_flowbox.add(a);
+            }
+
+            show_all();
+
+            foreach(CoverArt a in audio_art) {
+                audio_flowbox.add(a);
+            }
+            foreach(CoverArt a in video_art) {
+                video_flowbox.add(a);
+            }
+            
+        }   
+
+
+
         /*
          * UI-related methods
          */
-         
-         
-        /*
-         * Hides the downloads menuitem if there are no active downloads
-         */
-        private void hide_downloads_menuitem() {
-            if(downloads.downloads.size < 1) {
-                download.no_show_all = true;
-                download.hide();
-                show_all();
-            }
-        }
-			         
-        /*
-         * Hides the playback box
-         */
-        private void hide_playback_box() {
 
-            this.headerbar_box.no_show_all = true;
-            this.headerbar_box.hide();
-        } 
-         
         /*
          * Called when a podcast is selected from an iconview. Creates and displays a new window containing
          * the podcast and episode information
          */
         private void show_details (Podcast current_podcast) {
-            
-            
-            // Remove the previous sidebar if there is one
-            if(details != null) {
-
-                int new_width = thinpaned.max_position - thinpaned.position;
-
-                // There is a possibility that the sidebar was hidden, so only set it large enough
-                if(new_width >= 100)
-                    settings.sidebar_width = thinpaned.max_position - thinpaned.position;    
-
-                revealer.reveal_child = false;
-                revealer.remove(details);
-            }
-            
-            details = new Sidepane(this, current_podcast, on_elementary);
-            
-            // Set up all the signals for the new side pane
-            details.play_episode_requested.connect(play_different_track);
-            details.download_episode_requested.connect(download_episode);
-            details.mark_episode_as_played_requested.connect(on_mark_episode_as_played_request);
-            details.mark_episode_as_unplayed_requested.connect(on_mark_episode_as_unplayed_request);
-            details.delete_local_episode_requested.connect(on_episode_delete_request);
-
-            details.mark_all_episodes_as_played_requested.connect(on_mark_as_played_request);
-            details.download_all_requested.connect(on_download_all_request);
-            details.delete_podcast_requested.connect(on_remove_request);
-
-            details.delete_multiple_episodes_requested.connect(on_delete_multiple_episodes);
-            details.mark_multiple_episodes_as_played_requested.connect(on_mark_multiple_episodes_as_played);
-            details.mark_multiple_episodes_as_unplayed_requested.connect(on_mark_multiple_episodes_as_unplayed);
-
-            details.unplayed_count_changed.connect(on_unplayed_count_changed);
-
-            details.pane_should_hide.connect(() => {
-                revealer.reveal_child = false;
-                thinpaned.position = -1;
-            });
-            
-            // Set up a revealer for the sidebar
-            
-            revealer.add(details);
-            show_all();
-            revealer.reveal_child = true;
-            thinpaned.position = thinpaned.max_position - settings.sidebar_width;
+            details.set_podcast(current_podcast);
+            switch_visible_page(details);
         }
-        
+
         /*
          * Shows the downloads popover
          */
         private void show_downloads_popover() {
             this.downloads.show_all();
         }
-        
-     	/*
-         * Shows the playback box
-         */
-        private void show_playback_box() {
-
-            this.headerbar_box.no_show_all = false;
-            this.headerbar_box.show();
-            show_all();
-        }
-
 
         /*
-         * Playback functions
+         * Called when a different widget needs to be displayed in the notebook
          */
-         
-         
+         private void switch_visible_page(Gtk.Widget widget) {
+
+            if(current_widget != widget)
+                previous_widget = current_widget;
+
+            if (widget == all_scrolled) {
+                if(mode_button.selected != 0)
+                    mode_button.set_active(0);
+                notebook.set_visible_child(all_scrolled);
+                current_widget = all_scrolled;
+                mode_button_revealer.reveal_child = true;   
+            }
+            else if (widget == audio_scrolled) {
+                if(mode_button.selected != 1)
+                    mode_button.set_active(1);
+                notebook.set_visible_child(audio_scrolled);
+                current_widget = audio_scrolled;
+                mode_button_revealer.reveal_child = true; 
+            }
+            else if (widget == video_scrolled) {
+                if(mode_button.selected != 2)
+                    mode_button.set_active(2);
+                notebook.set_visible_child(video_scrolled);
+                current_widget = video_scrolled;
+                mode_button_revealer.reveal_child = true; 
+            }
+            else if (widget == details) {
+                notebook.set_visible_child(details);
+                current_widget = details;
+                mode_button_revealer.reveal_child = false; 
+            }
+            else if (widget == video_widget) {
+                notebook.set_visible_child(video_widget);
+                current_widget = video_widget;
+                mode_button_revealer.reveal_child = false; 
+            }
+            else if (widget == import_message_box) {
+                notebook.set_visible_child(import_message_box);
+                current_widget = import_message_box;
+                mode_button_revealer.reveal_child = false; 
+            }
+            else if (widget == search_results_scrolled) {
+                notebook.set_visible_child(search_results_scrolled);
+                current_widget = search_results_scrolled;
+                mode_button_revealer.reveal_child = false; 
+            }
+            else if (widget == directory_scrolled) {
+                notebook.set_visible_child(directory_scrolled);
+                current_widget = directory_scrolled;
+                mode_button_revealer.reveal_child = false; 
+            }
+            else if (widget == welcome) {
+                notebook.set_visible_child(welcome);
+                current_widget = welcome;
+                mode_button_revealer.reveal_child = false; 
+            }
+            else {
+                info("Attempted to switch to a notebook page that didn't exist. This is likely a bug and might cause issues.");
+            }
+         }
+
+
         /*
          * Handles play requests and starts media playback using the player
          */
         public void play() {
-            
+
             if(current_episode != null) {
-                show_playback_box();
-                
+                toolbar.show_playback_box();
+
                 //If the current episode is unplayed, subtract one from unplayed total and display
                 if(current_episode.status == EpisodeStatus.UNPLAYED) {
                     this.current_episode_art.set_count(this.details.unplayed_count);
@@ -1129,43 +1191,46 @@ namespace Vocal {
                     library.new_episode_count--;
                     library.set_new_badge();
                 }
-                
+
                 // Mark the current episode as played
                 library.mark_episode_as_played(current_episode);
-               
+
                 // If the currently selected episode isn't set, do so
                 if(player.current_episode != current_episode) {
-                
+
                     // Save the position information from the previous episode
                     if(player.current_episode != null) {
                         library.set_episode_playback_position(player.current_episode);
                     }
-                    
+
                     player.set_episode(current_episode);
                     player.set_state(Gst.State.READY);
-                    
+
                 }
-               
-                
+
+
                 // Are we playing a video? If so, is the video widget already being displayed?
-                if(player.current_episode.parent.content_type == MediaType.VIDEO && current_widget != video_widget) {               
-                     
-                    // Remove the library view if necessary
-                    box.remove(thinpaned);
-                    box.pack_start(video_widget, true, true, 0);
-                    current_widget = video_widget;
+                if(player.current_episode.parent.content_type == MediaType.VIDEO && current_widget != video_widget) {
 
                     // Re-configure the video
-                    player.configure_video();  
-   
+                    player.configure_video();
+
+                    // If you want to see a pretty animation, you must give the player time to configure everything
+                    GLib.Timeout.add (1000, () => {
+                        switch_visible_page(video_widget);
+
+                        return false;
+                    });
+
+
                 }
-                
+
                 if(player.is_currently_playing) {
                     player.pause();
                     playback_status_changed("Paused");
                     var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                    play_pause.image = playpause_image;
-                    play_pause.tooltip_text = _("Play");
+                    toolbar.set_play_pause_image(playpause_image);
+                    toolbar.set_play_pause_text(_("Play"));
 
                     var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                     video_controls.play_button.image = video_playpause_image;
@@ -1175,7 +1240,7 @@ namespace Vocal {
                     current_episode.last_played_position = player.get_position();
                     library.set_episode_playback_position(player.current_episode);
                 }
-                else {                
+                else {
 
                     player.play();
                     playback_status_changed("Playing");
@@ -1189,7 +1254,7 @@ namespace Vocal {
                         if(current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
                             player.pause();
                         }
-                        
+
                         player.set_position(current_episode.last_played_position);
 
                         // Pause for about a second to give time to catch up
@@ -1202,67 +1267,67 @@ namespace Vocal {
                     }
 
                     var playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                    play_pause.image = playpause_image;
-                    play_pause.tooltip_text = _("Pause");
+                    toolbar.set_play_pause_image(playpause_image);
+                    toolbar.set_play_pause_text(_("Pause"));
 
                     var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                     video_controls.play_button.image = video_playpause_image;
                     video_controls.tooltip_text = _("Pause");
-                    
+
                 }
 
                 if(!currently_importing) {
-                    playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                    toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     shownotes.set_notes_text(current_episode.description);
                 }
-                show_all();    
+                show_all();
             }
 
 
         }
-        
+
         /*
          * Switches the current track and requests the newly selected track starts playing
          */
         private void play_different_track () {
 
-            // Get the episode            
+            // Get the episode
             int index = details.current_episode_index;
             current_episode = details.podcast.episodes[index];
-            
+
             // Set episode position and start playback
             player.set_state(Gst.State.READY);
 
             play();
 
-            // Set the shownotes, the media information, and update the last played media in the settings     
+            // Set the shownotes, the media information, and update the last played media in the settings
             track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
             shownotes.set_notes_text(current_episode.description);
             settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
         }
-         
+
         /*
          * Seeks backward using the player by the number of settings specified in settings
          */
         public void seek_backward () {
             player.seek_backward(settings.rewind_seconds);
         }
-         
+
         /*
          * Seeks forward using the player by the number of settings specified in settings
          */
         public void seek_forward () {
             player.seek_forward(settings.fast_forward_seconds);
         }
-        
 
-        
-         
+
+
+
         /*
          * Library functions
          */
-         
+
 
         /*
          * Attempts to check whether or not Vocal is running on elementary OS
@@ -1271,45 +1336,48 @@ namespace Vocal {
             string output;
             output = GLib.Environment.get_variable("XDG_CURRENT_DESKTOP");
 
-            if (output != null && output.contains ("Pantheon")) {  
+            if (output != null && output.contains ("Pantheon")) {
                 on_elementary = true;
             }
          }
-         
+
         /*
-         * Handles request to download an episode, by showing the downloads menuitem and 
+         * Handles request to download an episode, by showing the downloads menuitem and
          * requesting the download from the library
          */
         private void download_episode(Episode episode) {
-            
+
             // Show the download menuitem
-            this.download.set_no_show_all(false);
-            this.download.show_all();
-            
-            
+            toolbar.show_download_button();
+
+
             // Begin the process of downloading the episode (asynchronously)
             var details_box = library.download_episode(episode);
             details_box.cancel_requested.connect(on_download_canceled);
-            
+
             // Every time a new percentage is available re-calculate the overall percentage
             details_box.new_percentage_available.connect(() => {
                 double overall_percentage = 1.0;
-                
+
                 foreach(DownloadDetailBox d in downloads.downloads) {
                     if(d.percentage > 0.0) {
                         overall_percentage *= d.percentage;
                     }
                 }
-                
+
                 // Commenting out setting launcher progress until it stops killing Plank
                 //library.set_launcher_progress(overall_percentage);
             });
-            
-            
+
+
             // Add the download to the downloads popup
             downloads.add_download(details_box);
         }
-         
+
+        private void enqueue_episode (Episode episode) {
+            library.enqueue_episode(episode);
+        }
+
         /*
          * Show a dialog to add a single feed to the library
          */
@@ -1318,7 +1386,7 @@ namespace Vocal {
             add_feed.response.connect(on_add_podcast_feed);
             add_feed.show_all();
         }
-        
+
         /*
          * Create a file containing the current library subscription export
          */
@@ -1329,7 +1397,7 @@ namespace Vocal {
                           Gtk.FileChooserAction.SAVE,
                           _("Cancel"), Gtk.ResponseType.CANCEL,
                           _("Save"), Gtk.ResponseType.ACCEPT);
-                          
+
             var all_files_filter = new Gtk.FileFilter();
             all_files_filter.set_filter_name(_("All files"));
             all_files_filter.add_pattern("*");
@@ -1344,17 +1412,17 @@ namespace Vocal {
 
             //Modal dialogs are sexy :)
             file_chooser.modal = true;
-            
+
             //If the user selects a file, get the name and parse it
             if (file_chooser.run () == Gtk.ResponseType.ACCEPT) {
                 string file_name = (file_chooser.get_filename ());
                 library.export_to_OPML(file_name);
             }
-            
+
             //If the user didn't select a file, destroy the dialog
             file_chooser.destroy ();
         }
-        
+
         /*
          * Choose a file to import to the library
          */
@@ -1367,7 +1435,7 @@ namespace Vocal {
                  Gtk.FileChooserAction.OPEN,
                  _("Cancel"), Gtk.ResponseType.CANCEL,
                  _("Open"), Gtk.ResponseType.ACCEPT);
-                          
+
             var all_files_filter = new Gtk.FileFilter();
             all_files_filter.set_filter_name(_("All files"));
             all_files_filter.add_pattern("*");
@@ -1380,57 +1448,52 @@ namespace Vocal {
             file_chooser.add_filter(all_files_filter);
 
             file_chooser.modal = true;
-            
+
             int decision = file_chooser.run();
             string file_name = file_chooser.get_filename();
 
             file_chooser.destroy();
-            
+
             //If the user selects a file, get the name and parse it
             if (decision == Gtk.ResponseType.ACCEPT) {
 
-                show_playback_box();
+                toolbar.show_playback_box();
 
                 // Hide the shownotes button
-                shownotes_button.set_no_show_all(true);
-                shownotes_button.hide();
-            
+                toolbar.hide_shownotes_button();
+                toolbar.hide_playlist_button();
+
+                if(current_widget == welcome) {
+                    switch_visible_page(import_message_box);
+                }
+
                 var loop = new MainLoop();
                 library.add_from_OPML(file_name, (obj, res) => {
 
                     bool success = library.add_from_OPML.end(res);
 
                     if(success) {
-                                       
+
                         if(!player.is_currently_playing)
-                            hide_playback_box();
-                            
+                            toolbar.hide_playback_box();
+
                         // Is there now at least one podcast in the library?
                         if(library.podcasts.size > 0) {
 
                             // Make the refresh and export items sensitive now
-                            //refresh_item.sensitive = true;
-                            export_item.sensitive = true;
+                            toolbar.export_item.sensitive = true;
 
-                            // Hide the shownotes button
-                            shownotes_button.set_no_show_all(false);
-                            shownotes_button.show();
-                        
-                            // Set up the initial widgets
-                            if(first_run || library_empty) {
+                            toolbar.show_shownotes_button();
+                            toolbar.show_playlist_button();
 
-                                // The library widgets (play/pause, next, forward, iconviews, etc.)
-                                setup_library_widgets();
+                            populate_views();
 
-                                // Although setup_library_widgets calls populate_views, an additional call is necessary when adding the first feed ever
-                                populate_views();
-                            } else {
-                                // but if we don't setup widgets, we need to repopulate the views
-                                populate_views();
+                            if(current_widget == import_message_box) {
+                                switch_visible_page(all_scrolled);
                             }
 
                             library_empty = false;
-                            
+
                             show_all();
                         }
 
@@ -1438,15 +1501,15 @@ namespace Vocal {
                     } else {
 
                         if(!player.is_currently_playing)
-                            hide_playback_box();
-                       
+                            toolbar.hide_playback_box();
+
                         var add_err_dialog = new Gtk.MessageDialog(add_feed,
                             Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
                             Gtk.ButtonsType.OK, "");
                             add_err_dialog.response.connect((response_id) => {
                                 add_err_dialog.destroy();
                             });
-                                
+
                         var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
                         add_err_dialog.set_transient_for(this);
                         add_err_dialog.text = _("Error Importing from File");
@@ -1458,23 +1521,23 @@ namespace Vocal {
                     currently_importing = false;
 
                     if(player.is_currently_playing) {
-                        playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                        toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                         video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     }
-                    
+
                     loop.quit();
                 });
                 loop.run();
-                
+
                 file_chooser.destroy();
             }
-        }     
-         
-         
+        }
+
+
         /*
          * Signal handlers and callbacks
          */
-        
+
 
         /*
          * Called when the player attempts to play media but the necessary Gstreamer plugins are not installed.
@@ -1529,89 +1592,96 @@ namespace Vocal {
          * the add feed menuitem
          */
         private void on_add_podcast_feed(int response_id) {
+            add_podcast_feed(response_id, add_feed.entry.get_text(), null);
+        }
+
+        /*
+         * Does the actual adding of podcast feeds
+         */
+        private void add_podcast_feed(int response_id, string feed, string? name) {
 
             currently_importing = true;
 
             if(response_id == Gtk.ResponseType.OK) {
-                if(add_feed != null) {
-                    string entered_feed = add_feed.entry.get_text();
-                    add_feed.destroy();
-                    
-                    // Hide the shownotes button
-                    shownotes_button.set_no_show_all(true);
-                    shownotes_button.hide();
-                    
-                    playback_box.set_message(_("Adding new podcast: <b>" + entered_feed + "</b>"));
-                    show_playback_box();
-                    
-                    var loop = new MainLoop();
-                    bool success = false;
+                string entered_feed;
+                if(feed == null && add_feed != null) 
+                    entered_feed = add_feed.entry.get_text();
+                else
+                    entered_feed = feed;
 
-                    library.async_add_podcast_from_file(entered_feed, (obj, res) => {
-                        success = library.async_add_podcast_from_file.end(res);
-                        currently_importing = false;
-                        if(player.is_currently_playing) {
-                            playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-                            video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                add_feed.destroy();
+
+                // Hide the shownotes button
+                toolbar.hide_shownotes_button();
+                toolbar.hide_playlist_button();
+
+                if(name == null)
+                    toolbar.playback_box.set_message(_("Adding new podcast: <b>" + entered_feed + "</b>"));
+                else
+                    toolbar.playback_box.set_message(_("Adding new podcast: <b>" + name + "</b>"));
+                toolbar.show_playback_box();
+
+                var loop = new MainLoop();
+                bool success = false;
+
+                library.async_add_podcast_from_file(entered_feed, (obj, res) => {
+                    success = library.async_add_podcast_from_file.end(res);
+                    currently_importing = false;
+                    if(player.is_currently_playing) {
+                        toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                        video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                    }
+                    loop.quit();
+                });
+
+                loop.run();
+
+
+                if(success) {
+                    toolbar.show_shownotes_button();
+                    toolbar.show_playlist_button();
+
+                    if(!player.is_currently_playing)
+                        toolbar.hide_playback_box();
+
+                    // Is there now at least one podcast in the library?
+                    if(library.podcasts.size > 0) {
+
+                        // Make the refresh and export items sensitive now
+                        //refresh_item.sensitive = true;
+                        toolbar.export_item.sensitive = true;
+
+                        // Populate views no matter what
+                        populate_views();
+
+                        if(current_widget == welcome) {
+                            switch_visible_page(all_scrolled);
                         }
-                        loop.quit(); 
+
+                        library_empty = false;
+
+                        show_all();
+                    }
+                } else {
+
+                    if(!player.is_currently_playing)
+                        toolbar.hide_playback_box();
+
+                    var add_err_dialog = new Gtk.MessageDialog(add_feed,
+                    Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
+                    Gtk.ButtonsType.OK, "");
+                    add_err_dialog.response.connect((response_id) => {
+                        add_err_dialog.destroy();
                     });
 
-                    loop.run();
+                    var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
+                    add_err_dialog.set_transient_for(this);
+                    add_err_dialog.text = _("Error Adding Podcast");
+                    add_err_dialog.secondary_text = _("Please check that the feed is correct and that you have a network connection.");
+                    add_err_dialog.set_image(error_img);
+                    add_err_dialog.show_all();
+                }
 
-
-                    if(success) {
-                        if(!player.is_currently_playing)
-                            hide_playback_box();
-                            
-                        // Is there now at least one podcast in the library?
-                        if(library.podcasts.size > 0) {
-
-                            // Make the refresh and export items sensitive now
-                            //refresh_item.sensitive = true;
-                            export_item.sensitive = true;
-
-                            // Hide the shownotes button
-                            shownotes_button.set_no_show_all(false);
-                            shownotes_button.show();
-                        
-                            // Set up the initial widgets
-                            if(first_run || library_empty) {
-
-                                // The library widgets (play/pause, next, forward, iconviews, etc.)
-                                setup_library_widgets();
-
-                                // Although setup_library_widgets calls populate_views, an additional call is necessary when adding the first feed ever
-                                populate_views();
-                            } else {
-                                // but if we don't setup widgets, we need to repopulate the views
-                                populate_views();
-                            }
-
-                            library_empty = false;
-                            
-                            show_all();
-                        }  
-                    } else {
-
-                        if(!player.is_currently_playing)
-                            hide_playback_box();
-
-                        var add_err_dialog = new Gtk.MessageDialog(add_feed,
-                        Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
-                        Gtk.ButtonsType.OK, "");
-                        add_err_dialog.response.connect((response_id) => {
-                            add_err_dialog.destroy();
-                        });
-                
-                        var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
-                        add_err_dialog.set_transient_for(this);
-                        add_err_dialog.text = _("Error Adding Podcast");
-                        add_err_dialog.secondary_text = _("Please check that the feed is correct and that you have a network connection.");
-                        add_err_dialog.set_image(error_img);
-                        add_err_dialog.show_all();
-                    }
-                } 
             }
             else {
             	// Destroy the add podcast dialog box
@@ -1622,8 +1692,7 @@ namespace Vocal {
         /*
          * Called whenever a child is activated (selected) in one of the three flowboxes.
          */
-        private void on_child_activated(FlowBoxChild child)
-        {
+        private void on_child_activated(FlowBoxChild child) {
             Gtk.FlowBox parent = child.parent as Gtk.FlowBox;
             CoverArt art = parent.get_child_at_index(child.get_index()).get_child() as CoverArt;
             parent.unselect_all();
@@ -1631,7 +1700,52 @@ namespace Vocal {
             this.highlighted_podcast = art.podcast;
             show_details(art.podcast);
         }
-        
+
+        /*
+         * Called when a user enters a cheat code that is correct
+         */
+
+        private void on_code_accepted(string code) {
+            secret_entry.hide();
+
+            switch(code) {
+                case "camelot":
+
+                    const string CAMELOT_SS = """
+                    @define-color colorPrimary shade(#AF739A, .80);
+                    """;
+
+
+                    Granite.Widgets.Utils.set_theming_for_screen (this.get_screen (), CAMELOT_SS,
+                                                   Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+                    Episode fake_episode = new Episode();
+                    fake_episode.title = "Monty Python and the Holy Grail Lego Version";
+                    fake_episode.uri = "https://ia700402.us.archive.org/6/items/legopython/legopython.mp4";
+                    Podcast fake_podcast = new Podcast();
+                    fake_episode.parent = fake_podcast;
+                    fake_podcast.remote_art_uri = "https://i.vimeocdn.com/video/144879370_640.jpg";
+                    fake_podcast.local_art_uri = "https://i.vimeocdn.com/video/144879370_640.jpg";
+                    fake_podcast.content_type = MediaType.VIDEO;
+                    current_episode = fake_episode;
+
+                    // Set episode position and start playback
+                    player.set_state(Gst.State.READY);
+
+                    track_changed("And now for something completely different",
+                        "Monty Python", current_episode.parent.coverart_uri, player.get_duration());
+
+                    play();
+
+                    
+                    break;
+                case "roundel":
+                    break;
+                default:
+                    break;
+            }
+        }
+
 		/*
 		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to delete
 		 */
@@ -1649,14 +1763,14 @@ namespace Vocal {
                 download_episode(e);
             }
         }
-        
+
         /*
          * Mark the episode as not being downloaded
          */
          private void on_download_canceled(Episode episode) {
 
             if(details != null && episode.parent == details.podcast) {
-                
+
                 // Get the index for the episode in the list
                 int index = details.get_box_index_from_episode(episode);
 
@@ -1669,7 +1783,7 @@ namespace Vocal {
 
         /*
          * Mark an episode as being downloaded
-         */ 
+         */
         private void on_download_finished(Episode episode) {
 
             if(details != null && episode.parent == details.podcast) {
@@ -1684,7 +1798,7 @@ namespace Vocal {
                 }
             }
         }
-        
+
         		/*
 		 * Called when an episode needs to be deleted (locally)
 		 */
@@ -1703,10 +1817,10 @@ namespace Vocal {
                 fullscreened = false;
                 ignore_window_state_change = true;
             } else {
-                
+
                 fullscreen();
                 fullscreened = true;
-                
+
             }
 
         }
@@ -1715,41 +1829,26 @@ namespace Vocal {
          * Called during an import event when the parser has started parsing a new feed
          */
         private void on_import_status_changed(int current, int total, string title) {
-        
-            this.playback_box.set_message_and_percentage("Adding feed %d/%d: %s".printf(current, total, title), (double)((double)current/(double)total));
 
-            if(first_run && current_widget != import_message_box)
-            {
-                box.remove(welcome);
-                import_message_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 25);
-                var import_h1_label = new Gtk.Label(_("Good Stuff is On Its Way"));
-                var import_h3_label = new Gtk.Label(_("If you are importing several podcasts it can take a few minutes. Your library will be ready shortly.")); 
-                Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H1, import_h1_label);
-                Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, import_h3_label);
-                import_h1_label.margin_top = 200;
-                import_message_box.add(import_h1_label);
-                import_message_box.add(import_h3_label);
-                box.add(import_message_box);
-                current_widget = import_message_box;
+            show_all();
 
-                show_all();
-            }
-            
+            toolbar.playback_box.set_message_and_percentage("Adding feed %d/%d: %s".printf(current, total, title), (double)((double)current/(double)total));
+
         }
-        
+
         /*
          * Called when the user requests to mark a podcast as played from the library via the right-click menu
          */
         private void on_mark_as_played_request() {
-        
+
             if(highlighted_podcast != null) {
                 Gtk.MessageDialog msg = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO,
-                     "Are you sure you want to mark all episodes from '%s' as played?".printf(highlighted_podcast.name.replace("%27", "'")));
-                     
-                var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);     
+                     _("Are you sure you want to mark all episodes from '%s' as played?".printf(highlighted_podcast.name.replace("%27", "'"))));
+
+                var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
                 msg.image = image;
                 msg.image.show_all();
-                
+
 			    msg.response.connect ((response_id) => {
 			        switch (response_id) {
 				        case Gtk.ResponseType.YES:
@@ -1797,7 +1896,7 @@ namespace Vocal {
 		        msg.show ();
 	        }
         }
-        
+
         /*
 		 * Called when an episode needs to be marked as played
 		 */
@@ -1858,7 +1957,7 @@ namespace Vocal {
                 library.mark_episode_as_unplayed(episode);
                 library.new_episode_count++;
                 library.set_new_badge();
-    
+
                 foreach(CoverArt a in all_art)
                 {
                     if(a.podcast == details.podcast)
@@ -1900,9 +1999,9 @@ namespace Vocal {
         }
 
 		/*
-		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to 
+		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to
 		 * mark them all as played
-		 */ 
+		 */
         private void on_mark_multiple_episodes_as_played(Gee.ArrayList<int> indexes) {
             foreach(int i in indexes) {
                 on_mark_episode_as_played_request(details.podcast.episodes[i]);
@@ -1910,12 +2009,32 @@ namespace Vocal {
         }
 
 		/*
-		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to 
+		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to
 		 * mark them all as played
-		 */ 
+		 */
         private void on_mark_multiple_episodes_as_unplayed(Gee.ArrayList<int> indexes) {
             foreach(int i in indexes) {
                 on_mark_episode_as_unplayed_request(details.podcast.episodes[i]);
+            }
+        }
+
+        /*
+         * Called when the user selects another mode button
+         */
+        private void on_mode_changed(Gtk.Widget widget) {
+
+            previous_widget = current_widget;
+
+            switch(mode_button.selected) {
+                case 0:
+                    switch_visible_page(all_scrolled);
+                    break;
+                case 1:
+                    switch_visible_page(audio_scrolled);
+                    break;
+                case 2:
+                    switch_visible_page(video_scrolled);
+                    break;
             }
         }
 
@@ -1955,7 +2074,7 @@ namespace Vocal {
                         hiding_timer = 0;
                         return true;
                     }
-                    
+
                     else if (hovering_over_video_controls || hovering_over_return_button) {
                         hiding_timer = 0;
                         return true;
@@ -1968,7 +2087,7 @@ namespace Vocal {
 
                     return false;
                 });
-            
+
 
                 if(fullscreened) {
                     bottom_actor.width = stage.width;
@@ -1977,29 +2096,46 @@ namespace Vocal {
                 }
                 return_revealer.set_reveal_child(true);
 
-            }   
+            }
 
             return false;
         }
 
-        
+        /*
+         * Called when the subscribe button is clicked either on the store or on a search page
+         */
+        private void on_new_subscription(string itunes_url) {
+
+            string name;
+
+            // We are given an iTunes store URL. We need to get the actual RSS feed from  this
+            string rss = itunes.get_rss_from_itunes_url(itunes_url, out name);
+
+            if(name == null) {
+                name = "Unknown";
+            }
+
+            add_podcast_feed(Gtk.ResponseType.OK, rss, name);
+        }
+
+
         /*
          * Called when the user requests to remove a podcast from the library via the right-click menu
          */
         private void on_remove_request() {
             if(highlighted_podcast != null) {
                 Gtk.MessageDialog msg = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                     "Are you sure you want to remove '%s' from your library?".printf(highlighted_podcast.name.replace("%27", "'")));
-                     
-                     
-                msg.add_button ("_No", Gtk.ResponseType.NO);
-                Gtk.Button delete_button = (Gtk.Button) msg.add_button("_Yes", Gtk.ResponseType.YES);
+                     _("Are you sure you want to remove '%s' from your library?".printf(highlighted_podcast.name.replace("%27", "'"))));
+
+
+                msg.add_button (_("No"), Gtk.ResponseType.NO);
+                Gtk.Button delete_button = (Gtk.Button) msg.add_button(_("Yes"), Gtk.ResponseType.YES);
                 delete_button.get_style_context().add_class("destructive-action");
-                     
-                var image = new Gtk.Image.from_icon_name("dialog-warning", Gtk.IconSize.DIALOG);     
+
+                var image = new Gtk.Image.from_icon_name("dialog-warning", Gtk.IconSize.DIALOG);
                 msg.image = image;
                 msg.image.show_all();
-                
+
 			    msg.response.connect ((response_id) => {
 			        switch (response_id) {
 				        case Gtk.ResponseType.YES:
@@ -2017,10 +2153,10 @@ namespace Vocal {
 		        msg.show ();
 	        }
         }
-        
+
         /*
          * Called when the video needs to be hidden and the library shown again
-         */ 
+         */
         private void on_return_to_library() {
 
             // If fullscreen, first exit fullscreen so you won't be "trapped" in fullscreen mode
@@ -2031,55 +2167,151 @@ namespace Vocal {
             if(player.is_currently_playing)
                 play();
 
-            if (hiding_timer != 0) {
-                Source.remove (hiding_timer);
+            switch_visible_page(previous_widget);
+
+            // Make sure the cursor is visible again
+            this.get_window ().set_cursor (null);
+        }
+
+        /*
+         * Called whenever the seach popover loses focus
+         */
+         private bool on_search_focus_change(EventFocus event) {
+
+            // Only show the search popover if either the popover or search entry has focus
+            if(toolbar.search_entry.has_focus) {
+            } else {
+                search_results.hide();
             }
 
-            // Wait just a short while before returning to library
-            GLib.Timeout.add(1000, () => {
+            return false;
+         }
 
-                // Remove the video widget
-                box.remove(video_widget);
-                
-                // Add the thinpaned back
-    		    box.pack_start(thinpaned);
+         private void on_search_popover_podcast_selected(Podcast p) {
+            if(p != null) {
+                bool found = false;
+                int i = 0;
+                while(!found && i < all_art.size) {
+                    CoverArt a = all_art[i];
+                    if(a.podcast.name == p.name) {
+                        all_flowbox.unselect_all();
+                        this.current_episode_art = a;
+                        this.highlighted_podcast = a.podcast;
+                        show_details(a.podcast);
+                        found = true;
+                    }
+                    i++;                    
+                }
+            }
+         }
 
-                current_widget = thinpaned;
+         private void on_search_popover_episode_selected(Podcast p, Episode e) {
+            if(p != null && e != null) {
+                bool podcast_found = false;
+                int i = 0;
+                while(!podcast_found && i < all_art.size) {
+                    CoverArt a = all_art[i];
+                    if(a.podcast.name == p.name) {
+                        all_flowbox.unselect_all();
+                        this.current_episode_art = a;
+                        this.highlighted_podcast = a.podcast;
+                        show_details(a.podcast);
+                        podcast_found = true;
+                        details.select_episode(e);
+                    }
+                    i++;                    
+                }
+            }
+         }
 
-                // Make sure the cursor is visible again
-                this.get_window ().set_cursor (null);
 
-                return false;
+        /*
+         * Shows a full search results listing
+         */
+        private void on_show_full_results() {
+
+            if(search_results_view != null) {
+                search_results_box.remove(search_results_view);
+            }
+
+
+            search_results_view = new SearchResultsView(toolbar.search_entry.get_text(), library, search_results.p_matches, search_results.e_matches);
+            search_results_view.on_new_subscription.connect(on_new_subscription);
+            search_results_view.return_to_library.connect(() => {
+                switch_visible_page(previous_widget);
             });
+            search_results_view.episode_selected.connect(on_search_popover_episode_selected);
+            search_results_view.podcast_selected.connect(on_search_popover_podcast_selected);
+
+            if(search_results.visible)
+                search_results.hide();
+
+            search_results_box.add(search_results_view);
+            switch_visible_page(search_results_scrolled);
+            show_all();
         }
-        
+
         /*
          * Called when the player finishes a stream
          */
         private void on_stream_ended() {
-        
+
             // hide the playback box and set the image on the pause button to play
-            hide_playback_box();
-            
+            toolbar.hide_playback_box();
+
             var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            play_pause.image = playpause_image;
+            toolbar.set_play_pause_image(playpause_image);
 
 
 
             // If there is a video showing, return to the library view
-            if(current_episode.parent.content_type == MediaType.VIDEO && current_widget != thinpaned) {
+            if(current_episode.parent.content_type == MediaType.VIDEO) {
                 on_return_to_library();
             }
 
 
-            // Reset the last played position and save it 
+            // Reset the last played position and save it
             player.set_state(Gst.State.NULL);
             player.current_episode.last_played_position = 0;
             library.set_episode_playback_position(player.current_episode);
 
             playback_status_changed("Stopped");
+
+
+            current_episode = library.get_next_episode_in_queue();
+
+            if(current_episode != null) {
+
+                // Set episode position and start playback
+                player.set_state(Gst.State.READY);
+
+                play();
+
+                // Set the shownotes, the media information, and update the last played media in the settings
+                track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+                shownotes.set_notes_text(current_episode.description);
+                settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
+            }
+
         }
-        
+
+        private void play_episode_from_queue_immediately(Episode e) {
+
+            current_episode = e;
+            queue_popover.hide();
+            library.remove_episode_from_queue(e);
+
+            // Set episode position and start playback
+            player.set_state(Gst.State.READY);
+
+            play();
+
+            // Set the shownotes, the media information, and update the last played media in the settings
+            track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+            shownotes.set_notes_text(current_episode.description);
+            settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
+        }
+
         /*
 		 * Called when the unplayed count changes and the banner count in the iconviews needs updated
 		 */
@@ -2122,25 +2354,25 @@ namespace Vocal {
                     }
                 }
         }
-        
-        
+
+
         /*
          * Check for new episodes
          */
         private void on_update_request() {
-               
+
             // Only check for updates if no other checks are currently under way
             if(!checking_for_updates) {
-            
+
                 checking_for_updates = true;
-        
+
                 // Create an arraylist to store new episodes
                 Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode>();
-                             
+
                 // Check for new updates
                 debug("Checking for updates");
 
-                
+
                 var loop = new MainLoop();
                 library.check_for_updates.begin((obj, res) => {
                     try {
@@ -2151,36 +2383,37 @@ namespace Vocal {
                     loop.quit();
                 });
                 loop.run();
-                
-                
+
+
                 // Reset the period
                 minutes_elapsed_in_period = 0;
-                
+
                 debug("Update complete");
-                
+
                 checking_for_updates = false;
 
-                
+
 
                 // Send a notification if there are new episodes
-                if(new_episodes.size > 0)
+                if(new_episodes.size > 0 && !settings.auto_download)
                 {
-                	Utils.send_generic_notification(_("Fresh content has been added to your library."));
+                    if(!focus_visible)
+                	   Utils.send_generic_notification(_("Fresh content has been added to your library."));
 
                 	// Also update the number of new episodes and set the badge count
                 	library.new_episode_count += new_episodes.size;
                 	library.set_new_badge();
                 }
-            
+
                 // Automatically download episodes if set to do so
                 if(settings.auto_download && new_episodes.size > 0) {
                     foreach(Episode e in new_episodes) {
                         download_episode(e);
                     }
-                }    
+                }
 
                 int new_episode_count = new_episodes.size;
-                
+
                 // Free up the memory from the arraylist
                 new_episodes = null;
 
@@ -2190,7 +2423,7 @@ namespace Vocal {
             } else {
                 info("Vocal is already checking for updates.");
             }
-            
+
         }
 
         /*
@@ -2203,37 +2436,43 @@ namespace Vocal {
             }
 
             return false;
-
         }
-        
+
         /*
          * Handles responses from the welcome screen
          */
         private void on_welcome(int index) {
-        
+
+            // Show the store
+            if(index == 0) {
+                switch_visible_page(directory_scrolled);
+
+                // Set the library as the previous widget for return_to_library to work
+                previous_widget = all_scrolled;
+            }
+
             // Add a new feed
-            if (index == 0 ) {
+            if (index == 1 ) {
                 add_feed = new AddFeedDialog(this, on_elementary);
                 add_feed.response.connect(on_add_podcast_feed);
                 add_feed.show_all();
 
             // Import from OPML
-            } else if (index == 1) {
+            } else if (index == 2) {
 
                 // The import podcasts method will handle any errors
                 import_podcasts();
 
             // Starter pack
-            } else {
-
+            } else if (index == 3) {
                 try {
                     GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/starter-pack");
                 } catch (Error error) {}
             }
 
         }
-        
-        
+
+
         /*
          * Saves the window height and width before closing, and decides whether to close or minimize
          * based on whether or not a track is currently playing
@@ -2252,23 +2491,15 @@ namespace Vocal {
             settings.window_height = height;
             settings.window_width = width;
 
-            if(details != null) {
-                int new_width = thinpaned.max_position - thinpaned.position;
-
-                // There is a possibility that the sidebar was hidden, so only set it large enough
-                if(new_width >= 100)
-                    settings.sidebar_width = thinpaned.max_position - thinpaned.position;       
-            }
 
 
-            
             // Save the playback position
             if(player.current_episode != null) {
                 stdout.printf("Setting the last played position to %s\n", player.current_episode.last_played_position.to_string());
                 if(player.current_episode.last_played_position != 0)
                     library.set_episode_playback_position(player.current_episode);
             }
-              
+
             // If an episode is currently playing just minimize the window
             if(player.is_currently_playing) {
                 this.iconify();
@@ -2282,7 +2513,7 @@ namespace Vocal {
 					if(response_id == Gtk.ResponseType.YES) {
 						should_quit_immediately = true;
 						this.close();
-					} 
+					}
 				});
 				downloads_active_dialog.show();
 				return true;

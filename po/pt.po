@@ -8,33 +8,34 @@ msgstr ""
 "Project-Id-Version: vocal\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-06 16:59+0000\n"
+"PO-Revision-Date: 2015-04-29 12:54+0000\n"
 "Last-Translator: Nathan Dyer <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-07 05:31+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-04-30 05:32+0000\n"
+"X-Generator: Launchpad (build 17453)\n"
 
 #: ../src/Utils/FeedParser.vala:288
 msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr "Ficheiros seleccionados não aparentam ter subscrições de podcast."
+msgstr "Parece que o ficheiro selecionado não contém subscrições."
 
 #: ../src/Utils/FeedParser.vala:299
 msgid "Selected file seems to be empty."
-msgstr "Ficheiros seleccionados estão vazios."
+msgstr "Parece que o ficheiro selecionado está vazio."
 
 #: ../src/Library.vala:152
 msgid "Unable to add podcast"
-msgstr "Incapaz de adicionar episódios"
+msgstr "Incapaz de adicionar podcast"
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
 msgstr ""
 "Launchpad Contributions:\n"
 "  Felix https://launchpad.net/~nunofelix1990-gmail\n"
-"  Nathan Dyer https://launchpad.net/~nathandyer"
+"  Nathan Dyer https://launchpad.net/~nathandyer\n"
+"  Sérgio Marques https://launchpad.net/~sergio+marques"
 
 #: ../src/MainWindow.vala:194
 msgid "View show notes"
@@ -42,7 +43,7 @@ msgstr "Ver notas do episódio"
 
 #: ../src/MainWindow.vala:237
 msgid "Return to library view"
-msgstr "Voltar para a vista de biblioteca"
+msgstr "Voltar para a vista de coleção"
 
 #: ../src/MainWindow.vala:489
 msgid "Welcome to Vocal"
@@ -50,7 +51,7 @@ msgstr "Bem-vindo ao Vocal"
 
 #: ../src/MainWindow.vala:489
 msgid "Build Your Library By Adding Podcasts"
-msgstr "Cria a tua biblioteca adicionando Podcasts"
+msgstr "Crie a sua coleção adicionando podcsts"
 
 #: ../src/MainWindow.vala:490
 msgid "Add a New Feed"
@@ -58,7 +59,7 @@ msgstr "Adicionar nova fonte"
 
 #: ../src/MainWindow.vala:490
 msgid "Provide the web address of a podcast feed."
-msgstr "Forneça o endereço web do podcast."
+msgstr "Escreva o endereço web da fonte."
 
 #: ../src/MainWindow.vala:493
 msgid "Import Subscriptions"
@@ -67,19 +68,19 @@ msgstr "Importar subscrições"
 #: ../src/MainWindow.vala:494
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
-msgstr "Se exportou fontes de outro gestor de Podcast, importe-as aqui."
+msgstr "Se exportou fontes de outro gestor de podcasts, importe-as aqui."
 
 #: ../src/MainWindow.vala:495
 msgid "Check Out the Vocal Starter Pack…"
-msgstr "Verifica só o pacote inicial do Vocal"
+msgstr "Verifique o pacote Vocal Starter..."
 
 #: ../src/MainWindow.vala:495
 msgid ""
 "New to podcasting? Check out our starter pack. Select individual podcasts, "
 "or download the entire pack."
 msgstr ""
-"Novo ao podcasting? Verifica só o nosso pacote inicial. Selecciona podcasts "
-"individuais, ou descarrega todo o pacote inteiro."
+"Novo no podcasting? Verifique o nosso pacote Starter. Selecione os podcasts "
+"individualmente ou o pacote completo."
 
 #: ../src/MainWindow.vala:526
 msgid "Export Subscriptions…"
@@ -91,7 +92,7 @@ msgstr "Preferências"
 
 #: ../src/MainWindow.vala:546
 msgid "Check Out The Vocal Starter Pack…"
-msgstr "Verifica só o pacote inicial do Vocal"
+msgstr "Verifique o nosso pacote Vocal Starter..."
 
 #: ../src/MainWindow.vala:554
 msgid "Donate…"
@@ -99,15 +100,15 @@ msgstr "Donativos..."
 
 #: ../src/MainWindow.vala:574
 msgid "Add new podcasts to the library"
-msgstr "Adiciona novos podcasts à biblioteca"
+msgstr "Adicionar novos podcasts à coleção"
 
 #: ../src/MainWindow.vala:580
 msgid "Add Podcast Feed"
-msgstr "Adicionar podcast às fontes"
+msgstr "Adicionar fonte de podcast"
 
 #: ../src/MainWindow.vala:588
 msgid "Import Subscriptions…"
-msgstr "Importar subscrições"
+msgstr "Importar subscrições..."
 
 #: ../src/MainWindow.vala:671
 msgid "All Podcasts"
@@ -130,15 +131,15 @@ msgstr "Reproduzir"
 
 #: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
 msgid "Fast forward %d seconds"
-msgstr "Avanço rápido %d segundos"
+msgstr "Avançar %d segundos"
 
 #: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
 msgid "Rewind %d seconds"
-msgstr "Retroceder %d segundos"
+msgstr "Recuar %d segundos"
 
 #: ../src/MainWindow.vala:709
 msgid "Check for new episodes"
-msgstr "Verificar existência de novos episódios"
+msgstr "Procurar novos episódios"
 
 #: ../src/MainWindow.vala:737
 msgid "Downloads"
@@ -155,7 +156,7 @@ msgstr "Cancelar"
 
 #: ../src/MainWindow.vala:1328
 msgid "Save"
-msgstr ""
+msgstr "Guardar"
 
 #: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
 msgid "All files"
@@ -167,11 +168,11 @@ msgstr "Ficheiros OPML e XML"
 
 #: ../src/MainWindow.vala:1362
 msgid "Select Subscription File"
-msgstr "Seleccionar ficheiro de subscrição"
+msgstr "Selecione o ficheiro de subscrições"
 
 #: ../src/MainWindow.vala:1366
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: ../src/MainWindow.vala:1373
 msgid "OPML files"
@@ -186,7 +187,7 @@ msgid ""
 "Please check that you selected the correct file and that you are connected "
 "to the network."
 msgstr ""
-"Por favor verifique  que seleccionou o ficheiro correcto e que está ligado à "
+"Por favor verifique se selecionou o ficheiro correto e se está ligado à "
 "Internet."
 
 #: ../src/MainWindow.vala:1483
@@ -194,12 +195,12 @@ msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
 msgstr ""
-"Plugins adicionais são necessários para reproduzir o conteúdo multimédia. "
-"Gostaria que o Vocal  instalá-los por você?"
+"São necessários alguns extras para a reprodução. Gostaria que o Vocal os "
+"tentasse instalar?"
 
 #: ../src/MainWindow.vala:1540
 msgid "Adding new podcast: <b>"
-msgstr "A adicionar novo pod cast: <b>"
+msgstr "Adicionando novo podcast: <b>"
 
 #: ../src/MainWindow.vala:1604
 msgid "Error Adding Podcast"
@@ -221,32 +222,32 @@ msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
 msgstr ""
-"Se você estiver a importar vários podcasts pode demorar alguns minutos. A "
-"sua biblioteca estará pronta em breve."
+"Se você estiver a importar vários podcasts, podem demorar alguns minutos. A "
+"sua coleção estará pronta brevemente."
 
 #: ../src/MainWindow.vala:2163
 msgid "Fresh content has been added to your library."
-msgstr "Conteúdo novo adicionado À sua biblioteca"
+msgstr "Foi adicionado novo conteúdo à sua coleção."
 
 #: ../src/MainWindow.vala:2274
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to "
 "be canceled. Are you sure you want to exit?"
 msgstr ""
-"Está a transferir episódios. Saindo fará com que as transferências  sejam "
-"canceladas. Tem certeza de que deseja sair?"
+"O Vocal ainda está a transferir alguns episódios. Se sair, as transferências "
+"ativas serão canceladas. Tem a certeza de que pretende sair?"
 
 #: ../src/Widgets/DownloadDetailBox.vala:107
 msgid "Cancel Download"
-msgstr "Cancelar Transferência"
+msgstr "Cancelar transferência"
 
 #: ../src/Widgets/VideoControls.vala:59
 msgid "Exit Fullscreen"
-msgstr "Sair do ecrã completo"
+msgstr "Sair de ecrã completo"
 
 #: ../src/Widgets/DownloadsPopover.vala:50
 msgid "No active downloads."
-msgstr "Sem transferências activas."
+msgstr "Nenhuma transferência ativa."
 
 #: ../src/Widgets/AddFeedDialog.vala:43
 msgid "Add New Podcast"
@@ -254,27 +255,27 @@ msgstr "Adicionar novo podcast"
 
 #: ../src/Widgets/AddFeedDialog.vala:54
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr "<b> Adionar uma nova fonte de podcast à biblioteca</b>"
+msgstr "<b> Adionar nova fonte de podcasts à coleção</b>"
 
 #: ../src/Widgets/AddFeedDialog.vala:59
 msgid "Podcast feed web address"
-msgstr "Endereço de rede da fonte de podcast"
+msgstr "Endereço web da fonte"
 
 #: ../src/Widgets/PlaybackBox.vala:39
 msgid "<b>Select an episode to start playing...</b>"
-msgstr "<b> Seleccione um episódio para começar a reproduzir... <b>"
+msgstr "<b>SSelecione um episódio para iniciar a reprodução...</b>"
 
 #: ../src/Widgets/SettingsDialog.vala:64
 msgid "Automatically download new episodes:"
-msgstr "Transferir automaticamente novos episódios:"
+msgstr "Transferir novos episódios automaticamente:"
 
 #: ../src/Widgets/SettingsDialog.vala:85
 msgid "Automatically delete played files:"
-msgstr "Eliminar automático ficheiros reproduzidos:"
+msgstr "Eliminar ficheiros reproduzidos:"
 
 #: ../src/Widgets/SettingsDialog.vala:115
 msgid "Seconds to skip back:"
-msgstr "Segundos para retroceder:"
+msgstr "Segundos para recuar:"
 
 #: ../src/Widgets/SettingsDialog.vala:136
 msgid "Seconds to skip forward:"
@@ -286,7 +287,7 @@ msgstr "Fechar"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:86
 msgid "This episode is currently being played"
-msgstr "Este episódio está actualmente a ser reproduzido"
+msgstr "Este episódio está a ser reproduzido"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:117
 #: ../src/Widgets/EpisodeDetailBox.vala:318
@@ -295,7 +296,7 @@ msgstr "Transmitir episódio"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:133
 msgid "Download Episode"
-msgstr "Transferir Episódio"
+msgstr "Transferir episódio"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
@@ -307,11 +308,11 @@ msgstr "Transferir todos os episódios"
 
 #: ../src/Widgets/Sidepane.vala:109
 msgid "Hide episodes that have already been played"
-msgstr "Esconder episódios que já foram reproduzidos"
+msgstr "Ocultar episódios que já foram reproduzidos"
 
 #: ../src/Widgets/Sidepane.vala:129
 msgid "Remove podcast from library"
-msgstr "Remover podcast da biblioteca"
+msgstr "Remover podcast da coleção"
 
 #: ../src/Widgets/Sidepane.vala:140
 msgid "More options"
@@ -319,25 +320,25 @@ msgstr "Mais opções"
 
 #: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
-msgstr ""
+msgstr "Ocultar painel lateral de episódios"
 
 #: ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
-msgstr ""
+msgstr "Marcar episódios selecionados como reproduzidos"
 
 #: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
-msgstr ""
+msgstr "Marcar episódios selecionados como não reproduzidos"
 
 #: ../src/Widgets/Sidepane.vala:313
 msgid "Delete local files for selected episodes"
-msgstr ""
+msgstr "Eliminar ficheiros locais dos episódios selecionados"
 
 #: ../src/Widgets/Sidepane.vala:317
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr ""
+msgstr "Tem a certeza de que pretende eliminar os ficheiros transferidos?"
 
 #: ../src/Widgets/Sidepane.vala:372
 msgid "Mark as Played"
@@ -345,7 +346,7 @@ msgstr "Marcar como reproduzido"
 
 #: ../src/Widgets/Sidepane.vala:391
 msgid "Mark as Unplayed"
-msgstr "Marcar com não reproduzido"
+msgstr "Marcar como não reproduzido"
 
 #: ../src/Widgets/Sidepane.vala:411
 msgid "Delete Local File"
@@ -353,11 +354,11 @@ msgstr "Eliminar ficheiro local"
 
 #: ../src/Widgets/Sidepane.vala:618
 msgid "No new episodes."
-msgstr "Sem episódios novos"
+msgstr "Nenhum novo episódio."
 
 #: ../src/Widgets/Sidepane.vala:627
 msgid "No episodes available."
-msgstr "Sem episódios disponíveis"
+msgstr "Nenhum episódio disponível."
 
 #: ../src/Widgets/Sidepane.vala:671
 msgid "%d episodes, %d unplayed"

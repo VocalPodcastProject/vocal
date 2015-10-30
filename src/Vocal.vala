@@ -76,8 +76,8 @@ namespace Vocal {
         public override void activate () {
 
             // Set Vocal to use the dark theme (if available)
-            var settings = Gtk.Settings.get_default();
-            settings.gtk_application_prefer_dark_theme = true;
+            //var settings = Gtk.Settings.get_default();
+            //settings.gtk_application_prefer_dark_theme = true;
 
             if (get_windows () == null) {
                 window = new MainWindow (this, Option.OPEN_HIDDEN);

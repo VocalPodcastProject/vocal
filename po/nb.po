@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: vocal\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-04 14:42+0000\n"
-"Last-Translator: Launchpad Translations Administrators <Unknown>\n"
+"PO-Revision-Date: 2015-04-19 16:57+0000\n"
+"Last-Translator: Kjetil Kultom <kjetil.kultom@gmail.com>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-06 05:50+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-04-20 06:11+0000\n"
+"X-Generator: Launchpad (build 17430)\n"
 
 #: ../src/Utils/FeedParser.vala:288
 msgid "Selected file doesn't appear to contain podcast subscriptions."
@@ -23,19 +23,21 @@ msgstr ""
 
 #: ../src/Utils/FeedParser.vala:299
 msgid "Selected file seems to be empty."
-msgstr ""
+msgstr "Valgt fil ser ut til å være tom."
 
 #: ../src/Library.vala:152
 msgid "Unable to add podcast"
-msgstr ""
+msgstr "Klarer ikke legge til podcast"
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
 msgstr ""
+"Launchpad Contributions:\n"
+"  Kjetil Kultom https://launchpad.net/~kjetil-kultom"
 
 #: ../src/MainWindow.vala:194
 msgid "View show notes"
-msgstr ""
+msgstr "Se notater"
 
 #: ../src/MainWindow.vala:237
 msgid "Return to library view"
@@ -43,11 +45,11 @@ msgstr ""
 
 #: ../src/MainWindow.vala:489
 msgid "Welcome to Vocal"
-msgstr ""
+msgstr "Velkommen til Vocal"
 
 #: ../src/MainWindow.vala:489
 msgid "Build Your Library By Adding Podcasts"
-msgstr ""
+msgstr "Bygg ditt bibliotek ved å legge til podcaster"
 
 #: ../src/MainWindow.vala:490
 msgid "Add a New Feed"
@@ -59,122 +61,125 @@ msgstr ""
 
 #: ../src/MainWindow.vala:493
 msgid "Import Subscriptions"
-msgstr ""
+msgstr "Importer abonnoment"
 
 #: ../src/MainWindow.vala:494
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
 msgstr ""
+"Om du har eksportert feeds fra en annen podcast manager, importer de her."
 
 #: ../src/MainWindow.vala:495
 msgid "Check Out the Vocal Starter Pack…"
-msgstr ""
+msgstr "Sjekk ut Vocals egen startpakke..."
 
 #: ../src/MainWindow.vala:495
 msgid ""
 "New to podcasting? Check out our starter pack. Select individual podcasts, "
 "or download the entire pack."
 msgstr ""
+"Er podcasting nytt for deg? Sjekk ut vår startpakke. Velg individuelle "
+"podcasts, eller last ned hele pakken."
 
 #: ../src/MainWindow.vala:526
 msgid "Export Subscriptions…"
-msgstr ""
+msgstr "Eksporter abonnoment..."
 
 #: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
 msgid "Preferences"
-msgstr ""
+msgstr "Instillinger"
 
 #: ../src/MainWindow.vala:546
 msgid "Check Out The Vocal Starter Pack…"
-msgstr ""
+msgstr "Sjekk ut Vocals startpakke"
 
 #: ../src/MainWindow.vala:554
 msgid "Donate…"
-msgstr ""
+msgstr "Doner..."
 
 #: ../src/MainWindow.vala:574
 msgid "Add new podcasts to the library"
-msgstr ""
+msgstr "Legg til nye podcasts til biblioteket"
 
 #: ../src/MainWindow.vala:580
 msgid "Add Podcast Feed"
-msgstr ""
+msgstr "Legg til podcast feed"
 
 #: ../src/MainWindow.vala:588
 msgid "Import Subscriptions…"
-msgstr ""
+msgstr "Importer abonnomenter..."
 
 #: ../src/MainWindow.vala:671
 msgid "All Podcasts"
-msgstr ""
+msgstr "Alle Podcaster"
 
 #: ../src/MainWindow.vala:672
 msgid "Audio"
-msgstr ""
+msgstr "Lyd"
 
 #: ../src/MainWindow.vala:673
 msgid "Video"
-msgstr ""
+msgstr "Video"
 
 #: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
 #: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
 #: ../src/Widgets/EpisodeDetailBox.vala:115
 #: ../src/Widgets/EpisodeDetailBox.vala:315
 msgid "Play"
-msgstr ""
+msgstr "Spill av"
 
 #: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
 msgid "Fast forward %d seconds"
-msgstr ""
+msgstr "Spol fremover %d sekunder"
 
 #: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
 msgid "Rewind %d seconds"
-msgstr ""
+msgstr "Spol tilbake %d sekunder"
 
 #: ../src/MainWindow.vala:709
 msgid "Check for new episodes"
-msgstr ""
+msgstr "Se etter nye episoder"
 
 #: ../src/MainWindow.vala:737
 msgid "Downloads"
-msgstr ""
+msgstr "Nedlastinger"
 
 #: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
 msgid "Pause"
-msgstr ""
+msgstr "Pause"
 
 #: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
 #: ../src/Widgets/AddFeedDialog.vala:64
 msgid "Cancel"
-msgstr ""
+msgstr "Avbryt"
 
 #: ../src/MainWindow.vala:1328
 msgid "Save"
-msgstr ""
+msgstr "Lagre"
 
 #: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
 msgid "All files"
-msgstr ""
+msgstr "Alle filer"
 
 #: ../src/MainWindow.vala:1335
 msgid "OPML and XML files"
-msgstr ""
+msgstr "OPML og XML filer"
 
 #: ../src/MainWindow.vala:1362
 msgid "Select Subscription File"
-msgstr ""
+msgstr "Velg abonnoment fil"
 
 #: ../src/MainWindow.vala:1366
 msgid "Open"
-msgstr ""
+msgstr "Åpne"
 
 #: ../src/MainWindow.vala:1373
 msgid "OPML files"
-msgstr ""
+msgstr "OPML filer"
 
 #: ../src/MainWindow.vala:1448
 msgid "Error Importing from File"
-msgstr ""
+msgstr "Feil ved import fra fil"
 
 #: ../src/MainWindow.vala:1449
 msgid ""

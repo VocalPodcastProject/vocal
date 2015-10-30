@@ -178,11 +178,13 @@ namespace Vocal {
                             episode.set_datetime_from_pubdate();
 
                         }
+                        /*
                         else if(next_item_in_queue == "summary") {
                             i++;
                             episode.description = queue[i];
                             found_summary = true;
-                        }
+                        }*/
+                        //else if(next_item_in_queue == "description" && !found_summary) {
                         else if(next_item_in_queue == "description" && !found_summary) {
                             i++;
                             episode.description = queue[i];
@@ -202,6 +204,62 @@ namespace Vocal {
             }
             
             return podcast;
+        }
+
+        /*
+         * Finds only the podcast description and returns it as a string
+         */
+        public string? find_description_from_file(string path) throws GLib.Error{
+
+            string description = "";
+            
+            // Call the Xml.Parser to parse the file, which returns an unowned reference
+            Xml.Doc* doc = Parser.parse_file (path);
+            
+            // Make sure that it didn't return a null reference
+            if (doc == null) {
+                warning ("Error opening file %s", path);
+                return null;
+            }
+
+            // Get the root node
+            Xml.Node* root = doc->get_root_element ();
+            
+            // Make sure that it didn't return a null reference, either
+            if (root == null) {
+            
+                // If it did, free the document manually (since unowned)
+                delete doc;
+                warning ("The XML file '%s' is empty", path);
+                return null;
+            }
+            
+            // Parse the root node, which in turn will cause all nodes and properties to be parsed
+            parse_node(root);
+                    
+            string next_item_in_queue = null;
+                                
+            for (int i = 0; i < queue.size - 1; i++) {
+
+                next_item_in_queue = queue[i];
+                
+                if(next_item_in_queue == "summary") {
+                    i++;
+                    description = queue[i];
+                    return description;
+
+                }
+                else if(next_item_in_queue == "description") {
+                    i++;
+                    description = queue[i];
+                    return description;
+                }
+            }
+            
+            // Free the document
+            delete doc;
+            
+            return null;
         }
         
         
@@ -411,7 +469,6 @@ namespace Vocal {
             while ( i < queue.size && !previous_found) {
             
                 if (queue[i] == "item") {
-                    //stdout.puts("Episode found!\n");
                     
                     // Create a new episode
                     Episode episode = new Episode();
@@ -472,12 +529,14 @@ namespace Vocal {
                             episode.set_datetime_from_pubdate();
 
                         }
+                        /*
                         else if(next_item_in_queue == "summary") {
                             i++;
                             episode.description = queue[i];
                             found_summary = true;
-                        }
-                        else if(next_item_in_queue == "description" && !found_summary) {
+                        }*/
+                        //else if(next_item_in_queue == "description" && !found_summary) {
+                        else if(next_item_in_queue == "description") {
                             i++;
                             episode.description = queue[i];
                         }

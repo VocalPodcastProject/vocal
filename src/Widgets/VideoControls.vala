@@ -44,7 +44,6 @@ namespace Vocal {
 
             playback_box = new PlaybackBox();
             playback_box.scale_changed.connect(() => {
-
                 progress_bar_fill = playback_box.get_progress_bar_fill();
                 progress_bar_scale_changed();
             });

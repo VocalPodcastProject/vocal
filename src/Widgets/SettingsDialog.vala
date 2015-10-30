@@ -63,13 +63,13 @@ namespace Vocal {
             // Autodownload option
             autodownload_new_label = new Gtk.Label(_("Automatically download new episodes:"));
             autodownload_new_label.justify = Gtk.Justification.LEFT;
-            autodownload_new_label.xalign = 0;
+            autodownload_new_label.set_property("xalign", 0);
             autodownload_new_label.margin_left = 5;
             
             autodownload_new = new Gtk.Switch();
             
             autodownload_new.set_active(settings.auto_download);
-            
+            autodownload_new.margin_left = 4;
             autodownload_new.notify["active"].connect (() => {
                 settings.auto_download = autodownload_new.active;
 		    });
@@ -82,15 +82,15 @@ namespace Vocal {
             content_box.add(autodownload_box);
             
             // Autoclean option
-            autoclean_label = new Gtk.Label(_("Automatically delete played files:"));
+            autoclean_label = new Gtk.Label(_("Keep my library clean:"));
             autoclean_label.justify = Gtk.Justification.LEFT;
-            autoclean_label.xalign = 0;
+            autoclean_label.set_property("xalign", 0);
             autoclean_label.margin_left = 5;
             
             autoclean = new Gtk.Switch();
             
             autoclean.set_active(settings.autoclean_library);
-            
+            autoclean.set_property("xalign", 1);
             autoclean.notify["active"].connect (() => {
                 settings.autoclean_library = autoclean.active;
 		    });
@@ -111,19 +111,18 @@ namespace Vocal {
             
             // Skip options
 		    var backward_interval_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-		    
+		  
 		    backward_interval_label = new Gtk.Label(_("Seconds to skip back:"));
 		    backward_interval_label.justify = Gtk.Justification.LEFT;
-		    backward_interval_label.xalign = 0;
+		    backward_interval_label.set_property("xalign", 0);
 		    backward_interval_label.margin_right = 5;
-		    
-		    
 		    
 		    backward_spinner = new Gtk.SpinButton.with_range (0, 240, 15);
 		    backward_spinner.value = (double)settings.rewind_seconds;
 		    backward_spinner.value_changed.connect(() => {
 		        settings.rewind_seconds = (int) backward_spinner.value;
 		    });
+            backward_spinner.set_property("xalign", 1);
 		    
 		    backward_interval_box.pack_start(backward_interval_label, true, true, 0);
 		    backward_interval_box.pack_start(backward_spinner, false, false, 0);
@@ -135,7 +134,7 @@ namespace Vocal {
 		    
 		    forward_interval_label = new Gtk.Label(_("Seconds to skip forward:"));
 		    forward_interval_label.justify = Gtk.Justification.LEFT;
-		    forward_interval_label.xalign = 0;
+		    forward_interval_label.set_property("xalign", 0);
 		    forward_interval_label.margin_right = 5;
 		    
 		    forward_spinner = new Gtk.SpinButton.with_range(0, 240, 15);
@@ -143,7 +142,8 @@ namespace Vocal {
 		    forward_spinner.value_changed.connect(() => {
 		        settings.fast_forward_seconds = (int) forward_spinner.value;
 		    });
-		    
+		    forward_spinner.set_property("xalign", 1);
+
 		    forward_interval_box.pack_start(forward_interval_label, true, true, 0);
 		    forward_interval_box.pack_start(forward_spinner, false, false, 0);
 		    forward_interval_box.margin = 5;
@@ -154,6 +154,8 @@ namespace Vocal {
             close_button.clicked.connect(() => {
                 destroy();
             });
+            close_button.margin_bottom = 12;
+            close_button.margin_right = 5;
 
             var button_box = new Gtk.ButtonBox (Gtk.Orientation.HORIZONTAL);
             button_box.set_layout (Gtk.ButtonBoxStyle.END);

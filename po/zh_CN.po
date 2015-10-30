@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: vocal\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-06 16:59+0000\n"
-"Last-Translator: Nathan Dyer <Unknown>\n"
+"PO-Revision-Date: 2015-04-25 02:41+0000\n"
+"Last-Translator: colindemian <dengmengpc@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-07 05:31+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"X-Launchpad-Export-Date: 2015-04-26 05:47+0000\n"
+"X-Generator: Launchpad (build 17430)\n"
 
 #: ../src/Utils/FeedParser.vala:288
 msgid "Selected file doesn't appear to contain podcast subscriptions."
@@ -153,7 +153,7 @@ msgstr "取消"
 
 #: ../src/MainWindow.vala:1328
 msgid "Save"
-msgstr ""
+msgstr "保存"
 
 #: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
 msgid "All files"
@@ -169,7 +169,7 @@ msgstr "选择订阅文件"
 
 #: ../src/MainWindow.vala:1366
 msgid "Open"
-msgstr ""
+msgstr "打开"
 
 #: ../src/MainWindow.vala:1373
 msgid "OPML files"
@@ -254,7 +254,7 @@ msgstr "<b>任选一集节目开始播放...</b>"
 
 #: ../src/Widgets/SettingsDialog.vala:64
 msgid "Automatically download new episodes:"
-msgstr "自动下载最新剧集："
+msgstr "自动下载最新的剧集："
 
 #: ../src/Widgets/SettingsDialog.vala:85
 msgid "Automatically delete played files:"
@@ -307,25 +307,25 @@ msgstr "更多选项"
 
 #: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
-msgstr ""
+msgstr "隐藏剧集侧边栏"
 
 #: ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
-msgstr ""
+msgstr "标记选中项为已播放"
 
 #: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
-msgstr ""
+msgstr "标记选中项为未播放"
 
 #: ../src/Widgets/Sidepane.vala:313
 msgid "Delete local files for selected episodes"
-msgstr ""
+msgstr "删除选中项的本地文件"
 
 #: ../src/Widgets/Sidepane.vala:317
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr ""
+msgstr "您确定要删除选中项已下载的文件吗？"
 
 #: ../src/Widgets/Sidepane.vala:372
 msgid "Mark as Played"

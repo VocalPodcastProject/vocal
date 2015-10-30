@@ -43,6 +43,7 @@ set (GLOBAL_VALAC_OPTIONS
 )
 
 set (DEPS_PACKAGES
+    webkit2gtk-4.0
     clutter-gtk-1.0
     sqlite3
     gtk+-3.0
@@ -50,10 +51,12 @@ set (DEPS_PACKAGES
     libxml-2.0
     gstreamer-1.0
     gstreamer-pbutils-1.0
+    libsoup-2.4
+    json-glib-1.0
 )
 
 find_package(PkgConfig)
-pkg_check_modules(DEPS REQUIRED libxml-2.0 granite gtk+-3.0 gstreamer-1.0 gstreamer-pbutils-1.0 gthread-2.0 sqlite3 clutter-gtk-1.0 gdk-x11-3.0)
+pkg_check_modules(DEPS REQUIRED libxml-2.0 granite gtk+-3.0 gstreamer-1.0 gstreamer-pbutils-1.0 gthread-2.0 sqlite3 clutter-gtk-1.0 gdk-x11-3.0 libsoup-2.4 json-glib-1.0 webkit2gtk-3.0)
 
 #
 # Libunity
@@ -92,7 +95,7 @@ link_directories(${DEPS_LIBRARY_DIRS})
 
 find_package(Vala REQUIRED)
 include(ValaVersion)
-ensure_vala_version("0.16.0" MINIMUM)
+ensure_vala_version("0.26.2" MINIMUM)
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
     src/Vocal.vala
@@ -102,23 +105,38 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/VocalSettings.vala
     src/Objects/Podcast.vala
     src/Objects/Episode.vala
+    src/Objects/DirectoryEntry.vala
     src/Widgets/EpisodeDetailBox.vala
     src/Widgets/AddFeedDialog.vala
     src/Widgets/DownloadsPopover.vala
     src/Widgets/ShowNotesPopover.vala
     src/Widgets/PlaybackBox.vala
     src/Widgets/SettingsDialog.vala
-    src/Widgets/Sidepane.vala
     src/Widgets/DownloadDetailBox.vala
     src/Widgets/CoverArt.vala
     src/Widgets/VideoControls.vala
+    src/Widgets/DirectoryView.vala
+    src/Widgets/DirectoryArt.vala
+    src/Widgets/CloudLoginDialog.vala
+    src/Widgets/SearchResultsPopover.vala
+    src/Widgets/SearchResultsView.vala
+    src/Widgets/PodcastView.vala
+    src/Widgets/Shownotes.vala
+    src/Widgets/Toolbar.vala
+    src/Widgets/DonateDialog.vala
+    src/Widgets/QueuePopover.vala
+    src/Widgets/QueueRow.vala
+    src/Widgets/SearchResultBox.vala
+    src/Widgets/SecretEntryPopover.vala
     src/Utils/Player.vala
     src/Utils/FeedParser.vala
     src/Utils/Utils.vala
     src/Utils/MPRIS.vala
+    src/Utils/iTunesProvider.vala
 PACKAGES
     ${DEPS_PACKAGES}
 OPTIONS
+    --vapidir=${CMAKE_SOURCE_DIR}/vapi
     ${GLOBAL_VALAC_OPTIONS}
 )
 

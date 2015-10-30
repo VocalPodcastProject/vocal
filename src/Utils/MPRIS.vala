@@ -112,16 +112,12 @@ namespace Vocal {
 		/*
 		 * Handler for when the name gets acquired
 		 */
-	    private void on_name_acquired(DBusConnection connection, string name) {
-		    info("name acquired\n");
-	    }	
+	    private void on_name_acquired(DBusConnection connection, string name) {}	
 
 		/*
 		 * Handler for when the name gets lost
 		 */
-	    private void on_name_lost(DBusConnection connection, string name) {
-		    info("name_lost\n");
-	    }
+	    private void on_name_lost(DBusConnection connection, string name) {}
     }
     
     [DBus(name = "org.mpris.MediaPlayer2.Player")]
@@ -171,6 +167,7 @@ namespace Vocal {
 	    }
 
 	    public void set_media_metadata (string episode_title, string podcast, string art_uri, uint64 duration) {
+	    	string[] artists = {podcast};
 	        _metadata = new HashTable<string, Variant> (null, null);
 
 	        _metadata.insert("mpris:trackid", get_track_id (episode_title));
@@ -178,8 +175,8 @@ namespace Vocal {
 
 	        _metadata.insert("mpris:artUrl", art_uri);
 	        _metadata.insert("xesam:title", episode_title);
-	        _metadata.insert("xesam:album", podcast);
-	        _metadata.insert("xesam:artist", podcast);
+	        _metadata.insert("xesam:album", artists);
+	        _metadata.insert("xesam:artist", artists);
 	        _metadata.insert("xesam:albumArtist", podcast);
 
 	        trigger_metadata_update();

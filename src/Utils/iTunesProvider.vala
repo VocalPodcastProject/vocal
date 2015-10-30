@@ -10,7 +10,7 @@ namespace Vocal {
             string rss = "";
 
             // We just need to get the iTunes store iD
-            int start_index = itunes_url.index_of("id") + 2;
+            int start_index = itunes_url.index_of("/id") + 3;
             int stop_index = itunes_url.index_of("?");
 
             string id = itunes_url.slice(start_index, stop_index);
@@ -31,7 +31,6 @@ namespace Vocal {
                     return null;
                 }
 
-
                 var elements = root_object.get_array_member("results").get_elements();
 
                 foreach(Json.Node e in elements) {
@@ -39,6 +38,7 @@ namespace Vocal {
                     rss = obj.get_string_member("feedUrl");
                     name = obj.get_string_member("trackName");
                 }
+                
 
             } catch (Error e) {
                 warning ("An error occurred while discovering the real RSS feed address");

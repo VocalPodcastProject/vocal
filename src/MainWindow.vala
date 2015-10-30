@@ -1606,17 +1606,17 @@ namespace Vocal {
                 string entered_feed = "";
                 if(feed == null && add_feed != null) 
                     entered_feed = add_feed.entry.get_text();
-
-                    // Was the RSS feed an iTunes URL? If so, find the actual RSS feed address
-                    if(entered_feed != null && entered_feed.contains("itunes.apple.com")) {
-                        string actual_rss = itunes.get_rss_from_itunes_url(entered_feed);
-                        if(actual_rss != null) {
-                            info("Original iTunes URL: %s, Vocal found matching RSS address: %s", entered_feed, actual_rss);
-                            entered_feed = actual_rss;
-                        }
-                    }
                 else
                     entered_feed = feed;
+
+                // Was the RSS feed an iTunes URL? If so, find the actual RSS feed address
+                if(entered_feed.contains("itunes.apple.com")) {
+                    string actual_rss = itunes.get_rss_from_itunes_url(entered_feed);
+                    if(actual_rss != null) {
+                        info("Original iTunes URL: %s, Vocal found matching RSS address: %s", entered_feed, actual_rss);
+                        entered_feed = actual_rss;
+                    }
+                }
 
                 add_feed.destroy();
 

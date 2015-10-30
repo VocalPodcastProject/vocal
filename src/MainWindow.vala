@@ -2176,7 +2176,10 @@ namespace Vocal {
             if(player.is_currently_playing)
                 play();
 
+            if(previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
+                previous_widget = all_scrolled;
             switch_visible_page(previous_widget);
+
 
             // Make sure the cursor is visible again
             this.get_window ().set_cursor (null);

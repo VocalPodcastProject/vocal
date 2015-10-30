@@ -36,7 +36,7 @@ namespace Vocal {
 
             if(first_run) {
                 return_button = new Gtk.Button.with_label(_("Go Back"));
-                return_button.clicked.connect(() => { return_to_welcome (); });
+                return_button.clicked.connect(on_first_run_return_clicked);
             } else  {
                 return_button = new Gtk.Button.with_label(_("Return to Library"));
                 return_button.clicked.connect(() => { return_to_library (); });
@@ -56,6 +56,7 @@ namespace Vocal {
             first_run_continue_button.expand = false;
             first_run_continue_button.halign = Gtk.Align.END;
             first_run_continue_button.clicked.connect(() => {
+                return_button.clicked.disconnect(on_first_run_return_clicked);
                 return_button.clicked.connect(() => { return_to_library(); });
                 return_button.label = _("Return to Library");
                 hide_first_run_continue_button();
@@ -125,7 +126,6 @@ namespace Vocal {
 
             yield;
 
-            info ("Loading complete.");
             loading_box.set_no_show_all(true);
             loading_box.hide();
 
@@ -141,6 +141,10 @@ namespace Vocal {
         public void hide_first_run_continue_button() {
             first_run_continue_button.set_no_show_all(true);
             first_run_continue_button.hide();
+        }
+
+        private void on_first_run_return_clicked() {
+            return_to_welcome();
         }
     }
 }

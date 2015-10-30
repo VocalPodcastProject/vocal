@@ -46,11 +46,13 @@ using Granite;
 			controls_box.margin = 5;
 
 			// Set the settings
+			/*
 			var settings = new WebKit.Settings();
 			settings.auto_load_images = true;
 			settings.default_font_family = "open-sans";
 			settings.enable_smooth_scrolling = true;
 			webview.settings = settings;
+			*/
 
 			title_label = new Gtk.Label("");
 			title_label.get_style_context().add_class("h3");

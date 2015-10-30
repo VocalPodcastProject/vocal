@@ -27,7 +27,6 @@ namespace Vocal {
 
         private Library library;
 
-
         public SearchResultsView(string query, Library library, Gee.ArrayList<Podcast> p_matches, Gee.ArrayList<Episode> e_matches) {
 
             this.set_orientation(Gtk.Orientation.VERTICAL);

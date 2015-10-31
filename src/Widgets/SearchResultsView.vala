@@ -1,3 +1,22 @@
+/***
+  BEGIN LICENSE
+
+  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU Lesser General Public License version 3, as
+  published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranties of
+  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses>
+
+  END LICENSE
+***/
+
 using Gtk;
 namespace Vocal {
 
@@ -27,6 +46,9 @@ namespace Vocal {
 
         private Library library;
 
+        /*
+         * Constructor for the full search results view. Shows all matches from the local library and across the iTunes ecosystem
+         */
         public SearchResultsView(string query, Library library, Gee.ArrayList<Podcast> p_matches, Gee.ArrayList<Episode> e_matches) {
 
             this.set_orientation(Gtk.Orientation.VERTICAL);
@@ -143,6 +165,9 @@ namespace Vocal {
 
         }
 
+        /*
+         * Loads the full list of iTunes store matches (popover limited to top 5 only, for both speed and size concerns)
+         */
         private async void load_from_itunes() {
 
             SourceFunc callback = load_from_itunes.callback;
@@ -174,6 +199,9 @@ namespace Vocal {
 
         }
 
+        /*
+         * Called when a matching episode is selected by the user
+         */
         private bool on_episode_activated(Gdk.EventButton button) {
             var row = local_episodes_listbox.get_row_at_y((int)button.y);
             int index = row.get_index();
@@ -182,6 +210,9 @@ namespace Vocal {
             return false;
         }
 
+        /*
+         * Called when a matching podcast is selected by the user
+         */
         private bool on_podcast_activated(Gdk.EventButton button) {
             var row = local_podcasts_listbox.get_row_at_y((int)button.y);
             int index = row.get_index();

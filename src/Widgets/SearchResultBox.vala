@@ -35,6 +35,11 @@ namespace Vocal {
         private string rss_url;
         private bool details_visible = false;
 
+
+        /*
+         * Constructor for a box that contains a search result. SRs can be for a library episode, a library podcast, or 
+         * content on the iTunes Store
+         */
         public SearchResultBox(Podcast? podcast, Episode? episode, string? details = null, string? subscribe_url = null) {
 
             this.episode = episode;
@@ -44,6 +49,7 @@ namespace Vocal {
 
             this.orientation = Gtk.Orientation.VERTICAL;
 
+            // If it's an iTunes URL, find its matching generic RSS URL and set that for the subscribe link
             if(subscribe_url != null && subscribe_url.contains("itunes.apple")) {
                 var itunes = new iTunesProvider();
                 rss_url = itunes.get_rss_from_itunes_url(subscribe_url);
@@ -71,6 +77,8 @@ namespace Vocal {
                 label.ellipsize = Pango.EllipsizeMode.END;
                 label.max_width_chars = 30;
                 content_box.pack_start(label,true, true, 0);
+
+            // If not, then we have an episode, which requires more info to be displayed
             } else {
 
                 try {
@@ -150,13 +158,19 @@ namespace Vocal {
             }
             this.add(content_box);
             this.add(details_box);
-        
         }
         
+
+        /*
+         * Gets the episode
+         */
         public Episode get_episode() {
             return episode;
         }
 
+        /*
+         * Gets the podcast
+         */
         public Podcast get_podcast() {
             return podcast;
         }

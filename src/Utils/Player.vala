@@ -88,6 +88,7 @@ namespace Vocal {
                    
         }
         
+        
         /*
          * Bus callback
          */

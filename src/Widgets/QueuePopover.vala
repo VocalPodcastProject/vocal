@@ -53,6 +53,9 @@ namespace Vocal {
 
 		}
 
+		/*
+		 * Sets the current queue
+		 */
 		public void set_queue(Gee.ArrayList<Episode> queue) {
 			scrolled_box.remove(episodes);
 			episodes = new Gtk.ListBox();
@@ -86,18 +89,29 @@ namespace Vocal {
 			scrolled_box.add(episodes);
 		}
 
+		/*
+		 * Show the "no episodes in queue" label
+		 */
 		private void show_label() {
 			label.set_no_show_all(false);
 			label.show();
 			scrolled_window.set_size_request(400, 60);
 		}
 
+
+		/*
+		 * Hide the "no episodes in queue" label
+		 */
 		private void hide_label() {
 			label.set_no_show_all(true);
 			label.hide();
 			scrolled_window.set_size_request(400, 225);
 		}
 
+
+		/*
+		 * Called whenever the row is activated (when the user clicks it)
+		 */
 		public void on_row_activated(Gtk.ListBoxRow row) {
 			int index = row.get_index();
 			play_episode_from_queue_immediately(rows[index].episode);

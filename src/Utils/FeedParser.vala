@@ -118,7 +118,6 @@ namespace Vocal {
                 
                 // We've found an episode!!
                 else if (current == "item") {
-                    //stdout.puts("Episode found!\n");
                     
                     // Create a new episode
                     Episode episode = new Episode();
@@ -575,7 +574,6 @@ namespace Vocal {
             delete root;
             
             return episodes_added;
-
         }
     }
 }

@@ -61,11 +61,20 @@ namespace Vocal {
 			this.width_request = 600;
 		}
 
+
+		/*
+		 * Set the current query
+		 */
 		public void set_query(string query) {
 			this.query = query;
 			on_query_update();
 		}
 	
+
+		/*
+		 * Called whenever the text query changes. Finds new matches given the search terms
+		 * and displays them back to the user.
+		 */
 		public async void on_query_update() {
 
 			string outdated_query = query;
@@ -90,7 +99,6 @@ namespace Vocal {
 					update_complete = true;
 				}
 
-
 				Idle.add((owned) callback);
                 return null;
             };
@@ -106,6 +114,11 @@ namespace Vocal {
             }
 		}
 
+
+		/*
+		 * Called when the search update is complete and the new matches
+		 * are ready to be displayed to the user
+		 */
 		private void update_search_view() {
 			if(content_box != null) {
     			content_box.destroy();
@@ -123,7 +136,6 @@ namespace Vocal {
 
 			local_episodes_listbox.button_press_event.connect(on_episode_activated);
 			local_podcasts_listbox.button_press_event.connect(on_podcast_activated);
-
 
 			local_episodes_widgets = new Gee.ArrayList<Widget>();
 			local_podcasts_widgets = new Gee.ArrayList<Widget>();
@@ -216,6 +228,10 @@ namespace Vocal {
 			show_all();
 		}
 
+
+		/*
+		 * Called whenever a user clicks on an matched episode
+		 */
 		private bool on_episode_activated(Gdk.EventButton button) {
 			var row = local_episodes_listbox.get_row_at_y((int)button.y);
 			int index = row.get_index();
@@ -223,7 +239,11 @@ namespace Vocal {
 			episode_selected(selected.get_podcast(), selected.get_episode());
 			return false;
 		}
+		
 
+		/*
+		 * Called whenever a user clicks on a matched podcast
+		 */
 		private bool on_podcast_activated(Gdk.EventButton button) {
 			var row = local_podcasts_listbox.get_row_at_y((int)button.y);
 			int index = row.get_index();

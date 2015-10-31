@@ -28,7 +28,7 @@ namespace Vocal {
         public string 		feed_uri;                     // the uri for the podcast
         public string 		remote_art_uri;               // the web link to the album art if local is unavailable
         public string 		local_art_uri;                // where the locally cached album art is located
-        public string 		description;				  // the episode's description
+        public string 		description;				          // the episode's description
         public MediaType 	content_type;                 // is the podcast an audio or video feed?
 
 		/*

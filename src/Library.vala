@@ -549,11 +549,17 @@ namespace Vocal {
             return detail_box;
         }
 
+        /*
+         * Adds an episode to the queue
+         */
         public void enqueue_episode(Episode e) {
             queue.add(e);
             queue_changed();
         }
 
+        /*
+         * Returns the next episode to be played in the queue
+         */
         public Episode? get_next_episode_in_queue() {
             if(queue.size > 0) {
                 Episode temp =  queue[0];
@@ -565,6 +571,9 @@ namespace Vocal {
             }
         }
 
+        /*
+         * Moves an episode higher up in the queue so it will be played quicker
+         */
         public void move_episode_up_in_queue(Episode e) {
             int i = 0;
             bool match = false;
@@ -582,6 +591,9 @@ namespace Vocal {
 
         }
 
+        /*
+         * Moves an episode down in the queue to give other episodes higher priority
+         */
         public void move_episode_down_in_queue(Episode e) {
             int i = 0;
             bool match = false;
@@ -598,6 +610,9 @@ namespace Vocal {
             }
         }
 
+        /*
+         * Removes an episode from the queue altogether
+         */
         public void remove_episode_from_queue(Episode e) {
             foreach(Episode ep in queue) {
                 if(e == ep) {
@@ -607,6 +622,7 @@ namespace Vocal {
                 }
             }
         }
+        
 
         /*
          * Exports the current podcast subscriptions to a file at the provided path

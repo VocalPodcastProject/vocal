@@ -31,8 +31,6 @@ namespace Vocal {
 
         string password;
         string username;
-
-
     
         public CloudLoginDialog(Window parent) {
             set_default_response(Gtk.ResponseType.OK);

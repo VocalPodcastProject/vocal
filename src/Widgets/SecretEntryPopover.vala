@@ -23,7 +23,10 @@ namespace Vocal {
   	public class SecretEntryPopover : Gtk.Popover {
 
         public signal void code_accepted(string code_id);
+
+        // Darn you cheating scoundrels for taking the easy way out. I'm onto you :)
         private string[] codes = { "camelot", "roundel" };
+        
         private Gtk.Entry entry;
 
         public SecretEntryPopover(Gtk.Widget parent) {

@@ -1,3 +1,22 @@
+/***
+  BEGIN LICENSE
+
+  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
+  This program is free software: you can redistribute it and/or modify it
+  under the terms of the GNU Lesser General Public License version 3, as
+  published by the Free Software Foundation.
+
+  This program is distributed in the hope that it will be useful, but
+  WITHOUT ANY WARRANTY; without even the implied warranties of
+  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
+  PURPOSE.  See the GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License along
+  with this program.  If not, see <http://www.gnu.org/licenses>
+
+  END LICENSE
+***/
+
 using Gtk;
 using Gee;
 using Granite;
@@ -262,18 +281,13 @@ namespace Vocal {
 	        pack_start(rate_button);
 		}
 
-		/*
-         * Hides the downloads menuitem if there are no active downloads
-         */
+
         public void hide_downloads_menuitem() {
             download.no_show_all = true;
             download.hide();
             show_all();
         }
 
-        /*
-         * Hides the playback box
-         */
         public void hide_playback_box() {
 
             this.headerbar_box.no_show_all = true;
@@ -281,9 +295,6 @@ namespace Vocal {
         }
 
 
-     	/*
-         * Shows the playback box
-         */
         public void show_playback_box() {
             this.headerbar_box.no_show_all = false;
             this.headerbar_box.show();

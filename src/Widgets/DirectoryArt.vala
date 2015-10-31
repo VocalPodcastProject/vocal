@@ -45,7 +45,6 @@ namespace Vocal {
 			this.margin = 10;
 
 			// Create labels for title and artist
-
 			var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
 			var title_label = new Gtk.Label("""<b>%s</b>""".printf(GLib.Markup.escape_text(title)));

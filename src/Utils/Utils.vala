@@ -92,6 +92,10 @@ public class Utils
 
     }
 
+    /*
+     * Takes HTML (most likely from show notes) and sets the background color, font family, and 
+     * font size so that it looks good in the podcast view.
+     */
     public static string get_styled_html(string original_html) {
 
 const string STYLE = """

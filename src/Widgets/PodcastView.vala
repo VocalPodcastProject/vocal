@@ -416,7 +416,7 @@ namespace Vocal {
 
                         delete_menuitem.activate.connect(() => {
                             Gtk.MessageDialog msg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                                 "Are you sure you want to delete the downloaded episode '%s'?".printf(podcast.episodes[current_episode_index].title.replace("%27", "'")));
+                                 _("Are you sure you want to delete the downloaded episode '%s'?").printf(podcast.episodes[current_episode_index].title.replace("%27", "'")));
 
 
                             msg.add_button ("_No", Gtk.ResponseType.CANCEL);
@@ -478,7 +478,7 @@ namespace Vocal {
 
             } catch (Error e) {}
 
-			name_label.set_text(podcast.name);
+			name_label.set_text(podcast.name.replace("%27", "'"));
 
             populate_episodes();
 
@@ -549,7 +549,7 @@ namespace Vocal {
                 previously_selected_box = boxes[current_episode_index];
             }
 
-            shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? podcast.episodes[current_episode_index].description : _("No show notes available."));
+            shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? podcast.episodes[current_episode_index].description.replace("%27", "'") : _("No show notes available."));
             shownotes.set_title(podcast.episodes[current_episode_index].title);
             show_all();
         }

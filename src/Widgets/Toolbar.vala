@@ -133,12 +133,21 @@ namespace Vocal {
                 preferences_selected();
             });
             menu.add(preferences_item);
+            menu.add(new Gtk.SeparatorMenuItem());
 
             var starterpack = new Gtk.MenuItem.with_label (_("Check Out The Vocal Starter Pack…"));
             starterpack.activate.connect (() => {
                 starterpack_selected();
             });
             menu.add(starterpack);
+
+            var report_problem = new Gtk.MenuItem.with_label (_("Report a Problem…"));
+            report_problem.activate.connect (() => {
+                try {
+                    GLib.Process.spawn_command_line_async ("xdg-open https://github.com/vocalapp/vocal/issues");
+                } catch (Error error) {}
+            });
+            menu.add(report_problem);
 
             var donate = new Gtk.MenuItem.with_label (_("Donate…"));
             donate.activate.connect (() => {

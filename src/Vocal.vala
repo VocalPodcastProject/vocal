@@ -48,9 +48,9 @@ namespace Vocal {
             application_id = "net.launchpad.vocal";
 
             main_url = "http://vocalproject.net";
-            bug_url = "https://bugs.launchpad.net/vocal";
+            bug_url = "https://github.com/vocalapp/vocal/issues";
             help_url = "http://vocalproject.net/documentation";
-            translate_url = "https://translations.launchpad.net/vocal";
+            translate_url = "https://www.transifex.com/needle-and-thread/vocal/";
 
             about_authors = { "Nathan Dyer <mail@nathandyer.me>" };
             about_documenters = { "Nathan Dyer <mail@nathandyer.me>" };

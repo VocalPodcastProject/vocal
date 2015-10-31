@@ -1726,6 +1726,9 @@ namespace Vocal {
         private void on_code_accepted(string code) {
             secret_entry.hide();
 
+            /*
+             * Shame on you for cheating. I'm calling your mom.
+             */
             switch(code) {
                 case "camelot":
 

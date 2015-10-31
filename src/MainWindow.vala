@@ -799,6 +799,8 @@ namespace Vocal {
 		    revealer = new Gtk.Revealer();
 		    revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
 
+            show_all();
+
             // Show the welcome widget if it's the first run, or if the library is empty
             if(first_run || library_empty) {
                 switch_visible_page(welcome);

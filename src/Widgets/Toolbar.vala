@@ -89,7 +89,7 @@ namespace Vocal {
 
 
             playlist_button = new Gtk.Button.from_icon_name("media-playlist-consecutive-symbolic");
-            playlist_button.tooltip_text = _("Playlist");
+            playlist_button.tooltip_text = _("Coming up next");
             playlist_button.clicked.connect(() => {
                 playlist_selected();
             });

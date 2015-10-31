@@ -33,8 +33,10 @@ namespace Vocal {
 
             Gtk.Button up_button = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             up_button.relief = Gtk.ReliefStyle.NONE;
+            up_button.set_tooltip_text(_("Move episode up in queue"));
             Gtk.Button down_button = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             down_button.relief = Gtk.ReliefStyle.NONE;
+            down_button.set_tooltip_text(_("Move episode down in queue"));
 
             up_button.clicked.connect(() => { move_up(episode); });
             down_button.clicked.connect(() => { move_down(episode); });
@@ -59,6 +61,7 @@ namespace Vocal {
 
             Gtk.Button remove_button = new Gtk.Button.from_icon_name("process-stop-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             remove_button.get_style_context().add_class("flat");
+            remove_button.set_tooltip_text(_("Remove episode from queue"));
 
             remove_button.clicked.connect(() => { remove_episode(episode); });
 

@@ -5,9 +5,9 @@ vocal (2.0) trusty; urgency=low
   * Local and remote searching
   * Better notification management 
   * A new podcast view
-  * Full HTML shownotes
-  * Improvement playback support
+  * HTML shownotes
+  * Improved playback support
   * Higher resolution album art
   * and much more!
 
- -- Nathan Dyer <mail@nathandyer.me>  Thu, 15 Oct 2015 17:00:00 -0500
+ -- Nathan Dyer <mail@nathandyer.me>  Sat, 31 Oct 2015 17:00:00 -0500

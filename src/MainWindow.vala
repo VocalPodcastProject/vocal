@@ -1762,6 +1762,25 @@ namespace Vocal {
                     break;
                 case "roundel":
                     break;
+                case "wookie":
+                	Episode fake_episode = new Episode();
+                    fake_episode.title = "Star Wars Holiday Special";
+                    fake_episode.uri = """https://archive.org/download/StarWarsHolidaySpecial/Star%20Wars%20Holiday%20Special.mp4""";
+                    Podcast fake_podcast = new Podcast();
+                    fake_episode.parent = fake_podcast;
+                    fake_podcast.remote_art_uri = "http://sothathappenedpodcast.com/wp-content/uploads/2014/12/starwarsholidayspecial.jpg";
+                    fake_podcast.local_art_uri = "http://sothathappenedpodcast.com/wp-content/uploads/2014/12/starwarsholidayspecial.jpg";
+                    fake_podcast.content_type = MediaType.VIDEO;
+                    current_episode = fake_episode;
+
+                    // Set episode position and start playback
+                    player.set_state(Gst.State.READY);
+
+                    track_changed("Star Wars Holiday Special",
+                        "Star Wars", current_episode.parent.coverart_uri, player.get_duration());
+
+                    play();
+                    break;
                 default:
                     break;
             }

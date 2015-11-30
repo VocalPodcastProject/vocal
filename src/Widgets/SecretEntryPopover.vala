@@ -48,6 +48,9 @@ namespace Vocal {
                 case "roundel":
                     code_accepted("roundel");
                     break;
+                case "wookie":
+                    code_accepted("wookie");
+                    break;
                 default:
                     break;
             }

@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Nathan Dyer <mail@nathandyer.me>
 Build-Depends: cmake (>= 2.8),
                debhelper (>= 8.0.0),
+               libgee-dev,
                libgranite-dev,
                libgtk-3-dev (>= 3.14),
                valac (>= 0.18.1),

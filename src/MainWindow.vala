@@ -154,6 +154,10 @@ namespace Vocal {
                     background-color: #FFF;
                 }
 
+                .local-coverart {
+                    box-shadow: 5px 5px 5px #777;
+                }
+
                 .directory-art {
                     background-color: #FFF;
 

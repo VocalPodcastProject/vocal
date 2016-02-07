@@ -76,12 +76,8 @@ namespace Vocal {
         /* Icon views and related variables */
 
         private Gtk.FlowBox         all_flowbox;
-        private Gtk.FlowBox         audio_flowbox;
-        private Gtk.FlowBox         video_flowbox;
 
         private Gtk.ScrolledWindow  all_scrolled;
-        private Gtk.ScrolledWindow  audio_scrolled;
-        private Gtk.ScrolledWindow  video_scrolled;
         private Gtk.ScrolledWindow  directory_scrolled;
         private Gtk.ScrolledWindow  search_results_scrolled;
 
@@ -121,8 +117,6 @@ namespace Vocal {
         private Gtk.Widget          current_widget;
         private Gtk.Widget          previous_widget;
         private Gee.ArrayList<CoverArt>      all_art;
-        private Gee.ArrayList<CoverArt>      audio_art;
-        private Gee.ArrayList<CoverArt>      video_art;
 
 
         /* Miscellaneous global variables */
@@ -659,14 +653,10 @@ namespace Vocal {
 
             // Set up scrolled windows so that content will scoll instead of causing the window to expand
             all_scrolled = new Gtk.ScrolledWindow (null, null);
-            audio_scrolled = new Gtk.ScrolledWindow (null, null);
-            video_scrolled = new Gtk.ScrolledWindow (null, null);
             directory_scrolled = new Gtk.ScrolledWindow (null, null);
             search_results_scrolled = new Gtk.ScrolledWindow(null, null);
 
             all_scrolled.get_style_context().add_class("notebook-art");
-            audio_scrolled.get_style_context().add_class("notebook-art");
-            video_scrolled.get_style_context().add_class("notebook-art");
 
             search_results_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             search_results_scrolled.add(search_results_box);
@@ -680,26 +670,7 @@ namespace Vocal {
             all_flowbox.child_activated.connect(on_child_activated);
             all_flowbox.valign = Gtk.Align.START;
 
-            audio_flowbox = new Gtk.FlowBox();
-            audio_art = new Gee.ArrayList<CoverArt>();
-            audio_flowbox.get_style_context().add_class("notebook-art");
-            audio_flowbox.valign = Gtk.Align.START;
-
-            audio_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
-            audio_flowbox.activate_on_single_click = true;
-            audio_flowbox.child_activated.connect(on_child_activated);
-
-            video_flowbox = new Gtk.FlowBox();
-            video_flowbox.get_style_context().add_class("notebook-art");
-            video_art = new Gee.ArrayList<CoverArt>();
-            video_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
-            video_flowbox.activate_on_single_click = true;
-            video_flowbox.child_activated.connect(on_child_activated);
-            video_flowbox.valign = Gtk.Align.START;
-
 		    all_scrolled.add(all_flowbox);
-		    audio_scrolled.add(audio_flowbox);
-		    video_scrolled.add(video_flowbox);
 
             notebook = new Gtk.Stack();
             notebook.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
@@ -707,20 +678,7 @@ namespace Vocal {
 
             details = new PodcastView (this, null, on_elementary);
             details.go_back.connect(() => {
-                switch(mode_button.selected) {
-                    case 0:
-                        switch_visible_page(all_scrolled);
-                        break;
-                    case 1:
-                        switch_visible_page(audio_scrolled);
-                        break;
-                    case 2:
-                        switch_visible_page(video_scrolled);
-                        break;
-                    default:
-                        switch_visible_page(all_scrolled);
-                        break;
-                }
+                switch_visible_page(all_scrolled);
             });
 
             // Set up all the signals for the podcast view
@@ -756,8 +714,6 @@ namespace Vocal {
             notebook.add_titled(welcome, "welcome", _("Welcome"));
             notebook.add_titled(import_message_box, "import", _("Importing"));
             notebook.add_titled(all_scrolled, "all", _("All Podcasts"));
-            notebook.add_titled(audio_scrolled, "audio", _("Audio"));
-            notebook.add_titled(video_scrolled, "video", _("Video"));
             notebook.add_titled(details, "details", _("Details"));
             notebook.add_titled(video_widget, "video_player", _("Video"));
 
@@ -776,32 +732,13 @@ namespace Vocal {
             notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
             notebook.add_titled(search_results_scrolled, "search", _("Search Results"));
 
-            // Create the all/audio/video modebutton
-            mode_button = new Granite.Widgets.ModeButton();
-            mode_button.append_icon("user-home-symbolic", Gtk.IconSize.BUTTON);
-            mode_button.append_icon("media-audio-symbolic", Gtk.IconSize.BUTTON);
-            mode_button.append_icon("media-video-symbolic", Gtk.IconSize.BUTTON);
-            mode_button.mode_changed.connect(on_mode_changed);
-
-            // Create a revealer for the mode button
-            mode_button_revealer = new Gtk.Revealer();
-            mode_button_revealer.set_transition_type(Gtk.RevealerTransitionType.SLIDE_DOWN);
-            mode_button_revealer.add(mode_button);
-            mode_button_revealer.reveal_child = true;
-            mode_button_revealer.transition_duration = 750;
-
             // Add the notebook
             var library_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		    library_box.pack_start(mode_button_revealer, false, true, 0);
 		    library_box.pack_start(notebook, true, true, 0);
 
             // Add the thinpaned to the box
             box.pack_start(library_box, true, true, 0);
             current_widget = notebook;
-
-		    // Set up the revealer for the side pane
-		    revealer = new Gtk.Revealer();
-		    revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
 
             show_all();
 
@@ -857,19 +794,7 @@ namespace Vocal {
         	            	all_flowbox.remove(all_flowbox.get_child_at_index(0));
         	            }
 
-        	            for(int i = 0; i < audio_art.size; i++)
-        	            {
-        	            	audio_flowbox.remove(audio_flowbox.get_child_at_index(0));
-        	            }
-
-        	            for(int i = 0; i < video_art.size; i++)
-        	            {
-        	            	video_flowbox.remove(video_flowbox.get_child_at_index(0));
-        	            }
-
                         all_art.clear();
-                        audio_art.clear();
-                        video_art.clear();
                     }
 
 
@@ -1000,48 +925,6 @@ namespace Vocal {
                         }
 
                         all_art.add(a);
-                        
-                        /*
-                        GLib.Timeout.add (1000, () => {
-                            all_flowbox.add(a);
-                            a.show();
-                            return false;
-                        });
-                        */
-                        
-                        // Audio podcast stuff
-                        if(podcast.content_type == MediaType.AUDIO) {
-                            CoverArt audio = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast);
-                            if(currently_unplayed > 0)
-                            {
-                                audio.set_count(currently_unplayed);
-                                audio.show_count();
-                            }
-
-                            else
-                            {
-                                audio.hide_count();
-                            }
-                            audio_art.add(audio);
-                        }
-
-
-                        // Video podcast stuff
-                        if(podcast.content_type == MediaType.VIDEO) {
-                            CoverArt video = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast);
-
-                            if(currently_unplayed > 0)
-                            {
-                                video.set_count(currently_unplayed);
-                                video.show_count();
-                            }
-
-                            else
-                            {
-                                video.hide_count();
-                            }
-                            video_art.add(video);
-                        }
 	                }
                     
     	            currently_repopulating = false;
@@ -1060,15 +943,7 @@ namespace Vocal {
                 all_flowbox.add(a);
             }
 
-            show_all();
-
-            foreach(CoverArt a in audio_art) {
-                audio_flowbox.add(a);
-            }
-            foreach(CoverArt a in video_art) {
-                video_flowbox.add(a);
-            }
-            
+            show_all();           
         }   
 
 
@@ -1497,20 +1372,6 @@ namespace Vocal {
                 notebook.set_visible_child(all_scrolled);
                 current_widget = all_scrolled;
                 mode_button_revealer.reveal_child = true;   
-            }
-            else if (widget == audio_scrolled) {
-                if(mode_button.selected != 1)
-                    mode_button.set_active(1);
-                notebook.set_visible_child(audio_scrolled);
-                current_widget = audio_scrolled;
-                mode_button_revealer.reveal_child = true; 
-            }
-            else if (widget == video_scrolled) {
-                if(mode_button.selected != 2)
-                    mode_button.set_active(2);
-                notebook.set_visible_child(video_scrolled);
-                current_widget = video_scrolled;
-                mode_button_revealer.reveal_child = true; 
             }
             else if (widget == details) {
                 notebook.set_visible_child(details);
@@ -2067,27 +1928,6 @@ namespace Vocal {
         private void on_mark_multiple_episodes_as_unplayed(Gee.ArrayList<int> indexes) {
             foreach(int i in indexes) {
                 on_mark_episode_as_unplayed_request(details.podcast.episodes[i]);
-            }
-        }
-
-
-        /*
-         * Called when the user selects another mode button
-         */
-        private void on_mode_changed(Gtk.Widget widget) {
-
-            previous_widget = current_widget;
-
-            switch(mode_button.selected) {
-                case 0:
-                    switch_visible_page(all_scrolled);
-                    break;
-                case 1:
-                    switch_visible_page(audio_scrolled);
-                    break;
-                case 2:
-                    switch_visible_page(video_scrolled);
-                    break;
             }
         }
 

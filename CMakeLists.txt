@@ -156,7 +156,7 @@ add_custom_target (uninstall
 
 install (TARGETS vocal RUNTIME DESTINATION bin)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/vocal.desktop DESTINATION share/applications)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/vocal.desktop.appdata.xml DESTINATION share/appdata/vocal.desktop.appdata.xml)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/vocal.desktop.appdata.xml DESTINATION share/appdata)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/16/vocal.svg DESTINATION share/icons/hicolor/16x16/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/22/vocal.svg DESTINATION share/icons/hicolor/22x22/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/24/vocal.svg DESTINATION share/icons/hicolor/24x24/apps)

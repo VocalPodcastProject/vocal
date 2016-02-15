@@ -201,6 +201,11 @@ string css = """
 			count_label.use_markup = true;
 			count_label.set_markup("<span foreground='white'><b>%d</b></span>".printf(count));
 			count_label.get_style_context().add_class("text-shadow");
+			if(count < 10) {
+				count_label.margin_right = 12;
+			} else {
+				count_label.margin_right = 6;
+			}
 
 		}
 		

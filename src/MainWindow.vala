@@ -949,6 +949,11 @@ namespace Vocal {
                 all_flowbox.add(a);
             }
 
+            var flowbox_children = all_flowbox.get_children();
+            foreach(Gtk.Widget f in flowbox_children) {
+                f.halign = Gtk.Align.CENTER;
+            }
+
             show_all();           
         }   
 

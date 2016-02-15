@@ -148,7 +148,13 @@ namespace Vocal {
                     background-color: #FFF;
                 }
 
-                .local-coverart {
+                .coverart {
+                    box-shadow: 3px 3px 3px #777;
+                    border-style: solid;
+                    border-width: 2px;
+                }
+
+                .podcast-view-coverart {
                     box-shadow: 5px 5px 5px #777;
                 }
 
@@ -656,8 +662,6 @@ namespace Vocal {
             directory_scrolled = new Gtk.ScrolledWindow (null, null);
             search_results_scrolled = new Gtk.ScrolledWindow(null, null);
 
-            all_scrolled.get_style_context().add_class("notebook-art");
-
             search_results_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             search_results_scrolled.add(search_results_box);
 
@@ -903,6 +907,8 @@ namespace Vocal {
 	                    }
 
                         CoverArt a = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast, true);
+                        a.get_style_context().add_class("coverart");
+                        a.halign = Gtk.Align.START;
 
                         int currently_unplayed = 0;
                         foreach(Episode e in podcast.episodes)

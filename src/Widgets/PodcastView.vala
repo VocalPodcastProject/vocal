@@ -472,7 +472,7 @@ namespace Vocal {
                 image = new Gtk.Image.from_pixbuf(pixbuf);
                 image.margin = 5;
                 image.margin_bottom = 0;
-                image.get_style_context().add_class("local-coverart");
+                image.get_style_context().add_class("podcast-view-coverart");
 
             	image_box.pack_start(image, true, true, 0);
 

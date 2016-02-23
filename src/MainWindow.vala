@@ -154,8 +154,8 @@ namespace Vocal {
                     border-width: 2px;
                 }
 
-                .podcast-view-coverart {
-                    box-shadow: 5px 5px 5px #777;
+                .episode-list {
+                    border-bottom: 1px solid #8a9580;
                 }
 
                 .directory-art {
@@ -174,6 +174,10 @@ namespace Vocal {
 
                 .notebook-art {
                     background-color: #D8D8D8;
+                }
+
+                .podcast-view-coverart {
+                    box-shadow: 5px 5px 5px #777;
                 }
 
                 .rate-button {

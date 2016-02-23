@@ -619,6 +619,9 @@ namespace Vocal {
                 	Episode current_episode = podcast.episodes[(podcast.episodes.size - 1) - count];
                     EpisodeDetailBox current_episode_box = new EpisodeDetailBox(current_episode, ((podcast.episodes.size - 1) - count), boxes.size, parent.on_elementary);
                     current_episode_box.streaming_button_clicked.connect(on_streaming_button_clicked);
+                    current_episode_box.margin_top = 6;
+                    current_episode_box.margin_left = 6;
+                    current_episode_box.border_width = 0;
                     if(current_episode_box.top_box_width > this.largest_box_size) {
                         this.largest_box_size = current_episode_box.top_box_width;
                     }
@@ -683,6 +686,10 @@ namespace Vocal {
             }
 
             listbox.button_press_event.connect(on_button_press_event);
+
+            listbox.get_children().foreach((child) => {
+                child.get_style_context().add_class("episode-list");
+            });
 
             scrolled.add(listbox);
 

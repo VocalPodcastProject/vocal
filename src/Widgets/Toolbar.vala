@@ -39,6 +39,7 @@ namespace Vocal {
 		public signal void seek_backward_selected();
 		public signal void downloads_selected();
 		public signal void starterpack_selected();
+        public signal void check_for_updates_selected();
 
 		public bool search_visible = false;
 
@@ -102,6 +103,11 @@ namespace Vocal {
             // Create the menus and menuitems
             menu = new Gtk.Menu ();
 
+            var check_for_updates = new Gtk.MenuItem.with_label(_("Check for Updates"));
+            check_for_updates.activate.connect(() => {
+                check_for_updates_selected();
+            });
+
             var add_feed_item = new Gtk.MenuItem.with_label(_("Add Podcast Feed…"));
             add_feed_item.activate.connect(() => {
                 add_podcast_selected();
@@ -122,6 +128,8 @@ namespace Vocal {
             export_item.activate.connect(() => {
             	export_selected();
         	});
+            menu.add(check_for_updates);
+            menu.add(new Gtk.SeparatorMenuItem());
             menu.add(add_feed_item);
             menu.add(import_item);
             menu.add(export_item);

@@ -587,6 +587,10 @@ namespace Vocal {
             toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
 
             // Set up all the toolbar signals
+            toolbar.check_for_updates_selected.connect(() => {
+                on_update_request();
+            });
+
             toolbar.add_podcast_selected.connect(() => {
                 add_new_podcast();
             });
@@ -2270,6 +2274,8 @@ namespace Vocal {
 
             // Only check for updates if no other checks are currently under way
             if(!checking_for_updates) {
+
+                info("Checking for updates.");
 
                 checking_for_updates = true;
 

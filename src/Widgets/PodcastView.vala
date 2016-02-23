@@ -137,9 +137,9 @@ namespace Vocal {
 
             image_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
 
-            details_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-            details_box.margin_left = 12;
-            details_box.margin_right = 12;
+            details_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 20);
+            details_box.margin_left = 24;
+            details_box.margin_right = 24;
 
             actions_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
 

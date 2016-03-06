@@ -168,10 +168,7 @@ namespace Vocal {
 
             // Create the AppMenu
             app_menu = new Gtk.MenuButton();
-		    if(on_elementary)
-	            	app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu", Gtk.IconSize.LARGE_TOOLBAR));
-		    else
-	     		app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.LARGE_TOOLBAR));
+	     	app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.LARGE_TOOLBAR));
             app_menu.popup = menu;
 
 

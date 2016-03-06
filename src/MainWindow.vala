@@ -67,7 +67,6 @@ namespace Vocal {
         private SettingsDialog      settings_dialog;
         private VideoControls       video_controls;
         private Gtk.Revealer        return_revealer;
-        private Gtk.Revealer        mode_button_revealer;
         private Gtk.Button          return_to_library;
         private DonateDialog        donate_dialog;
         private SecretEntryPopover  secret_entry;
@@ -155,7 +154,7 @@ namespace Vocal {
                 }
 
                 .episode-list {
-                    border-bottom: 1px solid #8a9580;
+                    border-bottom: 0.5px solid #8a9580;
                 }
 
                 .directory-art {
@@ -172,6 +171,13 @@ namespace Vocal {
                     background-color: #E8E8E8;
                 }
 
+                .library-toolbar {
+                    background-image: -gtk-gradient (linear,
+                                         left top, left bottom,
+                                         from (shade (@bg_color, 0.9)),
+                                         to (@bg_color));
+                }
+
                 .notebook-art {
                     background-color: #D8D8D8;
                 }
@@ -179,6 +185,11 @@ namespace Vocal {
                 .podcast-view-coverart {
                     box-shadow: 5px 5px 5px #777;
                 }
+
+                .podcast-view-description {
+                    font: open sans 10px;
+                }
+
 
                 .rate-button {
                     color: shade (#000, 1.60);
@@ -757,7 +768,6 @@ namespace Vocal {
             // Show the welcome widget if it's the first run, or if the library is empty
             if(first_run || library_empty) {
                 switch_visible_page(welcome);
-                mode_button_revealer.reveal_child = false;
                 show_all();
 
             } else {
@@ -1386,41 +1396,32 @@ namespace Vocal {
                 previous_widget = current_widget;
 
             if (widget == all_scrolled) {
-                if(mode_button.selected != 0)
-                    mode_button.set_active(0);
                 notebook.set_visible_child(all_scrolled);
-                current_widget = all_scrolled;
-                mode_button_revealer.reveal_child = true;   
+                current_widget = all_scrolled; 
             }
             else if (widget == details) {
                 notebook.set_visible_child(details);
                 current_widget = details;
-                mode_button_revealer.reveal_child = false; 
             }
             else if (widget == video_widget) {
                 notebook.set_visible_child(video_widget);
                 current_widget = video_widget;
-                mode_button_revealer.reveal_child = false; 
             }
             else if (widget == import_message_box) {
                 notebook.set_visible_child(import_message_box);
                 current_widget = import_message_box;
-                mode_button_revealer.reveal_child = false; 
             }
             else if (widget == search_results_scrolled) {
                 notebook.set_visible_child(search_results_scrolled);
                 current_widget = search_results_scrolled;
-                mode_button_revealer.reveal_child = false; 
             }
             else if (widget == directory_scrolled) {
                 notebook.set_visible_child(directory_scrolled);
                 current_widget = directory_scrolled;
-                mode_button_revealer.reveal_child = false; 
             }
             else if (widget == welcome) {
                 notebook.set_visible_child(welcome);
                 current_widget = welcome;
-                mode_button_revealer.reveal_child = false; 
             }
             else {
                 info("Attempted to switch to a notebook page that didn't exist. This is likely a bug and might cause issues.");

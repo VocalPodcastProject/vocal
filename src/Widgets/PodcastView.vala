@@ -55,6 +55,7 @@ namespace Vocal {
         private Gtk.Box toolbar_box;
         private Gtk.Label name_label;
         private Gtk.Label count_label;
+        private Gtk.Label description_label;
         private string count_string;
 
         private Gtk.Menu right_click_menu;
@@ -87,23 +88,29 @@ namespace Vocal {
 
 			this.current_episode_index = 0;
             this.boxes_index = 0;
-			this.orientation = Gtk.Orientation.HORIZONTAL;
+			this.orientation = Gtk.Orientation.VERTICAL;
+            var horizontal_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
 			count_string = null;
 
-			var go_back_button = new Gtk.Button.with_label(_("Return to Library"));
+            var toolbar = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            toolbar.get_style_context().add_class("toolbar");
+            toolbar.get_style_context().add_class("library-toolbar");
+
+            var go_back_button = new Gtk.Button.with_label(_("Your Podcasts"));
             go_back_button.clicked.connect(() => { go_back(); });
             go_back_button.get_style_context().add_class("back-button");
-            go_back_button.hexpand = false;
-            go_back_button.halign = Gtk.Align.START;
-            go_back_button.margin_top = 12;
+            go_back_button.margin = 6;
 
-
-            var mark_as_played = new Gtk.Button.from_icon_name("object-select-symbolic", Gtk.IconSize.MENU);
-            mark_as_played.tooltip_text = _("Mark all episodes as played");
+            var mark_as_played = new Gtk.Button.with_label(_("Mark All Played"));
             mark_as_played.clicked.connect(() => {
                 mark_all_episodes_as_played_requested();
             });
+            mark_as_played.margin = 6;
+
+            toolbar.pack_start(go_back_button, false, false, 0);
+            toolbar.pack_end(mark_as_played, false, false, 0);
+            this.pack_start(toolbar, false, true, 0);
 
             var download_all = new Gtk.Button.from_icon_name("browser-download-symbolic", Gtk.IconSize.MENU);
             download_all.tooltip_text = _("Download all episodes");
@@ -125,8 +132,7 @@ namespace Vocal {
                 show_all();
             });
 
-            var remove = new Gtk.Button.from_icon_name("edit-delete-symbolic", Gtk.IconSize.MENU);
-            remove.tooltip_text = _("Remove podcast from library");
+            var remove = new Gtk.Button.with_label(_("Unsubscribe"));
             remove.clicked.connect (() => {
                delete_podcast_requested();
             });
@@ -134,65 +140,63 @@ namespace Vocal {
             remove.get_style_context().add_class("destructive-action");
             remove.show();
 
+            image_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
-            image_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-
-            details_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 20);
-            details_box.margin_left = 24;
-            details_box.margin_right = 24;
-
-            actions_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
-
-            label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+            details_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            actions_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
+            label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
 			name_label = new Gtk.Label("Name");
 			count_label = new Gtk.Label(count_string);
 			name_label.max_width_chars = 15;
 			name_label.wrap = true;
 			name_label.justify = Gtk.Justification.CENTER;
+            name_label.margin_bottom = 15;
+
+            description_label = new Gtk.Label("Description");
+            description_label.max_width_chars = 20;
+            description_label.wrap = true;
+            description_label.wrap_mode = Pango.WrapMode.WORD;
+            description_label.valign = Gtk.Align.START;
+            description_label.get_style_context().add_class("podcast-view-description");
 
 			Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H2, name_label);
-            Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, count_label);
+            count_label.get_style_context().add_class("h4");
 
-			label_box.pack_start(name_label, false, false, 0);
+			label_box.pack_start(name_label, false, false, 5);
+            label_box.pack_start(description_label, true, true, 0);
+
+            var expander_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            expander_box.vexpand = true;
+
+            label_box.pack_start(expander_box, true, true, 0);
 			label_box.pack_start(count_label, false, false, 0);
 
-			actions_box.pack_start(mark_as_played, true, true, 0);
 			actions_box.pack_start(download_all, true, true, 0);
 			actions_box.pack_start(hide_played, true, true, 0);
 			actions_box.pack_start(remove, true, true, 0);
 
 			var vertical_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
-            vertical_box.pack_start(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), true, true, 0);
-			vertical_box.pack_start(label_box, false, false, 0);
+			vertical_box.pack_start(label_box, true, true, 0);
 			vertical_box.pack_start(actions_box, false, false, 0);
-            vertical_box.pack_start(new Gtk.Box(Gtk.Orientation.VERTICAL, 0), true, true, 0);
+            vertical_box.margin = 12;
+            vertical_box.margin_bottom = 0;
 
-			details_box.pack_start(image_box);
-			details_box.pack_start(vertical_box);
+            details_box.pack_start(vertical_box, true, true, 12);
+			details_box.pack_start(image_box, false, false, 0);
+            details_box.valign = Gtk.Align.FILL;
+            details_box.hexpand = false;
+            details_box.margin = 0;
 
-			var center_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			var expander_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			expander_box.vexpand = true;
-			var expander_box2 = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-			expander_box2.vexpand = true;
-
-            center_box.add(go_back_button);
-			center_box.pack_start(expander_box, true, true, 0);
-			center_box.pack_start(details_box, false, false, 0);
-			center_box.pack_start(expander_box2, true, true, 0);
-
-			center_box.margin_left = 12;
-			center_box.margin_right = 12;
-			this.pack_start(center_box, false, false, 0);
+			horizontal_box.pack_start(details_box, false, true, 0);
 
 			var separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
 			separator.margin = 0;
-			this.pack_start(separator, false, false, 0);
+			horizontal_box.pack_start(separator, false, false, 0);
 
 			paned = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
 			paned.expand = true;
-			this.pack_start(paned, true, true, 0);
+			horizontal_box.pack_start(paned, true, true, 0);
 
 			shownotes = new Shownotes();
             shownotes.play_button.clicked.connect(() => { play_episode_requested(); });
@@ -200,6 +204,8 @@ namespace Vocal {
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
 
 			paned.pack2(shownotes, true, true);
+
+            this.pack_start(horizontal_box, true, true, 0);
 
         }
 
@@ -466,12 +472,11 @@ namespace Vocal {
         	try {
 			    GLib.File cover = GLib.File.new_for_uri(podcast.coverart_uri);
                 InputStream input_stream = cover.read();
-                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 200, 200, true);
+                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 275, 275, true);
 
 
                 image = new Gtk.Image.from_pixbuf(pixbuf);
-                image.margin = 5;
-                image.margin_bottom = 0;
+                image.margin = 0;
                 image.get_style_context().add_class("podcast-view-coverart");
 
             	image_box.pack_start(image, true, true, 0);
@@ -480,6 +485,7 @@ namespace Vocal {
             } catch (Error e) {}
 
 			name_label.set_text(podcast.name.replace("%27", "'"));
+            description_label.set_text(GLib.Uri.unescape_string(podcast.description));
 
             populate_episodes();
 
@@ -552,6 +558,7 @@ namespace Vocal {
 
             shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? podcast.episodes[current_episode_index].description.replace("%27", "'") : _("No show notes available."));
             shownotes.set_title(podcast.episodes[current_episode_index].title);
+            shownotes.set_date(podcast.episodes[current_episode_index].datetime_released);
             show_all();
         }
 
@@ -726,9 +733,9 @@ namespace Vocal {
         public void set_unplayed_text() {
             string count_string = null;
             if(unplayed_count > 0) {
-                count_string = _("%d episodes, %d unplayed".printf(podcast.episodes.size, unplayed_count));
+                count_string = _("%d unplayed episodes".printf(unplayed_count));
             } else {
-                count_string = _("%d episodes".printf(podcast.episodes.size));
+                count_string = _("");
             }
             count_label.set_text(count_string);
         }

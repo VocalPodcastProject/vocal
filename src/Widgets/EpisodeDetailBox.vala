@@ -103,6 +103,7 @@ namespace Vocal {
             // If the episode is unplayed, show an unread icon
             if(unplayed != null) {
                 unplayed_image = new Gtk.Image.from_icon_name(unplayed, Gtk.IconSize.BUTTON);
+                unplayed_image.valign = Gtk.Align.START;
                 unplayed_box.pack_start(unplayed_image, false, false, 0);
             }
 
@@ -142,18 +143,16 @@ namespace Vocal {
             label_box.margin = 0;
             title_label = new Gtk.Label("<b>%s</b>".printf(GLib.Markup.escape_text(episode.title.replace("%27", "'").replace("&amp;", "&"))));
             title_label.set_use_markup(true);
-            title_label.set("xalign", 0);
+            title_label.halign = Gtk.Align.START;
             title_label.justify = Gtk.Justification.LEFT;
             title_label.wrap = true;
-            title_label.margin_left = 5;
-            title_label.margin_right = 5;
             label_box.pack_start(title_label, true, true, 0);
             if(episode.datetime_released != null) {
-                release_label = new Gtk.Label(episode.datetime_released.format(" %x"));
+                release_label = new Gtk.Label(episode.datetime_released.format("%x"));
             } else {
                 release_label = new Gtk.Label(episode.date_released);
             }
-            release_label.set("xalign",0);
+            release_label.halign = Gtk.Align.START;
             release_label.justify = Gtk.Justification.LEFT;
             label_box.expand = false;
 
@@ -171,13 +170,12 @@ namespace Vocal {
             description_label.justify = Gtk.Justification.LEFT;
             description_label.set_use_markup(true);
             description_label.set_ellipsize(Pango.EllipsizeMode.END);
-            description_label.lines = 3;
+            description_label.lines = 2;
             description_label.max_width_chars = 10;
             description_label.single_line_mode = true;
 
-            description_label.margin = 30;
-            description_label.margin_top = 15;
-            description_label.margin_bottom = 10;
+            description_label.margin = 12;
+            description_label.margin_left = 25;
 
             description_label.set("xalign", 0);
 
@@ -263,6 +261,7 @@ namespace Vocal {
 
                 unplayed_image = new Gtk.Image.from_icon_name("mail-unread", Gtk.IconSize.BUTTON);
                 unplayed_box.pack_start(unplayed_image, false, false, 0);
+                unplayed_image.valign = Gtk.Align.START;
 
                 show_all();
             }

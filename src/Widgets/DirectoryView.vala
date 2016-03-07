@@ -43,6 +43,9 @@ namespace Vocal {
             // Set up the banner
 
             banner_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            banner_box.get_style_context().add_class("toolbar");
+            banner_box.get_style_context().add_class("library-toolbar");
+
             var itunes_title = new Gtk.Label(_("iTunes Top 100 Podcasts"));
             itunes_title.margin_top = 5;
             itunes_title.margin_bottom = 5;
@@ -61,17 +64,13 @@ namespace Vocal {
                 return_button.clicked.connect(() => { return_to_library (); });
             }
             return_button.get_style_context().add_class("back-button");
-            return_button.margin_top = 12;
-            return_button.margin_left = 12;
-            return_button.margin_bottom = 0;
+            return_button.margin = 6;
             return_button.expand = false;
             return_button.halign = Gtk.Align.START;
 
             first_run_continue_button = new Gtk.Button.with_label(_("Done"));
             first_run_continue_button.get_style_context().add_class("suggested-action");
-            first_run_continue_button.margin_top = 12;
-            first_run_continue_button.margin_right = 12;
-            first_run_continue_button.margin_bottom = 0;
+            first_run_continue_button.margin = 6;
             first_run_continue_button.expand = false;
             first_run_continue_button.halign = Gtk.Align.END;
             first_run_continue_button.clicked.connect(() => {
@@ -83,8 +82,8 @@ namespace Vocal {
             });
             first_run_continue_button.sensitive = false;
 
-            banner_box.pack_start(return_button, false, false, 12);
-            banner_box.pack_end(first_run_continue_button, false, false, 12);
+            banner_box.pack_start(return_button, false, false, 0);
+            banner_box.pack_end(first_run_continue_button, false, false, 0);
 
             if(!first_run) {
                 hide_first_run_continue_button();

@@ -111,10 +111,6 @@ namespace Vocal {
             Intl.bind_textdomain_codeset (package_name, "UTF-8");
             Intl.textdomain (package_name);
 
-            // Initialize GStreamer
-            Gst.init (ref args);
-            Gst.PbUtils.init();
-
             // Initialize GtkClutter
             var err = GtkClutter.init (ref args);
             if (err != Clutter.InitError.SUCCESS) {
@@ -128,6 +124,10 @@ namespace Vocal {
                 stdout.puts("Could not initialize clutter.\n");
                 error ("Could not initalize clutter! "+err.to_string ());
             }
+
+            // Initialize GStreamer
+            Gst.init (ref args);
+            Gst.PbUtils.init();
 
             // Set the media role
             GLib.Environ.set_variable ({"PULSE_PROP_media.role"}, "audio", "true");

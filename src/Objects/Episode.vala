@@ -27,7 +27,7 @@ namespace Vocal {
         public string			description;			// the description/shownotes (TODO: in the future, make these separate fields)
         public string			uri;					// the remote location for the media file
         public string			local_uri;				// the local location for the media file, if any
-        public int64 			last_played_position;	// the latest position that has been played
+        public double 			last_played_position;	// the latest position that has been played
         public string 			date_released;			// when the episode was released, in string form
         public EpisodeStatus	status;					// whether the episode is played or unplayed
         public DownloadStatus	current_download_status;// whether the episode is downloaded or not downloaded

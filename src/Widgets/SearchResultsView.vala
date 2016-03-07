@@ -60,9 +60,7 @@ namespace Vocal {
             return_button.clicked.connect(() => { return_to_library (); });
             
             return_button.get_style_context().add_class("back-button");
-            return_button.margin_top = 12;
-            return_button.margin_left = 12;
-            return_button.margin_bottom = 0;
+            return_button.margin = 6;
             return_button.expand = false;
             return_button.halign = Gtk.Align.START;
 
@@ -87,7 +85,11 @@ namespace Vocal {
             cloud_results_label.get_style_context().add_class("h4");
             cloud_results_label.set_property("xalign", 0);
 
-            this.add(return_button);
+            var return_button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            return_button_box.get_style_context().add_class("toolbar");
+            return_button_box.get_style_context().add_class("library-toolbar");
+            return_button_box.add(return_button);
+            this.add(return_button_box);
             this.add(title_label);
 
             // Create the lists container

@@ -951,8 +951,8 @@ namespace Vocal {
 
                         }
                         else if (col_name == "latest_position") {
-                            int64 position = 0;
-                            if(int64.try_parse(val, out position)) {
+                            double position = 0;
+                            if(double.try_parse(val, out position)) {
                                 current_ep.last_played_position = position;
                             }
                         }
@@ -1091,8 +1091,8 @@ namespace Vocal {
 
                     }
                     else if (col_name == "latest_position") {
-                        int64 position = 0;
-                        if(int64.try_parse(val, out position)) {
+                        double position = 0;
+                        if(double.try_parse(val, out position)) {
                             current_ep.last_played_position = position;
                         }
                     }

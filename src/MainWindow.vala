@@ -69,7 +69,6 @@ namespace Vocal {
         private Gtk.Revealer        return_revealer;
         private Gtk.Button          return_to_library;
         private DonateDialog        donate_dialog;
-        private SecretEntryPopover  secret_entry;
         private Gtk.Box             search_results_box;
 
         /* Icon views and related variables */
@@ -259,18 +258,26 @@ namespace Vocal {
 
             // Create the Player and Initialize GStreamer
             player = Player.get_default(app.args);
-            player.stream_ended.connect(on_stream_ended);
+            player.eos.connect(on_stream_ended);
             player.additional_plugins_required.connect(on_additional_plugins_needed);
 
             // Create the drawing area for the video widget
             video_widget = new GtkClutter.Embed();
+            video_widget.use_layout_size = true;
             video_widget.button_press_event.connect(on_video_button_press_event);
 
             stage = (Clutter.Stage)video_widget.get_stage ();
             stage.background_color = {0, 0, 0, 0};
             stage.use_alpha = true;
 
-            stage.add_child (player);
+            actor = new Clutter.Actor();
+            var aspect_ratio = ClutterGst.Aspectratio.@new ();
+            ((ClutterGst.Content) aspect_ratio).player = player;
+            actor.content = aspect_ratio;
+
+            actor.add_constraint (new Clutter.BindConstraint (stage, Clutter.BindCoordinate.WIDTH, 0));
+            actor.add_constraint (new Clutter.BindConstraint (stage, Clutter.BindCoordinate.HEIGHT, 0));
+            stage.add_child (actor);
 
             // Set up all the video controls
             video_controls = new VideoControls();
@@ -347,46 +354,33 @@ namespace Vocal {
             // Create the toolbar
             toolbar = new Toolbar (settings);
             toolbar.get_style_context().add_class("vocal-headerbar");
-            secret_entry = new SecretEntryPopover(toolbar.app_menu);
-            secret_entry.code_accepted.connect(on_code_accepted);
-
 
             // Connect the new player position available signal from the player
             // to set the new progress on the playback box
             player.new_position_available.connect(() => {
 
-                int64 position = player.get_position();
-                int64 duration = player.get_duration();
-
-
-                // Set the current episode position (will later be saved to database when
-                // switching tracks or exiting the program)
-
-                if(position > 0)
-                    player.current_episode.last_played_position = position;
-
-                double percentage = (double) position / (double) duration;
-
-                // Convert nanoseconds to seconds
-                position = position / 1000000000;
-                duration = duration / 1000000000;
+                if(player.progress > 0)
+                    player.current_episode.last_played_position = player.progress;
 
                 int mins_remaining;
                 int secs_remaining;
                 int mins_elapsed;
                 int secs_elapsed;
 
-                mins_elapsed = (int) position / 60;
-                secs_elapsed = (int) position % 60;
+                // Progress is a percentage of completiong. Multiple by duration to get elapsed.
+                double total_secs_elapsed = player.duration * player.progress;
 
-                int64 remaining = duration - position;
+                mins_elapsed = (int) total_secs_elapsed / 60;
+                secs_elapsed = (int) total_secs_elapsed % 60;
 
-                mins_remaining = (int) remaining / 60;
-                secs_remaining = (int) remaining % 60;
+                double total_secs_remaining = player.duration - total_secs_elapsed;
 
-                if(!currently_importing && position != 0) {
-                    toolbar.playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
-                    video_controls.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+                mins_remaining = (int) total_secs_remaining / 60;
+                secs_remaining = (int) total_secs_remaining % 60;
+
+                if(!currently_importing && player.progress != 0) {
+                    toolbar.playback_box.set_progress(player.progress, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+                    video_controls.set_progress(player.progress, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
                 }
             });
 
@@ -414,38 +408,15 @@ namespace Vocal {
             // Change the player position to match scale changes
             toolbar.playback_box.scale_changed.connect( () => {
 
-                // Get the total duration in nanoseconds
-                int64 duration = player.get_duration();
-
-                double val = toolbar.playback_box.get_progress_bar_fill();
-
-                // Multiply percentage by the duration
-                double position_double = (double) duration * val;
-
-                int64 position = (int64) position_double;
-
                 // Set the position
-                player.set_position (position);
-                player.play();
+                player.set_position (toolbar.playback_box.get_progress_bar_fill());
             });
 
             // Repeat for the video playback box scale
             video_controls.progress_bar_scale_changed.connect( () => {
-
-                // Get the total duration in nanoseconds
-                int64 duration = player.get_duration();
-
-                double val = video_controls.progress_bar_fill;
-
-                // Multiply percentage by the duration
-
-                double position_double = (double) duration * val;
-
-                int64 position = (int64) position_double;
-
+                
                 // Set the position
-                player.set_position (position);
-                player.play();
+                player.set_position (video_controls.progress_bar_fill);
             });
 
 
@@ -502,9 +473,6 @@ namespace Vocal {
                             else 
                                 toolbar.hide_search();
                             break;
-                        case Gdk.Key.y:
-                            secret_entry.show_all();
-                            break;
                         default:
                             break;
                     }
@@ -512,7 +480,7 @@ namespace Vocal {
                 else {
                     switch (e.keyval) {
                         case Gdk.Key.space:
-                            if(!toolbar.search_entry.has_focus && !secret_entry.visible)
+                            if(!toolbar.search_entry.has_focus)
                                 play();
                             break;
                         case Gdk.Key.F11:
@@ -841,7 +809,7 @@ namespace Vocal {
     	                                    if(episode.title == fields[0]){
     	                                        this.current_episode = episode;
     	                                        toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-    	                                        track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+    	                                        track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
 
     	                                        string new_uri;
 
@@ -855,36 +823,9 @@ namespace Vocal {
     	                                        bool episode_finished = false;
     	                                        try {
 
-    	                                            Gst.PbUtils.Discoverer discoverer = new Gst.PbUtils.Discoverer(5000000000L);
-    	                                            Gst.PbUtils.DiscovererInfo disc_info = discoverer.discover_uri(new_uri);
+    	                                            player.set_episode(this.current_episode);
 
-    	                                            int64 duration = (int64)disc_info.get_duration();
-    	                                            int64 position = this.current_episode.last_played_position;
-
-    	                                            // Convert nanoseconds to seconds
-    	                                            position = position / 1000000000;
-    	                                            duration = duration / 1000000000;
-
-    	                                            if(position == duration) {
-    	                                                episode_finished = true;
-    	                                            }
-
-    	                                            int mins_remaining;
-    	                                            int secs_remaining;
-    	                                            int mins_elapsed;
-    	                                            int secs_elapsed;
-
-    	                                            double percentage = (double) position / (double) duration;
-
-    	                                            mins_elapsed = (int) position / 60;
-    	                                            secs_elapsed = (int) position % 60;
-
-    	                                            int64 remaining = duration - position;
-
-    	                                            mins_remaining = (int) remaining / 60;
-    	                                            secs_remaining = (int) remaining % 60;
-
-    	                                            toolbar.playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+    	                                            //toolbar.playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
     	                                            shownotes.set_notes_text(episode.description);
 
     	                                        } catch(Error e) {
@@ -986,6 +927,8 @@ namespace Vocal {
          */
         public void play() {
 
+            stdout.puts("Play\n");
+
             if(current_episode != null) {
                 toolbar.show_playback_box();
 
@@ -1003,6 +946,8 @@ namespace Vocal {
                 // Mark the current episode as played
                 library.mark_episode_as_played(current_episode);
 
+                stdout.puts("Setting player current episode\n");
+
                 // If the currently selected episode isn't set, do so
                 if(player.current_episode != current_episode) {
 
@@ -1012,8 +957,9 @@ namespace Vocal {
                     }
 
                     player.set_episode(current_episode);
-                    player.set_state(Gst.State.READY);
                 }
+
+                stdout.puts("Player set.\n");
 
 
                 // Are we playing a video? If so, is the video widget already being displayed?
@@ -1031,7 +977,7 @@ namespace Vocal {
                 }
 
                 // If we are playing, switch to paused mode. If we're paused, start playing.
-                if(player.is_currently_playing) {
+                if(player.playing) {
                     player.pause();
                     playback_status_changed("Paused");
                     var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
@@ -1043,7 +989,7 @@ namespace Vocal {
                     video_controls.tooltip_text = _("Play");
 
                     // Set last played position
-                    current_episode.last_played_position = player.get_position();
+                    current_episode.last_played_position = player.progress;
                     library.set_episode_playback_position(player.current_episode);
                 }
                 else {
@@ -1052,7 +998,7 @@ namespace Vocal {
                     playback_status_changed("Playing");
 
                     // Seek if necessary
-                    if(current_episode.last_played_position > 0 && current_episode.last_played_position > player.get_position()) {
+                    if(current_episode.last_played_position > 0 && current_episode.last_played_position > player.progress) {
 
                         // If it's a streaming episode, seeking takes longer
                         // Temporarily pause the track and give it some time to seek
@@ -1100,13 +1046,13 @@ namespace Vocal {
             int index = details.current_episode_index;
             current_episode = details.podcast.episodes[index];
 
-            // Set episode position and start playback
-            player.set_state(Gst.State.READY);
+            stdout.puts("settings state\n");
 
+            player.pause();
             play();
 
             // Set the shownotes, the media information, and update the last played media in the settings
-            track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+            track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64)player.duration);
             shownotes.set_notes_text(current_episode.description);
             settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
         }
@@ -1122,13 +1068,10 @@ namespace Vocal {
             queue_popover.hide();
             library.remove_episode_from_queue(e);
 
-            // Set episode position and start playback
-            player.set_state(Gst.State.READY);
-
             play();
 
             // Set the shownotes, the media information, and update the last played media in the settings
-            track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+            track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64)player.duration);
             shownotes.set_notes_text(current_episode.description);
             settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
         }
@@ -1306,7 +1249,7 @@ namespace Vocal {
 
                     if(success) {
 
-                        if(!player.is_currently_playing)
+                        if(!player.playing)
                             toolbar.hide_playback_box();
 
                         // Is there now at least one podcast in the library?
@@ -1331,7 +1274,7 @@ namespace Vocal {
 
                     } else {
 
-                        if(!player.is_currently_playing)
+                        if(!player.playing)
                             toolbar.hide_playback_box();
 
                         var add_err_dialog = new Gtk.MessageDialog(add_feed,
@@ -1351,7 +1294,7 @@ namespace Vocal {
 
                     currently_importing = false;
 
-                    if(player.is_currently_playing) {
+                    if(player.playing) {
                         toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                         video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     }
@@ -1463,8 +1406,6 @@ namespace Vocal {
                             info("GStreamer registry updated, attempting to start playback using the new plugins...");
 
                             // Reset the player
-                            player.set_state(Gst.State.NULL);
-                            player.set_state(Gst.State.READY);
                             player.current_episode = null;
 
                             play();
@@ -1530,7 +1471,7 @@ namespace Vocal {
                 library.async_add_podcast_from_file(entered_feed, (obj, res) => {
                     success = library.async_add_podcast_from_file.end(res);
                     currently_importing = false;
-                    if(player.is_currently_playing) {
+                    if(player.playing) {
                         toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                         video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     }
@@ -1543,7 +1484,7 @@ namespace Vocal {
                     toolbar.show_shownotes_button();
                     toolbar.show_playlist_button();
 
-                    if(!player.is_currently_playing)
+                    if(!player.playing)
                         toolbar.hide_playback_box();
 
                     // Is there now at least one podcast in the library?
@@ -1566,7 +1507,7 @@ namespace Vocal {
                     }
                 } else {
 
-                    if(!player.is_currently_playing)
+                    if(!player.playing)
                         toolbar.hide_playback_box();
 
                     var add_err_dialog = new Gtk.MessageDialog(add_feed,
@@ -1602,73 +1543,6 @@ namespace Vocal {
             this.current_episode_art = art;
             this.highlighted_podcast = art.podcast;
             show_details(art.podcast);
-        }
-
-        /*
-         * Called when a user enters a cheat code that is correct
-         */
-
-        private void on_code_accepted(string code) {
-            secret_entry.hide();
-
-            /*
-             * Shame on you for cheating. I'm calling your mom.
-             */
-            switch(code) {
-                case "camelot":
-
-                    const string CAMELOT_SS = """
-                    @define-color colorPrimary shade(#AF739A, .80);
-                    """;
-
-
-                    Granite.Widgets.Utils.set_theming_for_screen (this.get_screen (), CAMELOT_SS,
-                                                   Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
-
-                    Episode fake_episode = new Episode();
-                    fake_episode.title = "Monty Python and the Holy Grail Lego Version";
-                    fake_episode.uri = "https://ia700402.us.archive.org/6/items/legopython/legopython.mp4";
-                    Podcast fake_podcast = new Podcast();
-                    fake_episode.parent = fake_podcast;
-                    fake_podcast.remote_art_uri = "https://i.vimeocdn.com/video/144879370_640.jpg";
-                    fake_podcast.local_art_uri = "https://i.vimeocdn.com/video/144879370_640.jpg";
-                    fake_podcast.content_type = MediaType.VIDEO;
-                    current_episode = fake_episode;
-
-                    // Set episode position and start playback
-                    player.set_state(Gst.State.READY);
-
-                    track_changed("And now for something completely different",
-                        "Monty Python", current_episode.parent.coverart_uri, player.get_duration());
-
-                    play();
-
-                    
-                    break;
-                case "roundel":
-                    break;
-                case "wookie":
-                	Episode fake_episode = new Episode();
-                    fake_episode.title = "Star Wars Holiday Special";
-                    fake_episode.uri = """https://archive.org/download/StarWarsHolidaySpecial/Star%20Wars%20Holiday%20Special.mp4""";
-                    Podcast fake_podcast = new Podcast();
-                    fake_episode.parent = fake_podcast;
-                    fake_podcast.remote_art_uri = "http://sothathappenedpodcast.com/wp-content/uploads/2014/12/starwarsholidayspecial.jpg";
-                    fake_podcast.local_art_uri = "http://sothathappenedpodcast.com/wp-content/uploads/2014/12/starwarsholidayspecial.jpg";
-                    fake_podcast.content_type = MediaType.VIDEO;
-                    current_episode = fake_episode;
-
-                    // Set episode position and start playback
-                    player.set_state(Gst.State.READY);
-
-                    track_changed("Star Wars Holiday Special",
-                        "Star Wars", current_episode.parent.coverart_uri, player.get_duration());
-
-                    play();
-                    break;
-                default:
-                    break;
-            }
         }
 
 
@@ -2080,7 +1954,7 @@ namespace Vocal {
                 on_fullscreen_request();
 
             // Since we can't see the video any more pause playback if necessary
-            if(player.is_currently_playing)
+            if(player.playing)
                 play();
 
             if(previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
@@ -2190,16 +2064,11 @@ namespace Vocal {
             var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             toolbar.set_play_pause_image(playpause_image);
 
-
-
             // If there is a video showing, return to the library view
             if(current_episode.parent.content_type == MediaType.VIDEO) {
                 on_return_to_library();
             }
 
-
-            // Reset the last played position and save it
-            player.set_state(Gst.State.NULL);
             player.current_episode.last_played_position = 0;
             library.set_episode_playback_position(player.current_episode);
 
@@ -2210,13 +2079,10 @@ namespace Vocal {
 
             if(current_episode != null) {
 
-                // Set episode position and start playback
-                player.set_state(Gst.State.READY);
-
                 play();
 
                 // Set the shownotes, the media information, and update the last played media in the settings
-                track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, player.get_duration());
+                track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
                 shownotes.set_notes_text(current_episode.description);
                 settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
             }
@@ -2415,7 +2281,7 @@ namespace Vocal {
             }
 
             // If an episode is currently playing just minimize the window
-            if(player.is_currently_playing) {
+            if(player.playing) {
                 this.iconify();
                 return true;
             } else if(downloads != null && downloads.downloads.size > 0) {

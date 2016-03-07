@@ -56,10 +56,7 @@ namespace Vocal {
 		public Gtk.Button 			playlist_button;
 
         public  Gtk.MenuItem        export_item;
-        public  Gtk.Button 			search_button;
         public  Gtk.SearchEntry     search_entry;
-        public  Gtk.Revealer		search_entry_revealer;
-        public Gtk.Revealer 		search_button_revealer;
         private Gtk.Box             headerbar_box;
         public  PlaybackBox         playback_box;
 
@@ -218,28 +215,17 @@ namespace Vocal {
 			rate_button.get_style_context().add_class("h3");
             rate_button.relief = Gtk.ReliefStyle.NONE;
 
-            search_entry_revealer = new Gtk.Revealer();
-            search_button_revealer = new Gtk.Revealer();
-            search_entry_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
-            search_button_revealer.transition_type = Gtk.RevealerTransitionType.SLIDE_LEFT;
-
             search_entry = new Gtk.SearchEntry();
             search_entry.editable = true;
+            search_entry.placeholder_text = _("Search your library or online");
             search_entry.visibility = true;
+            search_entry.expand = true;
+            search_entry.max_width_chars = 30;
+            search_entry.margin_right = 12;
 
             search_entry.search_changed.connect(() => {
                 search_changed();
             });
-
-            search_button = new Gtk.Button.from_icon_name("edit-find-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            search_button.has_tooltip = true;
-            search_button.tooltip_text = _("Search");
-            search_button.clicked.connect(show_search);
-
-            search_button_revealer.add(search_button);
-            search_entry_revealer.add(search_entry);
-            search_entry_revealer.reveal_child = false;
-            search_button_revealer.reveal_child = true;
 
             podcast_store_button = new Gtk.Button.from_icon_name("applications-internet-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             podcast_store_button.tooltip_text = _("View the top podcasts in the iTunes Store");
@@ -288,10 +274,9 @@ namespace Vocal {
 	        pack_start (play_pause);
 	        pack_start (forward);
 
-			pack_end (search_entry_revealer);
-	        pack_end (search_button_revealer);
 			pack_end (podcast_store_button);
 	        pack_end (download);
+            pack_end (search_entry);
 	        pack_start(rate_button);
 		}
 
@@ -351,22 +336,6 @@ namespace Vocal {
 
         public void set_play_pause_text(string new_text) {
         	play_pause.tooltip_text = new_text;
-        }
-
-        public void show_search() {
-        	search_button_revealer.reveal_child = false;
-        	search_entry_revealer.reveal_child = true;
-        	show_all();
-        	search_visible = true;
-            search_entry.grab_focus();
-        }
-
-        public void hide_search() {
-        	search_entry_revealer.reveal_child = false;
-        	search_button_revealer.reveal_child = true;
-        	show_all();
-        	search_visible = false;
-            search_entry.grab_focus();
         }
 	}
 }

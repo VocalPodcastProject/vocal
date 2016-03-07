@@ -456,22 +456,8 @@ namespace Vocal {
                             this.destroy();
                             break;
                         case Gdk.Key.f:
-                            if(!toolbar.search_visible) {
-                                toolbar.search_entry.can_focus = false;
-                                grab_focus();
-                                toolbar.show_search();
-
-                                // Wait for half a second before giving focus to the search entry
-                                // otherwise, it will fail to show the search entry because of mainwindow's lost focus
-                                GLib.Timeout.add(500, () => {
-                                    toolbar.search_entry.can_focus = true;
-                                    toolbar.search_entry.grab_focus();
-                                    return false;
-                                });
-                                
-                            }
-                            else 
-                                toolbar.hide_search();
+                            toolbar.search_entry.can_focus = true;
+                            toolbar.search_entry.grab_focus();
                             break;
                         default:
                             break;
@@ -521,21 +507,24 @@ namespace Vocal {
             search_results.episode_selected.connect(on_search_popover_episode_selected);
             search_results.podcast_selected.connect(on_search_popover_podcast_selected);
             search_results.subscribe_to_podcast.connect(on_new_subscription);
-            search_results.closed.connect(() => {
-                toolbar.hide_search();
-            });
+
             toolbar.search_entry.activate.connect(() => {
                 search_results.full_results_button.clicked();
             }); 
+
+            toolbar.search_entry.focus_in_event.connect(() => {
+                search_results.set_query(toolbar.search_entry.text);
+                search_results.show();
+                toolbar.search_entry.grab_focus();
+                toolbar.search_entry.set_position(toolbar.search_entry.get_text().length);
+                return false;
+            });
             this.button_press_event.connect((event) => {
                 if(search_results.visible) {
                     search_results.hide();
                 }
-                if(toolbar.search_entry.visible) {
-                    toolbar.hide_search();
-                }
                 return false;
-            }); 
+            });
             
             downloads = new DownloadsPopover(toolbar.download);
             downloads.closed.connect(() => {

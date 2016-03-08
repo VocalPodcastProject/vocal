@@ -82,7 +82,7 @@ namespace Vocal {
         public PodcastView (MainWindow parent, Podcast? podcast, bool? on_elementary = true) {
             this.podcast = podcast;
             this.parent = parent;
-            this.settings = new VocalSettings();
+            this.settings = VocalSettings.get_default_instance();
 
             largest_box_size = 500;
 

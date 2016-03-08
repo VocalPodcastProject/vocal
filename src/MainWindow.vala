@@ -238,7 +238,7 @@ namespace Vocal {
             check_elementary();
 
             // Grab the current settings
-            this.settings = new VocalSettings();
+            this.settings = VocalSettings.get_default_instance();
 
             // Set window properties
             this.set_default_size (settings.window_width, settings.window_height);

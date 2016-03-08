@@ -93,7 +93,7 @@ namespace Vocal {
 
             this.podcasts = new ArrayList<Podcast>();
 
-            settings = new VocalSettings();
+            settings = VocalSettings.get_default_instance();
 
             // Set the local library path (and replace ~ with the absolute home directory if need be)
             local_library_path = settings.library_location.replace("~", GLib.Environment.get_home_dir());

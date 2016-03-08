@@ -98,5 +98,12 @@
 			</description>
 		</key>
 		
+		<key name="itunes-store-country" type="s">
+			<default>"us"</default>
+			<summary>The iTunes country code to search for results</summary>
+			<description>
+				When finding the top n podcasts, Vocal will search for results from a particular country's iTunes Store.
+			</description>
+		</key>
 	</schema>
 </schemalist>

@@ -20,10 +20,9 @@
 using Gtk;
 
 namespace Vocal {
-    class SettingsDialog : Gtk.Dialog{
+
+    public class SettingsDialog : Gtk.Dialog{
     
-        
-        
         private Gtk.Label       autodownload_new_label;
         private Gtk.Switch      autodownload_new;
         
@@ -114,7 +113,7 @@ namespace Vocal {
 		  
 		    backward_interval_label = new Gtk.Label(_("Seconds to skip back:"));
 		    backward_interval_label.justify = Gtk.Justification.LEFT;
-		    backward_interval_label.set_property("xalign", 0);
+		    backward_interval_label.halign = Gtk.Align.START;
 		    backward_interval_label.margin_right = 5;
 		    
 		    backward_spinner = new Gtk.SpinButton.with_range (0, 240, 15);
@@ -122,7 +121,7 @@ namespace Vocal {
 		    backward_spinner.value_changed.connect(() => {
 		        settings.rewind_seconds = (int) backward_spinner.value;
 		    });
-            backward_spinner.set_property("xalign", 1);
+            backward_spinner.halign = Gtk.Align.END;
 		    
 		    backward_interval_box.pack_start(backward_interval_label, true, true, 0);
 		    backward_interval_box.pack_start(backward_spinner, false, false, 0);
@@ -134,7 +133,7 @@ namespace Vocal {
 		    
 		    forward_interval_label = new Gtk.Label(_("Seconds to skip forward:"));
 		    forward_interval_label.justify = Gtk.Justification.LEFT;
-		    forward_interval_label.set_property("xalign", 0);
+		    forward_interval_label.halign = Gtk.Align.START;
 		    forward_interval_label.margin_right = 5;
 		    
 		    forward_spinner = new Gtk.SpinButton.with_range(0, 240, 15);
@@ -142,13 +141,75 @@ namespace Vocal {
 		    forward_spinner.value_changed.connect(() => {
 		        settings.fast_forward_seconds = (int) forward_spinner.value;
 		    });
-		    forward_spinner.set_property("xalign", 1);
+		    forward_spinner.halign = Gtk.Align.END;
 
 		    forward_interval_box.pack_start(forward_interval_label, true, true, 0);
 		    forward_interval_box.pack_start(forward_spinner, false, false, 0);
 		    forward_interval_box.margin = 5;
 		    content_box.add(forward_interval_box);
 		    
+            // iTunes County Codes
+            Gtk.ListStore list_store = new Gtk.ListStore (1, typeof(string));
+            Gtk.TreeIter iter;
+            int active_pos = 0, i = 0;
+
+            var cc = Utils.get_itunes_country_codes();
+            GLib.List<string> list = new GLib.List<string>();
+            foreach(string s in cc.values) {
+                list.append(s);
+            }     
+            list.sort((a,b) => {
+                int pos;
+                if (a < b) { pos = 0; } else { pos = 1; }
+                return pos;
+            });
+
+            // Find the matching value in the list for the current setting
+            string current_store_id = cc.get(this.settings.itunes_store_country);
+
+            foreach(string s in list) {
+                list_store.append (out iter);
+                list_store.set (iter, 0, s);
+                if(s == current_store_id) {
+                    active_pos = i;
+                }
+                i++;
+            }
+
+            var itunes_country_label = new Gtk.Label(_("Show iTunes Store results from:"));
+            itunes_country_label.justify = Gtk.Justification.LEFT;
+            itunes_country_label.set_property("xalign", 0);
+            itunes_country_label.margin = 5;
+
+            var combo_box = new Gtk.ComboBox.with_model(list_store);
+            Gtk.CellRendererText renderer = new Gtk.CellRendererText ();
+            combo_box.pack_start (renderer, true);
+            combo_box.margin = 5;
+            combo_box.add_attribute (renderer, "text", 0);
+            combo_box.active = active_pos;
+
+            // When the combo box changes, save the setting
+            combo_box.changed.connect(() => {
+                int active = combo_box.active;
+                string new_setting = list.nth(active).data;
+
+                foreach(string st in cc.keys) {
+                    if(cc.get(st) == new_setting) {
+                        this.settings.itunes_store_country = st;
+                        break;
+                    }
+                }
+            });
+
+            Gtk.Separator store_spacer = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+            store_spacer.expand = true;
+            store_spacer.margin = 5;
+            store_spacer.margin_top = 10;
+            store_spacer.margin_bottom = 10;
+            content_box.add(store_spacer);
+
+            content_box.add(itunes_country_label);
+            content_box.add(combo_box);
 		    
             var close_button = new Gtk.Button.with_label (_("Close"));
             close_button.clicked.connect(() => {

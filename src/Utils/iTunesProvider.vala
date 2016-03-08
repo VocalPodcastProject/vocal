@@ -75,7 +75,9 @@ namespace Vocal {
          */
         public Gee.ArrayList<DirectoryEntry>? get_top_podcasts(int? limit = 100) {
 
-            var uri =  "https://itunes.apple.com/us/rss/toppodcasts/limit=%d/json".printf(limit);
+            var settings = VocalSettings.get_default_instance();
+
+            var uri =  "https://itunes.apple.com/%s/rss/toppodcasts/limit=%d/json".printf(settings.itunes_store_country, limit);
             var session = new Soup.Session ();
             var message = new Soup.Message ("GET", uri);
             session.send_message (message);

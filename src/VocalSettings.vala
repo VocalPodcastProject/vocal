@@ -19,6 +19,8 @@
 
 public class VocalSettings : Granite.Services.Settings {
 
+    private static VocalSettings _default_instance = null;
+
     public bool auto_download { get; set; }
     public bool autoclean_library { get; set; }
     public bool continue_running_after_close { get; set; }
@@ -33,8 +35,16 @@ public class VocalSettings : Granite.Services.Settings {
     
     public string library_location { get; set; }
     public string last_played_media { get; set; }
+    public string itunes_store_country { get; set; }
     
-    public VocalSettings() {
+    private VocalSettings() {
         base("net.launchpad.vocal");
+    }
+
+    public static VocalSettings get_default_instance() {
+        if(_default_instance == null)
+            _default_instance = new VocalSettings();
+
+        return _default_instance;
     }
 }

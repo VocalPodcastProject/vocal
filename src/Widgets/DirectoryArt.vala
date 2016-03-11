@@ -114,19 +114,16 @@ namespace Vocal {
 			hor_box.margin_right = 10;
 
 			// Load the album artwork
-			// TODO: cache and load locally when possible
-
-			try {
-                GLib.File cover = GLib.File.new_for_uri(artworkUrl170);
-                InputStream input_stream = cover.read();
-                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 170, 170, true);
-                var image = new Gtk.Image.from_pixbuf(pixbuf);
-                image.margin = 0;
-                image.expand = false;
-                image.get_style_context().add_class("album-artwork");
-
-                this.pack_start(image, false, false, 0);
-            } catch (Error e) {}
+            ImageCache image_cache = new ImageCache();
+            image_cache.get_image.begin(artworkUrl170, (obj, res) => {
+                Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
+                if (pixbuf != null) {
+                    var image = new Gtk.Image.from_pixbuf(pixbuf);
+                    image.margin = 0;
+                    image.expand = false;
+                    this.pack_start(image, false, false, 0);
+                }
+            });
 
             this.pack_start(hor_box, false, false, 0);
 

@@ -448,16 +448,19 @@ namespace Vocal {
 
             // Set up all the keyboard shortcuts
             this.key_press_event.connect ( (e) => {
+                bool handled = false;
 
                 // Was the control key pressed?
                 if((e.state & Gdk.ModifierType.CONTROL_MASK) != 0) {
                     switch (e.keyval) {
                         case Gdk.Key.q:
                             this.destroy();
+                            handled = true;
                             break;
                         case Gdk.Key.f:
                             toolbar.search_entry.can_focus = true;
                             toolbar.search_entry.grab_focus();
+                            handled = true;
                             break;
                         default:
                             break;
@@ -466,29 +469,36 @@ namespace Vocal {
                 else {
                     switch (e.keyval) {
                         case Gdk.Key.space:
-                            if(!toolbar.search_entry.has_focus)
+                            if(!toolbar.search_entry.has_focus) {
                                 play();
+                                handled = true;
+                            }
+
                             break;
                         case Gdk.Key.F11:
                             on_fullscreen_request();
+                            handled = true;
                             break;
                         case Gdk.Key.Escape:
-                            if(fullscreened)
+                            if(fullscreened) {
                                 on_fullscreen_request();
+                                handled = true;
+                            }
+
                             break;
 
                         case Gdk.Key.Left:
                             seek_backward();
+                            handled = true;
                             break;
                         case Gdk.Key.Right:
                             seek_forward();
-                            break;
-                        default:
+                            handled = true;
                             break;
                         }
                 }
 
-                return false;
+                return handled;
             });
 
             // box is just a generic container that will hold everything else (Gtk.Window can only directly hold a single child)

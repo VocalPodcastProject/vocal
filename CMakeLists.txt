@@ -10,6 +10,7 @@ set (VERSION "1.0")
 set (VERSION_INFO "Release")
 set (EXEC_NAME "vocal")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
+set (CACHE_DIR "~/.vocal/cache/")
 set (DOLLAR "$")
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)

@@ -28,21 +28,23 @@ namespace Vocal {
         private static DiskCacher cacher;
         private static Gee.HashMap<uint, File> cache;
         private static Soup.Session soup_session;
+        private static CacheState state;
 
         static construct {
             // till the cache get initialized
+            state = new CacheState();
+            state.is_loaded = false;
             cache = new Gee.HashMap<uint, File>();
 
-            var settings = VocalSettings.get_default_instance();
             var home_dir = GLib.Environment.get_home_dir();
-            var cache_directory =
-                "%s/.cache".printf(
-                    settings.library_location.replace("~", home_dir)
-                );
+            var cache_directory = Constants.CACHE_DIR.replace("~", home_dir);
+
             soup_session = new Soup.Session();
             cacher = new DiskCacher(cache_directory);
             cacher.get_cached_files.begin((obj, res) => {
                 cache = cacher.get_cached_files.end(res);
+                state.is_loaded = true;
+                state.load_complete();
             });
         }
 
@@ -53,6 +55,11 @@ namespace Vocal {
             uint url_hash = url.hash();
             Gdk.Pixbuf pixbuf;
 
+            if (!state.is_loaded) {
+                state.load_complete.connect(() => { get_image.callback(); });
+                yield;
+
+            }
             if (cache.has_key(url_hash)) {
                 pixbuf = yield cacher.get_cached_file(cache.@get(url_hash));
 
@@ -61,7 +68,6 @@ namespace Vocal {
                 if (pixbuf != null) {
                     var cached_file = yield cacher.cache_file(url_hash, pixbuf);
                     cache.@set(url_hash, cached_file);
-                    print("loaded " + url + "\n");
                 }
             }
 
@@ -87,22 +93,27 @@ namespace Vocal {
 
             public async Gee.HashMap<uint, File> get_cached_files() {
                 Gee.HashMap<uint, File> files = new Gee.HashMap<uint, File>();
+                if (!cache_location.query_exists()) {
+                    cache_location.make_directory_with_parents();
+                }
+
                 try {
                     FileEnumerator enumerator = yield
                         cache_location.enumerate_children_async("standard::*",
-                                                            FileQueryInfoFlags.NOFOLLOW_SYMLINKS,
-                                                            Priority.DEFAULT, null);
+                                                                FileQueryInfoFlags.NONE,
+                                                                Priority.DEFAULT, null);
                     List<FileInfo> infos;
                     while((infos = yield enumerator.next_files_async(10)) != null) {
                         foreach(var info in infos) {
                             var name = info.get_name();
                             var file = File.new_for_path("%s/%s".printf(location, name));
+                            stdout.printf("Path: %s\n", file.get_uri());
                             var hashed_name = (uint)uint64.parse(name);
                             files.@set(hashed_name, file);
                         }
                     }
                 } catch (Error e) {
-                    warning("Could not load cached images");
+                    warning("Could not load cached images " + e.message);
                 }
                 return files;
             }
@@ -112,9 +123,6 @@ namespace Vocal {
                 var cfile = File.new_for_path(file_loc);
 
                 var cache_dir = cfile.get_parent();
-                if (!cache_dir.query_exists()) {
-                    cache_dir.make_directory();
-                }
 
                 var fiostream = yield cfile.create_readwrite_async(FileCreateFlags.NONE);
                 // switch to async version later, currently the bindings have a bug
@@ -134,5 +142,10 @@ namespace Vocal {
                 return pixbuf;
             }
         }
+        private class CacheState {
+            public signal void load_complete();
+            public bool is_loaded;
+        }
+
     }
 }

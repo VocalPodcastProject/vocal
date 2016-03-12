@@ -107,7 +107,6 @@ namespace Vocal {
                         foreach(var info in infos) {
                             var name = info.get_name();
                             var file = File.new_for_path("%s/%s".printf(location, name));
-                            stdout.printf("Path: %s\n", file.get_uri());
                             var hashed_name = (uint)uint64.parse(name);
                             files.@set(hashed_name, file);
                         }

@@ -73,6 +73,8 @@ namespace Vocal {
                 image_cache.get_image.begin(podcast.coverart_uri, 32, 32, (obj, res) => {
                     Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
                     if (pixbuf != null) {
+                        image.clear();
+                        pixbuf = pixbuf.scale_simple(32, 32, Gdk.InterpType.BILINEAR);
                         image.set_from_pixbuf(pixbuf);
                     }
                 });

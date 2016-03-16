@@ -113,9 +113,9 @@ namespace Vocal {
 			hor_box.margin_left = 10;
 			hor_box.margin_right = 10;
 
-			// Load the album artwork
+            // Load the album artwork
             ImageCache image_cache = new ImageCache();
-            image_cache.get_image.begin(artworkUrl170, (obj, res) => {
+            image_cache.get_image.begin(artworkUrl170, 170, 170, (obj, res) => {
                 Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
                 if (pixbuf != null) {
                     var image = new Gtk.Image.from_pixbuf(pixbuf);

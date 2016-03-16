@@ -25,6 +25,11 @@ n
 namespace Vocal {
 
     public class ImageCache : GLib.Object {
+        private class CacheState {
+            public signal void load_complete();
+            public bool is_loaded;
+        }
+
         private static DiskCacher cacher;
         private static Gee.HashMap<uint, File> cache;
         private static Soup.Session soup_session;
@@ -48,21 +53,23 @@ namespace Vocal {
             });
         }
 
-        public ImageCache() {
-        }
+        public ImageCache() { }
 
-        public async Gdk.Pixbuf get_image(string url) {
+        // Get image and cache it, optionally specify a size to cache it at.
+        public async Gdk.Pixbuf get_image(string url, int width = -1, int height = -1 ) {
             uint url_hash = url.hash();
             Gdk.Pixbuf pixbuf;
 
             if (!state.is_loaded) {
                 state.load_complete.connect(() => { get_image.callback(); });
                 yield;
-
             }
-            if (cache.has_key(url_hash)) {
-                pixbuf = yield cacher.get_cached_file(cache.@get(url_hash));
 
+            if (cache.has_key(url_hash) && cache.@get(url_hash) != null) {
+                pixbuf = yield cacher.get_cached_file(cache.@get(url_hash));
+                if (pixbuf == null) {
+                    warning("Could not load cached file");
+                }
             } else {
                 pixbuf = yield load_image_async(url);
                 if (pixbuf != null) {
@@ -74,11 +81,17 @@ namespace Vocal {
             return pixbuf;
         }
 
-        private async Gdk.Pixbuf load_image_async(string url) {
+        private async Gdk.Pixbuf load_image_async(string url, int width = -1, int height = -1) {
             Gdk.Pixbuf pixbuf = null;
             Soup.Request req = soup_session.request(url);
             InputStream image_stream = req.send(null);
-            pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
+            if (width != -1 && height != -1) {
+                pixbuf = yield new Gdk.Pixbuf
+                    .from_stream_at_scale_async(image_stream, width, height, true, null);
+
+            } else {
+                pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
+            }
             return pixbuf;
         }
 
@@ -93,6 +106,7 @@ namespace Vocal {
 
             public async Gee.HashMap<uint, File> get_cached_files() {
                 Gee.HashMap<uint, File> files = new Gee.HashMap<uint, File>();
+
                 if (!cache_location.query_exists()) {
                     cache_location.make_directory_with_parents();
                 }
@@ -118,12 +132,15 @@ namespace Vocal {
             }
 
             public async File cache_file(uint hashed_name, Gdk.Pixbuf pixbuf) {
-                var file_loc = "%s/%ud".printf(this.location, hashed_name);
+                var file_loc = "%s/%ud.png".printf(this.location, hashed_name);
                 var cfile = File.new_for_path(file_loc);
 
-                var cache_dir = cfile.get_parent();
-
-                var fiostream = yield cfile.create_readwrite_async(FileCreateFlags.NONE);
+                FileIOStream fiostream;
+                if (cfile.query_exists()) {
+                    fiostream = yield cfile.replace_readwrite_async(null, false, FileCreateFlags.NONE);
+                } else {
+                    fiostream = yield cfile.create_readwrite_async(FileCreateFlags.NONE);
+                }
                 // switch to async version later, currently the bindings have a bug
                 pixbuf.save_to_stream(fiostream.get_output_stream(), "png");
 
@@ -141,10 +158,5 @@ namespace Vocal {
                 return pixbuf;
             }
         }
-        private class CacheState {
-            public signal void load_complete();
-            public bool is_loaded;
-        }
-
     }
 }

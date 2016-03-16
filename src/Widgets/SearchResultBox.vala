@@ -61,17 +61,18 @@ namespace Vocal {
 
             // Do we only have a podcast?
             if(episode == null) {
-                try {
-                    GLib.File cover = GLib.File.new_for_uri(podcast.coverart_uri);
-                    InputStream input_stream = cover.read();
-                    var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 32, 32, true);
+                var image_cache = new ImageCache();
+                image_cache.get_image.begin(podcast.coverart_uri, 32, 32, (obj, res) => {
+                    Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
+
                     var image = new Gtk.Image.from_pixbuf(pixbuf);
                     image.margin = 0;
                     image.expand = false;
                     image.get_style_context().add_class("album-artwork");
 
                     content_box.pack_start(image, false, false, 5);
-                } catch (Error e) {}
+
+                });
                 var label = new Gtk.Label(podcast.name.replace("%27", "'"));
                 label.set_property("xalign", 0);
                 label.ellipsize = Pango.EllipsizeMode.END;

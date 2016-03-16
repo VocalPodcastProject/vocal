@@ -53,7 +53,9 @@ namespace Vocal {
 			try {
 
 				// Load the actual cover art
+				stdout.printf("Cover art: %s\n", path);
 				File cover_file = GLib.File.new_for_uri(path.replace("%27", "'"));
+				assert(cover_file != null);
 				bool exists = cover_file.query_exists();
 				if(!exists)
 				{

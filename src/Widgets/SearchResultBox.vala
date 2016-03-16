@@ -61,17 +61,20 @@ namespace Vocal {
 
             // Do we only have a podcast?
             if(episode == null) {
+                var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale("""//usr/share/vocal/vocal-missing.png""",
+                                                                       32, 32, true);
+                var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+                image.margin = 0;
+                image.expand = false;
+                image.get_style_context().add_class("album-artwork");
+                content_box.pack_start(image, false, false, 5);
+
                 var image_cache = new ImageCache();
                 image_cache.get_image.begin(podcast.coverart_uri, 32, 32, (obj, res) => {
                     Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
-
-                    var image = new Gtk.Image.from_pixbuf(pixbuf);
-                    image.margin = 0;
-                    image.expand = false;
-                    image.get_style_context().add_class("album-artwork");
-
-                    content_box.pack_start(image, false, false, 5);
-
+                    if (pixbuf != null) {
+                        image.set_from_pixbuf(pixbuf);
+                    }
                 });
                 var label = new Gtk.Label(podcast.name.replace("%27", "'"));
                 label.set_property("xalign", 0);

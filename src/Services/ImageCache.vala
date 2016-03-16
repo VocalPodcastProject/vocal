@@ -71,7 +71,7 @@ namespace Vocal {
                     warning("Could not load cached file");
                 }
             } else {
-                pixbuf = yield load_image_async(url);
+                pixbuf = yield load_image_async(url, width, height);
                 if (pixbuf != null) {
                     var cached_file = yield cacher.cache_file(url_hash, pixbuf);
                     cache.@set(url_hash, cached_file);

@@ -37,7 +37,7 @@ namespace Vocal {
          */
         public string coverart_uri {
 
-            the album art is saved locally, return that path. Otherwise, return main album art URI
+            //the album art is saved locally, return that path. Otherwise, return main album art URI
             get {
 
                 if(local_art_uri != null) {

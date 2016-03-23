@@ -122,10 +122,11 @@ namespace Vocal {
             this.pack_start(image, false, false, 0);
 
             ImageCache image_cache = new ImageCache();
-            image_cache.get_image.begin(artworkUrl170, 170, 170, (obj, res) => {
+            image_cache.get_image.begin(artworkUrl170, (obj, res) => {
                 Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
                 if (pixbuf != null) {
                     image.clear();
+                    pixbuf = pixbuf.scale_simple(170, 170, Gdk.InterpType.BILINEAR);
                     image.set_from_pixbuf(pixbuf);
                 }
             });

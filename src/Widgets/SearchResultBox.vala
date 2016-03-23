@@ -70,7 +70,7 @@ namespace Vocal {
                 content_box.pack_start(image, false, false, 5);
 
                 var image_cache = new ImageCache();
-                image_cache.get_image.begin(podcast.coverart_uri, 32, 32, (obj, res) => {
+                image_cache.get_image.begin(podcast.coverart_uri, (obj, res) => {
                     Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
                     if (pixbuf != null) {
                         image.clear();

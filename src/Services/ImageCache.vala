@@ -55,8 +55,8 @@ namespace Vocal {
 
         public ImageCache() { }
 
-        // Get image and cache it, optionally specify a size to cache it at.
-        public async Gdk.Pixbuf get_image(string url, int width = -1, int height = -1 ) {
+        // Get image and cache it
+        public async Gdk.Pixbuf get_image(string url) {
             uint url_hash = url.hash();
             Gdk.Pixbuf pixbuf;
 
@@ -71,7 +71,7 @@ namespace Vocal {
                     warning("Could not load cached file");
                 }
             } else {
-                pixbuf = yield load_image_async(url, width, height);
+                pixbuf = yield load_image_async(url);
                 if (pixbuf != null) {
                     var cached_file = yield cacher.cache_file(url_hash, pixbuf);
                     cache.@set(url_hash, cached_file);
@@ -81,17 +81,12 @@ namespace Vocal {
             return pixbuf;
         }
 
-        private async Gdk.Pixbuf load_image_async(string url, int width = -1, int height = -1) {
+        private async Gdk.Pixbuf load_image_async(string url) {
             Gdk.Pixbuf pixbuf = null;
             Soup.Request req = soup_session.request(url);
             InputStream image_stream = req.send(null);
-            if (width != -1 && height != -1) {
-                pixbuf = yield new Gdk.Pixbuf
-                    .from_stream_at_scale_async(image_stream, width, height, true, null);
+	        pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
 
-            } else {
-                pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
-            }
             return pixbuf;
         }
 

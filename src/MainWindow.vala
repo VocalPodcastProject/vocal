@@ -1839,6 +1839,13 @@ namespace Vocal {
             }
 
 
+            // e.y starts at 0.0 (top) and goes for however long
+            // If < 10.0, we can assume it's above the top of the video area, and therefore
+            // in the headerbar area
+            if (!fullscreened && e.y < 10.0) {
+                hovering_over_headerbar = true;
+            }   
+
 
             if (hiding_timer != 0) {
                 Source.remove (hiding_timer);
@@ -1867,7 +1874,7 @@ namespace Vocal {
                     video_controls.set_reveal_child(false);
                     return_revealer.set_reveal_child(false);
 
-                    if(player.playing) {
+                    if(player.playing && !hovering_over_headerbar) {
                         this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
                     }
 

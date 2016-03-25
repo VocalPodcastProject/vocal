@@ -194,9 +194,6 @@ namespace Vocal {
                     color: shade (#000, 1.60);
                 }
 
-                .secret_entry {
-                    color: black;
-                }
 
                 .sidepane-toolbar {
                     background-color: #fff;
@@ -210,14 +207,6 @@ namespace Vocal {
                     background-image: linear-gradient(#af81d6, #af81d6);
                 }
 
-                .vocal-headerbar {
-                    color: shade (#000, 1.60);
-                }
-
-                .vocal-headerbar-crazy {
-                    color: green;
-                    background-color: red;
-                }
 
             """;
 
@@ -1833,15 +1822,23 @@ namespace Vocal {
             // Show the cursor again
             this.get_window ().set_cursor (null);
 
-            bool hovering_over_return_button = false, hovering_over_video_controls = false;
+            bool hovering_over_headerbar = false,
+            hovering_over_return_button = false,
+            hovering_over_video_controls = false;
+
             int min_height, natural_height;
             video_controls.get_preferred_height(out min_height, out natural_height);
 
+
+            // Figure out whether or not the cursor is over the video bar at the bottom
+            // If so, don't actually hide the cursor
             if (fullscreened && e.y < natural_height) {
                 hovering_over_video_controls = true;
             } else {
                 hovering_over_video_controls = false;
             }
+
+
 
             if (hiding_timer != 0) {
                 Source.remove (hiding_timer);

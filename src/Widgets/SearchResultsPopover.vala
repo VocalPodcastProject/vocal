@@ -59,6 +59,7 @@ namespace Vocal {
 			this.library = library;
 			this.itunes = new iTunesProvider();
 			this.width_request = 600;
+			initialize();
 		}
 
 
@@ -86,14 +87,17 @@ namespace Vocal {
             	if(update_complete) {
 
             		update_complete = false;
-            		
-					if(query.length > 0) {
-						
-						p_matches = library.find_matching_podcasts(query);
 
-						e_matches = library.find_matching_episodes(query);
-						
-						c_matches = itunes.search_by_term(query, 3);
+					if(query.length > 0) {
+
+						p_matches.clear();
+						p_matches.add_all(library.find_matching_podcasts(query));
+
+						e_matches.clear();
+						e_matches.add_all(library.find_matching_episodes(query));
+
+						c_matches.clear();
+						c_matches.add_all(itunes.search_by_term(query, 3));
 					}
 
 					update_complete = true;
@@ -114,6 +118,16 @@ namespace Vocal {
             }
 		}
 
+
+        private void initialize() {
+            local_episodes_widgets = new Gee.ArrayList<Widget>();
+            local_podcasts_widgets = new Gee.ArrayList<Widget>();
+            cloud_results_widgets = new Gee.ArrayList<Widget>();
+
+            p_matches = new Gee.ArrayList<Podcast>();
+            e_matches = new Gee.ArrayList<Episode>();
+            c_matches = new Gee.ArrayList<DirectoryEntry>();
+        }
 
 		/*
 		 * Called when the search update is complete and the new matches
@@ -137,9 +151,9 @@ namespace Vocal {
 			local_episodes_listbox.button_press_event.connect(on_episode_activated);
 			local_podcasts_listbox.button_press_event.connect(on_podcast_activated);
 
-			local_episodes_widgets = new Gee.ArrayList<Widget>();
-			local_podcasts_widgets = new Gee.ArrayList<Widget>();
-			cloud_results_widgets = new Gee.ArrayList<Widget>();
+			local_episodes_widgets.clear();
+			local_podcasts_widgets.clear();
+			cloud_results_widgets.clear();
 
 			var local_episodes_label = new Gtk.Label(_("Episodes from Your Library"));
 			var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));

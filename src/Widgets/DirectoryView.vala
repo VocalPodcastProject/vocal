@@ -126,7 +126,6 @@ namespace Vocal {
 
                 int i = 1;
                 foreach(DirectoryEntry e in entries) {
-
                     DirectoryArt a = new DirectoryArt(e.itunesUrl, "%d. %s".printf(i, e.title), e.artist, e.summary, e.artworkUrl170);
                     a.expand = false;
                     a.subscribe_button_clicked.connect((url) => {

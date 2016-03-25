@@ -61,17 +61,23 @@ namespace Vocal {
 
             // Do we only have a podcast?
             if(episode == null) {
-                try {
-                    GLib.File cover = GLib.File.new_for_uri(podcast.coverart_uri);
-                    InputStream input_stream = cover.read();
-                    var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 32, 32, true);
-                    var image = new Gtk.Image.from_pixbuf(pixbuf);
-                    image.margin = 0;
-                    image.expand = false;
-                    image.get_style_context().add_class("album-artwork");
+                var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale("""//usr/share/vocal/vocal-missing.png""",
+                                                                       32, 32, true);
+                var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+                image.margin = 0;
+                image.expand = false;
+                image.get_style_context().add_class("album-artwork");
+                content_box.pack_start(image, false, false, 5);
 
-                    content_box.pack_start(image, false, false, 5);
-                } catch (Error e) {}
+                var image_cache = new ImageCache();
+                image_cache.get_image.begin(podcast.coverart_uri, (obj, res) => {
+                    Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
+                    if (pixbuf != null) {
+                        image.clear();
+                        pixbuf = pixbuf.scale_simple(32, 32, Gdk.InterpType.BILINEAR);
+                        image.set_from_pixbuf(pixbuf);
+                    }
+                });
                 var label = new Gtk.Label(podcast.name.replace("%27", "'"));
                 label.set_property("xalign", 0);
                 label.ellipsize = Pango.EllipsizeMode.END;

@@ -203,11 +203,11 @@ namespace Vocal {
                 }
 
                 .video-back-button {
-                    color: white;
+                    color: #af81d6;
                 }
 
                 .video-toolbar {
-                    background-color: shade(#BF94E4, .80);
+                    background-image: linear-gradient(#af81d6, #af81d6);
                 }
 
                 .vocal-headerbar {
@@ -1870,7 +1870,9 @@ namespace Vocal {
                     video_controls.set_reveal_child(false);
                     return_revealer.set_reveal_child(false);
 
-                    this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
+                    if(player.playing) {
+                        this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
+                    }
 
                     return false;
                 });

@@ -612,21 +612,12 @@ namespace Vocal {
          */
         private void setup_library_widgets() {
 
-            // Create a welcome screen and add it to the notebook (no matter if first run or not)
-            string add_icon, import_icon;
-            if(on_elementary) {
-                add_icon = "add";
-                import_icon = "document-import";
-            } else {
-                add_icon = "list-add";
-                import_icon = "document-open";
-            }
-
+            // Create a welcome screen and add it to the notebook (no matter if first run or not)          
             welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
             welcome.append("preferences-desktop-online-accounts", _("Browse Podcasts"),
                  _("Browse through podcasts and choose some to add to your library."));
-            welcome.append(add_icon, _("Add a New Feed"), _("Provide the web address of a podcast feed."));
-            welcome.append(import_icon, _("Import Subscriptions"),
+            welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
+            welcome.append("document-open", _("Import Subscriptions"),
                     _("If you have exported feeds from another podcast manager, import them here."));
             welcome.append("vocal", _("Check Out the Vocal Starter Pack…"), _("New to podcasting? Check out our starter pack. Select individual podcasts, or download the entire pack."));
 

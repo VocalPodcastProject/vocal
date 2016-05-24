@@ -16,40 +16,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2015-04-21 05:39+0000\n"
 "X-Generator: Launchpad (build 17430)\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Language: tr\n"
+"X-Source-Language: C\n"
 
 #: ../src/Utils/FeedParser.vala:288
 msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr ""
+msgstr "Seçili dosya podcast aboneliği içermiyor."
 
 #: ../src/Utils/FeedParser.vala:299
 msgid "Selected file seems to be empty."
-msgstr ""
+msgstr "Seçili dosya boş gözüküyor."
 
 #: ../src/Library.vala:152
 msgid "Unable to add podcast"
-msgstr ""
+msgstr "Podcast eklenemedi"
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
 msgstr ""
+"GitHub Contributions:\n"
+"  Nuri Uzunoğlu https://github.com/nuriu\n"
+"\n"
 "Launchpad Contributions:\n"
 "  Ayhan Kuru https://launchpad.net/~ayhankuru"
 
 #: ../src/MainWindow.vala:194
 msgid "View show notes"
-msgstr ""
+msgstr "Şov notlarını göster"
 
 #: ../src/MainWindow.vala:237
 msgid "Return to library view"
-msgstr ""
+msgstr "Kütüphane görünümüne dön"
 
 #: ../src/MainWindow.vala:489
 msgid "Welcome to Vocal"
-msgstr ""
+msgstr "Vocal'e Hoşgeldiniz"
 
 #: ../src/MainWindow.vala:489
 msgid "Build Your Library By Adding Podcasts"
-msgstr ""
+msgstr "Podcastler Ekleyerek Kütüphanenizi Oluşturun"
 
 #: ../src/MainWindow.vala:490
 msgid "Add a New Feed"
@@ -57,30 +63,34 @@ msgstr "Yeni Akış Ekle"
 
 #: ../src/MainWindow.vala:490
 msgid "Provide the web address of a podcast feed."
-msgstr ""
+msgstr "Podcast beslemesi için web adresi girin."
 
 #: ../src/MainWindow.vala:493
 msgid "Import Subscriptions"
-msgstr ""
+msgstr "Abonelikleri İçe Aktar"
 
 #: ../src/MainWindow.vala:494
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
 msgstr ""
+"Eğer beslemeleri bir başka podcast yöneticisinden dışa aktardıysanız burada "
+"içe aktarabilirsiniz."
 
 #: ../src/MainWindow.vala:495
 msgid "Check Out the Vocal Starter Pack…"
-msgstr ""
+msgstr "Vocal Başlangıç Paketi'ni İncele..."
 
 #: ../src/MainWindow.vala:495
 msgid ""
 "New to podcasting? Check out our starter pack. Select individual podcasts, "
 "or download the entire pack."
 msgstr ""
+"Podcaste yeni misiniz? Başlangıç paketimizi inceleyin. Belirli podcastleri "
+"seçin veya tüm paketi indirin."
 
 #: ../src/MainWindow.vala:526
 msgid "Export Subscriptions…"
-msgstr ""
+msgstr "Abonelikleri Dışa Aktar..."
 
 #: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
 msgid "Preferences"
@@ -88,11 +98,11 @@ msgstr "Tercihler"
 
 #: ../src/MainWindow.vala:546
 msgid "Check Out The Vocal Starter Pack…"
-msgstr "Vocal Başlangıç Paketi"
+msgstr "Vocal Başlangıç Paketi'ni İncele..."
 
 #: ../src/MainWindow.vala:554
 msgid "Donate…"
-msgstr "Bağış"
+msgstr "Bağış Yap..."
 
 #: ../src/MainWindow.vala:574
 msgid "Add new podcasts to the library"
@@ -104,7 +114,7 @@ msgstr "Akışa yeni podcast ekle"
 
 #: ../src/MainWindow.vala:588
 msgid "Import Subscriptions…"
-msgstr ""
+msgstr "Abonelikleri İçe Aktar..."
 
 #: ../src/MainWindow.vala:671
 msgid "All Podcasts"
@@ -127,15 +137,15 @@ msgstr "Oynat"
 
 #: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
 msgid "Fast forward %d seconds"
-msgstr ""
+msgstr "%d saniye ileri sar"
 
 #: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
 msgid "Rewind %d seconds"
-msgstr ""
+msgstr "%d saniye geri sar"
 
 #: ../src/MainWindow.vala:709
 msgid "Check for new episodes"
-msgstr ""
+msgstr "Yeni bölümleri kontrol et"
 
 #: ../src/MainWindow.vala:737
 msgid "Downloads"
@@ -160,11 +170,11 @@ msgstr "Tüm dosyalar"
 
 #: ../src/MainWindow.vala:1335
 msgid "OPML and XML files"
-msgstr ""
+msgstr "OPML ve XML dosyaları"
 
 #: ../src/MainWindow.vala:1362
 msgid "Select Subscription File"
-msgstr ""
+msgstr "Abonelik Dosyasını Seç"
 
 #: ../src/MainWindow.vala:1366
 msgid "Open"
@@ -172,56 +182,63 @@ msgstr "Aç"
 
 #: ../src/MainWindow.vala:1373
 msgid "OPML files"
-msgstr ""
+msgstr "OPML dosyaları"
 
 #: ../src/MainWindow.vala:1448
 msgid "Error Importing from File"
-msgstr ""
+msgstr "Dosyadan Aktarılırken Hata Oluştu"
 
 #: ../src/MainWindow.vala:1449
 msgid ""
 "Please check that you selected the correct file and that you are connected "
 "to the network."
 msgstr ""
+"Lütfen doğru dosyayı seçtiğinizden ve ağa bağlı olduğunuzdan emin olun."
 
 #: ../src/MainWindow.vala:1483
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
 msgstr ""
+"Medyayı oynatmak için eklentiler gerekli. Vocal'in bunları sizin için "
+"kurmasını ister misiniz?"
 
 #: ../src/MainWindow.vala:1540
 msgid "Adding new podcast: <b>"
-msgstr ""
+msgstr "Yeni podcast ekleniyor: <b>"
 
 #: ../src/MainWindow.vala:1604
 msgid "Error Adding Podcast"
-msgstr ""
+msgstr "Podcast Eklerken Hata Oluştu"
 
 #: ../src/MainWindow.vala:1605
 msgid ""
 "Please check that the feed is correct and that you have a network connection."
-msgstr ""
+msgstr "Lütfen beslemenin doğruluğunu ve ağ bağlantınızı kontrol edin."
 
 #: ../src/MainWindow.vala:1720
 msgid "Good Stuff is On Its Way"
-msgstr ""
+msgstr "İyi Şeyler Yolda"
 
 #: ../src/MainWindow.vala:1721
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
 msgstr ""
+"Eğer birkaç podcasti içe aktarıyorsanız bu işlem birkaç dakika sürebilir. "
+"Kütüphaneniz kısa zamanda hazır olacaktır."
 
 #: ../src/MainWindow.vala:2163
 msgid "Fresh content has been added to your library."
-msgstr ""
+msgstr "Yeni içerik kütüphanenize eklendi."
 
 #: ../src/MainWindow.vala:2274
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to "
 "be canceled. Are you sure you want to exit?"
 msgstr ""
+"Vocal şu anda bölüm(ler) indiriyor. Çıkış yapmak indirmelerin iptaline sebep "
+"olacak. Çıkış yapmak istediğinizden emin misiniz?"
 
 #: ../src/Widgets/DownloadDetailBox.vala:107
 msgid "Cancel Download"
@@ -233,39 +250,39 @@ msgstr "Tam ekranı kapat"
 
 #: ../src/Widgets/DownloadsPopover.vala:50
 msgid "No active downloads."
-msgstr ""
+msgstr "Aktif indirme yok."
 
 #: ../src/Widgets/AddFeedDialog.vala:43
 msgid "Add New Podcast"
-msgstr ""
+msgstr "Yeni Podcast Ekle"
 
 #: ../src/Widgets/AddFeedDialog.vala:54
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr ""
+msgstr "<b>Kütüphaneye yeni podcast beslemesi ekle</b>"
 
 #: ../src/Widgets/AddFeedDialog.vala:59
 msgid "Podcast feed web address"
-msgstr ""
+msgstr "Podcast besleme web adresi"
 
 #: ../src/Widgets/PlaybackBox.vala:39
 msgid "<b>Select an episode to start playing...</b>"
-msgstr ""
+msgstr "<b>Oynatmaya başlamak için bir bölüm seçin...</b>"
 
 #: ../src/Widgets/SettingsDialog.vala:64
 msgid "Automatically download new episodes:"
-msgstr ""
+msgstr "Yeni bölümleri otomatik indir:"
 
 #: ../src/Widgets/SettingsDialog.vala:85
 msgid "Automatically delete played files:"
-msgstr ""
+msgstr "Oynatılmış dosyaları otomatik sil:"
 
 #: ../src/Widgets/SettingsDialog.vala:115
 msgid "Seconds to skip back:"
-msgstr ""
+msgstr "Geri atlanacak saniye:"
 
 #: ../src/Widgets/SettingsDialog.vala:136
 msgid "Seconds to skip forward:"
-msgstr ""
+msgstr "İleri atlanacak saniye:"
 
 #: ../src/Widgets/SettingsDialog.vala:153
 msgid "Close"
@@ -273,12 +290,12 @@ msgstr "Kapat"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:86
 msgid "This episode is currently being played"
-msgstr ""
+msgstr "Bu bölüm hali hazırda oynatılıyor"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:117
 #: ../src/Widgets/EpisodeDetailBox.vala:318
 msgid "Stream Episode"
-msgstr ""
+msgstr "Bölümü Oynat"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:133
 msgid "Download Episode"
@@ -286,70 +303,71 @@ msgstr "Bölümü İndir"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
-msgstr ""
+msgstr "Tüm bölümleri oynatıldı olarak işaretle"
 
 #: ../src/Widgets/Sidepane.vala:101
 msgid "Download all episodes"
-msgstr ""
+msgstr "Tüm bölümleri indir"
 
 #: ../src/Widgets/Sidepane.vala:109
 msgid "Hide episodes that have already been played"
-msgstr ""
+msgstr "Oynatılmış bölümleri gizle"
 
 #: ../src/Widgets/Sidepane.vala:129
 msgid "Remove podcast from library"
-msgstr ""
+msgstr "Kütüphaneden podcast sil"
 
 #: ../src/Widgets/Sidepane.vala:140
 msgid "More options"
-msgstr ""
+msgstr "Daha fazla seçenek"
 
 #: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
-msgstr ""
+msgstr "Bölüm yan panelini gizle"
 
 #: ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
-msgstr ""
+msgstr "Seçili bölümleri oynatıldı olarak işaretle"
 
 #: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
-msgstr ""
+msgstr "Seçilen bölümleri oynatılmadı olarak işaretle"
 
 #: ../src/Widgets/Sidepane.vala:313
 msgid "Delete local files for selected episodes"
-msgstr ""
+msgstr "Seçili bölümler için lokal dosyaları sil"
 
 #: ../src/Widgets/Sidepane.vala:317
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
 msgstr ""
+"Seçili bölümlerin indirilmiş dosyalarını silmek istediğinizden emin misiniz?"
 
 #: ../src/Widgets/Sidepane.vala:372
 msgid "Mark as Played"
-msgstr ""
+msgstr "Oynatıldı Olarak İşaretle"
 
 #: ../src/Widgets/Sidepane.vala:391
 msgid "Mark as Unplayed"
-msgstr ""
+msgstr "Oynatılmadı Olarak İşaretle"
 
 #: ../src/Widgets/Sidepane.vala:411
 msgid "Delete Local File"
-msgstr ""
+msgstr "Lokal Dosyayı Sil"
 
 #: ../src/Widgets/Sidepane.vala:618
 msgid "No new episodes."
-msgstr ""
+msgstr "Yeni bölüm yok."
 
 #: ../src/Widgets/Sidepane.vala:627
 msgid "No episodes available."
-msgstr ""
+msgstr "Hiçbir bölüm yok."
 
 #: ../src/Widgets/Sidepane.vala:671
 msgid "%d episodes, %d unplayed"
-msgstr ""
+msgstr "%d bölüm, %d oynatılmamış"
 
 #: ../src/Widgets/Sidepane.vala:673
 msgid "%d episodes"
-msgstr ""
+msgstr "%d bölüm"

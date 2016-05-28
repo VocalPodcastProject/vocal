@@ -131,9 +131,9 @@ namespace Vocal {
         public MainWindow (VocalApp app, bool? open_hidden = false) {
 
             const string ELEMENTARY_STYLESHEET = """
-                
+
                 @define-color colorPrimary #af81d6;
-                
+
                 .album-artwork {
                     border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
                     border-style: solid;
@@ -252,7 +252,7 @@ namespace Vocal {
 
             // Create the drawing area for the video widget
             video_widget = new GtkClutter.Embed();
-            video_widget.use_layout_size = true;
+            video_widget.use_layout_size = false;
             video_widget.button_press_event.connect(on_video_button_press_event);
 
             stage = (Clutter.Stage)video_widget.get_stage ();
@@ -384,7 +384,7 @@ namespace Vocal {
                 GLib.Timeout.add(300000, () => {
 
                     // The update interval increases/decreases by a step of 5 each time, so eventually
-                    // the current count will equal the update interval. When that happens, update. 
+                    // the current count will equal the update interval. When that happens, update.
                     minutes_elapsed_in_period += 5;
                     if(minutes_elapsed_in_period == settings.update_interval) {
                         on_update_request();
@@ -403,7 +403,7 @@ namespace Vocal {
 
             // Repeat for the video playback box scale
             video_controls.progress_bar_scale_changed.connect( () => {
-                
+
                 // Set the position
                 player.set_position (video_controls.progress_bar_fill);
             });
@@ -509,7 +509,7 @@ namespace Vocal {
 
             toolbar.search_entry.activate.connect(() => {
                 search_results.full_results_button.clicked();
-            }); 
+            });
 
             toolbar.search_entry.focus_in_event.connect(() => {
                 search_results.set_query(toolbar.search_entry.text);
@@ -524,7 +524,7 @@ namespace Vocal {
                 }
                 return false;
             });
-            
+
             downloads = new DownloadsPopover(toolbar.download);
             downloads.closed.connect(() => {
                 if(downloads.downloads.size < 1)
@@ -612,7 +612,7 @@ namespace Vocal {
          */
         private void setup_library_widgets() {
 
-            // Create a welcome screen and add it to the notebook (no matter if first run or not)          
+            // Create a welcome screen and add it to the notebook (no matter if first run or not)
             welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
             welcome.append("preferences-desktop-online-accounts", _("Browse Podcasts"),
                  _("Browse through podcasts and choose some to add to your library."));
@@ -870,7 +870,7 @@ namespace Vocal {
 
                         all_art.add(a);
 	                }
-                    
+
     	            currently_repopulating = false;
             	}
 
@@ -882,7 +882,7 @@ namespace Vocal {
             Thread.create<void*>(run, false);
 
             yield;
-            
+
             foreach(CoverArt a in all_art) {
                 all_flowbox.add(a);
             }
@@ -892,8 +892,8 @@ namespace Vocal {
                 f.halign = Gtk.Align.CENTER;
             }
 
-            show_all();           
-        }   
+            show_all();
+        }
 
 
         /*
@@ -1319,7 +1319,7 @@ namespace Vocal {
 
             if (widget == all_scrolled) {
                 notebook.set_visible_child(all_scrolled);
-                current_widget = all_scrolled; 
+                current_widget = all_scrolled;
             }
             else if (widget == details) {
                 notebook.set_visible_child(details);
@@ -1418,7 +1418,7 @@ namespace Vocal {
 
             if(response_id == Gtk.ResponseType.OK) {
                 string entered_feed = "";
-                if(feed == null && add_feed != null) 
+                if(feed == null && add_feed != null)
                     entered_feed = add_feed.entry.get_text();
                 else
                     entered_feed = feed;
@@ -1596,6 +1596,7 @@ namespace Vocal {
 		 * Called when the app needs to go fullscreen or unfullscreen
 		 */
         private void on_fullscreen_request() {
+
             if(fullscreened) {
                 unfullscreen();
                 video_controls.set_reveal_child(false);
@@ -1835,7 +1836,7 @@ namespace Vocal {
             // in the headerbar area
             if (!fullscreened && e.y < 10.0) {
                 hovering_over_headerbar = true;
-            }   
+            }
 
 
             if (hiding_timer != 0) {
@@ -1993,7 +1994,7 @@ namespace Vocal {
                         show_details(a.podcast);
                         found = true;
                     }
-                    i++;                    
+                    i++;
                 }
             }
          }
@@ -2016,7 +2017,7 @@ namespace Vocal {
                         podcast_found = true;
                         details.select_episode(e);
                     }
-                    i++;                    
+                    i++;
                 }
             }
          }
@@ -2047,7 +2048,7 @@ namespace Vocal {
             switch_visible_page(search_results_scrolled);
             show_all();
         }
-        
+
 
         /*
          * Called when the player finishes a stream

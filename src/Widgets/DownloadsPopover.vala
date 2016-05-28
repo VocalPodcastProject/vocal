@@ -28,12 +28,12 @@ namespace Vocal {
 
 
         public signal void 	all_downloads_complete();		// signal that gets fired when all downloads are finished
-    
+
         private Gtk.ListBox listbox;						// displays the download details boxes
         private Gtk.Label 	downloads_complete;				// a label that gets shown when all downloads are finished
-        
+
         public ArrayList<DownloadDetailBox> downloads;		// stores the download detail boxes
-        
+
         /*
          * Constructor for a downloads popover that is relative to a provided parent
          */
@@ -41,20 +41,23 @@ namespace Vocal {
             this.set_relative_to(parent);
             this.listbox = new Gtk.ListBox();
             listbox.selection_mode = SelectionMode.NONE;
-            
+            this.width_request = 425;
+
             downloads = new ArrayList<DownloadDetailBox>();
             var scroll = new Gtk.ScrolledWindow(null, null);
             scroll.hscrollbar_policy = Gtk.PolicyType.NEVER;
             scroll.min_content_height = 200;
 
-            downloads_complete = new Gtk.Label(_("No active downloads."));
+            downloads_complete = new Gtk.Label(_("No Active Downloads"));
             Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, downloads_complete);
+            downloads_complete.sensitive = false;
+            downloads_complete.margin = 12;
             listbox.prepend(downloads_complete);
 
             this.add(scroll);
             scroll.add(listbox);
         }
-        
+
         /*
          * Adds a download to the popover
          */
@@ -62,27 +65,21 @@ namespace Vocal {
 
             if(downloads.size < 1) {
                 hide_downloads_complete();
-            }           
-            
+            }
+
             details.ready_for_removal.connect(remove_details_box);
             details.cancel_requested.connect(() => {
                 remove_details_box(details);
             });
-            
-            // If there are multiple downloads, add a separator
-            if(downloads.size >= 1)  {
-		          details.show_separator();
-            }
 
-            
             // Add the new download to the queue and listbox
             downloads.add(details);
-            
             listbox.prepend(details);
+            details.parent.get_style_context().add_class("download-detail-box");
             listbox.show_all();
         }
-        
-        
+
+
         /*
 		 * Hides the downloads complete label
 		 */
@@ -91,16 +88,16 @@ namespace Vocal {
             downloads_complete.hide();
             downloads_complete.show_all();
         }
-        
-        
+
+
         /*
          * Removes a download from the popover
          */
         private void remove_details_box(DownloadDetailBox box) {
+            box.parent.get_style_context().remove_class("download-detail-box");
             downloads.remove(box);
-            this.remove(box);
             box.destroy();
-            
+
             if(downloads.size < 1) {
                 show_downloads_complete();
 
@@ -109,7 +106,7 @@ namespace Vocal {
                   all_downloads_complete();
             }
         }
-        
+
 
 		/*
 		 * Shows the downloads complete label

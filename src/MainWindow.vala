@@ -170,6 +170,10 @@ namespace Vocal {
                     background-color: #E8E8E8;
                 }
 
+                .download-detail-box {
+                    border-bottom: 0.5px solid #8a9580;
+                }
+
                 .library-toolbar {
                     background-image: -gtk-gradient (linear,
                                          left top, left bottom,

@@ -47,6 +47,10 @@ namespace Vocal {
 
         private bool signal_has_been_sent;
 
+        string data_output;
+        string time_output;
+        string outdated_time_output;
+
         /*
          * Constructor for the download details box, which shows a an episode title, podcast name, and image
          * along with a progress bar indicating progress of the download.
@@ -78,29 +82,30 @@ namespace Vocal {
             title_label = new Gtk.Label("<b>" + title.replace("%27", "'") + "</b>");
             title_label.set_use_markup(true);
             title_label.set_justify(Gtk.Justification.RIGHT);
-            //title_label.xalign = 0;
+            title_label.xalign = 0;
+            title_label.max_width_chars = 15;
 
             podcast_label = new Gtk.Label(parent_podcast_name.replace("%27", "'"));
             podcast_label.set_justify(Gtk.Justification.LEFT);
-            //podcast_label.xalign = 0;
+            podcast_label.xalign = 0;
+            podcast_label.max_width_chars = 15;
 
-            var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 3);
+            var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             label_box.add(title_label);
             label_box.add(podcast_label);
 
             this.image = image;
 
-            var details_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
+            var details_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
             details_box.add(image);
             details_box.add(label_box);
 
-            var progress_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
-            progress_box.homogeneous = false;
-            progress_box.margin_top = 3;
+            var progress_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
             progress_bar = new Gtk.ProgressBar();
             progress_bar.show_text = false;
             progress_bar.expand = true;
+            progress_bar.valign = Gtk.Align.CENTER;
 
             var cancel_button = new Gtk.Button.from_icon_name("process-stop-symbolic", Gtk.IconSize.BUTTON);
             cancel_button.get_style_context().add_class("flat");
@@ -114,6 +119,7 @@ namespace Vocal {
 
             download_label = new Gtk.Label("");
             download_complete = false;
+            download_label.xalign = 0;
 
             this.add(details_box);
 
@@ -124,12 +130,24 @@ namespace Vocal {
             // While the download isn't complete, keep counting seconds elapsed
             GLib.Timeout.add(1000, () => {
                 secs_elapsed += 1;
+
                 if(!download_complete) {
                     return true;
                 } else {
                     return false;
                 }
+            });
 
+            // Periodically update the time on the label
+            GLib.Timeout.add(1000, () => {
+
+                outdated_time_output = time_output;
+
+                if(!download_complete) {
+                    return true;
+                } else {
+                    return false;
+                }
             });
 
         }
@@ -180,24 +198,20 @@ namespace Vocal {
                     units = _("seconds");
             }
 
+            data_output = """%.1fMB / %.1fMB""".printf(MB_downloaded, MB_total);
+            time_output = """, about %d %s remaining""".printf(time_val_to_display, units);
 
-            download_label.set_label(_("""%.1fMB / %.1fMB, %.1f MB/s, about %d %s remaining""").printf(MB_downloaded, MB_total, MBPS, time_val_to_display, units));
+            // When setting the label, always set it to the "outdated" time
+            // A separate timer will periodically update the time on the label
+            // (this prevents it from being too jarring)
+
+            if(outdated_time_output == null ) {
+                outdated_time_output = time_output;
+            }
+
+            download_label.set_text(data_output + outdated_time_output);
+
             new_percentage_available();
-        }
-
-
-
-        /*
-         * Shows a separator at the bottom of the box (useful for when there are multiple download detail boxes
-         */
-        public void show_separator() {
-            Gtk.Separator separator = new Gtk.Separator (Gtk.Orientation.HORIZONTAL);
-            separator.margin = 5;
-            separator.margin_left = 12;
-            separator.margin_right = 12;
-            this.add(separator);
-            this.show_all();
-
         }
     }
 }

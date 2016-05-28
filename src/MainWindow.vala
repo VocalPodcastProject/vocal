@@ -204,7 +204,8 @@ namespace Vocal {
                 }
 
                 .video-toolbar {
-                    background-image: linear-gradient(#af81d6, #af81d6);
+                    background-image: none;
+                    background-color: #af81d6;
                 }
 
 
@@ -278,6 +279,12 @@ namespace Vocal {
 
             bottom_actor = new GtkClutter.Actor.with_contents (video_controls);
             stage.add_child(bottom_actor);
+
+            var child1 = video_controls.get_child() as Gtk.Container;
+            foreach(Gtk.Widget child in child1.get_children()) {
+                child.parent.get_style_context().add_class("video-toolbar");
+                child.parent.parent.get_style_context().add_class("video-toolbar");
+            }
 
             video_widget.motion_notify_event.connect(on_motion_event);
 

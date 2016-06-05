@@ -154,17 +154,23 @@ namespace Vocal {
             name_label.margin_bottom = 15;
 
             description_label = new Gtk.Label("Description");
-            description_label.max_width_chars = 20;
+            description_label.max_width_chars = 15;
             description_label.wrap = true;
             description_label.wrap_mode = Pango.WrapMode.WORD;
             description_label.valign = Gtk.Align.START;
             description_label.get_style_context().add_class("podcast-view-description");
 
+            // Set up a scrolled window
+            var description_window = new Gtk.ScrolledWindow(null, null);
+            description_window.add(description_label);
+            description_window.height_request = 180;
+            description_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
+
 			Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H2, name_label);
             count_label.get_style_context().add_class("h4");
 
 			label_box.pack_start(name_label, false, false, 5);
-            label_box.pack_start(description_label, true, true, 0);
+            label_box.pack_start(description_window, true, true, 0);
 
             var expander_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             expander_box.vexpand = true;

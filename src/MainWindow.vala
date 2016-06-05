@@ -1584,11 +1584,14 @@ namespace Vocal {
                 // Get the index for the episode in the list
                 int index = details.get_box_index_from_episode(episode);
 
+                /*
                 // Set the box to hide the downloads button
                 if(index != -1) {
                     details.boxes[index].hide_download_button();
                     details.boxes[index].show_playback_button();
-                }
+                } */
+
+                details.shownotes.hide_download_button();
             }
         }
 

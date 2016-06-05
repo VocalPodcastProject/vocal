@@ -74,7 +74,7 @@ namespace Vocal {
 		private Gtk.Box label_box;
 
 		private Gtk.Image image = null;
-		private Shownotes shownotes;
+		public Shownotes shownotes;
 
 		/*
 		 * Constructor for a Sidepane given a parent window and pocast
@@ -535,7 +535,6 @@ namespace Vocal {
                 }
             }
 
-
             // No matter what, mark this box as now playing
             previously_activated_box.mark_as_now_playing();
             show_all();
@@ -565,6 +564,14 @@ namespace Vocal {
             shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? podcast.episodes[current_episode_index].description.replace("%27", "'") : _("No show notes available."));
             shownotes.set_title(podcast.episodes[current_episode_index].title);
             shownotes.set_date(podcast.episodes[current_episode_index].datetime_released);
+
+            // Check to see if the episode has been downloaded or not
+            if(podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
+                shownotes.hide_download_button();
+            } else {
+                shownotes.show_download_button();
+            }
+
             show_all();
         }
 

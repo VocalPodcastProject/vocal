@@ -1965,7 +1965,7 @@ namespace Vocal {
                 on_fullscreen_request();
 
             // Since we can't see the video any more pause playback if necessary
-            if(player.playing)
+            if(current_widget == video_widget && player.playing)
                 play();
 
             if(previous_widget == directory_scrolled || previous_widget == search_results_scrolled)

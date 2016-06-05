@@ -622,7 +622,7 @@ namespace Vocal {
                 }
             }
         }
-        
+
 
         /*
          * Exports the current podcast subscriptions to a file at the provided path
@@ -753,14 +753,14 @@ namespace Vocal {
 #if HAVE_LIBNOTIFY
 
             if(!batch_notification_needed) {
-                string message = "'%s' from '%s' has finished downloading.".printf(episode_title.replace("%27", "'"), parent_podcast_name.replace("%27","'"));
-                var notification = new Notify.Notification("Episode Download Complete", message, null);
+                string message = _("'%s' from '%s' has finished downloading.").printf(episode_title.replace("%27", "'"), parent_podcast_name.replace("%27","'"));
+                var notification = new Notify.Notification(_("Episode Download Complete"), message, null);
                 notification.set_icon_from_pixbuf(notification_pixbuf);
                 if(!main_window.focus_visible)
                     notification.show();
             } else {
                 if(batch_download_count == 0) {
-                    var notification = new Notify.Notification("Downloads Complete", "New episodes have been downloaded.", "vocal");
+                    var notification = new Notify.Notification(_("Downloads Complete"), _("New episodes have been downloaded."), "vocal");
                     batch_notification_needed = false;
                     if(!main_window.focus_visible)
                         notification.show();

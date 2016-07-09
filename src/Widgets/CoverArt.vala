@@ -235,5 +235,22 @@ string css = """
 			triangle.set_no_show_all(false);
 			triangle.show();
 		}
+
+
+		/*
+		 * Shows the name label underneath the cover art
+		 */
+		public void show_name_label() {
+			podcast_name_label.no_show_all = false;
+			podcast_name_label.visible = true;
+		}
+
+		/*
+		 * Hides the name label underneath the cover art
+		 */
+	 	public void hide_name_label() {
+	 		podcast_name_label.no_show_all = true;
+			podcast_name_label.visible = false;
+	 	}
 	}
 }

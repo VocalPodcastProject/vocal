@@ -22,12 +22,17 @@ using Gtk;
 namespace Vocal {
 
     public class SettingsDialog : Gtk.Dialog{
+
+        public signal void      show_name_label_toggled();
     
         private Gtk.Label       autodownload_new_label;
         private Gtk.Switch      autodownload_new;
         
         private Gtk.Label       autoclean_label;
         private Gtk.Switch      autoclean;
+
+        private Gtk.Label       show_name_label_label;
+        private Gtk.Switch      show_name_label_switch;
         
         private Gtk.Label       backward_interval_label;
         private Gtk.SpinButton  backward_spinner;
@@ -96,9 +101,30 @@ namespace Vocal {
             
             var autoclean_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             autoclean_box.spacing = 5;
+            autoclean_box.margin_bottom = 10;
             autoclean_box.pack_start(autoclean_label, true, true, 0);
             autoclean_box.pack_start(autoclean, false, false, 0);
             content_box.add(autoclean_box);
+
+            // Show name label option
+            show_name_label_label = new Gtk.Label(_("Show podcast names below cover art"));
+            show_name_label_label.justify = Gtk.Justification.LEFT;
+            show_name_label_label.set_property("xalign", 0);
+            show_name_label_label.margin_left = 5;
+
+            show_name_label_switch = new Gtk.Switch();
+            show_name_label_switch.set_active(settings.show_name_label);
+            show_name_label_switch.set_property("xalign", 1);
+            show_name_label_switch.notify["active"].connect (() => {
+                settings.show_name_label = show_name_label_switch.active;
+                show_name_label_toggled();
+            });
+
+            var show_label_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            show_label_box.spacing = 5;
+            show_label_box.pack_start(show_name_label_label, true, true, 0);
+            show_label_box.pack_start(show_name_label_switch, false, false, 0);
+            content_box.add(show_label_box);
             
             
 		    Gtk.Separator check_spacer = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);

@@ -575,6 +575,7 @@ namespace Vocal {
 
             toolbar.preferences_selected.connect(() => {
                 settings_dialog = new SettingsDialog(settings, this);
+                settings_dialog.show_name_label_toggled.connect(on_show_name_label_toggled);
                 settings_dialog.show_all();
             });
 
@@ -2058,6 +2059,23 @@ namespace Vocal {
             search_results_box.add(search_results_view);
             switch_visible_page(search_results_scrolled);
             show_all();
+        }
+
+
+        /*
+         * Called when the user toggles the show name label setting.
+         * Calls the show/hide label method for every cover art.
+         */
+        private void on_show_name_label_toggled() {
+            if(settings.show_name_label) {
+                foreach(CoverArt a in all_art) {
+                    a.show_name_label();
+                }
+            } else {
+                foreach(CoverArt a in all_art) {
+                    a.hide_name_label();
+                }
+            }
         }
 
 

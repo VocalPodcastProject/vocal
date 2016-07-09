@@ -105,5 +105,13 @@
 				When finding the top n podcasts, Vocal will search for results from a particular country's iTunes Store.
 			</description>
 		</key>
+		
+		<key name="show-name-label" type="b">
+			<default>false</default>
+			<summary>Whether or not Vocal should display the names of podcasts in the local library</summary>
+			<description>
+				When enabled, Vocal will show an extra label beneath the cover art in the library with the name of the podcast.
+			</description>
+		</key>
 	</schema>
 </schemalist>

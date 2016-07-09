@@ -146,22 +146,18 @@ namespace Vocal {
                     background-color: #FFF;
                 }
 
-                .coverart {
-                    box-shadow: 3px 3px 3px #777;
-                    border-style: solid;
-                    border-width: 2px;
-                }
 
                 .episode-list {
                     border-bottom: 0.5px solid #8a9580;
                 }
 
-                .directory-art {
+                .coverart, .directory-art {
                     background-color: #FFF;
 
                     border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
+                    box-shadow: 3px 3px 3px #777;
                     border-style: solid;
-                    border-width: 3px;
+                    border-width: 2px;
 
                     color: #000;
                 }
@@ -650,6 +646,7 @@ namespace Vocal {
             all_flowbox.activate_on_single_click = true;
             all_flowbox.child_activated.connect(on_child_activated);
             all_flowbox.valign = Gtk.Align.FILL;
+            all_flowbox.homogeneous = true;
 
 		    all_scrolled.add(all_flowbox);
 

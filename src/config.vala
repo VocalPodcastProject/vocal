@@ -5,4 +5,5 @@ namespace Constants {
     public const string RELEASE_NAME = "Voyager";
     public const string VERSION = "1.0";
     public const string VERSION_INFO = "Release";
+    public const string CACHE_DIR = "~/.vocal/cache/";
 }

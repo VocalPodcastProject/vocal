@@ -38,6 +38,8 @@ namespace Vocal {
 		private Gtk.Overlay triangle_overlay;		// Overlays the banner on top of the image
 		private Gtk.Overlay count_overlay;			// Overlays the count on top of the banner
 		private Gtk.Label 	count_label;			// The label that stores the unplayed count
+		private Gtk.Label   podcast_name_label;     // The label that show the name of the podcast
+		                                                // (if it is enabled in the settings)
 
 		public Podcast podcast;						// Refers to the podcast this coverart represents
 
@@ -49,6 +51,7 @@ namespace Vocal {
 
 			this.podcast = podcast;
 			this.margin = 10;
+			this.orientation = Gtk.Orientation.VERTICAL;
 
 			try {
 
@@ -151,6 +154,17 @@ string css = """
 			this.valign = Align.START;
 			image.set_no_show_all(false);
 			image.show();
+			
+			podcast_name_label = new Gtk.Label("<b>" + GLib.Uri.unescape_string(podcast.name).replace("&", """&amp;""") + "</b>");
+			podcast_name_label.wrap = true;
+			podcast_name_label.use_markup = true;
+			podcast_name_label.max_width_chars = 15;
+			this.pack_start(podcast_name_label, false, false, 12);
+			
+			if(!VocalSettings.get_default_instance().show_name_label) {
+			    podcast_name_label.no_show_all = true;
+			    podcast_name_label.visible = false;
+			}
 
 			show_all();
 		}

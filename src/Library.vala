@@ -1258,6 +1258,35 @@ namespace Vocal {
 #endif
 
         }
+        
+        public void set_new_local_album_art(string path_to_local_file, Podcast p) {
+            
+            // Copy the file
+            GLib.File current_file = GLib.File.new_for_path(path_to_local_file);
+
+            InputStream input_stream = current_file.read();
+
+            string path = settings.library_location + "/%s/cover.jpg".printf(p.name.replace("%27", "'").replace("%", "_"));
+            GLib.File local_file = GLib.File.new_for_path(path);
+
+            current_file.copy_async(local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, null, null);
+            
+            // Set the new file location in the database
+            string query, errmsg;
+            int ec;
+
+            query = """UPDATE Podcast SET album_art_local_uri = '%s' WHERE name = '%s'""".printf(local_file.get_uri(),p.name);
+
+            ec = db.exec (query, null, out errmsg);
+
+            if (ec != Sqlite.OK) {
+                stderr.printf ("Error: %s\n", errmsg);
+            }
+            
+            // Set the new file location for the podcast object
+            p.local_art_uri = local_file.get_uri();
+            
+        }
 
         /*
          * Creates Vocal's config directory, establishes a new SQLite database, and creates

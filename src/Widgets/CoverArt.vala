@@ -33,7 +33,7 @@ namespace Vocal {
 
         private const int COVER_SIZE = 170;
 
-		private Gtk.Image 	image;					// The actual coverart image
+		public Gtk.Image 	image;					// The actual coverart image
 		private Gtk.Image 	triangle;				// The banner in the top right corner
 		private Gtk.Overlay triangle_overlay;		// Overlays the banner on top of the image
 		private Gtk.Overlay count_overlay;			// Overlays the count on top of the banner

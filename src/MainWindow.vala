@@ -674,6 +674,7 @@ namespace Vocal {
             details.mark_multiple_episodes_as_played_requested.connect(on_mark_multiple_episodes_as_played);
             details.mark_multiple_episodes_as_unplayed_requested.connect(on_mark_multiple_episodes_as_unplayed);
             details.unplayed_count_changed.connect(on_unplayed_count_changed);
+            details.new_cover_art_set.connect(on_new_cover_art_set);
 
             // Set up the box that gets displayed when importing from .OPML or .XML files during the first launch
             import_message_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 25);
@@ -2157,6 +2158,26 @@ namespace Vocal {
                         }
                     }
                 }
+        }
+        
+        /*
+         * Called when a user manually sets a new cover art file
+         */
+        private void on_new_cover_art_set(string path) {
+            
+            // Find the cover art in the library and set the new image
+            foreach(CoverArt a in all_art) {
+                if(a.podcast == details.podcast) {
+                    GLib.File cover = GLib.File.new_for_path(path);
+                    InputStream input_stream = cover.read();
+                    var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 275, 275, true);
+                    
+                    a.image.pixbuf = pixbuf;
+                    
+                    // Now copy the image to library cache and set it in the db
+                    library.set_new_local_album_art(path, a.podcast);
+                }
+            }
         }
 
 

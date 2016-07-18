@@ -41,6 +41,8 @@ namespace Vocal {
         public signal void delete_podcast_requested();
         public signal void unplayed_count_changed(int n);
         public signal void go_back();
+        
+        public signal void new_cover_art_set(string path);
 
 
         public Podcast 			podcast;				// The parent podcast
@@ -132,6 +134,19 @@ namespace Vocal {
                 show_all();
             });
 
+            var edit = new Gtk.Button.from_icon_name("edit-symbolic", Gtk.IconSize.MENU);
+            edit.tooltip_text = _("Edit podcast details");
+            edit.button_press_event.connect((e) => {
+                var edit_menu = new Gtk.Menu();
+                var change_cover_art_item = new Gtk.MenuItem.with_label(_("Select different cover art"));
+                change_cover_art_item.activate.connect(on_change_album_art);
+                edit_menu.add(change_cover_art_item);
+                edit_menu.attach_to_widget(edit, null);
+                edit_menu.show_all();
+                edit_menu.popup(null, null, null, e.button, e.time);
+                return true;
+            });
+
             var remove = new Gtk.Button.with_label(_("Unsubscribe"));
             remove.clicked.connect (() => {
                delete_podcast_requested();
@@ -141,6 +156,7 @@ namespace Vocal {
             remove.show();
 
             image_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            
 
             details_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             actions_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
@@ -179,6 +195,7 @@ namespace Vocal {
 			label_box.pack_start(count_label, false, false, 0);
 
 			actions_box.pack_start(download_all, true, true, 0);
+            actions_box.pack_start(edit, true, true, 0);
 			actions_box.pack_start(hide_played, true, true, 0);
 			actions_box.pack_start(remove, true, true, 0);
 
@@ -738,6 +755,44 @@ namespace Vocal {
             // Is the number of unplayed episodes now different?
             if(previous_count != unplayed_count)
                 unplayed_count_changed(unplayed_count);
+        }
+        
+        private void on_change_album_art() {
+            var file_chooser = new Gtk.FileChooserDialog (_("Select Album Art"),
+                 parent,
+                 Gtk.FileChooserAction.OPEN,
+                 _("Cancel"), Gtk.ResponseType.CANCEL,
+                 _("Open"), Gtk.ResponseType.ACCEPT);
+
+            var all_files_filter = new Gtk.FileFilter();
+            all_files_filter.set_filter_name(_("All files"));
+            all_files_filter.add_pattern("*");
+
+            var opml_filter = new Gtk.FileFilter();
+            opml_filter.set_filter_name(_("Image Files"));
+            opml_filter.add_mime_type("image/png");
+            opml_filter.add_mime_type("image/jpeg");
+
+            file_chooser.add_filter(opml_filter);
+            file_chooser.add_filter(all_files_filter);
+
+            file_chooser.modal = true;
+
+            int decision = file_chooser.run();
+            string file_name = file_chooser.get_filename();
+
+            file_chooser.destroy();
+
+            //If the user selects a file, get the name and parse it
+            if (decision == Gtk.ResponseType.ACCEPT) {
+                GLib.File cover = GLib.File.new_for_path(file_name);
+                InputStream input_stream = cover.read();
+                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 275, 275, true);
+
+                image.pixbuf = pixbuf;
+                
+                new_cover_art_set(file_name);
+            }
         }
 
 		/*

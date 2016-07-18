@@ -164,7 +164,7 @@ namespace Vocal {
 
             top_box_width = top_box.width_request;
 
-            string text = Utils.html_to_markup(episode.description).replace("\n", " ");
+            string text = Utils.html_to_markup(episode.description);
 
             description_label = new Gtk.Label(text != "(null)" ? text : _("No description available."));
             description_label.justify = Gtk.Justification.LEFT;

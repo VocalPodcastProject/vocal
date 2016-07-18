@@ -3,13 +3,13 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: ../src/Widgets/PodcastView.vala:744
+#: ../src/Widgets/PodcastView.vala:768
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-05 14:17-0400\n"
+"POT-Creation-Date: 2016-07-08 22:21-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,182 +18,182 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../src/MainWindow.vala:298 ../src/Widgets/DirectoryView.vala:63
+#: ../src/MainWindow.vala:294 ../src/Widgets/DirectoryView.vala:63
 #: ../src/Widgets/DirectoryView.vala:79
 #: ../src/Widgets/SearchResultsView.vala:59
 msgid "Return to Library"
 msgstr ""
 
-#: ../src/MainWindow.vala:627
+#: ../src/MainWindow.vala:624
 msgid "Welcome to Vocal"
 msgstr ""
 
-#: ../src/MainWindow.vala:627
+#: ../src/MainWindow.vala:624
 msgid "Build Your Library By Adding Podcasts"
 msgstr ""
 
-#: ../src/MainWindow.vala:628
+#: ../src/MainWindow.vala:625
 msgid "Browse Podcasts"
 msgstr ""
 
-#: ../src/MainWindow.vala:629
+#: ../src/MainWindow.vala:626
 msgid "Browse through podcasts and choose some to add to your library."
 msgstr ""
 
-#: ../src/MainWindow.vala:630
+#: ../src/MainWindow.vala:627
 msgid "Add a New Feed"
 msgstr ""
 
-#: ../src/MainWindow.vala:630
+#: ../src/MainWindow.vala:627
 msgid "Provide the web address of a podcast feed."
 msgstr ""
 
-#: ../src/MainWindow.vala:631
+#: ../src/MainWindow.vala:628
 msgid "Import Subscriptions"
 msgstr ""
 
-#: ../src/MainWindow.vala:632
+#: ../src/MainWindow.vala:629
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
 msgstr ""
 
-#: ../src/MainWindow.vala:633
+#: ../src/MainWindow.vala:630
 msgid "Check Out the Vocal Starter Pack…"
 msgstr ""
 
-#: ../src/MainWindow.vala:633
+#: ../src/MainWindow.vala:630
 msgid ""
 "New to podcasting? Check out our starter pack. Select individual podcasts, "
 "or download the entire pack."
 msgstr ""
 
-#: ../src/MainWindow.vala:682
+#: ../src/MainWindow.vala:680
 msgid "Good Stuff is On Its Way"
 msgstr ""
 
-#: ../src/MainWindow.vala:683
+#: ../src/MainWindow.vala:681
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
 msgstr ""
 
-#: ../src/MainWindow.vala:695
+#: ../src/MainWindow.vala:693
 msgid "Welcome"
 msgstr ""
 
-#: ../src/MainWindow.vala:696
+#: ../src/MainWindow.vala:694
 msgid "Importing"
 msgstr ""
 
-#: ../src/MainWindow.vala:697
+#: ../src/MainWindow.vala:695
 msgid "All Podcasts"
 msgstr ""
 
-#: ../src/MainWindow.vala:698 ../src/Widgets/DirectoryArt.vala:69
+#: ../src/MainWindow.vala:696 ../src/Widgets/DirectoryArt.vala:69
 msgid "Details"
 msgstr ""
 
-#: ../src/MainWindow.vala:699
+#: ../src/MainWindow.vala:697
 msgid "Video"
 msgstr ""
 
-#: ../src/MainWindow.vala:713
+#: ../src/MainWindow.vala:711
 msgid "Browse Podcast Directory"
 msgstr ""
 
-#: ../src/MainWindow.vala:714
+#: ../src/MainWindow.vala:712
 msgid "Search Results"
 msgstr ""
 
-#: ../src/MainWindow.vala:975 ../src/MainWindow.vala:979
+#: ../src/MainWindow.vala:973 ../src/MainWindow.vala:977
 #: ../src/Widgets/Toolbar.vala:187 ../src/Widgets/VideoControls.vala:40
 #: ../src/Widgets/EpisodeDetailBox.vala:116
 #: ../src/Widgets/EpisodeDetailBox.vala:294
 msgid "Play"
 msgstr ""
 
-#: ../src/MainWindow.vala:1011 ../src/MainWindow.vala:1015
+#: ../src/MainWindow.vala:1009 ../src/MainWindow.vala:1013
 msgid "Pause"
 msgstr ""
 
-#: ../src/MainWindow.vala:1162 ../src/MainWindow.vala:1201
+#: ../src/MainWindow.vala:1160 ../src/MainWindow.vala:1199
 msgid "Cancel"
 msgstr ""
 
-#: ../src/MainWindow.vala:1163
+#: ../src/MainWindow.vala:1161
 msgid "Save"
 msgstr ""
 
-#: ../src/MainWindow.vala:1166 ../src/MainWindow.vala:1205
+#: ../src/MainWindow.vala:1164 ../src/MainWindow.vala:1203
 msgid "All files"
 msgstr ""
 
-#: ../src/MainWindow.vala:1170
+#: ../src/MainWindow.vala:1168
 msgid "OPML and XML files"
 msgstr ""
 
-#: ../src/MainWindow.vala:1198
+#: ../src/MainWindow.vala:1196
 msgid "Select Subscription File"
 msgstr ""
 
-#: ../src/MainWindow.vala:1202
+#: ../src/MainWindow.vala:1200
 msgid "Open"
 msgstr ""
 
-#: ../src/MainWindow.vala:1209
+#: ../src/MainWindow.vala:1207
 msgid "OPML files"
 msgstr ""
 
-#: ../src/MainWindow.vala:1279
+#: ../src/MainWindow.vala:1277
 msgid "Error Importing from File"
 msgstr ""
 
-#: ../src/MainWindow.vala:1280
+#: ../src/MainWindow.vala:1278
 msgid ""
 "Please check that you selected the correct file and that you are connected "
 "to the network."
 msgstr ""
 
-#: ../src/MainWindow.vala:1378
+#: ../src/MainWindow.vala:1376
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
 msgstr ""
 
-#: ../src/MainWindow.vala:1453 ../src/MainWindow.vala:1455
+#: ../src/MainWindow.vala:1451 ../src/MainWindow.vala:1453
 msgid "Adding new podcast: <b>"
 msgstr ""
 
-#: ../src/MainWindow.vala:1512
+#: ../src/MainWindow.vala:1510
 msgid "Error Adding Podcast"
 msgstr ""
 
-#: ../src/MainWindow.vala:1513
+#: ../src/MainWindow.vala:1511
 msgid ""
 "Please check that the feed is correct and that you have a network connection."
 msgstr ""
 
-#: ../src/MainWindow.vala:1640
+#: ../src/MainWindow.vala:1641
 msgid "Are you sure you want to mark all episodes from '%s' as played?"
 msgstr ""
 
-#: ../src/MainWindow.vala:1925
+#: ../src/MainWindow.vala:1926
 msgid "Are you sure you want to remove '%s' from your library?"
 msgstr ""
 
-#: ../src/MainWindow.vala:1928
+#: ../src/MainWindow.vala:1929
 msgid "No"
 msgstr ""
 
-#: ../src/MainWindow.vala:1929
+#: ../src/MainWindow.vala:1930
 msgid "Yes"
 msgstr ""
 
-#: ../src/MainWindow.vala:2189
+#: ../src/MainWindow.vala:2207
 msgid "Fresh content has been added to your library."
 msgstr ""
 
-#: ../src/MainWindow.vala:2298
+#: ../src/MainWindow.vala:2316
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to "
 "be canceled. Are you sure you want to exit?"
@@ -235,41 +235,41 @@ msgstr ""
 msgid "Hide the episode side pane"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:251 ../src/Widgets/PodcastView.vala:267
+#: ../src/Widgets/Sidepane.vala:251 ../src/Widgets/PodcastView.vala:284
 msgid "Mark selected episodes as played"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:281 ../src/Widgets/PodcastView.vala:297
+#: ../src/Widgets/Sidepane.vala:281 ../src/Widgets/PodcastView.vala:314
 msgid "Mark selected episodes as unplayed"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:313 ../src/Widgets/PodcastView.vala:329
+#: ../src/Widgets/Sidepane.vala:313 ../src/Widgets/PodcastView.vala:346
 msgid "Delete local files for selected episodes"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:317 ../src/Widgets/PodcastView.vala:333
+#: ../src/Widgets/Sidepane.vala:317 ../src/Widgets/PodcastView.vala:350
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:372 ../src/Widgets/PodcastView.vala:388
+#: ../src/Widgets/Sidepane.vala:372 ../src/Widgets/PodcastView.vala:405
 msgid "Mark as Played"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:391 ../src/Widgets/PodcastView.vala:407
+#: ../src/Widgets/Sidepane.vala:391 ../src/Widgets/PodcastView.vala:424
 msgid "Mark as Unplayed"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:411 ../src/Widgets/PodcastView.vala:427
+#: ../src/Widgets/Sidepane.vala:411 ../src/Widgets/PodcastView.vala:444
 msgid "Delete Local File"
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:618 ../src/Widgets/PodcastView.vala:684
+#: ../src/Widgets/Sidepane.vala:618 ../src/Widgets/PodcastView.vala:708
 msgid "No new episodes."
 msgstr ""
 
-#: ../src/Widgets/Sidepane.vala:627 ../src/Widgets/PodcastView.vala:693
+#: ../src/Widgets/Sidepane.vala:627 ../src/Widgets/PodcastView.vala:717
 msgid "No episodes available."
 msgstr ""
 
@@ -313,7 +313,7 @@ msgstr ""
 msgid "Export Subscriptions…"
 msgstr ""
 
-#: ../src/Widgets/Toolbar.vala:136 ../src/Widgets/SettingsDialog.vala:49
+#: ../src/Widgets/Toolbar.vala:136 ../src/Widgets/SettingsDialog.vala:54
 msgid "Preferences"
 msgstr ""
 
@@ -411,23 +411,31 @@ msgstr ""
 msgid "Mark All Played"
 msgstr ""
 
-#: ../src/Widgets/PodcastView.vala:135
+#: ../src/Widgets/PodcastView.vala:136
+msgid "Edit podcast details"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:139
+msgid "Select different cover art"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:150
 msgid "Unsubscribe"
 msgstr ""
 
-#: ../src/Widgets/PodcastView.vala:431
+#: ../src/Widgets/PodcastView.vala:448
 msgid "Are you sure you want to delete the downloaded episode '%s'?"
 msgstr ""
 
-#: ../src/Widgets/PodcastView.vala:565
+#: ../src/Widgets/PodcastView.vala:581
 msgid "No show notes available."
 msgstr ""
 
-#: ../src/Widgets/PodcastView.vala:674
+#: ../src/Widgets/PodcastView.vala:698
 msgid "Show more episodes"
 msgstr ""
 
-#: ../src/Widgets/PodcastView.vala:742
+#: ../src/Widgets/PodcastView.vala:766
 msgid "%d unplayed episodes"
 msgstr ""
 
@@ -445,27 +453,31 @@ msgstr ""
 msgid "No matches found."
 msgstr ""
 
-#: ../src/Widgets/SettingsDialog.vala:63
+#: ../src/Widgets/SettingsDialog.vala:68
 msgid "Automatically download new episodes:"
 msgstr ""
 
-#: ../src/Widgets/SettingsDialog.vala:84
+#: ../src/Widgets/SettingsDialog.vala:89
 msgid "Keep my library clean:"
 msgstr ""
 
-#: ../src/Widgets/SettingsDialog.vala:114
+#: ../src/Widgets/SettingsDialog.vala:110
+msgid "Show podcast names below cover art"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:140
 msgid "Seconds to skip back:"
 msgstr ""
 
-#: ../src/Widgets/SettingsDialog.vala:134
+#: ../src/Widgets/SettingsDialog.vala:160
 msgid "Seconds to skip forward:"
 msgstr ""
 
-#: ../src/Widgets/SettingsDialog.vala:179
+#: ../src/Widgets/SettingsDialog.vala:205
 msgid "Show iTunes Store results from:"
 msgstr ""
 
-#: ../src/Widgets/SettingsDialog.vala:214
+#: ../src/Widgets/SettingsDialog.vala:240
 msgid "Close"
 msgstr ""
 

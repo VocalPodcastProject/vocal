@@ -5,4 +5,5 @@ add_translations_catalog (${GETTEXT_PACKAGE}
     ../src/Objects
     ../src/Utils
     ../src/Widgets
+    ../data
 )

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Vocal
-Comment=Subscribe, download, and listen to podcasts
-GenericName=Podcast Manager
+_Comment=Subscribe, download, and listen to podcasts
+_GenericName=Podcast Manager
 Exec=vocal
 Icon=vocal
 Terminal=false

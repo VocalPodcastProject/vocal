@@ -455,7 +455,20 @@ namespace Vocal {
 
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Parser.parse_file (path);
+            Xml.Doc* doc;
+            
+            if(path.contains("http")) {
+                // Use libsoup because otherwise it freaks when
+                // given secure pages
+                var session = new Soup.Session ();
+                var message = new Soup.Message ("GET", path);
+
+                session.send_message (message);
+
+                doc = Parser.parse_doc ( (string) message.response_body.data);
+            } else {
+                doc = Parser.parse_file (path);
+            }
             
             // Make sure that it didn't return a null reference
             if (doc == null) {

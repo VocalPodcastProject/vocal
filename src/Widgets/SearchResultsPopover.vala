@@ -265,5 +265,39 @@ namespace Vocal {
 			podcast_selected(selected.get_podcast());
 			return false;
 		}
+		
+		/*
+		 * Tells the popover about the status of adding a podcast
+		 * so it can update the icon
+		 */
+		 public void add_status_changed(bool successfully_added, string? name = null) {
+			 if(successfully_added) {
+				 foreach(Widget w in cloud_results_widgets) {
+					 var srb = (SearchResultBox) w;
+					 
+					 // compare the names if possible
+					 if(name != null) {
+						 if(name == srb.get_podcast().name) {
+							 srb.set_button_icon("emblem-ok-symbolic");
+						 }
+					 } else {
+						 srb.set_button_icon("emblem-ok-symbolic");
+					 }
+				 }
+			 } else {
+				 foreach(Widget w in cloud_results_widgets) {
+					 var srb = (SearchResultBox) w;
+					 
+					 // compare the names if possible
+					 if(name != null) {
+						 if(name == srb.get_podcast().name) {
+							 srb.set_button_icon("list-add-symbolic");
+						 }
+					 } else {
+						 srb.set_button_icon("list-add-symbolic");
+					 }
+				 }
+			 }
+		 }
   	}
 }

@@ -1503,6 +1503,9 @@ namespace Vocal {
                         }
 
                         library_empty = false;
+                        
+                        // Tell the search results popover that adding succeeded
+                        search_results.add_status_changed(true, name);
 
                         show_all();
                     }
@@ -1536,6 +1539,9 @@ namespace Vocal {
                     add_err_dialog.secondary_text = error_message;
                     add_err_dialog.set_image(error_img);
                     add_err_dialog.show_all();
+                    
+                    // Tell the search results popover that adding failed
+                    search_results.add_status_changed(false, name);
                 }
 
             }

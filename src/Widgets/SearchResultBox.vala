@@ -34,6 +34,7 @@ namespace Vocal {
 
         private string rss_url;
         private bool details_visible = false;
+        private Gtk.Button subscribe_button;
 
 
         /*
@@ -150,13 +151,13 @@ namespace Vocal {
 
             // Show a subscribe button
             if(subscribe_url != null) {
-                var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+                subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
                 subscribe_button.relief = Gtk.ReliefStyle.NONE;
                 subscribe_button.tooltip_text = _("Subscribe to podcast");
 
                 subscribe_button.clicked.connect(() => {
-                    var check_image = new Gtk.Image.from_icon_name("emblem-ok-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-                    subscribe_button.image = check_image;
+                    var working_image = new Gtk.Image.from_icon_name("process-working-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+                    subscribe_button.image = working_image;
                     subscribe_to_podcast(subscribe_url);
                 }); 
 
@@ -179,6 +180,11 @@ namespace Vocal {
          */
         public Podcast get_podcast() {
             return podcast;
+        }
+        
+        public void set_button_icon(string icon_name) {
+            var new_image = new Gtk.Image.from_icon_name(icon_name, Gtk.IconSize.SMALL_TOOLBAR);
+            subscribe_button.image = new_image;
         }
     }
 }

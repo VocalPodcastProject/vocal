@@ -735,11 +735,11 @@ namespace Vocal {
 
                 show_all();
 
-                // If the app is supposed to open hidden, don't present the window. Instead, iconify
+                // If the app is supposed to open hidden, don't present the window. Instead, hide it
                 if(!open_hidden)
                     show_all();
                 else {
-                    this.iconify();
+                    this.hide();
                 }
 
                 // Autoclean the library
@@ -2357,9 +2357,9 @@ namespace Vocal {
                     library.set_episode_playback_position(player.current_episode);
             }
 
-            // If an episode is currently playing just minimize the window
+            // If an episode is currently playing, hide the window
             if(player.playing) {
-                this.iconify();
+                this.hide();
                 return true;
             } else if(downloads != null && downloads.downloads.size > 0) {
 

@@ -110,80 +110,11 @@ namespace Vocal {
          */
         public void set_datetime_from_pubdate() {
 
-            // Split all the fields (command, colon, and space delimited)
-            string[] fields = date_released.split_set(",: ");
-
-            // The offset refers to the index position
-            // The datetime field is typically standardized, but one
-            // very rare cases the first field may not contain the day of the week
-            int offset = 0;
-
-            // See if the first field is a number. If so, the day of the week isn't first
-            bool no_day_of_week = int64.try_parse(fields[0]);
-
-            if(no_day_of_week) {
-                offset = -2;
+            if(date_released != null) {
+                GLib.Time tm = GLib.Time ();
+                tm.strptime (date_released, "%a, %d %b %Y %H:%M:%S %Z");
+                datetime_released = new DateTime.local(tm.year, tm.month, tm.day, tm.hour, tm.minute, tm.second);
             }
-
-
-
-            // Since the pubdate is a standard, we can hard-code the values where each item is located
-
-            int day = int.parse(fields[2 + offset]);
-            int year = int.parse(fields[4 + offset]);
-            int hour = int.parse(fields[5 + offset]);
-            int minute = int.parse(fields[6 + offset]);
-            int seconds = int.parse(fields[7 + offset]);
-
-
-            // Determine the month number from the string as read from the pubdate
-            int month = 1;
-
-            switch(fields[3 + offset]) {
-                case "Jan":
-                    month = 1;
-                    break;
-                case "Feb":
-                    month = 2;
-                    break;
-                case "Mar":
-                    month = 3;
-                    break;
-                case "Apr":
-                    month = 4;
-                    break;
-                case "May":
-                    month = 5;
-                    break;
-                case "Jun":
-                    month = 6;
-                    break;
-                case "Jul":
-                    month = 7;
-                    break;
-                case "Aug":
-                    month = 8;
-                    break;
-                case "Sep":
-                    month = 9;
-                    break;
-                case "Oct":
-                    month = 10;
-                    break;
-                case "Nov":
-                    month = 11;
-                    break;
-                case "Dec":
-                    month = 12;
-                    break;
-
-            }
-
-            // Create the datetime object (assume pubdate is UTC)
-            var datetime_utc = new DateTime.utc(year, month, day, hour, minute, (double)seconds);
-
-            // Convert from UTC to system local time
-            datetime_released = datetime_utc.to_local();
         }
 
     }

@@ -735,11 +735,11 @@ namespace Vocal {
 
                 show_all();
 
-                // If the app is supposed to open hidden, don't present the window. Instead, iconify
+                // If the app is supposed to open hidden, don't present the window. Instead, hide it
                 if(!open_hidden)
                     show_all();
                 else {
-                    this.iconify();
+                    this.hide();
                 }
 
                 // Autoclean the library

@@ -295,10 +295,16 @@ namespace Vocal {
 		 */
         public bool add_podcast_from_file(string path) {
 
-            info("Adding podcast from file: %s".printf(path));
+            string uri = path;
+            
+            // Discover the real URI (avoid redirects)
+            if(path.contains("http")) {
+                uri = Utils.get_real_uri(path);
+            }
+            info("Adding podcast from: %s".printf(uri));
             parser = new FeedParser();
 
-            Podcast new_podcast = parser.get_podcast_from_file(path);
+            Podcast new_podcast = parser.get_podcast_from_file(uri);
             if(new_podcast == null) {
                 return false;
             } else {

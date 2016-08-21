@@ -81,7 +81,40 @@ public class Utils
             return false;
         }
     }
-
+    
+    /*
+    * Find the real URI for a resource (locates redirected URIs, etc)
+    *
+    * Code primarily taken from a patch by
+    * Olivier Duchateau <duchateau.olivierd@gmail.com>
+    */
+    public static string get_real_uri(string resource) {
+        Soup.Session session;
+        Soup.Message msg;
+        string new_url = null;
+        
+        /* Create Soup objects */
+        session = new Soup.Session();
+        msg = new Soup.Message("GET", resource);
+        
+        /* Signal */
+        msg.got_headers.connect(() => {
+            /* 302 */
+            if (msg.status_code == Soup.Status.FOUND) {
+                new_url = msg.response_headers.get_one("Location");
+                /* Finish processing request */
+                session.cancel_message(msg, Soup.Status.CANCELLED);
+            }
+        });
+        
+        session.send_message(msg);
+        
+        if (new_url == null) {
+           new_url = "%s".printf(resource);
+        }
+        
+        return new_url;
+    }
 
 	/*
 	 * Strips a string of HTML tags, except for ones that are useful in markup

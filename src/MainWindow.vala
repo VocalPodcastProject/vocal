@@ -2357,9 +2357,9 @@ namespace Vocal {
                     library.set_episode_playback_position(player.current_episode);
             }
 
-            // If an episode is currently playing just minimize the window
+            // If an episode is currently playing, hide the window
             if(player.playing) {
-                this.iconify();
+                this.hide();
                 return true;
             } else if(downloads != null && downloads.downloads.size > 0) {
 

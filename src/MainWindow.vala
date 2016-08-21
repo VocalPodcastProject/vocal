@@ -1272,11 +1272,23 @@ namespace Vocal {
                             add_err_dialog.response.connect((response_id) => {
                                 add_err_dialog.destroy();
                             });
+                            
+                        // Determine if it was a network issue, or just a problem with the feed
+                        
+                        bool network_okay = Utils.confirm_internet_functional();
+                        
+                        string error_message;
+                        
+                        if(network_okay) {
+                            error_message = _("Please check that you selected the correct file and that it is not corrupted.");
+                        } else {
+                            error_message = _("There seems to be a problem with your internet connection. Make sure you are online and then try again.");
+                        }
 
                         var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
                         add_err_dialog.set_transient_for(this);
                         add_err_dialog.text = _("Error Importing from File");
-                        add_err_dialog.secondary_text = _("Please check that you selected the correct file and that you are connected to the network.");
+                        add_err_dialog.secondary_text = error_message;
                         add_err_dialog.set_image(error_img);
                         add_err_dialog.show_all();
                     }
@@ -1505,11 +1517,23 @@ namespace Vocal {
                     add_err_dialog.response.connect((response_id) => {
                         add_err_dialog.destroy();
                     });
+                    
+                    // Determine if it was a network issue, or just a problem with the feed
+                    
+                    bool network_okay = Utils.confirm_internet_functional();
+                    
+                    string error_message;
+                    
+                    if(network_okay) {
+                        error_message = _("Please make sure you selected the correct feed and that it is still available.");
+                    } else {
+                        error_message = _("There seems to be a problem with your internet connection. Make sure you are online and then try again.");
+                    }
 
                     var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
                     add_err_dialog.set_transient_for(this);
                     add_err_dialog.text = _("Error Adding Podcast");
-                    add_err_dialog.secondary_text = _("Please check that the feed is correct and that you have a network connection.");
+                    add_err_dialog.secondary_text = error_message;
                     add_err_dialog.set_image(error_img);
                     add_err_dialog.show_all();
                 }

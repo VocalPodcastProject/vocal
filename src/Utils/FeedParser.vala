@@ -292,6 +292,7 @@ namespace Vocal {
                 var session = new Soup.Session ();
                 var message = new Soup.Message ("GET", path);
 
+                session.user_agent = Constants.USER_AGENT;
                 session.send_message (message);
 
                 doc = Parser.parse_doc ( (string) message.response_body.data);

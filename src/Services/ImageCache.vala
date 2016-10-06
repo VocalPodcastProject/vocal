@@ -45,6 +45,7 @@ namespace Vocal {
             var cache_directory = Constants.CACHE_DIR.replace("~", home_dir);
 
             soup_session = new Soup.Session();
+            soup_session.user_agent = Constants.USER_AGENT;
             cacher = new DiskCacher(cache_directory);
             cacher.get_cached_files.begin((obj, res) => {
                 cache = cacher.get_cached_files.end(res);

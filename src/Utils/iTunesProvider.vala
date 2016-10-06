@@ -40,6 +40,7 @@ namespace Vocal {
             var uri =  "https://itunes.apple.com/lookup?id=%s&entity=podcast".printf(id);
             var session = new Soup.Session ();
             var message = new Soup.Message ("GET", uri);
+            session.user_agent = Constants.USER_AGENT;
             session.send_message (message);
 
             try {

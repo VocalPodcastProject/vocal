@@ -95,6 +95,7 @@ public class Utils
         
         /* Create Soup objects */
         session = new Soup.Session();
+        session.user_agent = Constants.USER_AGENT;
         msg = new Soup.Message("GET", resource);
         
         /* Signal */

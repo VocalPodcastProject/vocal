@@ -6,4 +6,5 @@ namespace Constants {
     public const string VERSION = "@VERSION@";
     public const string VERSION_INFO = "@VERSION_INFO@";
     public const string CACHE_DIR = "@CACHE_DIR@";
+    public const string USER_AGENT = "@USER_AGENT@";
 }

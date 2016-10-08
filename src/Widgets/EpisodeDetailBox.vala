@@ -144,6 +144,7 @@ namespace Vocal {
             title_label = new Gtk.Label("<b>%s</b>".printf(GLib.Markup.escape_text(episode.title.replace("%27", "'").replace("&amp;", "&"))));
             title_label.set_use_markup(true);
             title_label.halign = Gtk.Align.START;
+            title_label.set_property("xalign", 0);
             title_label.justify = Gtk.Justification.LEFT;
             title_label.wrap = true;
             label_box.pack_start(title_label, true, true, 0);

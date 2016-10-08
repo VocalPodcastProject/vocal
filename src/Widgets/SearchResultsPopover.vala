@@ -50,6 +50,10 @@ namespace Vocal {
 		private string query;
 
 		private bool update_complete = true;
+		private GLib.Cancellable cancellable;
+
+		private bool updating_results_UI = false;
+		private bool additional_update_pending = false;
 
 		/*
 		 * Constructor for the shownotes popover relative to a given parent
@@ -78,30 +82,36 @@ namespace Vocal {
 		 */
 		public async void on_query_update() {
 
-			string outdated_query = query;
+			// If the previous update isn't complete
+			if(!update_complete) {
+				cancellable.cancel();
+				update_complete = true;
+			}
 
 			SourceFunc callback = on_query_update.callback;
 
             ThreadFunc<void*> run = () => {
 
-            	if(update_complete) {
+        		update_complete = false;
 
-            		update_complete = false;
+				if(query.length > 0) {
 
-					if(query.length > 0) {
+					p_matches.clear();
+					p_matches.add_all(library.find_matching_podcasts(query));
 
-						p_matches.clear();
-						p_matches.add_all(library.find_matching_podcasts(query));
+					e_matches.clear();
+					e_matches.add_all(library.find_matching_episodes(query));
 
-						e_matches.clear();
-						e_matches.add_all(library.find_matching_episodes(query));
+					cancellable.cancelled.connect(() => {
+						return;
+					});
 
-						c_matches.clear();
-						c_matches.add_all(itunes.search_by_term(query, 3));
-					}
-
-					update_complete = true;
+					c_matches.clear();
+					c_matches.add_all(itunes.search_by_term(query, 3));
 				}
+
+				update_complete = true;
+				
 
 				Idle.add((owned) callback);
                 return null;
@@ -111,11 +121,6 @@ namespace Vocal {
             yield;
 
             update_search_view();
-
-            // If the query has changed during updated, go again
-            if(outdated_query != query) {
-            	on_query_update();
-            }
 		}
 
 
@@ -133,113 +138,135 @@ namespace Vocal {
 		 * Called when the search update is complete and the new matches
 		 * are ready to be displayed to the user
 		 */
-		private void update_search_view() {
-			if(content_box != null) {
-    			content_box.destroy();
-    			content_box = null;
-    		}
+		private async void update_search_view() {
 
-    		local_episodes_listbox = new Gtk.ListBox();
-			local_podcasts_listbox = new Gtk.ListBox();
-			cloud_results_listbox = new Gtk.ListBox();
+			SourceFunc callback = update_search_view.callback;
 
-			local_episodes_listbox.activate_on_single_click = true;
-			local_podcasts_listbox.activate_on_single_click = true;
-			cloud_results_listbox.activate_on_single_click = true;
-			cloud_results_listbox.selection_mode = Gtk.SelectionMode.NONE;
+            ThreadFunc<void*> run = () => {
 
-			local_episodes_listbox.button_press_event.connect(on_episode_activated);
-			local_podcasts_listbox.button_press_event.connect(on_podcast_activated);
+            	if(!updating_results_UI) {
 
-			local_episodes_widgets.clear();
-			local_podcasts_widgets.clear();
-			cloud_results_widgets.clear();
+	            	updating_results_UI = true;
 
-			var local_episodes_label = new Gtk.Label(_("Episodes from Your Library"));
-			var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));
-			var cloud_results_label = new Gtk.Label(_("%s Podcast Results".printf(cloud_provider)));
+		    		local_episodes_listbox = new Gtk.ListBox();
+					local_podcasts_listbox = new Gtk.ListBox();
+					cloud_results_listbox = new Gtk.ListBox();
 
-			local_episodes_label.get_style_context().add_class("h4");
-			local_episodes_label.set_property("xalign", 0);
-			local_podcasts_label.get_style_context().add_class("h4");
-			local_podcasts_label.set_property("xalign", 0);
-			cloud_results_label.get_style_context().add_class("h4");
-			cloud_results_label.set_property("xalign", 0);
+					local_episodes_listbox.activate_on_single_click = true;
+					local_podcasts_listbox.activate_on_single_click = true;
+					cloud_results_listbox.activate_on_single_click = true;
+					cloud_results_listbox.selection_mode = Gtk.SelectionMode.NONE;
 
-			full_results_button = new Gtk.Button.with_label(_("View All Results"));
-			full_results_button.get_style_context().add_class("suggested-action");
-			this.can_focus = false;
-			full_results_button.can_focus = false;
+					local_episodes_listbox.button_press_event.connect(on_episode_activated);
+					local_podcasts_listbox.button_press_event.connect(on_podcast_activated);
 
-			full_results_button.clicked.connect(() => {
-				show_full_results();
-			});
+					local_episodes_widgets.clear();
+					local_podcasts_widgets.clear();
+					cloud_results_widgets.clear();
 
-			for(int i = 0; i < 5; i++) {
-				if(i < p_matches.size) {
-					SearchResultBox srb = new SearchResultBox(p_matches[i], null);
-					local_podcasts_widgets.add(srb);
-					local_podcasts_listbox.add(srb);
-				}
-			}
-			if(p_matches.size < 1) {
-				var no_matches_label = new Gtk.Label(_("No matches found."));
-				local_podcasts_widgets.add(no_matches_label);
-				local_podcasts_listbox.add(no_matches_label);
-			}
+					var local_episodes_label = new Gtk.Label(_("Episodes from Your Library"));
+					var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));
+					var cloud_results_label = new Gtk.Label(_("%s Podcast Results".printf(cloud_provider)));
 
-			for(int i = 0; i < 5; i++) {
-				if(i < e_matches.size) {
-					Podcast parent = null;
-					foreach(Podcast p in library.podcasts) {
-						if(e_matches[i].parent.name == p.name) {
-							parent = p;
+					local_episodes_label.get_style_context().add_class("h4");
+					local_episodes_label.set_property("xalign", 0);
+					local_podcasts_label.get_style_context().add_class("h4");
+					local_podcasts_label.set_property("xalign", 0);
+					cloud_results_label.get_style_context().add_class("h4");
+					cloud_results_label.set_property("xalign", 0);
+
+					full_results_button = new Gtk.Button.with_label(_("View All Results"));
+					full_results_button.get_style_context().add_class("suggested-action");
+					this.can_focus = false;
+					full_results_button.can_focus = false;
+
+					full_results_button.clicked.connect(() => {
+						show_full_results();
+					});
+
+					for(int i = 0; i < 5; i++) {
+						if(i < p_matches.size) {
+							SearchResultBox srb = new SearchResultBox(p_matches[i], null);
+							local_podcasts_widgets.add(srb);
+							local_podcasts_listbox.add(srb);
 						}
 					}
-					SearchResultBox srb = new SearchResultBox(parent, e_matches[i]);
-					local_episodes_widgets.add(srb);
-					local_episodes_listbox.add(srb);
+					if(p_matches.size < 1) {
+						var no_matches_label = new Gtk.Label(_("No matches found."));
+						local_podcasts_widgets.add(no_matches_label);
+						local_podcasts_listbox.add(no_matches_label);
+					}
+
+					for(int i = 0; i < 5; i++) {
+						if(i < e_matches.size) {
+							Podcast parent = null;
+							foreach(Podcast p in library.podcasts) {
+								if(e_matches[i].parent.name == p.name) {
+									parent = p;
+								}
+							}
+							SearchResultBox srb = new SearchResultBox(parent, e_matches[i]);
+							local_episodes_widgets.add(srb);
+							local_episodes_listbox.add(srb);
+						}
+					}
+					if(e_matches.size < 1) {
+						var no_matches_label = new Gtk.Label(_("No matches found."));
+						local_episodes_widgets.add(no_matches_label);
+						local_episodes_listbox.add(no_matches_label);
+					}
+
+					for(int i = 0; i < 5; i++) {
+						if(i < c_matches.size) {
+							Podcast p_temp = new Podcast();
+							p_temp.name = c_matches[i].title;
+							p_temp.local_art_uri = c_matches[i].artworkUrl600;
+							SearchResultBox srb = new SearchResultBox(p_temp, null, c_matches[i].summary, c_matches[i].itunesUrl);
+							srb.subscribe_to_podcast.connect((itunes_url) => {
+								subscribe_to_podcast(itunes_url);
+							});
+							cloud_results_widgets.add(srb);
+							cloud_results_listbox.add(srb);
+						}
+					}
+					if(c_matches.size < 1) {
+						var no_matches_label = new Gtk.Label(_("No matches found."));
+						cloud_results_widgets.add(no_matches_label);
+						cloud_results_listbox.add(no_matches_label);
+					}
+
+					if(content_box != null) {
+		    			content_box.destroy();
+		    			content_box = null;
+		    		}
+
+					content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
+					this.add(content_box);
+					content_box.add(local_podcasts_label);
+					content_box.add(local_podcasts_listbox);
+					content_box.add(local_episodes_label);
+					content_box.add(local_episodes_listbox);
+					content_box.add(cloud_results_label);
+					content_box.add(cloud_results_listbox);
+					content_box.add(full_results_button);
+
+					content_box.margin = 5;
+
+					show_all();
 				}
-			}
-			if(e_matches.size < 1) {
-				var no_matches_label = new Gtk.Label(_("No matches found."));
-				local_episodes_widgets.add(no_matches_label);
-				local_episodes_listbox.add(no_matches_label);
-			}
 
-			for(int i = 0; i < 5; i++) {
-				if(i < c_matches.size) {
-					Podcast p_temp = new Podcast();
-					p_temp.name = c_matches[i].title;
-					p_temp.local_art_uri = c_matches[i].artworkUrl600;
-					SearchResultBox srb = new SearchResultBox(p_temp, null, c_matches[i].summary, c_matches[i].itunesUrl);
-					srb.subscribe_to_podcast.connect((itunes_url) => {
-						subscribe_to_podcast(itunes_url);
-					});
-					cloud_results_widgets.add(srb);
-					cloud_results_listbox.add(srb);
-				}
-			}
-			if(c_matches.size < 1) {
-				var no_matches_label = new Gtk.Label(_("No matches found."));
-				cloud_results_widgets.add(no_matches_label);
-				cloud_results_listbox.add(no_matches_label);
-			}
+				Idle.add((owned) callback);
+	                return null;
+            };
 
-			content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
-			content_box.add(local_podcasts_label);
-			content_box.add(local_podcasts_listbox);
-			content_box.add(local_episodes_label);
-			content_box.add(local_episodes_listbox);
-			content_box.add(cloud_results_label);
-			content_box.add(cloud_results_listbox);
-			content_box.add(full_results_button);
+            Thread.create<void*>(run, false);
+            yield;
 
-			content_box.margin = 5;
+            updating_results_UI = false;
 
-			this.add(content_box);
-
-			show_all();
+            if(additional_update_pending) {
+            	update_search_view();
+            }
 		}
 
 

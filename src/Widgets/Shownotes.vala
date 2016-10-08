@@ -82,11 +82,13 @@ using Granite;
 			title_label.margin_bottom = 6;
 			title_label.margin_left = 12;
 			title_label.halign = Gtk.Align.START;
+			title_label.set_property("xalign", 0);
 
 			date_label = new Gtk.Label("");
 			date_label.margin_bottom = 12;
 			date_label.margin_left = 12;
 			date_label.halign = Gtk.Align.START;
+			title_label.set_property("xalign", 0);
 
 			play_button = new Gtk.Button.with_label("Play this episode");
 			queue_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);

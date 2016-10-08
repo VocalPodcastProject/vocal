@@ -45,6 +45,8 @@ using Granite;
 
 			controls_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			controls_box.get_style_context().add_class("toolbar");
+			controls_box.get_style_context().add_class("podcast-view-toolbar");
+			controls_box.height_request = 30;
 
 			mark_as_played_button = new Gtk.Button.from_icon_name("object-select-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			mark_as_played_button.has_tooltip = true;

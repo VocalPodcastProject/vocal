@@ -189,6 +189,10 @@ namespace Vocal {
                     font: open sans 10px;
                 }
 
+                .podcast-view-toolbar {
+                    background-image: none;
+                    background-color: white;
+                }
 
                 .rate-button {
                     color: shade (#000, 1.60);

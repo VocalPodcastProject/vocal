@@ -122,48 +122,20 @@ public class Utils
 	 */
     public static string html_to_markup(string original) {
 
-        string markup, temp;
+        string markup = original;
 
-        markup = original.replace("%27", "'").replace("&nbsp;", "").replace("&rdquo;", "").replace("&rsquo;", "").replace("&ldquo;", "").replace("hellip;", "");
+        // remove HTML tags and special sequences
+        var html_tags_regex = new Regex("(<.*>)|(&\\w+;)");
+        markup = html_tags_regex.replace(markup, markup.length, 0, "");
+
+        // replace new lines and tab characters by spaces
+        var non_space_separators_regex = new Regex("[\\n\\r\\t]+");
+        markup = non_space_separators_regex.replace(markup, markup.length, 0, " ");
+
+        markup = markup.replace("%27", "'");
 
         markup.normalize();
-
-        string split = "";
-
-        int i = 0;
-        int left_bracket_index, right_bracket_index;
-
-        int end_of_tags_position = original.last_index_of(">");
-
-        while(i < markup.length) {
-
-            if(i < end_of_tags_position) {
-
-                // Get the next left bracket index
-                left_bracket_index = markup.index_of("<", i);
-                right_bracket_index = markup.index_of(">", left_bracket_index);
-
-                // At this point, i should be less than the end of tags position.
-                // If not, it means that there is a close bracket without an open
-                // bracket. It's rare, but it happens. If so, just return the original.
-                if(left_bracket_index == -1) {
-                    return markup;
-                }
-
-                // Keep from i to the beginning of the next tag
-                temp = markup.slice(i, left_bracket_index);
-
-                // Set i to the position right after the right bracket is found
-                i = right_bracket_index + 1;
-            } else {
-                temp = markup.slice(i, markup.length);
-                i = markup.length;
-            }
-
-            split += temp;
-        }
-
-        return split;
+        return markup;
 
     }
 

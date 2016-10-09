@@ -462,7 +462,7 @@ msgid "Keep my library clean:"
 msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:110
-msgid "Show podcast names below cover art"
+msgid "Show podcast names below cover art:"
 msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:140

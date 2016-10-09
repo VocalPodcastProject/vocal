@@ -279,7 +279,7 @@ namespace Vocal {
             video_controls.vexpand = true;
             video_controls.set_valign (Gtk.Align.END);
             video_controls.unfullscreen.connect(on_fullscreen_request);
-            video_controls.play_toggled.connect(play);
+            video_controls.play_toggled.connect(play_pause);
 
             bottom_actor = new GtkClutter.Actor.with_contents (video_controls);
             stage.add_child(bottom_actor);
@@ -435,7 +435,7 @@ namespace Vocal {
                             seek_forward();
                             break;
                         case "Play":
-                            play();
+                            play_pause();
                             break;
                         default:
                             break;
@@ -470,7 +470,7 @@ namespace Vocal {
                     switch (e.keyval) {
                         case Gdk.Key.space:
                             if(!toolbar.search_entry.has_focus) {
-                                play();
+                                play_pause();
                                 handled = true;
                             }
 
@@ -601,7 +601,7 @@ namespace Vocal {
             });
 
             toolbar.refresh_selected.connect(on_update_request);
-            toolbar.play_pause_selected.connect(play);
+            toolbar.play_pause_selected.connect(play_pause);
             toolbar.seek_forward_selected.connect(seek_forward);
             toolbar.seek_backward_selected.connect(seek_backward);
 
@@ -914,13 +914,28 @@ namespace Vocal {
          * Playback related methods
          */
 
+        /*
+         * Determines whether the play button should play or pause, and calls
+         * the appropriate function
+         */
+
+        public void play_pause() {
+
+            // If the player is playing, pause. Otherwise, play
+            if(player != null) {
+                if(player.playing) {
+                    pause();
+                } else {
+                    play();
+                }
+            }
+        }
+
 
         /*
          * Handles play requests and starts media playback using the player
          */
         public void play() {
-
-            stdout.puts("Play\n");
 
             if(current_episode != null) {
                 toolbar.show_playback_box();
@@ -939,8 +954,6 @@ namespace Vocal {
                 // Mark the current episode as played
                 library.mark_episode_as_played(current_episode);
 
-                stdout.puts("Setting player current episode\n");
-
                 // If the currently selected episode isn't set, do so
                 if(player.current_episode != current_episode) {
 
@@ -951,8 +964,6 @@ namespace Vocal {
 
                     player.set_episode(current_episode);
                 }
-
-                stdout.puts("Player set.\n");
 
 
                 // Are we playing a video? If so, is the video widget already being displayed?
@@ -969,54 +980,36 @@ namespace Vocal {
                     });
                 }
 
-                // If we are playing, switch to paused mode. If we're paused, start playing.
-                if(player.playing) {
-                    player.pause();
-                    playback_status_changed("Paused");
-                    var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                    toolbar.set_play_pause_image(playpause_image);
-                    toolbar.set_play_pause_text(_("Play"));
+                player.play();
+                playback_status_changed("Playing");
 
-                    var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                    video_controls.play_button.image = video_playpause_image;
-                    video_controls.tooltip_text = _("Play");
+                // Seek if necessary
+                if(current_episode.last_played_position > 0 && current_episode.last_played_position > player.progress) {
 
-                    // Set last played position
-                    current_episode.last_played_position = player.progress;
-                    library.set_episode_playback_position(player.current_episode);
-                }
-                else {
-
-                    player.play();
-                    playback_status_changed("Playing");
-
-                    // Seek if necessary
-                    if(current_episode.last_played_position > 0 && current_episode.last_played_position > player.progress) {
-
-                        // If it's a streaming episode, seeking takes longer
-                        // Temporarily pause the track and give it some time to seek
-                        if(current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                            player.pause();
-                        }
-
-                        player.set_position(current_episode.last_played_position);
-
-                        // Pause for about a second to give time to catch up
-                        if(current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                            player.pause();
-                            Thread.usleep(700000);
-                            player.play();
-                        }
+                    // If it's a streaming episode, seeking takes longer
+                    // Temporarily pause the track and give it some time to seek
+                    if(current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
+                        player.pause();
                     }
 
-                    var playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                    toolbar.set_play_pause_image(playpause_image);
-                    toolbar.set_play_pause_text(_("Pause"));
+                    player.set_position(current_episode.last_played_position);
 
-                    var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                    video_controls.play_button.image = video_playpause_image;
-                    video_controls.tooltip_text = _("Pause");
+                    // Pause for about a second to give time to catch up
+                    if(current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
+                        player.pause();
+                        Thread.usleep(700000);
+                        player.play();
+                    }
                 }
+
+                var playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                toolbar.set_play_pause_image(playpause_image);
+                toolbar.set_play_pause_text(_("Pause"));
+
+                var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                video_controls.play_button.image = video_playpause_image;
+                video_controls.tooltip_text = _("Pause");
+            
 
                 // Set the media information (assuming we're not importing. If we are, the import status is more important
                 // and the media info will be correctly set after it is finished.)
@@ -1027,6 +1020,37 @@ namespace Vocal {
                 }
                 show_all();
             }
+        }
+
+        /* Pauses playback if it is currently playing */
+        public void pause() {
+
+            // If we are playing, switch to paused mode.
+            if(player.playing) {
+                player.pause();
+                playback_status_changed("Paused");
+                var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                toolbar.set_play_pause_image(playpause_image);
+                toolbar.set_play_pause_text(_("Play"));
+
+                var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                video_controls.play_button.image = video_playpause_image;
+                video_controls.tooltip_text = _("Play");
+
+                // Set last played position
+                current_episode.last_played_position = player.progress;
+                library.set_episode_playback_position(player.current_episode);
+            }
+
+            // Set the media information (assuming we're not importing. If we are, the import status is more important
+            // and the media info will be correctly set after it is finished.)
+            if(!currently_importing) {
+                toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                shownotes.set_notes_text(current_episode.description);
+            }
+
+            show_all();
         }
 
 
@@ -1999,7 +2023,7 @@ namespace Vocal {
 
             // Since we can't see the video any more pause playback if necessary
             if(current_widget == video_widget && player.playing)
-                play();
+                pause();
 
             if(previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
                 previous_widget = all_scrolled;

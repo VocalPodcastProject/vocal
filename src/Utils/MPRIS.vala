@@ -92,6 +92,14 @@ namespace Vocal {
 			    	window.play();
 		    	});
 
+		    	player.pause.connect(() => {
+		    		window.pause();
+		    	});
+
+		    	player.play_pause.connect(() => {
+		    		window.play_pause();
+	    		});	
+
 		    	player.next.connect(() => {
 		    		window.seek_forward();
 		    	});
@@ -125,6 +133,8 @@ namespace Vocal {
 	    private unowned DBusConnection conn;
 	    
 	    public signal void play();
+	    public signal void pause();
+	    public signal void play_pause();
 	    public signal void next();
 	    public signal void previous();
 
@@ -311,15 +321,15 @@ namespace Vocal {
 	    }
 
 	    public void Pause() {
-            play();
+            pause();
 	    }
 
 	    public void PlayPause() {
-            play();
+            play_pause();
 	    }
 
 	    public void Stop() {
-            play();
+            pause();
 	    }
 
 	    public void Play() {

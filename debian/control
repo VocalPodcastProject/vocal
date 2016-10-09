@@ -18,7 +18,7 @@ Build-Depends: cmake (>= 2.8),
                libclutter-gst-3.0-dev,
                libsqlite3-dev,
                libsoup2.4-dev,
-               libwebkit2gtk-3.0-dev                
+               libwebkit2gtk-4.0-dev                
                
                
                

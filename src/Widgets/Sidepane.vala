@@ -668,9 +668,9 @@ namespace Vocal {
         public void set_unplayed_text() {
             string count_string = null;
             if(unplayed_count > 0) {
-                count_string = _("%d episodes, %d unplayed".printf(podcast.episodes.size, unplayed_count));
+                count_string = ngettext("%d episode, %d unplayed", "%d episodes, %d unplayed", podcast.episodes.size).printf(podcast.episodes.size, unplayed_count));
             } else {
-                count_string = _("%d episodes".printf(podcast.episodes.size));
+                count_string = ngettext("%d episode", "%d episodes", podcast.episodes.size).printf(podcast.episodes.size));
             }
             count_label.set_text(count_string);
         }

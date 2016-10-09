@@ -190,20 +190,20 @@ namespace Vocal {
             forward = new Gtk.Button();
             forward.image = forward_image;
             forward.has_tooltip = true;
-            forward.tooltip_text = _("Fast forward %d seconds".printf(this.settings.fast_forward_seconds));
+            forward.tooltip_text = ngettext("Fast forward %d second", "Fast forward %d seconds", this.settings.fast_forward_seconds).printf(this.settings.fast_forward_seconds);
 
             var backward_image = new Gtk.Image.from_icon_name("media-seek-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             backward = new Gtk.Button();
             backward.image = backward_image;
             backward.has_tooltip = true;
-            backward.tooltip_text = _("Rewind %d seconds".printf(this.settings.rewind_seconds));
+            backward.tooltip_text = ngettext("Rewind %d second", "Rewind %d seconds", this.settings.rewind_seconds).printf(this.settings.rewind_seconds);
 
 			play_pause.get_style_context().add_class("vocal-headerbar-button");
 
             // Connect the changed signal for settings to update the tooltips
             this.settings.changed.connect(() => {
-                forward.tooltip_text = _("Fast forward %d seconds".printf(this.settings.fast_forward_seconds));
-                backward.tooltip_text = _("Rewind %d seconds".printf(this.settings.rewind_seconds));
+                forward.tooltip_text = ngettext("Fast forward %d second", "Fast forward %d seconds", this.settings.fast_forward_seconds).printf(this.settings.fast_forward_seconds);
+                backward.tooltip_text = ngettext("Rewind %d second", "Rewind %d seconds", this.settings.rewind_seconds).printf(this.settings.rewind_seconds);
             });
 
             refresh = new Gtk.Button.from_icon_name("view-refresh-symbolic", Gtk.IconSize.LARGE_TOOLBAR);

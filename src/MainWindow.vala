@@ -162,6 +162,10 @@ namespace Vocal {
                     color: #000;
                 }
 
+                .directory-art-image {
+                    border-bottom: 3px solid #EFEFEF;
+                }
+
                 .directory-flowbox {
                     background-color: #E8E8E8;
                 }

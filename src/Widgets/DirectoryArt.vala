@@ -72,9 +72,6 @@ namespace Vocal {
 			details_popover = new Gtk.Popover(details_button);
 			summary_label = new Gtk.Label ("");
 			summary_label.wrap = true;
-			summary_label.margin = 12;
-			summary_label.max_width_chars = 30;
-			summary_label.expand = true;
 			details_popover.add(summary_label);
 			
 
@@ -89,6 +86,8 @@ namespace Vocal {
 	                summary_label.set_text(details_summary.length > 0 ? details_summary : _("No summary available."));
 	                fp = null;
                 }
+                summary_label.max_width_chars = 64;
+                summary_label.margin = 20;
 				details_popover.show_all();
 			});	
 
@@ -117,8 +116,9 @@ namespace Vocal {
             var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale("""//usr/share/vocal/vocal-missing.png""",
                                                                    170, 170, true);
             var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
-            image.margin = 0;
+            image.margin = 2;
             image.expand = false;
+            image.get_style_context().add_class("directory-art-image");
             this.pack_start(image, false, false, 0);
 
             ImageCache image_cache = new ImageCache();

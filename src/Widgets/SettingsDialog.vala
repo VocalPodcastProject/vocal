@@ -107,7 +107,7 @@ namespace Vocal {
             content_box.add(autoclean_box);
 
             // Show name label option
-            show_name_label_label = new Gtk.Label(_("Show podcast names below cover art"));
+            show_name_label_label = new Gtk.Label(_("Show podcast names below cover art:"));
             show_name_label_label.justify = Gtk.Justification.LEFT;
             show_name_label_label.set_property("xalign", 0);
             show_name_label_label.margin_left = 5;

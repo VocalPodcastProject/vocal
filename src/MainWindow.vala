@@ -1710,40 +1710,7 @@ namespace Vocal {
 			    msg.response.connect ((response_id) => {
 			        switch (response_id) {
 				        case Gtk.ResponseType.YES:
-					        library.mark_all_episodes_as_played(highlighted_podcast);
-					        library.recount_unplayed();
-					        library.set_new_badge();
-                            foreach(CoverArt a in all_art)
-                            {
-                                if(a.podcast == highlighted_podcast)
-                                {
-                                    a.set_count(0);
-                                    a.hide_count();
-                                }
-                            }
-                            if(highlighted_podcast.content_type == MediaType.AUDIO) {
-                                foreach(CoverArt audio in all_art)
-                                {
-                                    if(audio.podcast == highlighted_podcast)
-                                    {
-                                        audio.set_count(0);
-                                        audio.hide_count();
-                                    }
-                                }
-                            }
-                            else {
-                                foreach(CoverArt video in all_art)
-                                {
-                                    if(video.podcast == highlighted_podcast)
-                                    {
-                                        video.set_count(0);
-                                        video.hide_count();
-                                    }
-                                }
-                            }
-
-                            details.mark_all_played();
-
+                            mark_all_as_played_async(highlighted_podcast);
 					        break;
 				        case Gtk.ResponseType.NO:
 					        break;
@@ -1753,6 +1720,35 @@ namespace Vocal {
 		        });
 		        msg.show ();
 	        }
+        }
+
+        private async void mark_all_as_played_async(Podcast highlighted_podcast) {
+
+            SourceFunc callback = mark_all_as_played_async.callback;
+
+            ThreadFunc<void*> run = () => {
+
+                library.mark_all_episodes_as_played(highlighted_podcast);
+                library.recount_unplayed();
+                library.set_new_badge();
+                foreach(CoverArt a in all_art)
+                {
+                    if(a.podcast == highlighted_podcast)
+                    {
+                        a.set_count(0);
+                        a.hide_count();
+                    }
+                }
+
+                details.mark_all_played();
+
+
+                Idle.add((owned) callback);
+                return null;
+            };
+            Thread.create<void*>(run, false);
+
+            yield;
         }
 
 

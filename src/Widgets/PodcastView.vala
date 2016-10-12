@@ -225,6 +225,7 @@ namespace Vocal {
             shownotes.play_button.clicked.connect(() => { play_episode_requested(); });
             shownotes.queue_button.clicked.connect(() => { enqueue_episode_internal(); });
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
+            shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
 
 			paned.pack2(shownotes, true, true);
 
@@ -239,6 +240,24 @@ namespace Vocal {
 
         private void enqueue_episode_internal() {
             enqueue_episode(podcast.episodes[current_episode_index]);
+        }
+
+        private void mark_episode_as_played_requested_internal() {
+
+            if(podcast.episodes[current_episode_index].status != EpisodeStatus.PLAYED) {
+                unplayed_count--;
+                set_unplayed_text();
+
+                // Remove the unplayed image from the episode's box
+                int floor = podcast.episodes.size - limit -1;
+                int num;
+
+                (floor >= 0) ? num = current_episode_index - floor : num = current_episode_index;
+
+                boxes[num].mark_as_played();
+
+                mark_episode_as_played_requested(podcast.episodes[current_episode_index]);
+            }
         }
         /*
          * Gets an episode's corresponding box index in the list of EpisodeDetailBoxes
@@ -404,18 +423,7 @@ namespace Vocal {
                     if(podcast.episodes[current_episode_index].status != EpisodeStatus.PLAYED) {
                         var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark as Played"));
                         mark_played_menuitem.activate.connect(() => {
-                            unplayed_count--;
-                            set_unplayed_text();
-
-                            // Remove the unplayed image from the episode's box
-                            int floor = podcast.episodes.size - limit -1;
-                            int num;
-
-                            (floor >= 0) ? num = current_episode_index - floor : num = current_episode_index;
-
-                            boxes[num].mark_as_played();
-
-                            mark_episode_as_played_requested(podcast.episodes[current_episode_index]);
+                            mark_episode_as_played_requested_internal();                            
                         });
                         right_click_menu.add(mark_played_menuitem);
 

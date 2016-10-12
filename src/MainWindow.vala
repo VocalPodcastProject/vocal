@@ -1773,32 +1773,6 @@ namespace Vocal {
                             a.hide_count();
                     }
                 }
-                if(highlighted_podcast.content_type == MediaType.AUDIO) {
-                    foreach(CoverArt audio in all_art)
-                    {
-                        if(audio.podcast == details.podcast)
-                        {
-                            audio.set_count(details.unplayed_count);
-                            if(details.unplayed_count > 0)
-                                audio.show_count();
-                            else
-                                audio.hide_count();
-                        }
-                    }
-                }
-                else {
-                    foreach(CoverArt video in all_art)
-                    {
-                        if(video.podcast == details.podcast)
-                        {
-                            video.set_count(details.unplayed_count);
-                            if(details.unplayed_count > 0)
-                                video.show_count();
-                            else
-                                video.hide_count();
-                        }
-                    }
-                }
             }
         }
 

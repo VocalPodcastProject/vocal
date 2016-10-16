@@ -2144,6 +2144,8 @@ namespace Vocal {
                 track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
                 shownotes.set_notes_text(current_episode.description);
                 settings.last_played_media = "%s,%s".printf(current_episode.title, current_episode.parent.name);
+            } else {
+                player.playing = false;
             }
 
         }

@@ -188,10 +188,6 @@ namespace Vocal {
 			label_box.pack_start(name_label, false, false, 5);
             label_box.pack_start(description_window, true, true, 0);
 
-            var expander_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-            expander_box.vexpand = true;
-
-            label_box.pack_start(expander_box, true, true, 0);
 			label_box.pack_start(count_label, false, false, 0);
 
 			actions_box.pack_start(download_all, true, true, 0);

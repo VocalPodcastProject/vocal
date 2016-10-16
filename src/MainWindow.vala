@@ -269,7 +269,7 @@ namespace Vocal {
             stage.use_alpha = true;
 
             actor = new Clutter.Actor();
-            var aspect_ratio = ClutterGst.Aspectratio.@new ();
+            var aspect_ratio = new ClutterGst.Aspectratio();
             ((ClutterGst.Content) aspect_ratio).player = player;
             actor.content = aspect_ratio;
 

@@ -533,12 +533,6 @@ namespace Vocal {
                 toolbar.search_entry.set_position(toolbar.search_entry.get_text().length);
                 return false;
             });
-            this.button_press_event.connect((event) => {
-                if(search_results.visible) {
-                    search_results.hide();
-                }
-                return false;
-            });
 
             downloads = new DownloadsPopover(toolbar.download);
             downloads.closed.connect(() => {
@@ -616,6 +610,14 @@ namespace Vocal {
 
             toolbar.export_selected.connect(export_podcasts);
             toolbar.downloads_selected.connect(show_downloads_popover);
+
+            // Set up a timer to check if the search popover needs to hide
+            GLib.Timeout.add(1000, () => {
+                if(!toolbar.search_entry.has_focus && search_results.visible) {
+                    search_results.hide();
+                }
+                return true;
+            }, GLib.Priority.DEFAULT);
 
             setup_library_widgets();
         }
@@ -727,6 +729,10 @@ namespace Vocal {
             // Add the thinpaned to the box
             box.pack_start(library_box, true, true, 0);
             current_widget = notebook;
+
+            // Set up a timer in the background to check the state of the 
+            // search results popover
+
 
             show_all();
 

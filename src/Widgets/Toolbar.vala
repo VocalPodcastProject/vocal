@@ -277,7 +277,7 @@ namespace Vocal {
 			pack_end (podcast_store_button);
 	        pack_end (download);
             pack_end (search_entry);
-	        pack_start(rate_button);
+	        //pack_start(rate_button);
 		}
 
 

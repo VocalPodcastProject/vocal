@@ -233,7 +233,7 @@ namespace Vocal {
             this.newly_launched = true;
 
             // Check whether or not we're running on elementary
-            check_elementary();
+            on_elementary = Utils.check_elementary();
 
             // Grab the current settings
             this.settings = VocalSettings.get_default_instance();
@@ -1124,19 +1124,6 @@ namespace Vocal {
         /*
          * Library functions
          */
-
-
-        /*
-         * Attempts to check whether or not Vocal is running on elementary OS
-         */
-        private void check_elementary() {
-            string output;
-            output = GLib.Environment.get_variable("XDG_CURRENT_DESKTOP");
-
-            if (output != null && output.contains ("Pantheon")) {
-                on_elementary = true;
-            }
-         }
 
 
         /*

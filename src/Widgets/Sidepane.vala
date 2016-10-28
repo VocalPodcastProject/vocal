@@ -66,7 +66,7 @@ namespace Vocal {
 		/*
 		 * Constructor for a Sidepane given a parent window and pocast
 		 */
-        public Sidepane (MainWindow parent, Podcast podcast, bool? on_elementary = true) {
+        public Sidepane (MainWindow parent, Podcast podcast, bool? on_elementary = Utils.check_elementary()) {
             assert(podcast!= null);
             this.podcast = podcast;
             this.parent = parent;
@@ -92,11 +92,8 @@ namespace Vocal {
             });
             toolbar.insert(mark_as_played, 0);
 
-	    Gtk.Image download_image;	
-	    if(on_elementary)
-            	download_image = new Gtk.Image.from_icon_name("browser-download-symbolic", Gtk.IconSize.MENU);
-	    else
-		download_image = new Gtk.Image.from_icon_name("document-save-symbolic", Gtk.IconSize.MENU);
+	        Gtk.Image download_image;	
+            download_image = new Gtk.Image.from_icon_name(check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);
             Gtk.ToolButton download_all = new Gtk.ToolButton(download_image, null);
             download_all.tooltip_text = _("Download all episodes");
             download_all.clicked.connect(() => {

@@ -114,7 +114,7 @@ namespace Vocal {
             toolbar.pack_end(mark_as_played, false, false, 0);
             this.pack_start(toolbar, false, true, 0);
 
-            var download_all = new Gtk.Button.from_icon_name("browser-download-symbolic", Gtk.IconSize.MENU);
+            var download_all = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);
             download_all.tooltip_text = _("Download all episodes");
             download_all.clicked.connect(() => {
                 download_all_requested();
@@ -134,7 +134,7 @@ namespace Vocal {
                 show_all();
             });
 
-            var edit = new Gtk.Button.from_icon_name("edit-symbolic", Gtk.IconSize.MENU);
+            var edit = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "edit-symbolic" : "document-properties-symbolic",Gtk.IconSize.MENU);
             edit.tooltip_text = _("Edit podcast details");
             edit.button_press_event.connect((e) => {
                 var edit_menu = new Gtk.Menu();

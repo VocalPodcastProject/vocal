@@ -27,6 +27,18 @@ public interface GnomeMediaKeys : GLib.Object {
 public class Utils
 {
 
+    public static bool check_elementary() {
+        string output;
+        output = GLib.Environment.get_variable("XDG_CURRENT_DESKTOP");
+        string icon_name = Gtk.Settings.get_default().gtk_icon_theme_name;
+
+        if (output != null && output.contains ("Pantheon") && icon_name.contains("elementary")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 	/*
 	 * A convenience method that sends a generic notification with a message and title
 	 * (assuming libnotify is enabled)

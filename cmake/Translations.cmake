@@ -18,7 +18,7 @@ macro (add_translations_directory NLS_PACKAGE)
         add_custom_command (TARGET i18n COMMAND ${MSGFMT_EXECUTABLE} -o ${MO_OUTPUT} ${PO_INPUT})
 
         install (FILES ${MO_OUTPUT} DESTINATION
-            share/locale-langpack/${PO_INPUT_BASE}/LC_MESSAGES
+            share/locale/${PO_INPUT_BASE}/LC_MESSAGES
             RENAME ${NLS_PACKAGE}.mo)
     endforeach (PO_INPUT ${PO_FILES})
 endmacro (add_translations_directory)

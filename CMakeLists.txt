@@ -2,7 +2,7 @@ project (vocal)
 cmake_minimum_required (VERSION 2.8)
 cmake_policy (VERSION 2.6)
 
-set (DATADIR "${CMAKE_INSTALL_PREFIX}/share/vocal")
+set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set (PKGDATADIR "${DATADIR}/vocal")
 set (GETTEXT_PACKAGE "vocal")
 set (RELEASE_NAME "Voyager")

@@ -113,7 +113,7 @@ namespace Vocal {
 			hor_box.margin_right = 10;
 
             // Load the album artwork
-            var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale("""//usr/share/vocal/vocal-missing.png""",
+            var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale(GLib.Path.build_filename (Constants.PKGDATADIR, "vocal-missing.png"),
                                                                    170, 170, true);
             var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
             image.margin = 2;

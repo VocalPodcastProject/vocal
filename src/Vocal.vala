@@ -42,7 +42,7 @@ namespace Vocal {
             build_version = Constants.VERSION;
             build_version_info = Constants.VERSION_INFO;
 
-            app_years = "2015";
+            app_years = "2015-2016";
             app_icon = "vocal";
             app_launcher = "vocal.desktop";
             application_id = "net.launchpad.vocal";
@@ -105,9 +105,8 @@ namespace Vocal {
 
             // Init internationalization support
             string package_name = Constants.GETTEXT_PACKAGE;
-            string langpack_dir = Constants.DATADIR.replace("/vocal", "/locale-langpack");
             Intl.setlocale (LocaleCategory.ALL, "");
-            Intl.bindtextdomain (package_name, langpack_dir);
+            Intl.bindtextdomain (package_name, Constants.DATADIR + "/locale");
             Intl.bind_textdomain_codeset (package_name, "UTF-8");
             Intl.textdomain (package_name);
 

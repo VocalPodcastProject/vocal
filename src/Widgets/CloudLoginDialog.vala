@@ -80,7 +80,7 @@ namespace Vocal {
             register_button.clicked.connect(() => {
 
                 try {
-                  GLib.Process.spawn_command_line_async ("xdg-open http://gpodder.net/register");
+                  Gtk.show_uri (null, "http://gpodder.net/register", 0);
                 } catch (Error e) {}
                 
             }); 

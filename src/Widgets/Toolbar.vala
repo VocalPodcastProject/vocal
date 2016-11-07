@@ -149,7 +149,7 @@ namespace Vocal {
             var report_problem = new Gtk.MenuItem.with_label (_("Report a Problem…"));
             report_problem.activate.connect (() => {
                 try {
-                    GLib.Process.spawn_command_line_async ("xdg-open https://github.com/vocalapp/vocal/issues");
+                    Gtk.show_uri (null, "https://github.com/vocalapp/vocal/issues", 0);
                 } catch (Error error) {}
             });
             menu.add(report_problem);
@@ -157,7 +157,7 @@ namespace Vocal {
             var donate = new Gtk.MenuItem.with_label (_("Donate…"));
             donate.activate.connect (() => {
                 try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/donate");
+                    Gtk.show_uri (null, "http://vocalproject.net/donate", 0);
                 } catch (Error error) {}
             });
             menu.add(donate);

@@ -583,7 +583,7 @@ namespace Vocal {
 
             toolbar.starterpack_selected.connect(() => {
                 try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/starter-pack");
+                    Gtk.show_uri (null, "http://vocalproject.net/starter-pack", 0);
                 } catch (Error error) {}
             });
 
@@ -2320,7 +2320,7 @@ namespace Vocal {
             // Starter pack
             } else if (index == 3) {
                 try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/starter-pack");
+                    Gtk.show_uri (null, "http://vocalproject.net/starter-pack", 0);
                 } catch (Error error) {}
             }
 

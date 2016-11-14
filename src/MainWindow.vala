@@ -68,7 +68,6 @@ namespace Vocal {
         private VideoControls       video_controls;
         private Gtk.Revealer        return_revealer;
         private Gtk.Button          return_to_library;
-        private DonateDialog        donate_dialog;
         private Gtk.Box             search_results_box;
 
         /* Icon views and related variables */
@@ -581,17 +580,6 @@ namespace Vocal {
                 settings_dialog.show_all();
             });
 
-            toolbar.starterpack_selected.connect(() => {
-                try {
-                    Gtk.show_uri (null, "http://vocalproject.net/starter-pack", 0);
-                } catch (Error error) {}
-            });
-
-            toolbar.donate_selected.connect(() => {
-                donate_dialog = new DonateDialog(this);
-                donate_dialog.show_all();
-            });
-
             toolbar.search_changed.connect(() => {
                 search_results.set_query(toolbar.search_entry.text);
                 toolbar.search_entry.grab_focus();
@@ -637,8 +625,6 @@ namespace Vocal {
             welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
             welcome.append("document-open", _("Import Subscriptions"),
                     _("If you have exported feeds from another podcast manager, import them here."));
-            welcome.append("vocal", _("Check Out the Vocal Starter Pack…"), _("New to podcasting? Check out our starter pack. Select individual podcasts, or download the entire pack."));
-
             welcome.activated.connect(on_welcome);
 
             // Set up scrolled windows so that content will scoll instead of causing the window to expand
@@ -2317,13 +2303,7 @@ namespace Vocal {
                 // The import podcasts method will handle any errors
                 import_podcasts();
 
-            // Starter pack
-            } else if (index == 3) {
-                try {
-                    Gtk.show_uri (null, "http://vocalproject.net/starter-pack", 0);
-                } catch (Error error) {}
-            }
-
+            } 
         }
 
 

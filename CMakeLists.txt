@@ -127,7 +127,6 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/PodcastView.vala
     src/Widgets/Shownotes.vala
     src/Widgets/Toolbar.vala
-    src/Widgets/DonateDialog.vala
     src/Widgets/QueuePopover.vala
     src/Widgets/QueueRow.vala
     src/Widgets/SearchResultBox.vala

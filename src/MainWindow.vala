@@ -1680,7 +1680,7 @@ namespace Vocal {
 
             if(highlighted_podcast != null) {
                 Gtk.MessageDialog msg = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO,
-                     _("Are you sure you want to mark all episodes from '%s' as played?".printf(highlighted_podcast.name.replace("%27", "'"))));
+                     _("Are you sure you want to mark all episodes from '%s' as played?".printf(GLib.Markup.escape_text(highlighted_podcast.name.replace("%","%%")))));
 
                 var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
                 msg.image = image;

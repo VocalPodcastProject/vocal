@@ -24,6 +24,10 @@ using Granite;
 
 	    public class Shownotes : Gtk.ScrolledWindow {
 
+    	public signal void copy_shareable_link();
+    	public signal void send_tweet();
+    	public signal void copy_direct_link();
+
 		private WebKit.WebView webview;
 		public Gtk.Button play_button;
 		public Gtk.Button queue_button;
@@ -32,6 +36,11 @@ using Granite;
 		public Gtk.Button mark_as_played_button;
 		public Gtk.Button mark_as_new_button;
 		public Gtk.Button delete_button;
+
+		public Gtk.MenuItem shareable_link;
+		public Gtk.MenuItem tweet;
+		public Gtk.MenuItem link_to_file;
+
 		private Gtk.Label title_label;
 		private Gtk.Label date_label;
 		private Gtk.Box controls_box;
@@ -62,6 +71,25 @@ using Granite;
 			share_button.has_tooltip = true;
 			share_button.relief = Gtk.ReliefStyle.NONE;
 			share_button.tooltip_text = _("Share this episode");
+			share_button.button_press_event.connect((e) => {
+                var share_menu = new Gtk.Menu();
+                shareable_link = new Gtk.MenuItem.with_label(_("Copy shareable link"));
+                tweet = new Gtk.MenuItem.with_label(_("Send a Tweet…"));
+                link_to_file = new Gtk.MenuItem.with_label(_("Copy the direct episode link"));
+
+                shareable_link.activate.connect(() => { copy_shareable_link(); });
+           		tweet.activate.connect(() => { send_tweet(); });
+            	link_to_file.activate.connect(() => { copy_direct_link(); });
+
+                share_menu.add(shareable_link);
+                share_menu.add(tweet);
+                share_menu.add(new Gtk.SeparatorMenuItem());
+                share_menu.add(link_to_file);
+                share_menu.attach_to_widget(share_button, null);
+                share_menu.show_all();
+                share_menu.popup(null, null, null, e.button, e.time);
+                return true;
+            });
 
 			controls_box.pack_start(mark_as_played_button, false, false, 0);
 			controls_box.pack_start(download_button, false, false, 0);

@@ -145,6 +145,10 @@ namespace Vocal {
                     }
                 }); 
 
+                details_button.can_focus = false;
+                summary_label.can_focus = false;
+                details_box.can_focus = false;
+
                 content_box.pack_start(details_button, false, false, 0);
             }
             

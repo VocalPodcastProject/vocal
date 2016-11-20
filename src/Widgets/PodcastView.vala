@@ -179,7 +179,7 @@ namespace Vocal {
             // Set up a scrolled window
             var description_window = new Gtk.ScrolledWindow(null, null);
             description_window.add(description_label);
-            description_window.height_request = 180;
+            description_window.height_request = 130;
             description_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
 
 			Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H2, name_label);

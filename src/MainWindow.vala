@@ -98,6 +98,7 @@ namespace Vocal {
         private bool 				currently_repopulating = false;
         private bool                currently_importing = false;
         private bool                is_closing = false;
+        private bool                mouse_primary_down = false;
 
         public bool                 on_elementary = false;
         public bool                 open_hidden = false;
@@ -263,6 +264,7 @@ namespace Vocal {
             video_widget = new GtkClutter.Embed();
             video_widget.use_layout_size = false;
             video_widget.button_press_event.connect(on_video_button_press_event);
+            video_widget.button_release_event.connect(on_video_button_release_event);
 
             stage = (Clutter.Stage)video_widget.get_stage ();
             stage.background_color = {0, 0, 0, 0};
@@ -1830,76 +1832,85 @@ namespace Vocal {
 		 */
         private bool on_motion_event(Gdk.EventMotion e) {
 
-            // Show the cursor again
-            this.get_window ().set_cursor (null);
-
-            bool hovering_over_headerbar = false,
-            hovering_over_return_button = false,
-            hovering_over_video_controls = false;
-
-            int min_height, natural_height;
-            video_controls.get_preferred_height(out min_height, out natural_height);
-
-
-            // Figure out whether or not the cursor is over the video bar at the bottom
-            // If so, don't actually hide the cursor
-            if (fullscreened && e.y < natural_height) {
-                hovering_over_video_controls = true;
+            // Figure out if you should just move the window
+            if (mouse_primary_down) {
+                mouse_primary_down = false;
+                this.begin_move_drag (Gdk.BUTTON_PRIMARY,
+                    (int)e.x_root, (int)e.y_root, e.time);
+                
             } else {
+
+                // Show the cursor again
+                this.get_window ().set_cursor (null);
+
+                bool hovering_over_headerbar = false,
+                hovering_over_return_button = false,
                 hovering_over_video_controls = false;
-            }
+
+                int min_height, natural_height;
+                video_controls.get_preferred_height(out min_height, out natural_height);
 
 
-            // e.y starts at 0.0 (top) and goes for however long
-            // If < 10.0, we can assume it's above the top of the video area, and therefore
-            // in the headerbar area
-            if (!fullscreened && e.y < 10.0) {
-                hovering_over_headerbar = true;
-            }
-
-
-            if (hiding_timer != 0) {
-                Source.remove (hiding_timer);
-            }
-
-            if(current_widget == video_widget) {
-
-                hiding_timer = GLib.Timeout.add (2000, () => {
-
-                    if(current_widget != video_widget)
-                    {
-                        this.get_window ().set_cursor (null);
-                        return false;
-                    }
-
-                    if(!fullscreened && (hovering_over_video_controls || hovering_over_return_button)) {
-                        hiding_timer = 0;
-                        return true;
-                    }
-
-                    else if (hovering_over_video_controls || hovering_over_return_button) {
-                        hiding_timer = 0;
-                        return true;
-                    }
-
-                    video_controls.set_reveal_child(false);
-                    return_revealer.set_reveal_child(false);
-
-                    if(player.playing && !hovering_over_headerbar) {
-                        this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
-                    }
-
-                    return false;
-                });
-
-
-                if(fullscreened) {
-                    bottom_actor.width = stage.width;
-                    bottom_actor.y = stage.height - natural_height;
-                    video_controls.set_reveal_child(true);
+                // Figure out whether or not the cursor is over the video bar at the bottom
+                // If so, don't actually hide the cursor
+                if (fullscreened && e.y < natural_height) {
+                    hovering_over_video_controls = true;
+                } else {
+                    hovering_over_video_controls = false;
                 }
-                return_revealer.set_reveal_child(true);
 
+
+                // e.y starts at 0.0 (top) and goes for however long
+                // If < 10.0, we can assume it's above the top of the video area, and therefore
+                // in the headerbar area
+                if (!fullscreened && e.y < 10.0) {
+                    hovering_over_headerbar = true;
+                }
+
+
+                if (hiding_timer != 0) {
+                    Source.remove (hiding_timer);
+                }
+
+                if(current_widget == video_widget) {
+
+                    hiding_timer = GLib.Timeout.add (2000, () => {
+
+                        if(current_widget != video_widget)
+                        {
+                            this.get_window ().set_cursor (null);
+                            return false;
+                        }
+
+                        if(!fullscreened && (hovering_over_video_controls || hovering_over_return_button)) {
+                            hiding_timer = 0;
+                            return true;
+                        }
+
+                        else if (hovering_over_video_controls || hovering_over_return_button) {
+                            hiding_timer = 0;
+                            return true;
+                        }
+
+                        video_controls.set_reveal_child(false);
+                        return_revealer.set_reveal_child(false);
+
+                        if(player.playing && !hovering_over_headerbar) {
+                            this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
+                        }
+
+                        return false;
+                    });
+
+
+                    if(fullscreened) {
+                        bottom_actor.width = stage.width;
+                        bottom_actor.y = stage.height - natural_height;
+                        video_controls.set_reveal_child(true);
+                    }
+                    return_revealer.set_reveal_child(true);
+
+                }
             }
 
             return false;
@@ -2266,10 +2277,16 @@ namespace Vocal {
          * is double-clicked
          */
         private bool on_video_button_press_event(EventButton e) {
+            mouse_primary_down = true;
             if(e.type == Gdk.EventType.2BUTTON_PRESS) {
                 on_fullscreen_request();
             }
 
+            return false;
+        }
+
+        private bool on_video_button_release_event(EventButton e) {
+            mouse_primary_down = false;
             return false;
         }
 

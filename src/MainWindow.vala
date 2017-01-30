@@ -97,6 +97,7 @@ namespace Vocal {
         private bool                checking_for_updates = false;
         private bool 				currently_repopulating = false;
         private bool                currently_importing = false;
+        private bool                is_closing = false;
 
         public bool                 on_elementary = false;
         public bool                 open_hidden = false;
@@ -716,10 +717,6 @@ namespace Vocal {
             box.pack_start(library_box, true, true, 0);
             current_widget = notebook;
 
-            // Set up a timer in the background to check the state of the 
-            // search results popover
-
-
             show_all();
 
             // Show the welcome widget if it's the first run, or if the library is empty
@@ -728,17 +725,13 @@ namespace Vocal {
                 show_all();
 
             } else {
-                // Populate the three IconViews from the library
+                // Populate the IconViews from the library
                 populate_views();
 
                 switch_visible_page(all_scrolled);
 
-                show_all();
-
-                // If the app is supposed to open hidden, don't present the window. Instead, hide it
-                if(!open_hidden)
-                    show_all();
-                else {
+                
+                if(open_hidden) {
                     this.hide();
                 }
 
@@ -902,7 +895,9 @@ namespace Vocal {
                 f.halign = Gtk.Align.CENTER;
             }
 
-            show_all();
+            // If the app is supposed to open hidden, don't present the window. Instead, hide it
+            if(!open_hidden && !is_closing)
+                show_all();
         }
 
 
@@ -2312,6 +2307,8 @@ namespace Vocal {
          * based on whether or not a track is currently playing
          */
         private bool on_window_closing() {
+
+            is_closing = true;
 
         	// If flagged to quit immediately, return true to go ahead and do that.
         	// This flag is usually only set when the user wants to exit while downloads

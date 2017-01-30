@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Nathan Dyer <mail@nathandyer.me> -->
+<component type="desktop">
+  <id>vocal.desktop</id>
+  <metadata_license>CC0</metadata_license>
+  <name>Vocal</name>
+  <summary>Simple Podcast Client for the Modern Desktop</summary>
+
+  <description>
+    <p>
+      Subscribe, download, and listen to podcasts.
+    </p>
+    <p>Features include:</p>
+    <ul>
+      <li>Audio and video podcast support</li>
+      <li>Streaming and downloading</li>
+      <li>Custom skip intervals</li>
+      <li>Full system integration</li>
+      <li>Automatic downloads</li>
+      <li>Smart library management</li>
+      <li>Playback position saving</li>
+      <li>... and much more!</li>
+    </ul>
+  </description>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>Library View</caption>
+      <image width="1000" height="562">https://static1.squarespace.com/static/53f7c95fe4b0d182e1b6bbfa/53f7cda1e4b0f2dbc7fd2fe4/55209b2ee4b085a7c1bd4843/1428200240776/Screenshot+from+2015-04-04+22%3A08%3A42.png?format=1000w</image>
+    </screenshot>
+    <screenshot>
+      <caption>Video Playback</caption>
+      <image width="1000" height="563">https://static1.squarespace.com/static/53f7c95fe4b0d182e1b6bbfa/53f7cda1e4b0f2dbc7fd2fe4/55209b2be4b01b8a469b6984/1428200238050/Screenshot+from+2015-04-04+22%3A03%3A55.png?format=1000w</image>
+    </screenshot>
+    <screenshot>
+      <caption>Downloads</caption>
+      <image width="1000" height="567">https://static1.squarespace.com/static/53f7c95fe4b0d182e1b6bbfa/53f7cda1e4b0f2dbc7fd2fe4/55209b2ce4b01b8a469b6986/1428200236528/Screenshot+from+2015-04-04+22%3A07%3A43.png?format=1000w</image>
+    </screenshot>
+    <screenshot>
+      <caption>System Integration</caption>
+      <image width="1000" height="563">https://static1.squarespace.com/static/53f7c95fe4b0d182e1b6bbfa/53f7cda1e4b0f2dbc7fd2fe4/55209b31e4b01b8a469b6997/1428200243971/Screenshot+from+2015-04-04+22%3A10%3A39.png?format=1000w</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">http://vocalproject.net</url>
+
+  <provides>
+    <binary>vocal</binary>
+  </provides>
+
+  <releases>
+    <release version="1.0" timestamp="20150405">
+      <description>
+        <p>Vocal's initial release</p>
+      </description>
+    </release>
+  </releases>
+</component>

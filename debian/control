@@ -27,7 +27,7 @@ Build-Depends: cmake (>= 2.8),
                
                
 Standards-Version: 3.9.3
-Package: vocal
+Package: com.github.needle-and-thread.vocal
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Vocal

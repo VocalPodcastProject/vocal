@@ -1,5 +1,5 @@
 Name:           com.github.needle-and-thread.vocal
-Version:        2.0.11
+Version:        1.0
 Release:        1%{?dist}
 Summary:        A beautiful podcast client for the modern free desktop
 License:        GPLv3

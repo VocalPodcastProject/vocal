@@ -1,5 +1,5 @@
 <schemalist>
-	<schema id="net.launchpad.vocal" path="/net/launchpad/vocal/" gettext-domain="vocal">
+	<schema id="com.github.needle-and-thread.vocal" path="/com/github/needle-and-thread/vocal/" gettext-domain="com.github.needle-and-thread.vocal">
 		
 		<key name="auto-download" type="b">
 			<default>true</default>

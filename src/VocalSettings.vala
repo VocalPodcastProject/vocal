@@ -39,7 +39,7 @@ public class VocalSettings : Granite.Services.Settings {
     public string itunes_store_country { get; set; }
     
     private VocalSettings() {
-        base("net.launchpad.vocal");
+        base("com.github.needle-and-thread.vocal");
     }
 
     public static VocalSettings get_default_instance() {

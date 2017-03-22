@@ -142,7 +142,7 @@ namespace Vocal {
             var report_problem = new Gtk.MenuItem.with_label (_("Report a Problem…"));
             report_problem.activate.connect (() => {
                 try {
-                    Gtk.show_uri (null, "https://github.com/vocalapp/vocal/issues", 0);
+                    Gtk.show_uri (null, "https://github.com/needle-and-thread/vocal/issues", 0);
                 } catch (Error error) {}
             });
             menu.add(report_problem);

@@ -44,11 +44,11 @@ namespace Vocal {
 
             app_years = "2015-2016";
             app_icon = "vocal";
-            app_launcher = "vocal.desktop";
-            application_id = "net.launchpad.vocal";
+            app_launcher = "com.github.needle-and-thread.vocal.desktop";
+            application_id = "com.github.needle-and-thread.vocal";
 
             main_url = "http://vocalproject.net";
-            bug_url = "https://github.com/vocalapp/vocal/issues";
+            bug_url = "https://github.com/needle-and-thread/vocal/issues";
             help_url = "http://vocalproject.net/documentation";
             translate_url = "https://www.transifex.com/needle-and-thread/vocal/";
 

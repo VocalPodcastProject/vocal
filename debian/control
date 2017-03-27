@@ -1,4 +1,4 @@
-Source: vocal
+Source: com.github.needle-and-thread.vocal
 Section: sound
 Priority: optional
 Maintainer: Nathan Dyer <mail@nathandyer.me>
@@ -18,13 +18,7 @@ Build-Depends: cmake (>= 2.8),
                libclutter-gst-3.0-dev,
                libsqlite3-dev,
                libsoup2.4-dev,
-               libwebkit2gtk-4.0-dev                
-               
-               
-               
-               
-               
-               
+               libwebkit2gtk-4.0-dev
                
 Standards-Version: 3.9.3
 Package: com.github.needle-and-thread.vocal

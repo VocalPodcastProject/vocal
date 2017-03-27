@@ -23,7 +23,7 @@ configure_file (${CMAKE_SOURCE_DIR}/src/config.vala.cmake ${CMAKE_SOURCE_DIR}/sr
 
 #GSettings
 include(GSettings)
-add_schema("net.launchpad.vocal.gschema.xml")
+add_schema("com.github.needle-and-thread.vocal.gschema.xml")
 
 # Definitions
 add_definitions ("-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\"")
@@ -158,15 +158,15 @@ add_custom_target (uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/Uninstall.cmake)
 
 install (TARGETS vocal RUNTIME DESTINATION bin)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.vocalapp.vocal.desktop DESTINATION share/applications)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.vocalapp.vocal.desktop.appdata.xml DESTINATION share/appdata)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/16/vocal.svg DESTINATION share/icons/hicolor/16x16/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/22/vocal.svg DESTINATION share/icons/hicolor/22x22/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/24/vocal.svg DESTINATION share/icons/hicolor/24x24/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/32/vocal.svg DESTINATION share/icons/hicolor/32x32/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/48/vocal.svg DESTINATION share/icons/hicolor/48x48/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/64/vocal.svg DESTINATION share/icons/hicolor/64x64/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/128/vocal.svg DESTINATION share/icons/hicolor/128x128/apps)
-install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/scalable/vocal-symbolic.svg DESTINATION share/icons/hicolor/scalable/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.needle-and-thread.vocal.desktop DESTINATION share/applications)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.needle-and-thread.vocal.appdata.xml DESTINATION share/appdata)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/16/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/16x16/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/22/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/22x22/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/24/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/24x24/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/32/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/32x32/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/48/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/48x48/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/64/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/64x64/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/128/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/128x128/apps)
+install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/scalable/com.github.needle-and-thread.vocal-symbolic.svg DESTINATION share/icons/hicolor/scalable/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/assets/vocal-missing.png DESTINATION share/vocal)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/assets/banner.png DESTINATION share/vocal)

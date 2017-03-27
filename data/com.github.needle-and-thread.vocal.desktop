@@ -4,7 +4,7 @@ Name=Vocal
 Comment=Subscribe, download, and listen to podcasts
 GenericName=Podcast Manager
 Exec=vocal
-Icon=vocal
+Icon=com.github.needle-and-thread.vocal
 Terminal=false
 Categories=AudioVideo;Audio;Video;
 X-PulseAudio-Properties=media.role=music

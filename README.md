@@ -9,7 +9,7 @@ Please consult the `INSTALL` and `COPYING` files for more information.
 The project's oficial website is http://vocalproject.net
 
 * **Bugs**  
-Please report bugs at https://github.com/vocalapp/vocal/issues
+Please report bugs at https://github.com/needle-and-thread/vocal/issues
 
 * **Translations**  
 To contribute translations please visit https://www.transifex.com/needle-and-thread/vocal/

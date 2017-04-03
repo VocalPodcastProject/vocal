@@ -1,4 +1,4 @@
-vocal (2.0) trusty; urgency=low
+com.github.needle-and-thread.vocal (2.0) trusty; urgency=low
 
   * iTunes Store integration
   * An all-new playback queue

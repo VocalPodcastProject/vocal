@@ -29,7 +29,7 @@ namespace Vocal {
 		public signal void shownotes_selected();
 		public signal void playlist_selected();
 		public signal void preferences_selected();
-		public signal void donate_selected();
+		//public signal void donate_selected();
 		public signal void search_changed();
 		public signal void refresh_selected();
 		public signal void rate_button_selected();
@@ -38,7 +38,6 @@ namespace Vocal {
 		public signal void seek_forward_selected();
 		public signal void seek_backward_selected();
 		public signal void downloads_selected();
-		public signal void starterpack_selected();
         public signal void check_for_updates_selected();
 
 		public bool search_visible = false;
@@ -140,16 +139,10 @@ namespace Vocal {
             menu.add(preferences_item);
             menu.add(new Gtk.SeparatorMenuItem());
 
-            var starterpack = new Gtk.MenuItem.with_label (_("Check Out The Vocal Starter Pack…"));
-            starterpack.activate.connect (() => {
-                starterpack_selected();
-            });
-            menu.add(starterpack);
-
             var report_problem = new Gtk.MenuItem.with_label (_("Report a Problem…"));
             report_problem.activate.connect (() => {
                 try {
-                    GLib.Process.spawn_command_line_async ("xdg-open https://github.com/vocalapp/vocal/issues");
+                    Gtk.show_uri (null, "https://github.com/needle-and-thread/vocal/issues", 0);
                 } catch (Error error) {}
             });
             menu.add(report_problem);
@@ -157,10 +150,10 @@ namespace Vocal {
             var donate = new Gtk.MenuItem.with_label (_("Donate…"));
             donate.activate.connect (() => {
                 try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/donate");
+                    //Gtk.show_uri (null, "http://vocalproject.net/donate", 0);
                 } catch (Error error) {}
             });
-            menu.add(donate);
+            //menu.add(donate);
             menu.show_all();
 
             // Create the AppMenu

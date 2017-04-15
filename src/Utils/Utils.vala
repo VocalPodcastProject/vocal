@@ -311,6 +311,15 @@ public class Utils
         return code_map;
     }
 
+    public static string get_shareable_link_for_episode(Vocal.Episode e) {
+        string output = "http://needleandthread.co/apps/vocal/simpleshare.html?podcastName=%s&artUri=%s&episodeTitle=%s&mediaUri=%s";
+        string podcastName = GLib.Uri.escape_string(e.parent.name);
+        string albumArt = e.parent.remote_art_uri;
+        string episodeTitle = GLib.Uri.escape_string(e.title);
+        string audioSource = e.uri;
+        return output.printf(podcastName, albumArt, episodeTitle, audioSource);
+    }
+
     /*
      * Takes HTML (most likely from show notes) and sets the background color, font family, and 
      * font size so that it looks good in the podcast view.

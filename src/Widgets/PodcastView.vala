@@ -179,7 +179,7 @@ namespace Vocal {
             // Set up a scrolled window
             var description_window = new Gtk.ScrolledWindow(null, null);
             description_window.add(description_label);
-            description_window.height_request = 180;
+            description_window.height_request = 130;
             description_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
 
 			Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H2, name_label);
@@ -223,7 +223,14 @@ namespace Vocal {
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
 
-			paned.pack2(shownotes, true, true);
+            shownotes.copy_shareable_link.connect(on_copy_shareable_link);
+            shownotes.send_tweet.connect(on_tweet);
+            shownotes.copy_direct_link.connect(on_link_to_file);
+			
+
+
+
+            paned.pack2(shownotes, true, true);
 
             this.pack_start(horizontal_box, true, true, 0);
 
@@ -824,6 +831,27 @@ namespace Vocal {
                     i = boxes.size;
                 }
             }
+        }
+
+        private void on_link_to_file() {
+            Gdk.Display display = parent.get_display ();
+            Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+            string uri = podcast.episodes[current_episode_index].uri;
+            clipboard.set_text(uri,uri.length);
+        }
+
+        private void on_tweet() {
+            string uri = Utils.get_shareable_link_for_episode(podcast.episodes[current_episode_index]);
+            string message_text = GLib.Uri.escape_string(_("I'm listening to %s from %s").printf(podcast.episodes[current_episode_index].title,podcast.episodes[current_episode_index].parent.name));
+            string new_tweet_uri = "https://twitter.com/intent/tweet?text=%s&url=%s".printf(message_text, GLib.Uri.escape_string(uri));
+            Gtk.show_uri (null, new_tweet_uri, 0);
+        }
+
+        private void on_copy_shareable_link() {
+            Gdk.Display display = parent.get_display ();
+            Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+            string uri = Utils.get_shareable_link_for_episode(podcast.episodes[current_episode_index]);
+            clipboard.set_text(uri,uri.length);
         }
     }
 }

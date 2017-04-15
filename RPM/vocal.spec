@@ -1,4 +1,4 @@
-Name:           vocal
+Name:           com.github.needle-and-thread.vocal
 Version:        1.0
 Release:        1%{?dist}
 Summary:        A beautiful podcast client for the modern free desktop

@@ -68,7 +68,6 @@ namespace Vocal {
         private VideoControls       video_controls;
         private Gtk.Revealer        return_revealer;
         private Gtk.Button          return_to_library;
-        private DonateDialog        donate_dialog;
         private Gtk.Box             search_results_box;
 
         /* Icon views and related variables */
@@ -98,6 +97,8 @@ namespace Vocal {
         private bool                checking_for_updates = false;
         private bool 				currently_repopulating = false;
         private bool                currently_importing = false;
+        private bool                is_closing = false;
+        private bool                mouse_primary_down = false;
 
         public bool                 on_elementary = false;
         public bool                 open_hidden = false;
@@ -263,6 +264,7 @@ namespace Vocal {
             video_widget = new GtkClutter.Embed();
             video_widget.use_layout_size = false;
             video_widget.button_press_event.connect(on_video_button_press_event);
+            video_widget.button_release_event.connect(on_video_button_release_event);
 
             stage = (Clutter.Stage)video_widget.get_stage ();
             stage.background_color = {0, 0, 0, 0};
@@ -581,17 +583,6 @@ namespace Vocal {
                 settings_dialog.show_all();
             });
 
-            toolbar.starterpack_selected.connect(() => {
-                try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/starter-pack");
-                } catch (Error error) {}
-            });
-
-            toolbar.donate_selected.connect(() => {
-                donate_dialog = new DonateDialog(this);
-                donate_dialog.show_all();
-            });
-
             toolbar.search_changed.connect(() => {
                 search_results.set_query(toolbar.search_entry.text);
                 toolbar.search_entry.grab_focus();
@@ -637,8 +628,6 @@ namespace Vocal {
             welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
             welcome.append("document-open", _("Import Subscriptions"),
                     _("If you have exported feeds from another podcast manager, import them here."));
-            welcome.append("vocal", _("Check Out the Vocal Starter Pack…"), _("New to podcasting? Check out our starter pack. Select individual podcasts, or download the entire pack."));
-
             welcome.activated.connect(on_welcome);
 
             // Set up scrolled windows so that content will scoll instead of causing the window to expand
@@ -730,10 +719,6 @@ namespace Vocal {
             box.pack_start(library_box, true, true, 0);
             current_widget = notebook;
 
-            // Set up a timer in the background to check the state of the 
-            // search results popover
-
-
             show_all();
 
             // Show the welcome widget if it's the first run, or if the library is empty
@@ -742,17 +727,13 @@ namespace Vocal {
                 show_all();
 
             } else {
-                // Populate the three IconViews from the library
+                // Populate the IconViews from the library
                 populate_views();
 
                 switch_visible_page(all_scrolled);
 
-                show_all();
-
-                // If the app is supposed to open hidden, don't present the window. Instead, hide it
-                if(!open_hidden)
-                    show_all();
-                else {
+                
+                if(open_hidden) {
                     this.hide();
                 }
 
@@ -916,7 +897,9 @@ namespace Vocal {
                 f.halign = Gtk.Align.CENTER;
             }
 
-            show_all();
+            // If the app is supposed to open hidden, don't present the window. Instead, hide it
+            if(!open_hidden && !is_closing)
+                show_all();
         }
 
 
@@ -1694,7 +1677,7 @@ namespace Vocal {
 
             if(highlighted_podcast != null) {
                 Gtk.MessageDialog msg = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO,
-                     _("Are you sure you want to mark all episodes from '%s' as played?".printf(highlighted_podcast.name.replace("%27", "'"))));
+                     _("Are you sure you want to mark all episodes from '%s' as played?".printf(GLib.Markup.escape_text(highlighted_podcast.name.replace("%","%%")))));
 
                 var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
                 msg.image = image;
@@ -1849,76 +1832,85 @@ namespace Vocal {
 		 */
         private bool on_motion_event(Gdk.EventMotion e) {
 
-            // Show the cursor again
-            this.get_window ().set_cursor (null);
-
-            bool hovering_over_headerbar = false,
-            hovering_over_return_button = false,
-            hovering_over_video_controls = false;
-
-            int min_height, natural_height;
-            video_controls.get_preferred_height(out min_height, out natural_height);
-
-
-            // Figure out whether or not the cursor is over the video bar at the bottom
-            // If so, don't actually hide the cursor
-            if (fullscreened && e.y < natural_height) {
-                hovering_over_video_controls = true;
+            // Figure out if you should just move the window
+            if (mouse_primary_down) {
+                mouse_primary_down = false;
+                this.begin_move_drag (Gdk.BUTTON_PRIMARY,
+                    (int)e.x_root, (int)e.y_root, e.time);
+                
             } else {
+
+                // Show the cursor again
+                this.get_window ().set_cursor (null);
+
+                bool hovering_over_headerbar = false,
+                hovering_over_return_button = false,
                 hovering_over_video_controls = false;
-            }
+
+                int min_height, natural_height;
+                video_controls.get_preferred_height(out min_height, out natural_height);
 
 
-            // e.y starts at 0.0 (top) and goes for however long
-            // If < 10.0, we can assume it's above the top of the video area, and therefore
-            // in the headerbar area
-            if (!fullscreened && e.y < 10.0) {
-                hovering_over_headerbar = true;
-            }
-
-
-            if (hiding_timer != 0) {
-                Source.remove (hiding_timer);
-            }
-
-            if(current_widget == video_widget) {
-
-                hiding_timer = GLib.Timeout.add (2000, () => {
-
-                    if(current_widget != video_widget)
-                    {
-                        this.get_window ().set_cursor (null);
-                        return false;
-                    }
-
-                    if(!fullscreened && (hovering_over_video_controls || hovering_over_return_button)) {
-                        hiding_timer = 0;
-                        return true;
-                    }
-
-                    else if (hovering_over_video_controls || hovering_over_return_button) {
-                        hiding_timer = 0;
-                        return true;
-                    }
-
-                    video_controls.set_reveal_child(false);
-                    return_revealer.set_reveal_child(false);
-
-                    if(player.playing && !hovering_over_headerbar) {
-                        this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
-                    }
-
-                    return false;
-                });
-
-
-                if(fullscreened) {
-                    bottom_actor.width = stage.width;
-                    bottom_actor.y = stage.height - natural_height;
-                    video_controls.set_reveal_child(true);
+                // Figure out whether or not the cursor is over the video bar at the bottom
+                // If so, don't actually hide the cursor
+                if (fullscreened && e.y < natural_height) {
+                    hovering_over_video_controls = true;
+                } else {
+                    hovering_over_video_controls = false;
                 }
-                return_revealer.set_reveal_child(true);
 
+
+                // e.y starts at 0.0 (top) and goes for however long
+                // If < 10.0, we can assume it's above the top of the video area, and therefore
+                // in the headerbar area
+                if (!fullscreened && e.y < 10.0) {
+                    hovering_over_headerbar = true;
+                }
+
+
+                if (hiding_timer != 0) {
+                    Source.remove (hiding_timer);
+                }
+
+                if(current_widget == video_widget) {
+
+                    hiding_timer = GLib.Timeout.add (2000, () => {
+
+                        if(current_widget != video_widget)
+                        {
+                            this.get_window ().set_cursor (null);
+                            return false;
+                        }
+
+                        if(!fullscreened && (hovering_over_video_controls || hovering_over_return_button)) {
+                            hiding_timer = 0;
+                            return true;
+                        }
+
+                        else if (hovering_over_video_controls || hovering_over_return_button) {
+                            hiding_timer = 0;
+                            return true;
+                        }
+
+                        video_controls.set_reveal_child(false);
+                        return_revealer.set_reveal_child(false);
+
+                        if(player.playing && !hovering_over_headerbar) {
+                            this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
+                        }
+
+                        return false;
+                    });
+
+
+                    if(fullscreened) {
+                        bottom_actor.width = stage.width;
+                        bottom_actor.y = stage.height - natural_height;
+                        video_controls.set_reveal_child(true);
+                    }
+                    return_revealer.set_reveal_child(true);
+
+                }
             }
 
             return false;
@@ -2285,10 +2277,16 @@ namespace Vocal {
          * is double-clicked
          */
         private bool on_video_button_press_event(EventButton e) {
+            mouse_primary_down = true;
             if(e.type == Gdk.EventType.2BUTTON_PRESS) {
                 on_fullscreen_request();
             }
 
+            return false;
+        }
+
+        private bool on_video_button_release_event(EventButton e) {
+            mouse_primary_down = false;
             return false;
         }
 
@@ -2317,13 +2315,7 @@ namespace Vocal {
                 // The import podcasts method will handle any errors
                 import_podcasts();
 
-            // Starter pack
-            } else if (index == 3) {
-                try {
-                    GLib.Process.spawn_command_line_async ("xdg-open http://vocalproject.net/starter-pack");
-                } catch (Error error) {}
-            }
-
+            } 
         }
 
 
@@ -2332,6 +2324,8 @@ namespace Vocal {
          * based on whether or not a track is currently playing
          */
         private bool on_window_closing() {
+
+            is_closing = true;
 
         	// If flagged to quit immediately, return true to go ahead and do that.
         	// This flag is usually only set when the user wants to exit while downloads

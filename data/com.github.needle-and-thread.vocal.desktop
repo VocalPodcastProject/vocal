@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
 Name=Vocal
-_Comment=Subscribe, download, and listen to podcasts
-_GenericName=Podcast Manager
+Comment=Subscribe, download, and listen to podcasts
+GenericName=Podcast Manager
 Exec=vocal
-Icon=vocal
+Icon=com.github.needle-and-thread.vocal
 Terminal=false
 Categories=AudioVideo;Audio;Video;
 X-PulseAudio-Properties=media.role=music

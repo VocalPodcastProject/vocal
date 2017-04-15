@@ -62,12 +62,12 @@ using Granite;
 			mark_as_played_button.relief = Gtk.ReliefStyle.NONE;
 			mark_as_played_button.tooltip_text = _("Mark this episode as played");
 
-			download_button = new Gtk.Button.from_icon_name("browser-download-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			download_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			download_button.has_tooltip = true;
 			download_button.relief = Gtk.ReliefStyle.NONE;
 			download_button.tooltip_text = _("Download episode");
 
-			share_button = new Gtk.Button.from_icon_name("send-to-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			share_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "send-to-symbolic" : "emblem-shared-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			share_button.has_tooltip = true;
 			share_button.relief = Gtk.ReliefStyle.NONE;
 			share_button.tooltip_text = _("Share this episode");

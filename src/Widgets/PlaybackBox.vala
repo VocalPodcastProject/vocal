@@ -39,7 +39,7 @@ namespace Vocal {
             this.get_style_context().add_class("seek-bar");
             
             this.width_request  = 300;
-            this.info_label = new Gtk.Label(_("<b>Select an episode to start playing...</b>"));
+            this.info_label = new Gtk.Label(_("<b>Select an episode to start playing…</b>"));
             this.info_label.set_use_markup(true);
             this.info_label.width_chars = 20;
             this.info_label.set_ellipsize(Pango.EllipsizeMode.END);

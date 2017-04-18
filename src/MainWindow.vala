@@ -190,6 +190,7 @@ namespace Vocal {
 
                 .podcast-view-coverart {
                     box-shadow: 5px 5px 5px #777;
+                    border-style: none;
                 }
 
 /*
@@ -906,6 +907,7 @@ namespace Vocal {
             var flowbox_children = all_flowbox.get_children();
             foreach(Gtk.Widget f in flowbox_children) {
                 f.halign = Gtk.Align.CENTER;
+                f.valign = Gtk.Align.START;
             }
 
             // If the app is supposed to open hidden, don't present the window. Instead, hide it

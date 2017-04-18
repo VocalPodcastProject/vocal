@@ -1,7 +1,7 @@
 /***
   BEGIN LICENSE
 
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
+  Copyright (C) 2014-2017 Nathan Dyer <mail@nathandyer.me>
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU Lesser General Public License version 3, as
   published by the Free Software Foundation.
@@ -171,6 +171,8 @@ namespace Vocal {
                     background-color: #E8E8E8;
                 }
 
+
+
                 .download-detail-box {
                     border-bottom: 0.5px solid #8a9580;
                 }
@@ -183,21 +185,23 @@ namespace Vocal {
                 }
 
                 .notebook-art {
-                    background-color: #D8D8D8;
+                    /*background-color: #D8D8D8;*/
                 }
 
                 .podcast-view-coverart {
                     box-shadow: 5px 5px 5px #777;
                 }
 
+/*
                 .podcast-view-description {
-                    font: open sans 10px;
+                    //font: open sans 10px;
                 }
-
+*/
                 .podcast-view-toolbar {
                     background-image: none;
                     background-color: white;
                 }
+
 
                 .rate-button {
                     color: shade (#000, 1.60);
@@ -217,11 +221,14 @@ namespace Vocal {
                     background-color: #af81d6;
                 }
 
+                """;
 
-            """;
+            var css_provider = new Gtk.CssProvider();
+            css_provider.load_from_buffer (ELEMENTARY_STYLESHEET.data);
+            var screen = Gdk.Screen.get_default();
+            var style_context = this.get_style_context();
+            style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-            Granite.Widgets.Utils.set_theming_for_screen (this.get_screen (), ELEMENTARY_STYLESHEET,
-                                               Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             this.set_application (app);
 
             this.open_hidden = open_hidden;
@@ -235,6 +242,9 @@ namespace Vocal {
 
             // Check whether or not we're running on elementary
             on_elementary = Utils.check_elementary();
+            if (!on_elementary) {
+                Gtk.Settings.get_default().set("gtk-application-prefer-dark-theme", true);
+            }
 
             // Grab the current settings
             this.settings = VocalSettings.get_default_instance();
@@ -254,6 +264,7 @@ namespace Vocal {
                 ignore_window_state_change = false;
                 return false;
             });
+
 
             // Create the Player and Initialize GStreamer
             player = Player.get_default(app.args);

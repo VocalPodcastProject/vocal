@@ -43,6 +43,8 @@ namespace Vocal {
             this.info_label.set_use_markup(true);
             this.info_label.width_chars = 20;
             this.info_label.set_ellipsize(Pango.EllipsizeMode.END);
+            this.info_label.margin_top = 12;
+            this.halign = Gtk.Align.CENTER;
 
             this.progress_bar = new Gtk.ProgressBar();
             

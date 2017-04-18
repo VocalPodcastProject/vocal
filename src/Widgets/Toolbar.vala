@@ -42,7 +42,7 @@ namespace Vocal {
 
 		public bool search_visible = false;
 
-        private Gtk.Menu            menu;
+        public Gtk.Menu             menu;
         public Gtk.MenuButton       app_menu;
 
 		private Gtk.Button          play_pause;

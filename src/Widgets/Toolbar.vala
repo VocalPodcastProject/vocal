@@ -70,7 +70,6 @@ namespace Vocal {
 
             // Create the box to be shown during playback
             playback_box = new PlaybackBox();
-            playback_box.halign = Gtk.Align.CENTER;
 
             // Set the playback box in the middle of the HeaderBar
 	        playback_box.hexpand = true;
@@ -84,6 +83,7 @@ namespace Vocal {
             shownotes_button.clicked.connect(() => {
                 shownotes_selected();
             });
+            shownotes_button.relief = Gtk.ReliefStyle.NONE;
 
 
             playlist_button = new Gtk.Button.from_icon_name("media-playlist-consecutive-symbolic");
@@ -91,10 +91,12 @@ namespace Vocal {
             playlist_button.clicked.connect(() => {
                 playlist_selected();
             });
+            playlist_button.relief = Gtk.ReliefStyle.NONE;
 
             headerbar_box.add(shownotes_button);
             headerbar_box.add(playback_box);
             headerbar_box.add(playlist_button);
+            headerbar_box.halign = Gtk.Align.CENTER;
 
 
             // Create the menus and menuitems
@@ -159,8 +161,9 @@ namespace Vocal {
 
             // Create the AppMenu
             app_menu = new Gtk.MenuButton();
-	     	app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", Gtk.IconSize.LARGE_TOOLBAR));
+	     	app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", on_elementary ? on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR));
             app_menu.popup = menu;
+            app_menu.relief = Gtk.ReliefStyle.NONE;
 
 
             // Populate the toolbar
@@ -173,23 +176,26 @@ namespace Vocal {
             this.show_close_button = true;
 
             // Create new icons for placback functions and downloads
-            var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            var playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             play_pause = new Gtk.Button();
             play_pause.image = playpause_image;
             play_pause.image = playpause_image;
             play_pause.has_tooltip = true;
             play_pause.tooltip_text = _("Play");
+            play_pause.relief = Gtk.ReliefStyle.NONE;
 
-            var forward_image = new Gtk.Image.from_icon_name("media-seek-forward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            var forward_image = new Gtk.Image.from_icon_name("media-seek-forward-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             forward = new Gtk.Button();
             forward.image = forward_image;
             forward.has_tooltip = true;
+            forward.relief = Gtk.ReliefStyle.NONE;
             forward.tooltip_text = _("Fast forward %d seconds".printf(this.settings.fast_forward_seconds));
 
-            var backward_image = new Gtk.Image.from_icon_name("media-seek-backward-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            var backward_image = new Gtk.Image.from_icon_name("media-seek-backward-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             backward = new Gtk.Button();
             backward.image = backward_image;
             backward.has_tooltip = true;
+            backward.relief = Gtk.ReliefStyle.NONE;
             backward.tooltip_text = _("Rewind %d seconds".printf(this.settings.rewind_seconds));
 
 			play_pause.get_style_context().add_class("vocal-headerbar-button");
@@ -200,7 +206,7 @@ namespace Vocal {
                 backward.tooltip_text = _("Rewind %d seconds".printf(this.settings.rewind_seconds));
             });
 
-            refresh = new Gtk.Button.from_icon_name("view-refresh-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            refresh = new Gtk.Button.from_icon_name("view-refresh-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             refresh.has_tooltip = true;
             refresh.tooltip_text = _("Check for new episodes");
 
@@ -213,7 +219,7 @@ namespace Vocal {
             search_entry.editable = true;
             search_entry.placeholder_text = _("Search your library or online");
             search_entry.visibility = true;
-            search_entry.expand = true;
+            search_entry.expand = false;
             search_entry.max_width_chars = 30;
             search_entry.margin_right = 12;
 
@@ -222,11 +228,12 @@ namespace Vocal {
             });
 
             if(on_elementary) {
-                podcast_store_button = new Gtk.Button.from_icon_name("applications-internet-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                podcast_store_button = new Gtk.Button.from_icon_name("applications-internet-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             } else {
-                podcast_store_button = new Gtk.Button.from_icon_name("application-rss+xml-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                podcast_store_button = new Gtk.Button.from_icon_name("application-rss+xml-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             }
             podcast_store_button.tooltip_text = _("View the top podcasts in the iTunes Store");
+            podcast_store_button.relief = Gtk.ReliefStyle.NONE;
 
             // Connect signals to appropriate handlers
             refresh.clicked.connect(() => {
@@ -252,14 +259,15 @@ namespace Vocal {
 
             Gtk.Image download_image;
             if(on_elementary)
-                download_image = new Gtk.Image.from_icon_name("browser-download-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                download_image = new Gtk.Image.from_icon_name("browser-download-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             else {
-                download_image = new Gtk.Image.from_icon_name("document-save-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                download_image = new Gtk.Image.from_icon_name("document-save-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             }
             download = new Gtk.Button();
             download.image = download_image;
             download.has_tooltip = true;
             download.tooltip_text = _("Downloads");
+            download.relief = Gtk.ReliefStyle.NONE;
 
             download.clicked.connect(() => {
             	downloads_selected();

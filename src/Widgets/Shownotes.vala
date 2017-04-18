@@ -28,7 +28,6 @@ using Granite;
     	public signal void send_tweet();
     	public signal void copy_direct_link();
 
-		private WebKit.WebView webview;
 		public Gtk.Button play_button;
 		public Gtk.Button queue_button;
 		public Gtk.Button download_button;
@@ -44,13 +43,17 @@ using Granite;
 		private Gtk.Label title_label;
 		private Gtk.Label date_label;
 		private Gtk.Box controls_box;
+		private Gtk.Label shownotes_label;
 
 		public Shownotes () {
 
 			var content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-			this.webview = new WebKit.WebView ();
-			webview.margin = 3;
+			shownotes_label = new Gtk.Label ("");
+			shownotes_label.margin = 12;
+			shownotes_label.halign = Gtk.Align.START;
+			shownotes_label.valign = Gtk.Align.START;
+			shownotes_label.wrap = true;
 
 			controls_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 			controls_box.get_style_context().add_class("toolbar");
@@ -95,13 +98,6 @@ using Granite;
 			controls_box.pack_start(download_button, false, false, 0);
 			controls_box.pack_end(share_button, false, false, 0);
 
-			// Set the settings
-			var settings = new WebKit.Settings();
-			settings.auto_load_images = true;
-			settings.default_font_family = "open-sans";
-			settings.enable_smooth_scrolling = true;
-			webview.settings = settings;
-
 			title_label = new Gtk.Label("");
 			title_label.get_style_context().add_class("h3");
 			title_label.wrap = true;
@@ -140,13 +136,14 @@ using Granite;
 			content_box.pack_start(date_label, false, false, 0);
 			content_box.pack_start(button_box, false, false, 0);
 			content_box.pack_start(summary_label, false, false, 0);
-			content_box.pack_start(webview, true, true, 0);
+			content_box.pack_start(shownotes_label, true, true, 0);
 
 			this.add (content_box);
 		}
 
 		public void set_html(string html) {
-			this.webview.load_html (Utils.get_styled_html(html), "");
+			this.shownotes_label.label = html;
+			shownotes_label.use_markup = true;
 			show_all();
 		}
 

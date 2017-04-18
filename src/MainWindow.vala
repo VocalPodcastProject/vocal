@@ -158,7 +158,7 @@ namespace Vocal {
                     border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
                     box-shadow: 3px 3px 3px #777;
                     border-style: solid;
-                    border-width: 2px;
+                    border-width: 0.4px;
 
                     color: #000;
                 }
@@ -180,6 +180,14 @@ namespace Vocal {
 
                 .download-detail-box {
                     border-bottom: 0.5px solid #8a9580;
+                }
+
+                .h2 {
+                    font-size: 1.5em;
+                }
+
+                .h3 {
+                    font-size: 1.3em;
                 }
 
                 .library-toolbar {

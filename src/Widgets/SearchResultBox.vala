@@ -120,7 +120,7 @@ namespace Vocal {
 
             // Show a details button
             if(details != null) {
-                var details_button = new Gtk.Button.from_icon_name("help-info-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+                var details_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "help-info-symbolic" : "system-help-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
                 details_button.relief = Gtk.ReliefStyle.NONE;
                 summary_label = new Gtk.Label ("");
                 details_button.tooltip_text = _("Summary");

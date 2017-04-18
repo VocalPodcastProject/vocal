@@ -81,13 +81,13 @@ namespace Vocal {
             streaming_box.set_size_request(25, 25);
 
             // Create the now playing image, but don't actually use it anywhere yet
-            now_playing_image = new Gtk.Image.from_icon_name("starred-symbolic", Gtk.IconSize.BUTTON);
+            now_playing_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.BUTTON);
             now_playing_image.has_tooltip = true;
             now_playing_image.tooltip_text = _("This episode is currently being played");
 
             // Determine whether or not the episode has been played
             if(episode.status == EpisodeStatus.UNPLAYED) {
-                unplayed = "mail-unread";
+                unplayed = "starred-symbolic";
                 this.unplayed = true;
             }
 
@@ -229,7 +229,7 @@ namespace Vocal {
             // It's possible that now_playing_image pointed to the unplayed icon before,
             // so set it to match the icon for now playing
 
-            now_playing_image.icon_name = "starred-symbolic";
+            now_playing_image.icon_name = "media-playback-start-symbolic";
 
             unplayed_box.pack_start(now_playing_image, false, false, 0);
             now_playing = true;
@@ -260,7 +260,7 @@ namespace Vocal {
                     now_playing = false;
                 }
 
-                unplayed_image = new Gtk.Image.from_icon_name("mail-unread", Gtk.IconSize.BUTTON);
+                unplayed_image = new Gtk.Image.from_icon_name("starred-symbolic", Gtk.IconSize.BUTTON);
                 unplayed_box.pack_start(unplayed_image, false, false, 0);
                 unplayed_image.valign = Gtk.Align.START;
 

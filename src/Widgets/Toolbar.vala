@@ -189,6 +189,8 @@ namespace Vocal {
             forward.image = forward_image;
             forward.has_tooltip = true;
             forward.relief = Gtk.ReliefStyle.NONE;
+            forward.hexpand = true;
+            forward.halign = Gtk.Align.START;
             forward.tooltip_text = _("Fast forward %d seconds".printf(this.settings.fast_forward_seconds));
 
             var backward_image = new Gtk.Image.from_icon_name("media-seek-backward-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);

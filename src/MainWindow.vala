@@ -182,6 +182,7 @@ namespace Vocal {
                                          left top, left bottom,
                                          from (shade (@bg_color, 0.9)),
                                          to (@bg_color));
+                    border-bottom: 0.3px solid white;
                 }
 
                 .notebook-art {
@@ -199,8 +200,6 @@ namespace Vocal {
                 }
 */
                 .podcast-view-toolbar {
-                    background-image: none;
-                    background-color: white;
                 }
 
 

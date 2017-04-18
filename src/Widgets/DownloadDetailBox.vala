@@ -185,20 +185,14 @@ namespace Vocal {
 
             if(num_secs_remaining > 60) {
                 time_val_to_display = num_secs_remaining / 60;
-                if(time_val_to_display < 2)
-                    units = _("minute");
-                else
-                    units = _("minutes");
+                units = ngettext("minute", "minutes", time_val_to_display);
             }
             else {
                 time_val_to_display = num_secs_remaining;
-                if(time_val_to_display == 1)
-                    units = _("second");
-                else
-                    units = _("seconds");
+                units = ngettext("second", "seconds", time_val_to_display);
             }
 
-            data_output = """%.1fMB / %.1fMB""".printf(MB_downloaded, MB_total);
+            data_output = "%s / %s".printf(GLib.format_size(current_num_bytes), GLib.format_size(total_num_bytes));
             time_output = """, about %d %s remaining""".printf(time_val_to_display, units);
 
             // When setting the label, always set it to the "outdated" time

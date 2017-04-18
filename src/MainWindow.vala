@@ -163,6 +163,11 @@ namespace Vocal {
                     color: #000;
                 }
 
+                .coverart-overlay {
+                    font-size: 1.7em;
+                    font-family: sans;
+                }
+
                 .directory-art-image {
                     border-bottom: 3px solid #EFEFEF;
                 }

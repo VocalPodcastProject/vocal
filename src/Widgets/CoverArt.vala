@@ -95,9 +95,9 @@ namespace Vocal {
 				count_overlay = new Gtk.Overlay();
 
 			// Create a label to display the number of new episodes
-			count_label = new Gtk.Label("<b>10</b>");
+			count_label = new Gtk.Label("");
 			count_label.use_markup = true;
-			Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H2, count_label);
+			count_label.get_style_context (). add_class ("coverart-overlay");
 			count_label.set_alignment(1,0);
 			count_label.margin_right = 5;
 

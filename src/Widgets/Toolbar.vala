@@ -70,6 +70,7 @@ namespace Vocal {
 
             // Create the box to be shown during playback
             playback_box = new PlaybackBox();
+            playback_box.halign = Gtk.Align.CENTER;
 
             // Set the playback box in the middle of the HeaderBar
 	        playback_box.hexpand = true;
@@ -78,7 +79,7 @@ namespace Vocal {
 		    if(on_elementary)
 	            shownotes_button = new Gtk.Button.from_icon_name("help-info-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 		    else
-	     		shownotes_button = new Gtk.Button.from_icon_name("media-view-subtitles-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+	     		shownotes_button = new Gtk.Button.from_icon_name("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             shownotes_button.tooltip_text = _("View show notes");
             shownotes_button.clicked.connect(() => {
                 shownotes_selected();
@@ -223,7 +224,7 @@ namespace Vocal {
             if(on_elementary) {
                 podcast_store_button = new Gtk.Button.from_icon_name("applications-internet-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             } else {
-                podcast_store_button = new Gtk.Button.from_icon_name("bookmark-new-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                podcast_store_button = new Gtk.Button.from_icon_name("application-rss+xml-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
             }
             podcast_store_button.tooltip_text = _("View the top podcasts in the iTunes Store");
 

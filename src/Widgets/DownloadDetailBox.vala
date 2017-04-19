@@ -99,6 +99,7 @@ namespace Vocal {
             var details_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
             details_box.add(image);
             details_box.add(label_box);
+            details_box.set_use_markup(true);
 
             var progress_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 

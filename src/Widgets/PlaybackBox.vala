@@ -44,7 +44,6 @@ namespace Vocal {
             this.info_label.width_chars = 20;
             this.info_label.set_ellipsize(Pango.EllipsizeMode.END);
             this.info_label.margin_top = 12;
-            this.halign = Gtk.Align.CENTER;
 
             this.progress_bar = new Gtk.ProgressBar();
             
@@ -67,6 +66,8 @@ namespace Vocal {
             scale_grid.attach (scale, 1, 0, 1, 1);
             scale_grid.attach (right_time, 2, 0, 1, 1);
             
+            this.hexpand = false;
+
             // Add the components to the box
             this.add(info_label);
             this.add(scale_grid);

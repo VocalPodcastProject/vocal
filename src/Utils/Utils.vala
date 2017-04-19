@@ -135,6 +135,10 @@ public class Utils
     public static string html_to_markup(string original) {
 
         string markup = original;
+        // Save anchor tags and breaks
+        markup.replace ("<a", "+a");
+        markup.replace ("</a", "+/a");
+        markup.replace ("<br", "+br");
 
         // remove HTML tags and special sequences
         var html_tags_regex = new Regex("(<.*>)|(&\\w+;)");
@@ -147,7 +151,16 @@ public class Utils
         markup = markup.replace("%27", "'");
 
         markup.normalize();
-        return markup;
+        markup.replace ("+a", "<a");
+        markup.replace ("+/a", "</a");
+        markup.replace ("+br", "<br");
+
+        markup.replace ("<p>", "");
+        markup.replace ("</p>", "");
+        if (markup != null && markup.length > 0)
+            return markup;
+        else
+            return markup;
 
     }
 

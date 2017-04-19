@@ -122,7 +122,6 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/DirectoryView.vala
     src/Widgets/DirectoryArt.vala
     src/Widgets/CloudLoginDialog.vala
-    src/Widgets/SearchResultsPopover.vala
     src/Widgets/SearchResultsView.vala
     src/Widgets/PodcastView.vala
     src/Widgets/Shownotes.vala

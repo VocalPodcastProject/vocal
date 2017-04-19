@@ -558,14 +558,13 @@ namespace Vocal {
 
                 // Re-mark the box so it doesn't show if hide played is enabled
                 if(settings.hide_played && unplayed_count > 0) {
-                    previously_activated_box.set_no_show_all(true);
-                    previously_activated_box.hide();
+                    previously_activated_box. get_parent (). set_no_show_all(true);
+                    previously_activated_box. get_parent (). visible = false;
                 }
             }
 
             // No matter what, mark this box as now playing
             previously_activated_box.mark_as_now_playing();
-            show_all();
 
             play_episode_requested();
         }

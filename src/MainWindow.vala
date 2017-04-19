@@ -62,7 +62,6 @@ namespace Vocal {
         private DownloadsPopover    downloads;
         private ShowNotesPopover    shownotes;
         private QueuePopover        queue_popover;
-        private SearchResultsPopover search_results;
         private Gtk.MessageDialog   missing_dialog;
         private SettingsDialog      settings_dialog;
         private VideoControls       video_controls;
@@ -73,7 +72,6 @@ namespace Vocal {
         /* Icon views and related variables */
 
         private Gtk.FlowBox         all_flowbox;
-
         private Gtk.ScrolledWindow  all_scrolled;
         private Gtk.ScrolledWindow  directory_scrolled;
         private Gtk.ScrolledWindow  search_results_scrolled;
@@ -384,6 +382,7 @@ namespace Vocal {
             // Create the toolbar
             toolbar = new Toolbar (settings);
             toolbar.get_style_context().add_class("vocal-headerbar");
+            toolbar.search_button.clicked.connect (on_show_search);
 
             // Connect the new player position available signal from the player
             // to set the new progress on the playback box
@@ -488,8 +487,6 @@ namespace Vocal {
                             handled = true;
                             break;
                         case Gdk.Key.f:
-                            toolbar.search_entry.can_focus = true;
-                            toolbar.search_entry.grab_focus();
                             handled = true;
                             break;
                         default:
@@ -499,10 +496,10 @@ namespace Vocal {
                 else {
                     switch (e.keyval) {
                         case Gdk.Key.space:
-                            if(!toolbar.search_entry.has_focus) {
+                            //if(!toolbar.search_entry.has_focus) {
                                 play_pause();
                                 handled = true;
-                            }
+                            //}
 
                             break;
                         case Gdk.Key.F11:
@@ -541,24 +538,6 @@ namespace Vocal {
             // Create the show notes popover
             shownotes = new ShowNotesPopover(toolbar.shownotes_button);
             toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
-            search_results = new SearchResultsPopover(toolbar.search_entry, library);
-            search_results.modal = false;
-            search_results.show_full_results.connect(on_show_full_results);
-            search_results.episode_selected.connect(on_search_popover_episode_selected);
-            search_results.podcast_selected.connect(on_search_popover_podcast_selected);
-            search_results.subscribe_to_podcast.connect(on_new_subscription);
-
-            toolbar.search_entry.activate.connect(() => {
-                search_results.full_results_button.clicked();
-            });
-
-            toolbar.search_entry.focus_in_event.connect(() => {
-                search_results.set_query(toolbar.search_entry.text);
-                search_results.show();
-                toolbar.search_entry.grab_focus();
-                toolbar.search_entry.set_position(toolbar.search_entry.get_text().length);
-                return false;
-            });
 
             downloads = new DownloadsPopover(toolbar.download);
             downloads.closed.connect(() => {
@@ -607,12 +586,6 @@ namespace Vocal {
                 settings_dialog.show_all();
             });
 
-            toolbar.search_changed.connect(() => {
-                search_results.set_query(toolbar.search_entry.text);
-                toolbar.search_entry.grab_focus();
-                toolbar.search_entry.set_position(toolbar.search_entry.get_text().length);
-            });
-
             toolbar.refresh_selected.connect(on_update_request);
             toolbar.play_pause_selected.connect(play_pause);
             toolbar.seek_forward_selected.connect(seek_forward);
@@ -625,14 +598,6 @@ namespace Vocal {
 
             toolbar.export_selected.connect(export_podcasts);
             toolbar.downloads_selected.connect(show_downloads_popover);
-
-            // Set up a timer to check if the search popover needs to hide
-            GLib.Timeout.add(1000, () => {
-                if(!toolbar.search_entry.has_focus && search_results.visible) {
-                    search_results.hide();
-                }
-                return true;
-            }, GLib.Priority.DEFAULT);
 
             setup_library_widgets();
         }
@@ -742,6 +707,17 @@ namespace Vocal {
             // Add the thinpaned to the box
             box.pack_start(library_box, true, true, 0);
             current_widget = notebook;
+
+            // Create the search box
+            search_results_view = new SearchResultsView(library);
+            search_results_view.on_new_subscription.connect(on_new_subscription);
+            search_results_view.return_to_library.connect(() => {
+                switch_visible_page(previous_widget);
+            });
+            search_results_view.episode_selected.connect(on_search_popover_episode_selected);
+            search_results_view.podcast_selected.connect(on_search_popover_podcast_selected);
+
+            search_results_box.add(search_results_view);
 
             show_all();
 
@@ -1536,9 +1512,6 @@ namespace Vocal {
                         }
 
                         library_empty = false;
-                        
-                        // Tell the search results popover that adding succeeded
-                        search_results.add_status_changed(true, name);
 
                         show_all();
                     }
@@ -1572,9 +1545,6 @@ namespace Vocal {
                     add_err_dialog.secondary_text = error_message;
                     add_err_dialog.set_image(error_img);
                     add_err_dialog.show_all();
-                    
-                    // Tell the search results popover that adding failed
-                    search_results.add_status_changed(false, name);
                 }
 
             }
@@ -2018,21 +1988,6 @@ namespace Vocal {
             this.get_window ().set_cursor (null);
         }
 
-
-        /*
-         * Called whenever the seach popover loses focus
-         */
-         private bool on_search_focus_change(EventFocus event) {
-
-            // Only show the search popover if either the popover or search entry has focus
-            if(toolbar.search_entry.has_focus) {
-            } else {
-                search_results.hide();
-            }
-
-            return false;
-         }
-
          /*
           * Called when the user clicks on a podcast in the search popover
           */
@@ -2081,25 +2036,7 @@ namespace Vocal {
         /*
          * Shows a full search results listing
          */
-        private void on_show_full_results() {
-
-            if(search_results_view != null) {
-                search_results_box.remove(search_results_view);
-            }
-
-
-            search_results_view = new SearchResultsView(toolbar.search_entry.get_text(), library, search_results.p_matches, search_results.e_matches);
-            search_results_view.on_new_subscription.connect(on_new_subscription);
-            search_results_view.return_to_library.connect(() => {
-                switch_visible_page(previous_widget);
-            });
-            search_results_view.episode_selected.connect(on_search_popover_episode_selected);
-            search_results_view.podcast_selected.connect(on_search_popover_podcast_selected);
-
-            if(search_results.visible)
-                search_results.hide();
-
-            search_results_box.add(search_results_view);
+        private void on_show_search() {
             switch_visible_page(search_results_scrolled);
             show_all();
         }

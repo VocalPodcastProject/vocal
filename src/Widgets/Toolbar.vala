@@ -30,7 +30,6 @@ namespace Vocal {
 		public signal void playlist_selected();
 		public signal void preferences_selected();
 		//public signal void donate_selected();
-		public signal void search_changed();
 		public signal void refresh_selected();
 		public signal void rate_button_selected();
 		public signal void store_selected();
@@ -39,8 +38,6 @@ namespace Vocal {
 		public signal void seek_backward_selected();
 		public signal void downloads_selected();
         public signal void check_for_updates_selected();
-
-		public bool search_visible = false;
 
         public Gtk.Menu             menu;
         public Gtk.MenuButton       app_menu;
@@ -51,11 +48,11 @@ namespace Vocal {
         private Gtk.Button          refresh;
         public  Gtk.Button          download;
         public  Gtk.Button 			shownotes_button;
+        public  Gtk.Button          search_button;
         private Gtk.Button          podcast_store_button;
 		public Gtk.Button 			playlist_button;
 
         public  Gtk.MenuItem        export_item;
-        public  Gtk.SearchEntry     search_entry;
         private Gtk.Box             headerbar_box;
         public  PlaybackBox         playback_box;
 
@@ -217,6 +214,7 @@ namespace Vocal {
 			rate_button.get_style_context().add_class("h3");
             rate_button.relief = Gtk.ReliefStyle.NONE;
 
+            /*
             search_entry = new Gtk.SearchEntry();
             search_entry.editable = true;
             search_entry.placeholder_text = _("Search your library or online");
@@ -224,10 +222,12 @@ namespace Vocal {
             search_entry.expand = false;
             search_entry.max_width_chars = 30;
             search_entry.margin_right = 12;
+            */
 
-            search_entry.search_changed.connect(() => {
-                search_changed();
-            });
+            search_button = new Gtk.Button.from_icon_name("edit-find-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
+            search_button.tooltip_text = _("Search your library or online");
+            search_button.relief = Gtk.ReliefStyle.NONE;
+
 
             if(on_elementary) {
                 podcast_store_button = new Gtk.Button.from_icon_name("applications-internet-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
@@ -282,10 +282,9 @@ namespace Vocal {
 	        pack_start (play_pause);
 	        pack_start (forward);
 
+            pack_end (search_button);
 			pack_end (podcast_store_button);
 	        pack_end (download);
-            pack_end (search_entry);
-	        //pack_start(rate_button);
 		}
 
 

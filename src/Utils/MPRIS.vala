@@ -53,7 +53,7 @@ namespace Vocal {
 	    public void initialize() {
 	        
 		    owner_id = Bus.own_name(BusType.SESSION,
-		                            "org.mpris.MediaPlayer2.Vocal",
+		                            "org.mpris.MediaPlayer2.com.github.needleandthread.vocal",
 		                            GLib.BusNameOwnerFlags.NONE,
                             		on_bus_acquired,
                             		on_name_acquired,

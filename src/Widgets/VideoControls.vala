@@ -36,9 +36,10 @@ namespace Vocal {
             transition_type = Gtk.RevealerTransitionType.CROSSFADE;
             var main_actionbar = new Gtk.ActionBar ();
 
-            play_button = new Gtk.Button.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            play_button = new Gtk.Button.from_icon_name ("media-playback-start-symbolic", Gtk.IconSize.DIALOG);
             play_button.tooltip_text = _("Play");
             play_button.clicked.connect (() => {play_toggled ();});
+            play_button.relief = Gtk.ReliefStyle.NONE;
 
             main_actionbar.pack_start (play_button);
 
@@ -47,15 +48,17 @@ namespace Vocal {
                 progress_bar_fill = playback_box.get_progress_bar_fill();
                 progress_bar_scale_changed();
             });
+            this.halign = Gtk.Align.CENTER;
 
             playback_box.margin_top = 10;
             playback_box.margin_bottom = 5;
             playback_box.margin_left = 20;
             playback_box.margin_right = 20;
 
-            unfullscreen_button = new Gtk.Button.from_icon_name("window-restore-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            unfullscreen_button = new Gtk.Button.from_icon_name("window-restore-symbolic", Gtk.IconSize.DIALOG);
             unfullscreen_button.clicked.connect(() => { unfullscreen(); });
             unfullscreen_button.tooltip_text = _("Exit Fullscreen");
+            unfullscreen_button.relief = Gtk.ReliefStyle.NONE;
 
             main_actionbar.pack_start(playback_box);
             main_actionbar.pack_start(unfullscreen_button);

@@ -227,7 +227,7 @@ namespace Vocal {
                     color: #af81d6;
                 }
 
-                .video-toolbar {
+                .video-toolbar * {
                     background-image: none;
                     background-color: #af81d6;
                 }
@@ -320,7 +320,7 @@ namespace Vocal {
 
             video_widget.motion_notify_event.connect(on_motion_event);
 
-            return_to_library = new Gtk.Button.from_icon_name("go-jump-rtl-symbolic", Gtk.IconSize.DIALOG);
+            return_to_library = new Gtk.Button.with_label (_("Return to Library"));
             return_to_library.get_style_context().add_class("video-back-button");
             return_to_library.has_tooltip = true;
             return_to_library.tooltip_text = _("Return to Library");

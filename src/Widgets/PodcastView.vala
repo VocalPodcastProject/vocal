@@ -222,13 +222,11 @@ namespace Vocal {
             shownotes.queue_button.clicked.connect(() => { enqueue_episode_internal(); });
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
+            shownotes.mark_as_new_button.clicked.connect(() => { mark_episode_as_new_requested_internal(); });
 
             shownotes.copy_shareable_link.connect(on_copy_shareable_link);
             shownotes.send_tweet.connect(on_tweet);
             shownotes.copy_direct_link.connect(on_link_to_file);
-			
-
-
 
             paned.pack2(shownotes, true, true);
 
@@ -251,7 +249,6 @@ namespace Vocal {
                 unplayed_count--;
                 set_unplayed_text();
 
-                // Remove the unplayed image from the episode's box
                 int floor = podcast.episodes.size - limit -1;
                 int num;
 
@@ -261,7 +258,34 @@ namespace Vocal {
 
                 mark_episode_as_played_requested(podcast.episodes[current_episode_index]);
             }
+
+            if (shownotes.episode != null && podcast.episodes[current_episode_index] == shownotes.episode) {
+                shownotes.show_mark_as_new_button ();
+            }
         }
+
+        private void mark_episode_as_new_requested_internal() {
+
+            if(podcast.episodes[current_episode_index].status != EpisodeStatus.UNPLAYED) {
+                unplayed_count++;
+                set_unplayed_text();
+
+                int floor = podcast.episodes.size - limit -1;
+                int num;
+
+                (floor >= 0) ? num = current_episode_index - floor : num = current_episode_index;
+
+                boxes[num].mark_as_unplayed();
+
+
+                mark_episode_as_unplayed_requested (podcast.episodes[current_episode_index]);
+            }
+
+            if (shownotes.episode != null && podcast.episodes[current_episode_index] == shownotes.episode) {
+                shownotes.show_mark_as_played_button ();
+            }
+        }
+
         /*
          * Gets an episode's corresponding box index in the list of EpisodeDetailBoxes
          */
@@ -333,7 +357,7 @@ namespace Vocal {
                     });
                     right_click_menu.add(mark_played_menuitem);
 
-                    var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as unplayed"));
+                    var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as new"));
                     mark_unplayed_menuitem.activate.connect(() => {
 
                         GLib.List<weak ListBoxRow> rows2 = listbox.get_selected_rows();
@@ -424,7 +448,7 @@ namespace Vocal {
 
                     // Mark as played
                     if(podcast.episodes[current_episode_index].status != EpisodeStatus.PLAYED) {
-                        var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark as Played"));
+                        var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark as played"));
                         mark_played_menuitem.activate.connect(() => {
                             mark_episode_as_played_requested_internal();                            
                         });
@@ -432,20 +456,9 @@ namespace Vocal {
 
                     // Mark as unplayed
                     } else {
-                        var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark as Unplayed"));
+                        var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark as new"));
                         mark_unplayed_menuitem.activate.connect(() => {
-                            unplayed_count++;
-                            set_unplayed_text();
-
-                            // Remove the unplayed image from the episode's box
-                            int floor = podcast.episodes.size - limit -1;
-                            int num;
-
-                            (floor >= 0) ? num = current_episode_index - floor : num = current_episode_index;
-
-                            boxes[num].mark_as_unplayed();
-
-                            mark_episode_as_unplayed_requested(podcast.episodes[current_episode_index]);
+                            mark_episode_as_new_requested_internal();
                         });
                         right_click_menu.add(mark_unplayed_menuitem);
                     }
@@ -588,6 +601,7 @@ namespace Vocal {
                 previously_selected_box = boxes[current_episode_index];
             }
 
+            shownotes.episode = podcast.episodes[current_episode_index];
             shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? podcast.episodes[current_episode_index].description.replace("%27", "'") : _("No show notes available."));
             shownotes.set_title(podcast.episodes[current_episode_index].title);
             shownotes.set_date(podcast.episodes[current_episode_index].datetime_released);
@@ -597,6 +611,13 @@ namespace Vocal {
                 shownotes.hide_download_button();
             } else {
                 shownotes.show_download_button();
+            }
+
+            // Check the playback status
+            if(podcast.episodes[current_episode_index].status == EpisodeStatus.PLAYED) {
+                shownotes.show_mark_as_new_button();
+            } else {
+                shownotes.show_mark_as_played_button();
             }
 
             show_all();

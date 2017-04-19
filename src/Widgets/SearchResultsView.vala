@@ -28,7 +28,7 @@ namespace Vocal {
         public signal void episode_selected(Podcast podcast, Episode episode);
         public signal void podcast_selected(Podcast podcast);
 
-        private Gtk.SearchEntry search_entry;
+        public Gtk.SearchEntry search_entry;
 
         private string search_term = "";
 

@@ -35,6 +35,7 @@ using Granite;
 		public Gtk.Button mark_as_played_button;
 		public Gtk.Button mark_as_new_button;
 		public Gtk.Button delete_button;
+		public Episode episode = null;
 
 		public Gtk.MenuItem shareable_link;
 		public Gtk.MenuItem tweet;
@@ -64,6 +65,11 @@ using Granite;
 			mark_as_played_button.has_tooltip = true;
 			mark_as_played_button.relief = Gtk.ReliefStyle.NONE;
 			mark_as_played_button.tooltip_text = _("Mark this episode as played");
+
+			mark_as_new_button = new Gtk.Button.from_icon_name("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			mark_as_new_button.has_tooltip = true;
+			mark_as_new_button.relief = Gtk.ReliefStyle.NONE;
+			mark_as_new_button.tooltip_text = _("Mark this episode as new");
 
 			download_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			download_button.has_tooltip = true;
@@ -95,6 +101,7 @@ using Granite;
             });
 
 			controls_box.pack_start(mark_as_played_button, false, false, 0);
+			controls_box.pack_start(mark_as_new_button, false, false, 0);
 			controls_box.pack_start(download_button, false, false, 0);
 			controls_box.pack_end(share_button, false, false, 0);
 
@@ -164,5 +171,21 @@ using Granite;
 		public void set_date(GLib.DateTime date) {
 			date_label.set_text(date.format("%x"));
 		}
+
+	    public void show_mark_as_new_button () {
+	        mark_as_played_button.no_show_all = true;
+	        mark_as_played_button.hide ();
+
+	        mark_as_new_button.no_show_all = false;
+	        mark_as_new_button.show ();
+	    }
+
+	    public void show_mark_as_played_button () {
+	        mark_as_played_button.no_show_all = false;
+	        mark_as_played_button.show ();
+
+	        mark_as_new_button.no_show_all = true;
+	        mark_as_new_button.hide ();
+	    }
 	}
 }

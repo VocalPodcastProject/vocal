@@ -77,6 +77,7 @@ namespace Vocal {
 		    else
 	     		shownotes_button = new Gtk.Button.from_icon_name("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             shownotes_button.tooltip_text = _("View show notes");
+            shownotes_button.valign = Gtk.Align.CENTER;
             shownotes_button.clicked.connect(() => {
                 shownotes_selected();
             });
@@ -89,6 +90,7 @@ namespace Vocal {
                 playlist_selected();
             });
             playlist_button.relief = Gtk.ReliefStyle.NONE;
+            playlist_button.valign = Gtk.Align.CENTER;
 
             headerbar_box.add(shownotes_button);
             headerbar_box.add(playback_box);
@@ -161,6 +163,7 @@ namespace Vocal {
 	     	app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", on_elementary ? on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR));
             app_menu.popup = menu;
             app_menu.relief = Gtk.ReliefStyle.NONE;
+            app_menu.valign = Gtk.Align.CENTER;
 
 
             // Populate the toolbar
@@ -180,6 +183,7 @@ namespace Vocal {
             play_pause.has_tooltip = true;
             play_pause.tooltip_text = _("Play");
             play_pause.relief = Gtk.ReliefStyle.NONE;
+            play_pause.valign = Gtk.Align.CENTER;
 
             var forward_image = new Gtk.Image.from_icon_name("media-seek-forward-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             forward = new Gtk.Button();
@@ -189,6 +193,7 @@ namespace Vocal {
             forward.hexpand = true;
             forward.halign = Gtk.Align.START;
             forward.tooltip_text = _("Fast forward %d seconds".printf(this.settings.fast_forward_seconds));
+            forward.valign = Gtk.Align.CENTER;
 
             var backward_image = new Gtk.Image.from_icon_name("media-seek-backward-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             backward = new Gtk.Button();
@@ -196,6 +201,7 @@ namespace Vocal {
             backward.has_tooltip = true;
             backward.relief = Gtk.ReliefStyle.NONE;
             backward.tooltip_text = _("Rewind %d seconds".printf(this.settings.rewind_seconds));
+            backward.valign = Gtk.Align.CENTER;
 
 			play_pause.get_style_context().add_class("vocal-headerbar-button");
 
@@ -213,20 +219,12 @@ namespace Vocal {
 			rate_button.get_style_context().add_class("rate-button");
 			rate_button.get_style_context().add_class("h3");
             rate_button.relief = Gtk.ReliefStyle.NONE;
-
-            /*
-            search_entry = new Gtk.SearchEntry();
-            search_entry.editable = true;
-            search_entry.placeholder_text = _("Search your library or online");
-            search_entry.visibility = true;
-            search_entry.expand = false;
-            search_entry.max_width_chars = 30;
-            search_entry.margin_right = 12;
-            */
+            rate_button.valign = Gtk.Align.CENTER;
 
             search_button = new Gtk.Button.from_icon_name("edit-find-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             search_button.tooltip_text = _("Search your library or online");
             search_button.relief = Gtk.ReliefStyle.NONE;
+            search_button.valign = Gtk.Align.CENTER;
 
 
             if(on_elementary) {
@@ -236,6 +234,7 @@ namespace Vocal {
             }
             podcast_store_button.tooltip_text = _("View the top podcasts in the iTunes Store");
             podcast_store_button.relief = Gtk.ReliefStyle.NONE;
+            podcast_store_button.valign = Gtk.Align.CENTER;
 
             // Connect signals to appropriate handlers
             refresh.clicked.connect(() => {
@@ -270,6 +269,7 @@ namespace Vocal {
             download.has_tooltip = true;
             download.tooltip_text = _("Downloads");
             download.relief = Gtk.ReliefStyle.NONE;
+            download.valign = Gtk.Align.CENTER;
 
             download.clicked.connect(() => {
             	downloads_selected();

@@ -64,10 +64,11 @@ namespace Vocal {
 			artist_label.set_property("xalign", 0);
 			label_box.pack_start(artist_label, false, false, 5);
 
-			var details_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "help-info-symbolic" : "system-help-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			var details_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "help-info-symbolic" : "dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			details_button.valign = Gtk.Align.START;
 			details_button.tooltip_text = _("Details");
-			details_button.relief = Gtk.ReliefStyle.NONE;
+			if (Utils.check_elementary ())
+			    details_button.relief = Gtk.ReliefStyle.NONE;
 
 			details_popover = new Gtk.Popover(details_button);
 			summary_label = new Gtk.Label ("");
@@ -93,7 +94,8 @@ namespace Vocal {
 
 			var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			subscribe_button.tooltip_text = _("Subscribe");
-			subscribe_button.relief = Gtk.ReliefStyle.NONE;
+			if (Utils.check_elementary ())
+			    subscribe_button.relief = Gtk.ReliefStyle.NONE;
 			subscribe_button.clicked.connect(() => {
 				subscribe_button_clicked(url);
 			});

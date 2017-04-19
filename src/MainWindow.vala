@@ -487,6 +487,7 @@ namespace Vocal {
                             handled = true;
                             break;
                         case Gdk.Key.f:
+                            on_show_search ();
                             handled = true;
                             break;
                         default:
@@ -496,10 +497,10 @@ namespace Vocal {
                 else {
                     switch (e.keyval) {
                         case Gdk.Key.space:
-                            //if(!toolbar.search_entry.has_focus) {
+                            if(!search_results_view.search_entry.has_focus) {
                                 play_pause();
                                 handled = true;
-                            //}
+                            }
 
                             break;
                         case Gdk.Key.F11:

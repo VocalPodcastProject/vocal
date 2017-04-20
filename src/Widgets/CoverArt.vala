@@ -65,11 +65,10 @@ namespace Vocal {
 				}
 	            InputStream input_stream = cover_file.read();
 	            var coverart_pixbuf = create_cover_image (input_stream);
-
 	            image = new Gtk.Image.from_pixbuf(coverart_pixbuf);
 
 	            // Load the banner to be drawn on top of the cover art
-                    File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
+                File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
 	            InputStream triangle_input_stream = triangle_file.read();
 	            var triangle_pixbuf = new Gdk.Pixbuf.from_stream_at_scale(triangle_input_stream, 75, 75, true);
 	            triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);

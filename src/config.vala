@@ -5,6 +5,6 @@ namespace Constants {
     public const string RELEASE_NAME = "Landingham";
     public const string VERSION = "2.0";
     public const string VERSION_INFO = "Release";
-    public const string CACHE_DIR = "~/.vocal/cache/";
+    public const string CACHE_DIR = "~/.cache/vocal";
     public const string USER_AGENT = "vocal 2.0";
 }

@@ -10,7 +10,7 @@ set (VERSION "2.0")
 set (VERSION_INFO "Release")
 set (EXEC_NAME "vocal")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
-set (CACHE_DIR "~/.vocal/cache/")
+set (CACHE_DIR "~/.cache/vocal")
 set (USER_AGENT "vocal ${VERSION}")
 set (DOLLAR "$")
 

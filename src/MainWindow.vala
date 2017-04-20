@@ -579,6 +579,10 @@ namespace Vocal {
                 import_podcasts();
             });
 
+            toolbar.about_selected.connect (() => {
+                app.show_about (this);
+            });
+
             toolbar.preferences_selected.connect(() => {
                 settings_dialog = new SettingsDialog(settings, this);
                 settings_dialog.show_name_label_toggled.connect(on_show_name_label_toggled);

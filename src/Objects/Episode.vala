@@ -24,7 +24,7 @@ namespace Vocal {
     public class Episode {
 
         public string			title;        			// the title of the episode
-        public string			description;			// the description/shownotes (TODO: in the future, make these separate fields)
+        public string			description;			// the description/shownotes
         public string			uri;					// the remote location for the media file
         public string			local_uri;				// the local location for the media file, if any
         public double 			last_played_position;	// the latest position that has been played

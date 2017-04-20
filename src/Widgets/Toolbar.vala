@@ -29,7 +29,7 @@ namespace Vocal {
 		public signal void shownotes_selected();
 		public signal void playlist_selected();
 		public signal void preferences_selected();
-		//public signal void donate_selected();
+		public signal void donate_selected();
 		public signal void refresh_selected();
 		public signal void rate_button_selected();
 		public signal void store_selected();
@@ -38,6 +38,7 @@ namespace Vocal {
 		public signal void seek_backward_selected();
 		public signal void downloads_selected();
         public signal void check_for_updates_selected();
+        public signal void about_selected ();
 
         public Gtk.Menu             menu;
         public Gtk.MenuButton       app_menu;
@@ -152,10 +153,16 @@ namespace Vocal {
             var donate = new Gtk.MenuItem.with_label (_("Donate…"));
             donate.activate.connect (() => {
                 try {
-                    //Gtk.show_uri (null, "http://vocalproject.net/donate", 0);
+                    Gtk.show_uri (null, "http://needleandthread.co/apps/vocal", 0);
                 } catch (Error error) {}
             });
-            //menu.add(donate);
+            menu.add(donate);
+
+            var about = new Gtk.MenuItem.with_label (_("About"));
+            about.activate.connect (() => {
+                about_selected ();
+            });
+            menu.add (about);
             menu.show_all();
 
             // Create the AppMenu

@@ -54,6 +54,7 @@ using Granite;
 			shownotes_label.margin = 12;
 			shownotes_label.halign = Gtk.Align.START;
 			shownotes_label.valign = Gtk.Align.START;
+			shownotes_label.xalign = 0;
 			shownotes_label.wrap = true;
 
 			controls_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);

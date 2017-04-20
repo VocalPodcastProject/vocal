@@ -1328,8 +1328,6 @@ namespace Vocal {
                 stderr.printf("Unable to create database at %s\n", db_location);
                 return false;
             } else {
-
-               //TODO: Make parent_podcast_name a foreign key
                 string query = """
                     CREATE TABLE Podcast (
                     id                  INT,

@@ -1,8 +1,8 @@
 [Desktop Entry]
 Type=Application
 Name=Vocal
-Comment=Subscribe, download, and listen to podcasts
-GenericName=Podcast Manager
+_Comment=Subscribe, download, and listen to podcasts
+_GenericName=Podcast Manager
 Exec=vocal
 Icon=com.github.needle-and-thread.vocal
 Terminal=false
@@ -12,4 +12,4 @@ Actions=AboutDialog;
 
 [Desktop Action AboutDialog]
 Exec=vocal --about
-Name=About Vocal
+_Name=About Vocal

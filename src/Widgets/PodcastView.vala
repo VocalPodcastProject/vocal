@@ -834,7 +834,7 @@ namespace Vocal {
             if(unplayed_count > 0) {
                 count_string = _("%d unplayed episodes".printf(unplayed_count));
             } else {
-                count_string = _("");
+                count_string = "";
             }
             count_label.set_text(count_string);
         }

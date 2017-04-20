@@ -48,17 +48,13 @@ namespace Vocal {
         private Player              player;
         private DirectoryView       directory;
         private SearchResultsView   search_results_view;
-        private Gtk.Revealer        revealer;
         private Gtk.Stack           notebook;
-        private Gtk.StackSwitcher   stack_switcher;
-        private Granite.Widgets.ModeButton mode_button;
         private PodcastView         details;
         private Gtk.Box             import_message_box;
 
         /* Secondary widgets */
 
         private AddFeedDialog       add_feed;
-        private CloudLoginDialog    cloud_login;
         private DownloadsPopover    downloads;
         private ShowNotesPopover    shownotes;
         private QueuePopover        queue_popover;
@@ -371,11 +367,6 @@ namespace Vocal {
 #if HAVE_LIBNOTIFY
             Notify.init("Vocal");
 #endif
-
-            // Set up resize requests
-            this.check_resize.connect(() => {
-                player.configure_video();
-            });
 
             // Create the toolbar
             toolbar = new Toolbar (settings);
@@ -965,9 +956,6 @@ namespace Vocal {
 
                 // Are we playing a video? If so, is the video widget already being displayed?
                 if(player.current_episode.parent.content_type == MediaType.VIDEO && current_widget != video_widget) {
-
-                    // Re-configure the video
-                    player.configure_video();
 
                     // If you want to see a pretty animation, you must give the player time to configure everything
                     GLib.Timeout.add (1000, () => {
@@ -1617,7 +1605,7 @@ namespace Vocal {
             if(details != null && episode.parent == details.podcast) {
 
                 // Get the index for the episode in the list
-                int index = details.get_box_index_from_episode(episode);
+                //int index = details.get_box_index_from_episode(episode);
 
                 /*
                 // Set the box to hide the downloads button

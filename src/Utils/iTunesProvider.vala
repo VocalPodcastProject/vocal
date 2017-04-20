@@ -21,13 +21,12 @@ namespace Vocal {
 
     public class iTunesProvider {
 
-        private Json.Object itunes_result;
         public iTunesProvider() {}
 
         /*
          * Finds the public RSS feed address from any given iTunes store URL
          */
-        public string get_rss_from_itunes_url(string itunes_url, out string? name = null) {
+        public string? get_rss_from_itunes_url(string itunes_url, out string? name = null) {
 
             string rss = "";
 
@@ -182,9 +181,6 @@ namespace Vocal {
 
                     // Create a new DirectoryEntry to store the results
                     DirectoryEntry ent = new DirectoryEntry();
-
-
-                    var obj = e.get_object();
 
                     // Objects
                     ent.itunesUrl = e.get_object().get_string_member("collectionViewUrl");

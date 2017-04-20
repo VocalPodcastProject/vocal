@@ -36,16 +36,11 @@ namespace Vocal {
         public signal void state_changed(Gst.State new_state);
         public signal void additional_plugins_required(Gst.Message message);
 
-
-
-        private MainLoop loop = new MainLoop ();
         public signal void new_position_available();
-        private string tag_string;       
-        
-        public Gst.State current_state;
-        
+        private string tag_string;
+
         public Episode current_episode;
-        
+
         private Player(string[]? args) {
 
             current_episode = null;
@@ -59,47 +54,27 @@ namespace Vocal {
             });
         }
         
-        
-        /*
-		 * Reconfigures the video (width, positions, etc.) as needed
-		 */
-        public void configure_video() {
-        }
-        
-        /*
-         * Iterates through a list of tags and sets matching properties
-         */
-        private void foreach_tag (Gst.TagList list, string tag) {
-            switch (tag) {
-            case "title":
-                list.get_string (tag, out tag_string);
-                break;
-            default:
-                break;
-            }
-        }
-        
         /*
          *  Returns the total duration of the currently playing media
          */
         public double get_duration () {
             return this.duration;
         }
-        
+
         /*
          * Returns the current position of the media
          */
         public double get_position () {
             return this.progress;
         }
-	    
+
 	    /*
          * Sets the current state to pause
          */
         public void pause () {
             this.playing = false;
         }
-	    
+
 	    /*
          * Sets the current state to playing
          */
@@ -117,7 +92,7 @@ namespace Vocal {
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
             set_position(progress - percentage_of_total_seconds);
-            
+
             new_position_available();
         }
         
@@ -183,14 +158,6 @@ namespace Vocal {
          */
         public void set_position (double pos) {
             this.progress = pos;
-        }
-        
-        /*
-         * Set the player to a designated state
-         */
-        public void set_state (Gst.State s) {
-            
-
         }
 
 		/*

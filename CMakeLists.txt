@@ -34,7 +34,6 @@ add_definitions (-w)
 
 set (BASIC_VALAC_OPTIONS
     --enable-experimental
-    --disable-warnings
     --target-glib=2.32
     --thread
     -g
@@ -129,7 +128,6 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/QueuePopover.vala
     src/Widgets/QueueRow.vala
     src/Widgets/SearchResultBox.vala
-    src/Widgets/SecretEntryPopover.vala
     src/Utils/Player.vala
     src/Utils/FeedParser.vala
     src/Utils/Utils.vala

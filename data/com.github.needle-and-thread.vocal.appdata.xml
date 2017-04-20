@@ -4,36 +4,39 @@
   <id>com.github.needle-and-thread.vocal.desktop</id>
   <metadata_license>CC0</metadata_license>
   <name>Vocal</name>
-  <summary>A Great Podcast Client for the Modern Free Desktop</summary>
+  <_summary>A Great Podcast Client for the Modern Free Desktop</_summary>
 
   <description>
-    <p>
-      Subscribe, download, and listen to podcasts.
-    </p>
-    <p>Features include:</p>
+    <_p>
+      Vocal is the best way to find interesting new podcasts, maintain a growing library,
+      and enjoy audio and video shows that automatically get updated with new content.
+    </_p>
+    <_p>Features include:</p_>
     <ul>
-      <li>Audio and video podcast support</li>
-      <li>Streaming and downloading</li>
-      <li>Custom skip intervals</li>
-      <li>Full system integration</li>
-      <li>Automatic downloads</li>
-      <li>Smart library management</li>
-      <li>Playback position saving</li>
-      <li>... and much more!</li>
+      <_li>Audio and video podcast support</_li>
+      <_li>Built-in iTunes podcast store browsing and search</_li>
+      <_li>Episode streaming and downloading</_li>
+      <_li>Custom skip intervals</_li>
+      <_li>Full system integration</_li>
+      <_li>Automatic downloads</_li>
+      <_li>Smart library management</_li>
+      <_li>Playback position saving</_li>
+      <_li>Library importing and exporting</_li>
+      <_li>... and much more!</_li>
     </ul>
   </description>
 
   <screenshots>
     <screenshot type="default">
-      <caption>Library View</caption>
+      <_caption>Library View</_caption>
       <image width="1345" height="721">http://needleandthread.co/apps/vocal/screenshots/screenshot1.png</image>
     </screenshot>
     <screenshot>
-      <caption>Video Playback</caption>
+      <_caption>Video Playback</_caption>
       <image width="1345" height="721">http://needleandthread.co/apps/vocal/screenshots/screenshot2.png</image>
     </screenshot>
     <screenshot>
-      <caption>Podcast View</caption>
+      <_caption>Podcast View</_caption>
       <image width="1345" height="721">http://needleandthread.co/apps/vocal/screenshots/screenshot3.png</image>
     </screenshot>
   </screenshots>
@@ -52,11 +55,11 @@
   <releases>
     <release version="2.0" timestamp="1493395200">
       <description>
-        <p>Vocal's most exciting release yet, featuring full iTunes
+        <_p>Vocal's most exciting release yet, featuring full iTunes
 		directory and search support, improved performance, a
 		redesigned podcast view, and tons of other great
 		improvements.
-	</p>
+	    </_p>
       </description>
     </release>
   </releases>

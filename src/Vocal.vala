@@ -62,7 +62,7 @@ namespace Vocal {
             set_options();
         }
 
-        public static const OptionEntry[] app_options = {
+        public const OptionEntry[] app_options = {
             { "hidden", 'h', 0, OptionArg.NONE, out Option.OPEN_HIDDEN, "Open without displaying the window so podcasts will continue to update", null },
             { null }
         };

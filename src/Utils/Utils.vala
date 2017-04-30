@@ -70,6 +70,7 @@ public class Utils
             var resolver = Resolver.get_default ();
             var addresses = resolver.lookup_by_name (host, null);
             var address = addresses.nth_data (0);
+            print ("Test internet connection...\n");
             print (@"Resolved $host to $address\n");
 
             // Connect

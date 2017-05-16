@@ -602,7 +602,7 @@ namespace Vocal {
             }
 
             shownotes.episode = podcast.episodes[current_episode_index];
-            shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? podcast.episodes[current_episode_index].description.replace("%27", "'") : _("No show notes available."));
+            shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? Utils.html_to_markup(podcast.episodes[current_episode_index].description) : _("No show notes available."));
             shownotes.set_title(podcast.episodes[current_episode_index].title);
             shownotes.set_date(podcast.episodes[current_episode_index].datetime_released);
 

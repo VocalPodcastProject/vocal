@@ -20,7 +20,7 @@
 namespace Vocal {
 	public class ShowNotesPopover : Gtk.Popover {
 
-		private Gtk.TextView show_notes;
+		private Gtk.Label show_notes;
 
 		/*
 		 * Constructor for the shownotes popover relative to a given parent
@@ -30,11 +30,11 @@ namespace Vocal {
 
 			// Set up the scrolled window
 		  	var scrolled = new Gtk.ScrolledWindow(null, null);
-		  	show_notes = new Gtk.TextView();
-		  	show_notes.set_wrap_mode(Gtk.WrapMode.WORD);
-		  	show_notes.buffer.text = "";
-		  	show_notes.cursor_visible = false;
-		  	show_notes.editable = false;
+		  	show_notes = new Gtk.Label("");
+		  	show_notes.label = "";
+		  	show_notes.wrap = true;
+		  	show_notes.wrap_mode = Pango.WrapMode.WORD;
+		  	show_notes.use_markup = true;
 		  	show_notes.margin = 10;
 		  	scrolled.set_size_request(400, 200);
 		  	scrolled.add(show_notes);
@@ -45,7 +45,7 @@ namespace Vocal {
 		 * Sets the text in the popover
 		 */
 		public void set_notes_text(string text) {
-			this.show_notes.buffer.text = Utils.html_to_markup(text);
+			this.show_notes.label = Utils.html_to_markup(text);
 		}
   	}
 }

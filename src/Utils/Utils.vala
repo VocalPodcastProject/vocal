@@ -134,29 +134,53 @@ public class Utils
 	 */
     public static string html_to_markup(string original) {
 
-        string markup = original;
-        // Save anchor tags and breaks
-        markup.replace ("<a", "+a");
-        markup.replace ("</a", "+/a");
-        markup.replace ("<br", "+br");
+        string markup = GLib.Uri.unescape_string(original);
+        markup = markup.replace("&", "&amp;");
 
-        // remove HTML tags and special sequences
-        var html_tags_regex = new Regex("(<.*>)|(&\\w+;)");
-        markup = html_tags_regex.replace(markup, markup.length, 0, "");
+        // Preserve hyperlinks
+        markup = markup.replace("<a", "?a");
+        markup = markup.replace("</a>", "?/a?");
 
-        // replace new lines and tab characters by spaces
-        var non_space_separators_regex = new Regex("[\\n\\r\\t]+");
-        markup = non_space_separators_regex.replace(markup, markup.length, 0, " ");
+        // Preserve breaks
+        markup = markup.replace("<br>", "?br?");
+        markup = markup.replace ("<br />", "?br /?");
 
-        markup = markup.replace("%27", "'");
+        // Preserve bold tags
+        markup = markup.replace("<b>", "?b?");
+        markup = markup.replace("</b>", "?/b?");
 
-        markup.normalize();
-        markup.replace ("+a", "<a");
-        markup.replace ("+/a", "</a");
-        markup.replace ("+br", "<br");
+        info(markup);
 
-        markup.replace ("<p>", "");
-        markup.replace ("</p>", "");
+        int nextOpenBracketIndex = 0;
+        int nextCloseBracketIndex = 0;
+        while (nextOpenBracketIndex >= 0) {
+            nextOpenBracketIndex = markup.index_of("<", 0);
+            nextCloseBracketIndex = markup.index_of(">", 0) + 1;
+            if (nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
+                    && nextCloseBracketIndex >= 0 && nextOpenBracketIndex <= markup.length && nextCloseBracketIndex <= markup.length) {
+                markup = markup.splice(nextOpenBracketIndex, nextCloseBracketIndex);
+                nextOpenBracketIndex = 0;
+                nextCloseBracketIndex = 0;
+            } else {
+                nextOpenBracketIndex = -1;
+            }
+        }
+
+        info(markup);
+
+        // Preserve hyperlinks
+        markup = markup.replace("?a", "<a");
+        markup = markup.replace("?/a?", "</a>");
+
+        // Preserve breaks
+        markup = markup.replace("?br?", "<br>");
+        markup = markup.replace ("?br /?", "<br />");
+
+        // Preserve bold tags
+        markup = markup.replace("?b?", "<b>");
+        markup = markup.replace("?/b?", "</b>");
+
+        info(markup);
         if (markup != null && markup.length > 0)
             return markup;
         else

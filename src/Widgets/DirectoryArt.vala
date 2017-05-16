@@ -115,9 +115,15 @@ namespace Vocal {
 			hor_box.margin_right = 10;
 
             // Load the album artwork
-            var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale(GLib.Path.build_filename (Constants.PKGDATADIR, "vocal-missing.png"),
-                                                                   170, 170, true);
-            var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+            Gtk.Image image = new Gtk.Image();
+
+            try {
+                var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale(GLib.Path.build_filename (Constants.PKGDATADIR, "vocal-missing.png"),
+                                                                       170, 170, true);
+                image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+            } catch (Error e) {
+                warning ("Unable to open missing album art file.");
+            }
             image.margin = 2;
             image.expand = false;
             image.get_style_context().add_class("directory-art-image");

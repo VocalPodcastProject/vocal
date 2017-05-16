@@ -34,6 +34,7 @@ add_definitions (-w)
 
 set (BASIC_VALAC_OPTIONS
     --enable-experimental
+    --disable-warnings
     --target-glib=2.32
     --thread
     -g

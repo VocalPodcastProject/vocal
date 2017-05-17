@@ -5,6 +5,13 @@
   <metadata_license>CC0</metadata_license>
   <name>Vocal</name>
   <_summary>A Great Podcast Client for the Modern Free Desktop</_summary>
+  
+  <screenshots>
+    <screenshot type="default">
+      <_caption>Library View</_caption>
+      <image width="1464" height="918">http://needleandthread.co/apps/vocal/screenshots/vocal_library.png</image>
+    </screenshot>
+  </screenshots>
 
   <description>
     <_p>

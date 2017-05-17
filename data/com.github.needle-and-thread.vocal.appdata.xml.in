@@ -26,21 +26,6 @@
     </ul>
   </description>
 
-  <screenshots>
-    <screenshot type="default">
-      <_caption>Library View</_caption>
-      <image width="1345" height="721">http://needleandthread.co/apps/vocal/screenshots/screenshot1.png</image>
-    </screenshot>
-    <screenshot>
-      <_caption>Video Playback</_caption>
-      <image width="1345" height="721">http://needleandthread.co/apps/vocal/screenshots/screenshot2.png</image>
-    </screenshot>
-    <screenshot>
-      <_caption>Podcast View</_caption>
-      <image width="1345" height="721">http://needleandthread.co/apps/vocal/screenshots/screenshot3.png</image>
-    </screenshot>
-  </screenshots>
-
   <url type="homepage">http://needleandthread.co/apps/vocal</url>
 
   <custom>

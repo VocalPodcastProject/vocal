@@ -148,9 +148,6 @@ public class Utils
         // Preserve bold tags
         markup = markup.replace("<b>", "?b?");
         markup = markup.replace("</b>", "?/b?");
-
-        info(markup);
-
         int nextOpenBracketIndex = 0;
         int nextCloseBracketIndex = 0;
         while (nextOpenBracketIndex >= 0) {
@@ -165,8 +162,6 @@ public class Utils
                 nextOpenBracketIndex = -1;
             }
         }
-
-        info(markup);
 
         // Preserve hyperlinks
         markup = markup.replace("?a", "<a");

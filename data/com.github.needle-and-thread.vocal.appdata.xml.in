@@ -3,8 +3,10 @@
 <component type="desktop">
   <id>com.github.needle-and-thread.vocal.desktop</id>
   <metadata_license>CC0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
   <name>Vocal</name>
   <_summary>A Great Podcast Client for the Modern Free Desktop</_summary>
+  <developer_name>Needle & Thread</developer_name>
   
   <screenshots>
     <screenshot type="default">
@@ -33,11 +35,13 @@
     </ul>
   </description>
 
-  <url type="homepage">http://needleandthread.co/apps/vocal</url>
+  <url type="homepage">http://github.com/needle-and-thread/vocal</url>
+  <url type="bugtracker">https://github.com/needle-and-thread/vocal/issues</url>
 
   <custom>
     <value key="x-appcenter-color-primary">#603461</value>
     <value key="x-appcenter-color-primary-text">#fff</value>
+    <value key="x-appcenter-suggested-price">500</value>
   </custom>
 
   <provides>

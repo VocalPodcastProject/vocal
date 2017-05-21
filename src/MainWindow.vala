@@ -505,12 +505,16 @@ namespace Vocal {
                             break;
 
                         case Gdk.Key.Left:
-                            seek_backward();
-                            handled = true;
+                            if(!search_results_view.search_entry.has_focus) {
+                                seek_backward();
+                                handled = true;
+                            }
                             break;
                         case Gdk.Key.Right:
-                            seek_forward();
-                            handled = true;
+                            if(!search_results_view.search_entry.has_focus) {
+                                seek_forward();
+                                handled = true;
+                            }
                             break;
                         }
                 }

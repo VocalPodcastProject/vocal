@@ -2,7 +2,9 @@
 
 ## The podcast client for the modern free desktop.
 
-Vocal is a powerful, fast, and intuitive application that helps users find new podcasts, manage their libraries, and enjoy the best that indepedent audio and video publishing has to offer. Vocal features full iTunes store search (with international results support), top 100 charts, iTunes link parsing, and more. Plus, it has great smart features such as an option to automatically keep your library clean from old files, customized skip intervals, and more. 
+![](screenshot1.png)
+
+Vocal is a powerful, fast, and intuitive application that helps users find new podcasts, manage their libraries, and enjoy the best that indepedent audio and video publishing has to offer. Vocal features full support for both episode downloading and streaming, native system integration, iTunes store search and top 100 charts (with international results support), iTunes link parsing, OPML importing and exporting, and so much more. Plus, it has great smart features like automatically keeping your library clean from old files, and the ability to set custom skip intervals.
 
 ## Official Installation Options
 
@@ -16,18 +18,18 @@ Vocal can be installed via Flatpak on most modern Linux systems via the followin
     flatpak install flathub com.github.needleandthread.vocal
 
 ### Snap
-An official snap is not yet available, although some community members are working on such a release.
+An official snap package is not yet available, although some community members are working on it.
 
 ### Debian Installers
-amd64 .deb installers can be downloaded from our [releases](https://github.com/needle-and-thread/vocal/releases) page. Please note: this method is highly discouraged. With the benefits of sandboxing, improved security, and greater simplicity, we are moving away from older installation methods. ** Also, please note that our stable and daily PPAs will be abandoned in the near future.
+64-bit .deb installers can be downloaded from our [releases](https://github.com/needle-and-thread/vocal/releases) page. Please note: this method is highly discouraged. With the benefits of sandboxing, improved security, and greater simplicity, we are moving away from older installation methods. **Also, please note that our stable and daily PPAs will be abandoned in the near future.**
 
 ### Official OS packages
-We're working with a number of distributions to provide official vocal packages as part of the OS. Stay tuned for more information.
+We're working with a number of distributions to provide official packages as part of the OS. Stay tuned for more information.
 
 ## Get Involved
 
 ### Code
-We love collaborating with others and gladly welcome code contributions. Pull requests are much appreciaed. Please feel free to jump in and help with any confirmed issues (make sure you leave a comment or assign yourself so we know it's being worked on). If you have a new feature in mind that you would like to work on, we recommend opening an issue first and making sure the feature gets approved just so you spend your time implementing something that wouldn't get accepted into the project.
+We love collaborating with others and gladly welcome code contributions. Pull requests are much appreciated. Please feel free to jump in and help with any confirmed issues (make sure you leave a comment or assign yourself so we know it's being worked on). If you have a new feature in mind that you would like to work on, we recommend opening an issue first and making sure the feature gets approved just so you don't spend your time implementing something that wouldn't get accepted into the project.
 
 The Vocal project is hosted on GitHub: https://github.com/needle-and-thread/vocal
 

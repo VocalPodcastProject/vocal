@@ -437,7 +437,6 @@ namespace Vocal {
                 player.set_position (video_controls.progress_bar_fill);
             });
 
-
             // Set up media keys and keyboard shortcuts
             try {
                 mediakeys = Bus.get_proxy_sync (BusType.SESSION,
@@ -739,8 +738,12 @@ namespace Vocal {
                 if(settings.autoclean_library)
                     library.autoclean_library();
 
-                // Check for updates
-                on_update_request();
+                // Check for updates after 20 seconds
+                GLib.Timeout.add (20000, () => {
+                    on_update_request();
+                    return false;
+                });
+
             }
         }
 
@@ -2172,10 +2175,6 @@ namespace Vocal {
                 // Create an arraylist to store new episodes
                 Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode>();
 
-                // Check for new updates
-                debug("Checking for updates");
-
-
                 var loop = new MainLoop();
                 library.check_for_updates.begin((obj, res) => {
                     try {
@@ -2187,15 +2186,10 @@ namespace Vocal {
                 });
                 loop.run();
 
-
                 // Reset the period
                 minutes_elapsed_in_period = 0;
 
-                debug("Update complete");
-
                 checking_for_updates = false;
-
-
 
                 // Send a notification if there are new episodes
                 if(new_episodes.size > 0 && !settings.auto_download)

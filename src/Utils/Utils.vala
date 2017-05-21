@@ -175,7 +175,6 @@ public class Utils
         markup = markup.replace("?b?", "<b>");
         markup = markup.replace("?/b?", "</b>");
 
-        info(markup);
         if (markup != null && markup.length > 0)
             return markup;
         else

@@ -156,7 +156,7 @@ namespace Vocal {
                     Gtk.show_uri (null, "http://needleandthread.co/apps/vocal", 0);
                 } catch (Error error) {}
             });
-            menu.add(donate);
+            //menu.add(donate);
 
             var about = new Gtk.MenuItem.with_label (_("About"));
             about.activate.connect (() => {

@@ -487,9 +487,10 @@ namespace Vocal {
                 throw new VocalUpdateError.NETWORK_ERROR("The XML file '%s' is empty".printf(path));
             }
             
+
             // Parse the root node, which in turn will cause all nodes and properties to be parsed
             parse_node(root);
-            
+
             int i = 0;
             
             while ( i < queue.size && !previous_found) {

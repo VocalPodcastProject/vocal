@@ -141,7 +141,7 @@ namespace Vocal {
 
             this.pack_start(hor_box, false, false, 0);
 
-            this.get_style_context().add_class("directory-art");
+            this.get_style_context().add_class("card");
 		}
 	}
 }

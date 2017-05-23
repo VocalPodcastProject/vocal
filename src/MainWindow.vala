@@ -146,17 +146,6 @@ namespace Vocal {
                     border-bottom: 0.5px solid #8a9580;
                 }
 
-                .coverart, .directory-art {
-                    background-color: #FFF;
-
-                    border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
-                    box-shadow: 3px 3px 3px #777;
-                    border-style: solid;
-                    border-width: 0.4px;
-
-                    color: #000;
-                }
-
                 .coverart-overlay {
                     font-size: 1.7em;
                     font-family: sans;
@@ -851,7 +840,7 @@ namespace Vocal {
 	                    }
 
                         CoverArt a = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast, true);
-                        a.get_style_context().add_class("coverart");
+                        a.get_style_context().add_class("card");
                         a.halign = Gtk.Align.START;
 
                         int currently_unplayed = 0;

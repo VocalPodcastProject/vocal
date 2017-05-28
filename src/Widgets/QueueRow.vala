@@ -19,30 +19,36 @@
 
 
 namespace Vocal {
-    public class QueueRow : Gtk.Box {
 
+    public class QueueListRow : Gtk.ListBoxRow {
+        private const Gtk.TargetEntry targetEntries[] = {
+           { "GTK_LIST_BOX_ROW", Gtk.TargetFlags.SAME_APP, 0 }
+        };
+
+        public signal void update_queue(int oldPos, int newPos);
         public signal void move_up(Episode e);
         public signal void move_down(Episode e);
         public signal void remove_episode(Episode e);
 
         public Episode episode;
+        public Gtk.Box box;
 
-        public QueueRow(Episode episode) {
+        public QueueListRow(Episode episode) {
             this.episode = episode;
-            this.orientation = Gtk.Orientation.HORIZONTAL;
 
-            Gtk.Button up_button = new Gtk.Button.from_icon_name("go-up-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-            up_button.relief = Gtk.ReliefStyle.NONE;
-            up_button.set_tooltip_text(_("Move episode up in queue"));
-            Gtk.Button down_button = new Gtk.Button.from_icon_name("go-down-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-            down_button.relief = Gtk.ReliefStyle.NONE;
-            down_button.set_tooltip_text(_("Move episode down in queue"));
+            box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
+            box.margin_start = 10;
+            box.margin_end = 10;
+            this.add(box);
 
-            up_button.clicked.connect(() => { move_up(episode); });
-            down_button.clicked.connect(() => { move_down(episode); });
+            var handle = new Gtk.EventBox();
+            var dnd_icon = new Gtk.Image.from_icon_name("view-list-symbolic", Gtk.IconSize.BUTTON);
+            handle.add(dnd_icon);
+            box.pack_start(handle, false, false, 0);
 
-            this.pack_start(up_button, false, false, 0);
-            this.pack_start(down_button, false, false, 0);
+            Gtk.drag_source_set(handle, Gdk.ModifierType.BUTTON1_MASK, targetEntries, Gdk.DragAction.MOVE);
+            handle.drag_begin.connect(on_drag_begin);
+            handle.drag_data_get.connect(on_drag_data_get);
 
             try {
                 GLib.File cover = GLib.File.new_for_uri(episode.parent.coverart_uri);
@@ -53,11 +59,11 @@ namespace Vocal {
                 image.expand = false;
                 image.get_style_context().add_class("album-artwork");
 
-                this.pack_start(image, false, false, 0);
+                box.pack_start(image, false, false, 0);
             } catch (Error e) {}
 
-            Gtk.Label title_label = new Gtk.Label(episode.title.replace("%27", "'"));
-            this.pack_start(title_label, true, true, 0);
+            Gtk.Label title_label = new Gtk.Label(Utils.truncate_string(episode.title.replace("%27", "'"), 35) + "...");
+            box.pack_start(title_label, false, false, 0);
 
             Gtk.Button remove_button = new Gtk.Button.from_icon_name("process-stop-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             remove_button.get_style_context().add_class("flat");
@@ -65,7 +71,35 @@ namespace Vocal {
 
             remove_button.clicked.connect(() => { remove_episode(episode); });
 
-            this.pack_start(remove_button, false, false, 0);
+            box.pack_end(remove_button, false, false, 0);
+        }
+
+        private void on_drag_begin(Gtk.Widget widget, Gdk.DragContext context){
+          var row = (QueueListRow) widget.get_ancestor(typeof(QueueListRow));
+
+          Gtk.Allocation alloc;
+          row.get_allocation(out alloc);
+
+          var surface = new Cairo.ImageSurface(Cairo.Format.ARGB32, alloc.width, alloc.height);
+          var cr = new Cairo.Context(surface);
+
+          row.get_style_context().add_class("drag-icon");
+          row.draw(cr);
+          row.get_style_context().remove_class("drag-icon");
+
+          int x, y;
+          widget.translate_coordinates(row, 0, 0, out x, out y);
+          surface.set_device_offset(-x, -y);
+          Gtk.drag_set_icon_surface(context, surface);
+        }
+
+        private void on_drag_data_get(Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time) {
+          uchar[] data = new uchar[(sizeof (QueueListRow))];
+          ((Gtk.Widget[])data)[0] = widget;
+
+          selection_data.set (
+              Gdk.Atom.intern_static_string ("GTK_LIST_BOX_ROW"), 32, data
+          );
         }
     }
 }

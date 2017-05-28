@@ -553,6 +553,11 @@ namespace Vocal {
                 library.move_episode_down_in_queue(e);
                 queue_popover.show_all();
             });
+            queue_popover.update_queue.connect((oldPos, newPos) => {
+                library.update_queue(oldPos, newPos);
+                queue_popover.show_all();
+            });
+
             queue_popover.remove_episode.connect((e) => {
                 library.remove_episode_from_queue(e);
                 queue_popover.show_all();

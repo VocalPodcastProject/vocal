@@ -135,6 +135,12 @@ public class Utils
     public static string html_to_markup(string original) {
 
         string markup = GLib.Uri.unescape_string(original);
+
+        if ( markup == null ) {
+            warning ("unable to unescape markup: " + original);
+            markup = original;
+        }
+
         markup = markup.replace("&", "&amp;");
 
         // Preserve hyperlinks

@@ -143,22 +143,27 @@ public class Utils
 
         markup = markup.replace("&", "&amp;");
 
-        // Preserve hyperlinks
+        // Simplify (keep only href attribute) & preserve anchor tags.
+        Regex simpleLinks = new Regex("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
+                                      RegexCompileFlags.CASELESS);
+        markup = simpleLinks.replace(markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
+
+        // Replace <br> tags with line breaks.
+        Regex lineBreaks = new Regex("<br[\\s\\/]*?>", RegexCompileFlags.CASELESS);
+        markup = lineBreaks.replace(markup, -1, 0, "\n");
+
         markup = markup.replace("<a", "?a");
         markup = markup.replace("</a>", "?/a?");
-
-        // Preserve breaks
-        markup = markup.replace("<br>", "?br?");
-        markup = markup.replace ("<br />", "?br /?");
 
         // Preserve bold tags
         markup = markup.replace("<b>", "?b?");
         markup = markup.replace("</b>", "?/b?");
+
         int nextOpenBracketIndex = 0;
         int nextCloseBracketIndex = 0;
         while (nextOpenBracketIndex >= 0) {
             nextOpenBracketIndex = markup.index_of("<", 0);
-            nextCloseBracketIndex = markup.index_of(">", 0) + 1;
+            nextCloseBracketIndex = markup.index_of(">", nextOpenBracketIndex) + 1;
             if (nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
                     && nextCloseBracketIndex >= 0 && nextOpenBracketIndex <= markup.length && nextCloseBracketIndex <= markup.length) {
                 markup = markup.splice(nextOpenBracketIndex, nextCloseBracketIndex);
@@ -169,13 +174,14 @@ public class Utils
             }
         }
 
-        // Preserve hyperlinks
-        markup = markup.replace("?a", "<a");
-        markup = markup.replace("?/a?", "</a>");
+        // remaining < & > tags are translated
+        markup = markup.replace("<", "&lt;");
+        markup = markup.replace(">", "&gt;");
 
-        // Preserve breaks
-        markup = markup.replace("?br?", "<br>");
-        markup = markup.replace ("?br /?", "<br />");
+        // Preserve hyperlinks
+        markup = markup.replace("?a?", "<a");
+        markup = markup.replace("?a-end?", ">");
+        markup = markup.replace("?/a?", "</a>");
 
         // Preserve bold tags
         markup = markup.replace("?b?", "<b>");

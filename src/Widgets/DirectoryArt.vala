@@ -141,7 +141,10 @@ namespace Vocal {
 
             this.pack_start(hor_box, false, false, 0);
 
-            this.get_style_context().add_class("directory-art");
+            if (Utils.check_elementary())
+                a.get_style_context().add_class("card");
+            else
+                this.get_style_context().add_class("directory-art");
 		}
 	}
 }

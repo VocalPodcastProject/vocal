@@ -559,8 +559,10 @@ namespace Vocal {
          * Adds an episode to the queue
          */
         public void enqueue_episode(Episode e) {
-            queue.add(e);
-            queue_changed();
+            if(!queue.contains(e)){
+                queue.add(e);
+                queue_changed();
+            }
         }
 
         /*
@@ -615,6 +617,34 @@ namespace Vocal {
                 i++;
             }
         }
+
+
+        /*
+         * Updates the queue by moving an episode in the old position to the new position
+         */
+        public void update_queue(int oldPos, int newPos) {
+            int i;
+
+            if(oldPos < newPos){
+                for(i = oldPos; i < newPos; i++) {
+                    swap(queue, i, i+1);
+                }
+            } else {
+                for(i = oldPos; i > newPos; i--) {
+                    swap(queue, i, i-1);
+                }
+            }
+        }
+
+        /*
+         * Used by update_queue to swap episodes in the queue.
+         */
+        private void swap(Gee.ArrayList<Episode> q, int a, int b) {
+            Episode tmp = q[a];
+            q[a] = q[b];
+            q[b] = tmp;
+        }
+
 
         /*
          * Removes an episode from the queue altogether

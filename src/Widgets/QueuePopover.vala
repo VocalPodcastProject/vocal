@@ -19,14 +19,14 @@
 
 namespace Vocal {
 	public class QueuePopover : Gtk.Popover {
-
+		public signal void update_queue(int oldPos, int newPos);
 		public signal void move_up(Episode e);
 		public signal void move_down(Episode e);
 		public signal void remove_episode(Episode e);
 		public signal void play_episode_from_queue_immediately(Episode e);
 
-		private Gtk.ListBox episodes;
-		private Gee.ArrayList<QueueRow> rows;
+		private QueueList episodes;
+
 		private Gtk.Label label;
 		private Gtk.ScrolledWindow scrolled_window;
 		private Gtk.Box scrolled_box;
@@ -34,11 +34,9 @@ namespace Vocal {
 		public QueuePopover(Gtk.Widget parent) {
 			this.set_relative_to(parent);
 
-			label = new Gtk.Label("No episodes in queue");
+			label = new Gtk.Label(_("No episodes in queue"));
 			label.get_style_context().add_class("h3");
 			label.margin  = 12;
-
-			episodes =  new Gtk.ListBox();
 
 			scrolled_window = new Gtk.ScrolledWindow(null, null);
 			scrolled_window.set_size_request(400, 50);
@@ -47,10 +45,8 @@ namespace Vocal {
 			scrolled_window.add(scrolled_box);
 
 			scrolled_box.add(label);
-			scrolled_box.add(episodes);
 
 			this.add(scrolled_window);
-
 		}
 
 		/*
@@ -58,36 +54,22 @@ namespace Vocal {
 		 */
 		public void set_queue(Gee.ArrayList<Episode> queue) {
 			scrolled_box.remove(episodes);
-			episodes = new Gtk.ListBox();
-			episodes.selection_mode = Gtk.SelectionMode.NONE;
-			rows = new Gee.ArrayList<QueueRow>();
-			if(queue.size > 0) {
 
+			if(queue.size > 0) {
 				hide_label();
 
-				foreach(Episode e in queue) {
-					QueueRow q = new QueueRow(e);
-					q.move_up.connect((e) => { move_up(e); });
-					q.move_down.connect((e) => { move_down(e); });
-					q.remove_episode.connect((e) => { remove_episode(e); });
-					
-					episodes.add(q);
-					rows.add(q);
-				}
-
+				episodes = new QueueList(queue);
+				episodes.vadjustment = scrolled_window.vadjustment;
+				episodes.update_queue.connect((oldPos, newPos) => { update_queue(oldPos, newPos); });
 				episodes.row_activated.connect(on_row_activated);
-
-				episodes.button_press_event.connect((e) => {
-					episodes.row_activated(episodes.get_row_at_y((int)e.y));
-					return false;
-				});	
+				episodes.remove_episode.connect((e) => { remove_episode(e); });
+				scrolled_box.add(episodes);
 
 			} else {
 				show_label();
 			}
-
-			scrolled_box.add(episodes);
 		}
+
 
 		/*
 		 * Show the "no episodes in queue" label
@@ -113,8 +95,118 @@ namespace Vocal {
 		 * Called whenever the row is activated (when the user clicks it)
 		 */
 		public void on_row_activated(Gtk.ListBoxRow row) {
+			print("\n\nrow activated\n\n");
 			int index = row.get_index();
-			play_episode_from_queue_immediately(rows[index].episode);
+			QueueListRow q = (QueueListRow) row;
+
+			play_episode_from_queue_immediately(q.episode);
 		}
-  	}
+  }
+
+	class QueueList : Gtk.ListBox {
+		public signal void update_queue(int oldPos, int newPos);
+		public signal void remove_episode(Episode e);
+
+		public Gee.ArrayList<QueueListRow> rows; 
+
+		private const Gtk.TargetEntry targetEntries[] = {
+		  { "GTK_LIST_BOX_ROW", Gtk.TargetFlags.SAME_APP, 0 }
+    };
+
+		public QueueList(Gee.ArrayList<Episode> queue) {
+			selection_mode = Gtk.SelectionMode.NONE;
+			rows = new Gee.ArrayList<QueueListRow>();
+
+			Gtk.drag_dest_set(this, Gtk.DestDefaults.ALL, targetEntries, Gdk.DragAction.MOVE);
+      drag_data_received.connect(on_drag_data_received);
+
+			foreach(Episode e in queue) {
+				QueueListRow listRow = new QueueListRow(e);
+
+				listRow.remove_episode.connect((e) => { remove_episode(e); });
+
+				listRow.update_queue.connect((oldPos, newPos) => { update_queue(oldPos, newPos); });
+
+				add(listRow);
+				rows.add(listRow);
+			}
+		}
+
+		private bool scroll_up = false;
+		private bool scrolling = false;
+    private bool should_scroll = false;
+    public Gtk.Adjustment vadjustment;
+
+    private const int SCROLL_STEP_SIZE = 10;
+    private const int SCROLL_DISTANCE = 30;
+    private const int SCROLL_DELAY = 50;
+
+		public override bool drag_motion(Gdk.DragContext context, int x, int y, uint time) {
+			check_scroll (y);
+			if(should_scroll && !scrolling) {
+				scrolling = true;
+				Timeout.add (SCROLL_DELAY, scroll);
+			}
+
+			return true;
+		}
+
+		private void check_scroll (int y) {
+			if (vadjustment == null) {
+				return;
+			}
+
+			double vadjustment_min = vadjustment.value;
+			double vadjustment_max = vadjustment.page_size + vadjustment_min;
+			double show_min = double.max(0, y - SCROLL_DISTANCE);
+			double show_max = double.min(vadjustment.upper, y + SCROLL_DISTANCE);
+
+			if(vadjustment_min > show_min) {
+				should_scroll = true;
+				scroll_up = true;
+			} else if (vadjustment_max < show_max){
+				should_scroll = true;
+				scroll_up = false;
+			} else {
+				should_scroll = false;
+			}
+		}
+
+    private bool scroll () {
+      if (should_scroll) {
+        if(scroll_up) {
+          vadjustment.value -= SCROLL_STEP_SIZE;
+        } else {
+          vadjustment.value += SCROLL_STEP_SIZE;
+        }
+      } else {
+        scrolling = false;
+      }
+
+      return should_scroll;
+    }
+
+    private void on_drag_data_received(Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint target_type, uint time) {
+      QueueListRow target;
+      Gtk.Widget row;
+      QueueListRow source;
+      int newPos;
+      int oldPos;
+
+      target  = (QueueListRow) get_row_at_y(y);
+
+      newPos = target.get_index();
+      row = ((Gtk.Widget[]) selection_data.get_data())[0];
+      source = (QueueListRow) row.get_ancestor(typeof(QueueListRow));
+      oldPos = source.get_index();
+
+      if(source == target) {
+        return;
+      }
+
+      remove(source);
+      insert(source, newPos);
+      update_queue(oldPos, newPos);
+    }
+	}
 }

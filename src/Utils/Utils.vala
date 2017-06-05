@@ -397,4 +397,15 @@ const string CLOSE = """
 
     }
 
+    /*
+     * Truncates a string if it is longer than to the n. Returns the string unchanged otherwise.
+     */
+    public static string truncate_string(string str, int n) {
+        if(str.length > n) {
+            return str.substring(0, n);
+        }
+
+        return str;
+    }
+
 }

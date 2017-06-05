@@ -145,6 +145,5 @@ namespace Vocal {
                 a.get_style_context().add_class("card");
             else
                 this.get_style_context().add_class("directory-art");
-		}
 	}
 }

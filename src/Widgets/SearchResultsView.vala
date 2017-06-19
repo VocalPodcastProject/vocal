@@ -110,6 +110,7 @@ namespace Vocal {
             search_entry.activate.connect (() => {
                 this.search_term = search_entry.text;
                 title_label.label = _("Search Results for <i>%s</i>".printf(search_term));
+		search_entry.grab_focus_without_selecting ();
                 reset ();
                 load_from_itunes ();
                 load_local_results ();

@@ -1939,7 +1939,8 @@ namespace Vocal {
         private void on_remove_request() {
             if(highlighted_podcast != null) {
                 Gtk.MessageDialog msg = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                     _("Are you sure you want to remove '%s' from your library?".printf(highlighted_podcast.name.replace("%27", "'"))));
+                                                               _("Are you sure you want to remove '%s' from your library?"),
+                                                               highlighted_podcast.name.replace("%27", "'"));
 
 
                 msg.add_button (_("No"), Gtk.ResponseType.NO);

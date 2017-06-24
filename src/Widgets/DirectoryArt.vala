@@ -80,39 +80,39 @@ namespace Vocal {
 				if(summary.length > 0) {
 					summary_label.set_text(summary);
 				} else if (url.contains("itunes.apple")) {
-	                var itunes = new iTunesProvider();
-	                string rss_url = itunes.get_rss_from_itunes_url(url);
-					var fp = new FeedParser();
-	                string details_summary =  fp.find_description_from_file(rss_url);
-	                summary_label.set_text(details_summary.length > 0 ? details_summary : _("No summary available."));
-	                fp = null;
+					var itunes = new iTunesProvider();
+					string rss_url = itunes.get_rss_from_itunes_url(url);
+							var fp = new FeedParser();
+					string details_summary =  fp.find_description_from_file(rss_url);
+					summary_label.set_text(details_summary.length > 0 ? details_summary : _("No summary available."));
+					fp = null;
                 }
-                summary_label.max_width_chars = 64;
-                summary_label.margin = 20;
+				summary_label.max_width_chars = 64;
+				summary_label.margin = 20;
 				details_popover.show_all();
 			});	
 
-			var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-			subscribe_button.tooltip_text = _("Subscribe");
-			if (Utils.check_elementary ())
-			    subscribe_button.relief = Gtk.ReliefStyle.NONE;
-			subscribe_button.clicked.connect(() => {
-				subscribe_button_clicked(url);
-			});
-			subscribe_button.valign = Gtk.Align.START;
+            var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            subscribe_button.tooltip_text = _("Subscribe");
+            if (Utils.check_elementary ())
+                subscribe_button.relief = Gtk.ReliefStyle.NONE;
+            subscribe_button.clicked.connect(() => {
+                subscribe_button_clicked(url);
+            });
+		    subscribe_button.valign = Gtk.Align.START;
 
-			button_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
-			button_box.add(details_button);
-			button_box.add(subscribe_button);
-			button_box.margin = 5;
-			button_box.margin_right = 0;
+            button_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+            button_box.add(details_button);
+            button_box.add(subscribe_button);
+            button_box.margin = 5;
+            button_box.margin_right = 0;
 
-			var hor_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-			hor_box.pack_start(label_box, true, true, 0);
-			hor_box.pack_start(button_box, false, false, 0);
+            var hor_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            hor_box.pack_start(label_box, true, true, 0);
+            hor_box.pack_start(button_box, false, false, 0);
 
-			hor_box.margin_left = 10;
-			hor_box.margin_right = 10;
+            hor_box.margin_left = 10;
+            hor_box.margin_right = 10;
 
             // Load the album artwork
             Gtk.Image image = new Gtk.Image();
@@ -141,7 +141,11 @@ namespace Vocal {
 
             this.pack_start(hor_box, false, false, 0);
 
-            this.get_style_context().add_class("directory-art");
-		}
+            if (Utils.check_elementary()) {
+                this.get_style_context().add_class("card");
+            } else {
+                this.get_style_context().add_class("directory-art");
+            }
+        }
 	}
 }

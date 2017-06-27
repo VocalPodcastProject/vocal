@@ -146,14 +146,14 @@ public class Utils
 
         // Simplify (keep only href attribute) & preserve anchor tags.
         Regex simpleLinks = new Regex("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
-                                      RegexCompileFlags.CASELESS);
+                                      RegexCompileFlags.CASELESS | RegexCompileFlags.DOTALL);
         markup = simpleLinks.replace(markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
 
         // Replace <br> tags with line breaks.
         Regex lineBreaks = new Regex("<br[\\s\\/]*?>", RegexCompileFlags.CASELESS);
         markup = lineBreaks.replace(markup, -1, 0, "\n");
 
-        markup = markup.replace("<a", "?a");
+        markup = markup.replace("<a", "?a?");
         markup = markup.replace("</a>", "?/a?");
 
         // Preserve bold tags

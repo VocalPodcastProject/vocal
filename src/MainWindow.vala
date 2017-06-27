@@ -2155,7 +2155,7 @@ namespace Vocal {
                 if(a.podcast == details.podcast) {
                     GLib.File cover = GLib.File.new_for_path(path);
                     InputStream input_stream = cover.read();
-                    var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 275, 275, true);
+                    var pixbuf = a.create_cover_image(input_stream);
                     
                     a.image.pixbuf = pixbuf;
                     

@@ -24,7 +24,10 @@ An official snap package is not yet available, although some community members a
 64-bit .deb installers can be downloaded from our [releases](https://github.com/needle-and-thread/vocal/releases) page. Please note: this method is highly discouraged. With the benefits of sandboxing, improved security, and greater simplicity, we are moving away from older installation methods. **Also, please note that our stable and daily PPAs will be abandoned in the near future.**
 
 ### Official OS packages
-We're working with a number of distributions to provide official packages as part of the OS. Stay tuned for more information.
+We're working with a number of distributions to make sure it's as simple as possible to get Vocal out-of-the-box. Check below for the list of distributions where Vocal can be downloaded from the official repositories.
+
+* [Fedora](https://admin.fedoraproject.org/pkgdb/package/rpms/vocal/)
+* [openSUSE](https://software.opensuse.org//download.html?project=multimedia%3Aapps&package=vocal)
 
 ## Get Involved
 

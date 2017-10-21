@@ -163,7 +163,7 @@ configure_file_translation (${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-th
 configure_file_translation (${CMAKE_CURRENT_SOURCE_DIR}/data/com.github.needle-and-thread.vocal.appdata.xml.in ${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.appdata.xml ${CMAKE_SOURCE_DIR}/po/)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.desktop DESTINATION share/applications)
-install (FILES ${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.appdata.xml DESTINATION share/appdata)
+install (FILES ${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.appdata.xml DESTINATION share/metainfo)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/16/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/16x16/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/22/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/22x22/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/24/com.github.needle-and-thread.vocal.svg DESTINATION share/icons/hicolor/24x24/apps)

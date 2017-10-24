@@ -123,7 +123,6 @@ namespace Vocal {
             // Create the lists container
             content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
             var scrolled = new Gtk.ScrolledWindow(null, null);
-            content_box.add(title_label);
             scrolled.add(content_box);
             this.add(scrolled);
 

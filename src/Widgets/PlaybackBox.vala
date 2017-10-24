@@ -37,14 +37,11 @@ namespace Vocal {
         public PlaybackBox () {
 
             this.get_style_context().add_class("seek-bar");
-            
-            this.width_request  = 300;
             this.info_label = new Gtk.Label(_("<b>Select an episode to start playing…</b>"));
             this.info_label.set_use_markup(true);
             this.info_label.width_chars = 20;
             this.info_label.set_ellipsize(Pango.EllipsizeMode.END);
             this.info_label.margin_top = 12;
-
             this.progress_bar = new Gtk.ProgressBar();
             
             scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 1, 1000);
@@ -71,6 +68,14 @@ namespace Vocal {
             // Add the components to the box
             this.add(info_label);
             this.add(scale_grid);
+        }
+
+        public override void get_preferred_width (out int minimum_width, out int natural_width) {
+            base.get_preferred_width (out minimum_width, out natural_width);
+            minimum_width = 300;
+            if (natural_width < 600) {
+                natural_width = 600;
+            }
         }
         
         /*

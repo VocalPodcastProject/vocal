@@ -53,7 +53,9 @@ namespace Vocal {
 		 * Sets the current queue
 		 */
 		public void set_queue(Gee.ArrayList<Episode> queue) {
-			scrolled_box.remove(episodes);
+			if(episodes != null) {
+				scrolled_box.remove(episodes);
+			}
 
 			if(queue.size > 0) {
 				hide_label();

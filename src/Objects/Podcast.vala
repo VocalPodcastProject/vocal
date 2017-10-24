@@ -39,17 +39,14 @@ namespace Vocal {
 
             //the album art is saved locally, return that path. Otherwise, return main album art URI
             get {
-
-                if(local_art_uri != null) {
+                if(local_art_uri != null && local_art_uri != "(null)") {
                     GLib.File local_art = GLib.File.new_for_uri(local_art_uri);
                     if(local_art.query_exists()) {
                         return local_art_uri;
                     }
                 } else if(remote_art_uri != null) {
                     GLib.File remote_art = GLib.File.new_for_path(remote_art_uri);
-                    if(remote_art.query_exists()) {
-                        return remote_art_uri;
-                    }
+                    return remote_art_uri;
                 }
                 // In rare instances where album art is not available at all, provide a "missing art" image to use
                 // in library view
@@ -61,9 +58,9 @@ namespace Vocal {
 		        string[] split = value.split(":");
 		        if(split[0] == "http" || split[0] == "HTTP") {
 		            remote_art_uri = value.replace("%27", "'");
-            } else {
-                local_art_uri = """file://""" + value.replace("%27", "'");
-            }
+                } else {
+                    local_art_uri = """file://""" + value.replace("%27", "'");
+                }
 		    }
 		}
 		

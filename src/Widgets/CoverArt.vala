@@ -48,32 +48,31 @@ namespace Vocal {
 		 * Constructor for CoverArt given an image path and a podcast
 		 */
 		public CoverArt(string path, Podcast podcast, bool? show_mimetype = false) {
-
+			
 			this.podcast = podcast;
 			this.margin = 10;
 			this.orientation = Gtk.Orientation.VERTICAL;
 
 			try {
-
 				// Load the actual cover art
 				File cover_file = GLib.File.new_for_uri(path.replace("%27", "'"));
 				assert(cover_file != null);
 				bool exists = cover_file.query_exists();
-				if(!exists)
-				{
-					info("Coverart at %s doesn't exist.".printf(path.replace("%27", "'")));
+				if(!exists)	{
+					info("Coverart at %s doesn't exist.", path.replace("%27", "'"));
 				}
-	            InputStream input_stream = cover_file.read();
-	            var coverart_pixbuf = create_cover_image (input_stream);
-	            image = new Gtk.Image.from_pixbuf(coverart_pixbuf);
 
-	            // Load the banner to be drawn on top of the cover art
-                File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
-	            InputStream triangle_input_stream = triangle_file.read();
-	            var triangle_pixbuf = new Gdk.Pixbuf.from_stream_at_scale(triangle_input_stream, 75, 75, true);
-	            triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);
+				InputStream input_stream = cover_file.read();
+				var coverart_pixbuf = create_cover_image (input_stream);
+				image = new Gtk.Image.from_pixbuf(coverart_pixbuf);
 
-	            // Align everything to the top right corner
+				// Load the banner to be drawn on top of the cover art
+				File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
+				InputStream triangle_input_stream = triangle_file.read();
+				var triangle_pixbuf = new Gdk.Pixbuf.from_stream_at_scale(triangle_input_stream, 75, 75, true);
+				triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);
+
+	      // Align everything to the top right corner
 				triangle.set_alignment(1, 0);
 				image.set_alignment(1,0);
 
@@ -85,7 +84,7 @@ namespace Vocal {
 				triangle_overlay.add(image);
 
 			} catch (Error e) {
-				critical("Unable to load podcast cover art.");
+				critical("Unable to load podcast cover art. %s\n", e.message);
 			}
 
 			if(triangle_overlay == null)

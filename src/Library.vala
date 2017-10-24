@@ -135,10 +135,8 @@ namespace Vocal {
                     }
 
                 } catch (Error e) {
-                    info("Error parsing OPML file.");
-                    info(e.message);
+                    info("Error parsing OPML file. %s\n", e.message);
                     successful = false;
-
                 }
 
 
@@ -199,14 +197,14 @@ namespace Vocal {
                 }
 
             } catch(Error e) {
-                stderr.puts("Unable to save a local copy of the album art.\n");
+                error("Unable to save a local copy of the album art. %s\n", e.message);                
             }
 
 
             // Open the database
             int ec = Sqlite.Database.open (db_location, out db);
 	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
+		        error("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
 		        return false;
 	        }
 
@@ -246,7 +244,7 @@ namespace Vocal {
 
             ec = db.exec (query, null, out errmsg);
 	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Error: %s\n", errmsg);
+		        error("Error: %s\n", errmsg);
 		        return false;
 	        }
 
@@ -281,10 +279,9 @@ namespace Vocal {
 
                 ec = db.exec (query, null, out errmsg);
                 if (ec != Sqlite.OK) {
-                    stderr.printf ("Error: %s\n", errmsg);
+                    error ("Error: %s\n", errmsg);
                 }
             }
-
 
 	        return true;
 
@@ -530,7 +527,7 @@ namespace Vocal {
                         try {
                             local_file.delete();
                         } catch(Error e) {
-                            stderr.puts("Unable to delete file.\n");
+                            error ("Unable to delete file.\n");
                         }
                     }
 
@@ -545,6 +542,7 @@ namespace Vocal {
 
 
             } catch (Error e) {
+                error("Error occurered downloading episode %s\n", e.message);
             }
 
             if(batch_download_count > 0) {
@@ -726,7 +724,7 @@ namespace Vocal {
             ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                error ("Error: %s\n", errmsg);
             }
         }
 
@@ -845,7 +843,7 @@ namespace Vocal {
             // Open a database:
             int ec = Sqlite.Database.open (db_location, out db);
             if (ec != Sqlite.OK) {
-	            stderr.printf ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
+	            error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
 	            return -1;
             }
 
@@ -939,7 +937,7 @@ namespace Vocal {
 	            prepared_query_str = "SELECT * FROM Episode WHERE parent_podcast_name = '%s' ORDER BY rowid ASC".printf(p.name);
 	            ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
 	            if (ec != Sqlite.OK) {
-		            stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
+		            error ("Error: %d: %s\n", db.errcode (), db.errmsg ());
 		            return;
 	            }
 
@@ -1163,7 +1161,7 @@ namespace Vocal {
 
 	        ec = db.exec (query, null, out errmsg);
 	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
+		        error ("Error: %d: %s\n", db.errcode (), db.errmsg ());
 		        return;
 	        }
 
@@ -1172,7 +1170,7 @@ namespace Vocal {
             ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                error ("Error: %s\n", errmsg);
             }
 
             // Remove the local object as well
@@ -1262,7 +1260,7 @@ namespace Vocal {
             ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                error ("Error: %s\n", errmsg);
             }
         }
 
@@ -1318,7 +1316,7 @@ namespace Vocal {
             ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                error ("Error: %s\n", errmsg);
             }
             
             // Set the new file location for the podcast object
@@ -1357,7 +1355,7 @@ namespace Vocal {
 
             int ec = Sqlite.Database.open(db_location, out db);
             if(ec != Sqlite.OK) {
-                stderr.printf("Unable to create database at %s\n", db_location);
+                error("Unable to create database at %s\n", db_location);
                 return false;
             } else {
                 string query = """
@@ -1388,7 +1386,7 @@ namespace Vocal {
 		            """;
 	            ec = db.exec (query, null, out error_message);
 	            if(ec != Sqlite.OK) {
-	                stderr.printf("Unable to execute query at %s\n", db_location);
+	                error("Unable to execute query at %s\n", db_location);
                 }
                 return true;
             }
@@ -1435,7 +1433,7 @@ namespace Vocal {
             ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                error ("Error: %s\n", errmsg);
             }
         }
     }

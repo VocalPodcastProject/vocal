@@ -113,14 +113,14 @@ namespace Vocal {
             // Initialize GtkClutter
             var err = GtkClutter.init (ref args);
             if (err != Clutter.InitError.SUCCESS) {
-                stdout.puts("Could not initialize clutter gtk\n");
+                error ("Could not initialize clutter gtk\n");
                 error ("Could not initalize clutter! "+err.to_string ());
             }
 
             // Initialize Clutter
             err = Clutter.init (ref args);
             if (err != Clutter.InitError.SUCCESS) {
-                stdout.puts("Could not initialize clutter.\n");
+                error ("Could not initialize clutter.\n");
                 error ("Could not initalize clutter! "+err.to_string ());
             }
 

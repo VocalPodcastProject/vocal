@@ -63,27 +63,18 @@ namespace Vocal {
 
 			this.settings = settings;
 
-			// Create the box that will be used for the title in the headerbar
-            headerbar_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
-
-            // Create the box to be shown during playback
-            playback_box = new PlaybackBox();
-
-            // Set the playback box in the middle of the HeaderBar
-	        playback_box.hexpand = true;
-
             // Create the show notes button
-		    if(on_elementary)
+		    if(on_elementary) {
 	            shownotes_button = new Gtk.Button.from_icon_name("help-info-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-		    else
-	     		shownotes_button = new Gtk.Button.from_icon_name("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            } else {
+                 shownotes_button = new Gtk.Button.from_icon_name("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            }
             shownotes_button.tooltip_text = _("View show notes");
             shownotes_button.valign = Gtk.Align.CENTER;
             shownotes_button.clicked.connect(() => {
                 shownotes_selected();
             });
             shownotes_button.relief = Gtk.ReliefStyle.NONE;
-
 
             playlist_button = new Gtk.Button.from_icon_name("media-playlist-consecutive-symbolic");
             playlist_button.tooltip_text = _("Coming up next");
@@ -93,11 +84,16 @@ namespace Vocal {
             playlist_button.relief = Gtk.ReliefStyle.NONE;
             playlist_button.valign = Gtk.Align.CENTER;
 
+            // Create the box to be shown during playback
+            playback_box = new PlaybackBox();
+            
+            // Create the box that will be used for the title in the headerbar
+            headerbar_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 10);
             headerbar_box.add(shownotes_button);
             headerbar_box.add(playback_box);
             headerbar_box.add(playlist_button);
             headerbar_box.halign = Gtk.Align.CENTER;
-
+            headerbar_box.hexpand = true;
 
             // Create the menus and menuitems
             menu = new Gtk.Menu ();
@@ -146,7 +142,9 @@ namespace Vocal {
             report_problem.activate.connect (() => {
                 try {
                     Gtk.show_uri (null, "https://github.com/needle-and-thread/vocal/issues", 0);
-                } catch (Error error) {}
+                } catch (Error e) {
+                    error("Error occured %s\n", e.message);
+                }
             });
             menu.add(report_problem);
 
@@ -154,7 +152,9 @@ namespace Vocal {
             donate.activate.connect (() => {
                 try {
                     Gtk.show_uri (null, "http://needleandthread.co/apps/vocal", 0);
-                } catch (Error error) {}
+                } catch (Error e) {
+                    error("Error occured %s\n", e.message);
+                }
             });
             //menu.add(donate);
 
@@ -266,9 +266,9 @@ namespace Vocal {
 
 
             Gtk.Image download_image;
-            if(on_elementary)
+            if(on_elementary) {
                 download_image = new Gtk.Image.from_icon_name("browser-download-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
-            else {
+            } else {
                 download_image = new Gtk.Image.from_icon_name("document-save-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             }
             download = new Gtk.Button();

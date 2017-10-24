@@ -49,7 +49,7 @@ namespace Vocal {
                 var root_object = parser.get_root ().get_object ();
 
                 if(root_object == null) {
-                    stdout.puts("Error. Root object was null.");
+                    error("Error. Root object was null.");
                     return null;
                 }
 
@@ -91,7 +91,7 @@ namespace Vocal {
                 var root_object = parser.get_root ().get_object ();
 
                 if(root_object == null) {
-                    stdout.puts("Error. Root object was null.");
+                    error("Error. Root object was null.");
                     return null;
                 }
 
@@ -169,7 +169,7 @@ namespace Vocal {
                 var root_object = parser.get_root ().get_object ();
 
                 if(root_object == null) {
-                    stdout.puts("Error. Root object was null.");
+                    error("Error. Root object was null.");
                     return null;
                 }
 

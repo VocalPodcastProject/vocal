@@ -523,7 +523,7 @@ namespace Vocal {
 
             // box is just a generic container that will hold everything else (Gtk.Window can only directly hold a single child)
             box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-
+            
             // Add everything to window
             this.add (box);
             this.set_titlebar(toolbar);
@@ -538,7 +538,7 @@ namespace Vocal {
                     toolbar.hide_downloads_menuitem();
             });
             downloads.all_downloads_complete.connect(toolbar.hide_downloads_menuitem);
-
+            
             // Create the queue popover
             queue_popover = new QueuePopover(toolbar.playlist_button);
             library.queue_changed.connect(() => {
@@ -557,14 +557,14 @@ namespace Vocal {
                 library.update_queue(oldPos, newPos);
                 queue_popover.show_all();
             });
-
+            
             queue_popover.remove_episode.connect((e) => {
                 library.remove_episode_from_queue(e);
                 queue_popover.show_all();
             });
             queue_popover.play_episode_from_queue_immediately.connect(play_episode_from_queue_immediately);
             toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
-
+            
             // Set up all the toolbar signals
             toolbar.check_for_updates_selected.connect(() => {
                 on_update_request();
@@ -600,7 +600,7 @@ namespace Vocal {
 
             toolbar.export_selected.connect(export_podcasts);
             toolbar.downloads_selected.connect(show_downloads_popover);
-
+            
             setup_library_widgets();
         }
 
@@ -611,7 +611,7 @@ namespace Vocal {
          * that is NOT the first run).
          */
         private void setup_library_widgets() {
-
+            
             // Create a welcome screen and add it to the notebook (no matter if first run or not)
             welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
             welcome.append(on_elementary ? "preferences-desktop-online-accounts" : "applications-internet", _("Browse Podcasts"),
@@ -697,7 +697,7 @@ namespace Vocal {
                 switch_visible_page(welcome);
             });
             directory_scrolled.add(directory);
-
+            
             // Add the remaining widgets to the notebook. At this point, the gang's all here
             notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
             notebook.add_titled(search_results_scrolled, "search", _("Search Results"));
@@ -709,25 +709,25 @@ namespace Vocal {
             // Add the thinpaned to the box
             box.pack_start(library_box, true, true, 0);
             current_widget = notebook;
-
+            
             // Create the search box
-            search_results_view = new SearchResultsView(library);
+            search_results_view = new SearchResultsView(library);            
             search_results_view.on_new_subscription.connect(on_new_subscription);
             search_results_view.return_to_library.connect(() => {
                 switch_visible_page(previous_widget);
             });
             search_results_view.episode_selected.connect(on_search_popover_episode_selected);
             search_results_view.podcast_selected.connect(on_search_popover_podcast_selected);
-
+            
             search_results_box.add(search_results_view);
 
             show_all();
 
             // Show the welcome widget if it's the first run, or if the library is empty
-            if(first_run || library_empty) {
+            if(first_run || library_empty) {            
                 switch_visible_page(welcome);
                 show_all();
-
+                
             } else {
                 // Populate the IconViews from the library
                 populate_views();
@@ -766,13 +766,12 @@ namespace Vocal {
 
             		currently_repopulating = true;
     	            bool has_video = false;
-
+                    
                     // If it's not the first run or newly launched go ahead and remove all the widgets from the flowboxes
                     if(!first_run && !newly_launched) {
-        	            for(int i = 0; i < all_art.size; i++)
-        	            {
+        	            for(int i = 0; i < all_art.size; i++) {
         	            	all_flowbox.remove(all_flowbox.get_child_at_index(0));
-        	            }
+                        }
 
                         all_art.clear();
                     }
@@ -855,7 +854,7 @@ namespace Vocal {
 	                        has_video = true;
 	                    }
 
-                        CoverArt a = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast, true);
+                        CoverArt a = new CoverArt(podcast.coverart_uri, podcast, true);
                         a.get_style_context().add_class("coverart");
                         a.halign = Gtk.Align.START;
 
@@ -893,7 +892,7 @@ namespace Vocal {
             Thread.create<void*>(run, false);
 
             yield;
-
+            
             foreach(CoverArt a in all_art) {
                 all_flowbox.add(a);
             }
@@ -1060,7 +1059,7 @@ namespace Vocal {
             int index = details.current_episode_index;
             current_episode = details.podcast.episodes[index];
 
-            stdout.puts("settings state\n");
+            info("settings state\n");
 
             player.pause();
             play();
@@ -1281,9 +1280,10 @@ namespace Vocal {
                         var add_err_dialog = new Gtk.MessageDialog(add_feed,
                             Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
                             Gtk.ButtonsType.OK, "");
-                            add_err_dialog.response.connect((response_id) => {
-                                add_err_dialog.destroy();
-                            });
+
+                        add_err_dialog.response.connect((response_id) => {
+                            add_err_dialog.destroy();
+                        });
                             
                         // Determine if it was a network issue, or just a problem with the feed
                         
@@ -2300,7 +2300,7 @@ namespace Vocal {
 
             // Save the playback position
             if(player.current_episode != null) {
-                stdout.printf("Setting the last played position to %s\n", player.current_episode.last_played_position.to_string());
+                info("Setting the last played position to %s\n", player.current_episode.last_played_position.to_string());
                 if(player.current_episode.last_played_position != 0)
                     library.set_episode_playback_position(player.current_episode);
             }

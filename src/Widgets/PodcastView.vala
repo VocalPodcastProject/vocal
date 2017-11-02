@@ -662,7 +662,10 @@ namespace Vocal {
                 remove(scrolled);
             }
 
-            paned.remove(scrolled);
+            if ( scrolled != null ) {
+                paned.remove(scrolled);
+            }
+
             scrolled = new Gtk.ScrolledWindow (null, null);
             listbox = new Gtk.ListBox();
             listbox.activate_on_single_click = false;

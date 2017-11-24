@@ -22,14 +22,14 @@ using Gee;
 namespace Vocal {
     public class Podcast {
     
-        public  ArrayList<Episode> episodes = null;		  // the episodes belonging to this podcast
+        public  ArrayList<Episode> episodes = null;  // the episodes belonging to this podcast
         
-        public string 		name;                         // podcast name
-        public string 		feed_uri;                     // the uri for the podcast
-        public string 		remote_art_uri;               // the web link to the album art if local is unavailable
-        public string 		local_art_uri;                // where the locally cached album art is located
-        public string 		description;				          // the episode's description
-        public MediaType 	content_type;                 // is the podcast an audio or video feed?
+        public string       name = "";               // podcast name
+        public string       feed_uri = "";           // the uri for the podcast
+        public string       remote_art_uri = "";     // the web link to the album art if local is unavailable
+        public string       local_art_uri = "";      // where the locally cached album art is located
+        public string       description = "";        // the episode's description
+        public MediaType    content_type;            // is the podcast an audio or video feed?
 
         /*
          * Gets and sets the coverart, whether it's from a remote source

@@ -127,6 +127,7 @@ namespace Vocal {
                     while (next_item_in_queue != "item" && i < queue.size - 1) {
                         i++;
                         next_item_in_queue = queue[i];
+
                         if(next_item_in_queue == "title") {
                             i++;
                             episode.title = queue[i];
@@ -177,14 +178,15 @@ namespace Vocal {
                             episode.set_datetime_from_pubdate();
 
                         }
-                        /*
                         else if(next_item_in_queue == "summary") {
-                            i++;
-                            episode.description = queue[i];
-                            found_summary = true;
-                        }*/
-                        //else if(next_item_in_queue == "description" && !found_summary) {
-                        else if(next_item_in_queue == "description" && !found_summary) {
+                            // Save the summary as description if we haven't found a description yet.
+                            // Subsequent descriptions will overwrite this.
+                            if (episode.description.char_count() == 0) {
+                                i++;
+                                episode.description = queue[i];
+                            }
+                        }
+                        else if(next_item_in_queue == "description") {
                             i++;
                             episode.description = queue[i];
                         }
@@ -453,7 +455,6 @@ namespace Vocal {
             }
             
             string path = podcast.feed_uri;
-
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
             Xml.Doc* doc;
@@ -556,13 +557,14 @@ namespace Vocal {
                             episode.set_datetime_from_pubdate();
 
                         }
-                        /*
                         else if(next_item_in_queue == "summary") {
-                            i++;
-                            episode.description = queue[i];
-                            found_summary = true;
-                        }*/
-                        //else if(next_item_in_queue == "description" && !found_summary) {
+                            // Save the summary as description if we haven't found a description yet.
+                            // Subsequent descriptions will overwrite this.
+                            if (episode.description.char_count() == 0) {
+                                i++;
+                                episode.description = queue[i];
+                            }
+                        }
                         else if(next_item_in_queue == "description") {
                             i++;
                             episode.description = queue[i];

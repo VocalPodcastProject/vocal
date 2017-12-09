@@ -72,6 +72,14 @@ namespace Vocal {
             this.add(info_label);
             this.add(scale_grid);
         }
+
+        public override void get_preferred_width (out int minimum_width, out int natural_width) {
+            base.get_preferred_width (out minimum_width, out natural_width);
+            minimum_width = 300;
+            if (natural_width < 600) {
+                natural_width = 600;
+            }
+        }
         
         /*
          * Returns the percentage that the progress bar has been filled

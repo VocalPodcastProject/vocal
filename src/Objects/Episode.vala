@@ -21,19 +21,19 @@ using GLib;
 
 namespace Vocal {
 
-    public class Episode {
+	public class Episode {
 
-        public string			title;        			// the title of the episode
-        public string			description;			// the description/shownotes
-        public string			uri;					// the remote location for the media file
-        public string			local_uri;				// the local location for the media file, if any
-        public double 			last_played_position;	// the latest position that has been played
-        public string 			date_released;			// when the episode was released, in string form
-        public EpisodeStatus	status;					// whether the episode is played or unplayed
-        public DownloadStatus	current_download_status;// whether the episode is downloaded or not downloaded
+		public string           title = "";              // the title of the episode
+		public string           description = "";        // the description/shownotes
+		public string           uri = "";                // the remote location for the media file
+		public string           local_uri = "";          // the local location for the media file, if any
+		public double           last_played_position;    // the latest position that has been played
+		public string           date_released;           // when the episode was released, in string form
+		public EpisodeStatus    status;                  // whether the episode is played or unplayed
+		public DownloadStatus	current_download_status; // whether the episode is downloaded or not downloaded
 
-        public Podcast 			parent;					// the parent that the episode belongs to
-        public DateTime 		datetime_released;		// the datetime corresponding the when the episode was released
+		public Podcast          parent;                  // the parent that the episode belongs to
+		public DateTime         datetime_released;       // the datetime corresponding the when the episode was released
 
 		/*
 		 * Gets the playback uri based on whether the file is local or remote

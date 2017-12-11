@@ -167,6 +167,10 @@ namespace Vocal {
 
             string text = Utils.html_to_markup(episode.description);
 
+            // Remove repeated whitespace from description before adding to label.
+            Regex condense_spaces = new Regex("\\s{2,}");
+            text = condense_spaces.replace(text, -1, 0, " ").strip();
+
             description_label = new Gtk.Label(text != "(null)" ? text : _("No description available."));
             description_label.justify = Gtk.Justification.LEFT;
             description_label.set_use_markup(true);

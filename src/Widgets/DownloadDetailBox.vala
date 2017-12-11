@@ -203,7 +203,7 @@ namespace Vocal {
                 outdated_time_output = time_output;
             }
 
-            download_label.set_text(data_output + outdated_time_output);
+            download_label.set_markup(data_output + outdated_time_output);
 
             new_percentage_available();
         }

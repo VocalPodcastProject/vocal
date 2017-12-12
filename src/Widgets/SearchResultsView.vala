@@ -50,6 +50,10 @@ namespace Vocal {
 
         private Gtk.Label no_local_episodes_label;
         private Gtk.Label no_local_podcasts_label;
+        
+        private Gtk.Revealer local_podcasts_revealer;
+        private Gtk.Revealer local_episodes_revealer;
+        private Gtk.Revealer cloud_results_revealer;
 
         /*
          * Constructor for the full search results view. Shows all matches from the local library and across the iTunes ecosystem
@@ -151,16 +155,37 @@ namespace Vocal {
             no_local_episodes_label.get_style_context ().add_class ("h3");
             no_local_podcasts_label.get_style_context ().add_class ("h3");
 
-            content_box.add(local_podcasts_label);
-            content_box.add(no_local_podcasts_label);
-            content_box.add(local_podcasts_listbox);
-            content_box.add(local_episodes_label);
-            content_box.add(no_local_episodes_label);
-            content_box.add(local_episodes_listbox);
-            content_box.add(iTunes_box);
-            content_box.add(cloud_results_flowbox);
-
-            content_box.margin = 5;
+            
+            local_podcasts_revealer = new Gtk.Revealer();
+            local_episodes_revealer = new Gtk.Revealer();
+            cloud_results_revealer = new Gtk.Revealer();
+            
+            var local_podcasts_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+            local_podcasts_container.margin_left = 12;
+            local_podcasts_container.margin_right = 12;
+            local_podcasts_container.add(local_podcasts_label);
+            local_podcasts_container.add(no_local_podcasts_label);
+            local_podcasts_container.add(local_podcasts_listbox);
+            local_podcasts_revealer.add(local_podcasts_container);
+            
+            var local_episodes_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+            local_episodes_container.margin_left = 12;
+            local_episodes_container.margin_right = 12;
+            local_episodes_container.add(local_episodes_label);
+            local_episodes_container.add(no_local_episodes_label);
+            local_episodes_container.add(local_episodes_listbox);
+            local_episodes_revealer.add(local_episodes_container);
+            
+            var cloud_results_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+            cloud_results_container.margin_left = 12;
+            cloud_results_container.margin_right = 12;
+            cloud_results_container.add(iTunes_box);
+            cloud_results_container.add(cloud_results_flowbox);
+            cloud_results_revealer.add(cloud_results_container);
+            
+            content_box.add(local_podcasts_revealer);
+            content_box.add(local_episodes_revealer);
+            content_box.add(cloud_results_revealer);
 
             hide_spinner ();
             hide_no_local_podcasts ();
@@ -181,6 +206,9 @@ namespace Vocal {
             foreach (Gtk.Widget c in cloud_results_flowbox.get_children ()) {
                 cloud_results_flowbox.remove (c);
             }
+            local_podcasts_revealer.reveal_child = false;
+            local_episodes_revealer.reveal_child = false;
+            cloud_results_revealer.reveal_child = false;
             show_all ();
 
         }
@@ -214,8 +242,14 @@ namespace Vocal {
             foreach(Widget w in cloud_results_widgets) {
                 cloud_results_flowbox.add(w);
             }
+            
             hide_spinner ();
             show_all();
+            if (cloud_results_widgets.size < 1) {
+                cloud_results_revealer.reveal_child = false;
+            } else {
+                cloud_results_revealer.reveal_child = true;
+            }
 
         }
 
@@ -286,6 +320,8 @@ namespace Vocal {
                 show_local_episodes_listbox ();
             }
             show_all ();
+            local_podcasts_revealer.reveal_child = true;
+            local_episodes_revealer.reveal_child = true;
         }
 
         /*

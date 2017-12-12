@@ -25,7 +25,7 @@ using Vocal;
 namespace Vocal {
 
     errordomain VocalUpdateError {
-        NETWORK_ERROR;
+        NETWORK_ERROR, EMPTY_ADDRESS_ERROR;
     }
     
     class FeedParser {
@@ -330,11 +330,11 @@ namespace Vocal {
                 
             }
             
-            if(podcast.coverart_uri == null) {
+            if(podcast.coverart_uri == null || podcast.coverart_uri.length < 1) {
                 podcast.coverart_uri = """//usr/share/vocal/vocal-missing.png""";
             }
             
-            if(podcast.feed_uri == null) {
+            if(podcast.feed_uri == null || podcast.feed_uri.length < 1) {
                 podcast.feed_uri = path;
             }
             

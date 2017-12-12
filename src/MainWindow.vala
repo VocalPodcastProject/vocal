@@ -2221,8 +2221,10 @@ namespace Vocal {
                 new_episodes = null;
 
                 // Lastly, if there are new episodes, repopulate the views to obtain new counts
-                if(new_episode_count > 0)
+                if(new_episode_count > 0) {
+                    info ("Repopulating views after the update process has finished.");
                     this.populate_views();
+                }
             } else {
                 info("Vocal is already checking for updates.");
             }

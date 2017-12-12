@@ -27,7 +27,7 @@ namespace Vocal {
 
 
     public errordomain VocalLibraryError {
-        ADD_ERROR, IMPORT_ERROR;
+        ADD_ERROR, IMPORT_ERROR, MISSING_URI;
     }
 
 
@@ -413,9 +413,13 @@ namespace Vocal {
             ThreadFunc<void*> run = () => {
                 foreach(Podcast podcast in podcasts) {
                     try {
-                        int added = parser.update_feed(podcast);
+                    
+                        int added = -1;
+                        if (podcast.feed_uri != null && podcast.feed_uri.length > 4) {
+                            added = parser.update_feed(podcast);
+                        }
 
-                        while(added != 0) {
+                        while(added > 0) {
                             int index = podcast.episodes.size - added;
 
                             // Add the new episode to the arraylist in case it needs to be downloaded later
@@ -425,11 +429,15 @@ namespace Vocal {
                             write_episode_to_database(podcast.episodes[index]);
                             added--;
                         }
+                        
+                        if (added == -1) {
+                            critical ("Unable to update podcast due to missing feed URL: " + podcast.name);
+                        }
 
                     } catch(Error e) {
                         throw e;
                     }
-
+                    
                 }
 
                 Idle.add((owned) callback);

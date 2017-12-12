@@ -199,11 +199,6 @@ namespace Vocal {
                     border-style: none;
                 }
 
-/*
-                .podcast-view-description {
-                    //font: open sans 10px;
-                }
-*/
                 .podcast-view-toolbar {
                 }
 

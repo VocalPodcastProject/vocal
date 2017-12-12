@@ -116,26 +116,31 @@ namespace Vocal {
 
             // Load the album artwork
             Gtk.Image image = new Gtk.Image();
+            
+            // By default we're only given the 170px version, but the 600px is available
+            var bigartwork = artworkUrl170.replace("170", "600");
 
             try {
-                var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale(GLib.Path.build_filename (Constants.PKGDATADIR, "vocal-missing.png"),
-                                                                       170, 170, true);
-                image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+                var missing = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "vocal-missing.png"));
+                var icon = new GLib.FileIcon(missing);
+                image.gicon = icon;
+                image.pixel_size = 200;
             } catch (Error e) {
                 warning ("Unable to open missing album art file.");
             }
-            image.margin = 2;
             image.expand = false;
+            image.margin_top = 5;
+            image.margin_bottom = 5;
             image.get_style_context().add_class("directory-art-image");
             this.pack_start(image, false, false, 0);
 
             ImageCache image_cache = new ImageCache();
-            image_cache.get_image.begin(artworkUrl170, (obj, res) => {
+            image_cache.get_image.begin(bigartwork, (obj, res) => {
                 Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
                 if (pixbuf != null) {
                     image.clear();
-                    pixbuf = pixbuf.scale_simple(170, 170, Gdk.InterpType.BILINEAR);
-                    image.set_from_pixbuf(pixbuf);
+                    image.gicon = pixbuf;
+                    image.pixel_size = 200;
                 }
             });
 

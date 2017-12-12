@@ -47,7 +47,7 @@ namespace Vocal {
             banner_box.get_style_context().add_class("library-toolbar");
 
             var itunes_title = new Gtk.Label(_("iTunes Top 100 Podcasts"));
-            itunes_title.margin_top = 5;
+            itunes_title.margin_top = 15;
             itunes_title.margin_bottom = 5;
             itunes_title.justify = Gtk.Justification.CENTER;
             itunes_title.expand = true;

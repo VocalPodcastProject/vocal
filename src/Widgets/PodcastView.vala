@@ -517,12 +517,10 @@ namespace Vocal {
         	}
 
         	try {
-			    GLib.File cover = GLib.File.new_for_uri(podcast.coverart_uri);
-                InputStream input_stream = cover.read();
-                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 275, 275, true);
-
-
-                image = new Gtk.Image.from_pixbuf(pixbuf);
+			    var cover = GLib.File.new_for_uri(podcast.coverart_uri);
+                var icon = new GLib.FileIcon(cover);
+				image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+                image.pixel_size = 250;
                 image.margin = 0;
                 image.get_style_context().add_class("podcast-view-coverart");
 
@@ -820,10 +818,9 @@ namespace Vocal {
             //If the user selects a file, get the name and parse it
             if (decision == Gtk.ResponseType.ACCEPT) {
                 GLib.File cover = GLib.File.new_for_path(file_name);
-                InputStream input_stream = cover.read();
-                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 275, 275, true);
-
-                image.pixbuf = pixbuf;
+                var icon = new GLib.FileIcon(cover);
+				image.gicon = icon;
+				image.pixel_size = 250;
                 
                 new_cover_art_set(file_name);
             }

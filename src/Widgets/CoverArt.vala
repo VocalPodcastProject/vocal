@@ -56,16 +56,11 @@ namespace Vocal {
 			try {
 
 				// Load the actual cover art
-				File cover_file = GLib.File.new_for_uri(path.replace("%27", "'"));
-				assert(cover_file != null);
-				bool exists = cover_file.query_exists();
-				if(!exists)
-				{
-					info("Coverart at %s doesn't exist.".printf(path.replace("%27", "'")));
-				}
-	            InputStream input_stream = cover_file.read();
-	            var coverart_pixbuf = create_cover_image (input_stream);
-	            image = new Gtk.Image.from_pixbuf(coverart_pixbuf);
+				var file = GLib.File.new_for_uri(path.replace("%27", "'"));
+				var icon = new GLib.FileIcon(file);
+				var image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+				image.pixel_size = COVER_SIZE;
+                
 
 	            // Load the banner to be drawn on top of the cover art
                 File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
@@ -109,45 +104,7 @@ namespace Vocal {
 			count_overlay.add_overlay(count_label);
 			triangle_overlay.add_overlay(count_overlay);
 
-/*
- *	The code below shows the media type (audio/video) overlayed if the show_mimetype
- *	boolean value is set to true. I have since decided that it's too cluttered and
- *	doesn't provide any real additional value.
- */
-
-/*
-			if(show_mimetype) {
-
-				Gtk.Overlay mimetype_overlay = new Gtk.Overlay();
-				mimetype_overlay.add(triangle_overlay);
-
-
-				Gtk.Image mime_image;
-				if(podcast.content_type == MediaType.AUDIO)
-					mime_image = new Gtk.Image.from_icon_name ("media-audio-symbolic", IconSize.BUTTON);
-				else
-					mime_image = new Gtk.Image.from_icon_name ("media-video-symbolic", IconSize.BUTTON);
-
-string css = """
-* {
-	color: #e5e5e5;
-	icon-shadow: 2px 2px #2a2a2a;
-}
-""";
-				Gtk.CssProvider provider = new Gtk.CssProvider();
-				provider.load_from_data(css, css.length);
-				mime_image.get_style_context().add_provider(provider, 1);
-
-				mime_image.set_alignment((float)0.05, (float)0.95);
-
-				mimetype_overlay.add_overlay(mime_image);
-
-				this.pack_start(mimetype_overlay, false, false, 0);
-
-			} else {
-*/
-				this.pack_start(triangle_overlay, false, false, 0);
-//				}
+			this.pack_start(triangle_overlay, false, false, 0);
 
 			this.valign = Align.START;
 			image.set_no_show_all(false);

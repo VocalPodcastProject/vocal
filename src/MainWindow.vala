@@ -187,7 +187,7 @@ namespace Vocal {
                                          left top, left bottom,
                                          from (shade (@bg_color, 0.9)),
                                          to (@bg_color));
-                    border-bottom: 0.3px solid white;
+                    border-bottom: 0.3px solid black;
                 }
 
                 .notebook-art {
@@ -210,15 +210,6 @@ namespace Vocal {
 
                 .sidepane-toolbar {
                     background-color: #fff;
-                }
-
-                .video-back-button {
-                    color: #af81d6;
-                }
-
-                .video-toolbar * {
-                    background-image: none;
-                    background-color: #af81d6;
                 }
 
                 """;

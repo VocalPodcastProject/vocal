@@ -128,7 +128,7 @@ namespace Vocal {
             
             
 		    Gtk.Separator check_spacer = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-            check_spacer.expand = true;
+            check_spacer.expand = false;
             check_spacer.margin = 5;
             check_spacer.margin_top = 10;
             check_spacer.margin_bottom = 10;
@@ -228,7 +228,7 @@ namespace Vocal {
             });
 
             Gtk.Separator store_spacer = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-            store_spacer.expand = true;
+            store_spacer.expand = false;
             store_spacer.margin = 5;
             store_spacer.margin_top = 10;
             store_spacer.margin_bottom = 10;

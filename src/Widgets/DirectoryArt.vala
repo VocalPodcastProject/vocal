@@ -114,21 +114,17 @@ namespace Vocal {
             hor_box.margin_left = 10;
             hor_box.margin_right = 10;
 
-            // Load the album artwork
-            Gtk.Image image = new Gtk.Image();
             
             // By default we're only given the 170px version, but the 600px is available
             var bigartwork = artworkUrl170.replace("170", "600");
 
-            try {
-                var missing = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "vocal-missing.png"));
-                var icon = new GLib.FileIcon(missing);
-                image.gicon = icon;
-                image.pixel_size = 200;
-            } catch (Error e) {
-                warning ("Unable to open missing album art file.");
-            }
+            // Load the album artwork
+            var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/missing.png", 32, 32, true);
+            
+            var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+            image.margin = 0;
             image.expand = false;
+            image.pixel_size = 200;
             image.margin_top = 5;
             image.margin_bottom = 5;
             image.get_style_context().add_class("directory-art-image");

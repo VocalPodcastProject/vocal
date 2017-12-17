@@ -63,9 +63,7 @@ namespace Vocal {
                 
 
 	            // Load the banner to be drawn on top of the cover art
-                File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
-	            InputStream triangle_input_stream = triangle_file.read();
-	            var triangle_pixbuf = new Gdk.Pixbuf.from_stream_at_scale(triangle_input_stream, 75, 75, true);
+				var triangle_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/banner.png", 75, 75, true);
 	            triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);
 
 	            // Align everything to the top right corner

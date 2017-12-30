@@ -12,10 +12,9 @@ Vocal is a powerful, fast, and intuitive application that helps users find new p
 Vocal is available on elementary OS via download directly from AppCenter 
 
 ### Flatpak
-Vocal can be installed via Flatpak on most modern Linux systems via the following commands:
+Vocal can be installed via Flatpak on most modern Linux systems via the following command:
 
-    flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-    flatpak install flathub com.github.needleandthread.vocal
+    flatpak install --from https://flathub.org/repo/appstream/com.github.needleandthread.vocal.flatpakref
 
 ### Snap
 An official snap package is not yet available, although some community members are working on it.

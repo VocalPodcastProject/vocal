@@ -11,7 +11,15 @@
   <screenshots>
     <screenshot type="default">
       <_caption>Library View</_caption>
-      <image width="1464" height="918">http://needleandthread.co/apps/vocal/screenshots/vocal_library.png</image>
+      <image width="2440" height="1628">http://vocalproject.net/screenshots/libraryview.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <_caption>Podcast View</_caption>
+      <image width="2440" height="1628">http://vocalproject.net/screenshots/podcastview.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <_caption>iTunes Top 100 Podcasts</_caption>
+      <image width="2440" height="1628">http://vocalproject.net/screenshots/itunes.png</image>
     </screenshot>
   </screenshots>
 
@@ -49,6 +57,40 @@
   </provides>
 
   <releases>
+    <release version="2.1" timestamp="1514653432">
+      <description>
+        <_p>Grab some hot chocolate and curl up with a nice podcast this winter
+        season, it's time for a new Vocal release! This time around, enjoy
+        a ton of stability and performance enhancements, full HiDPI support, 
+        and other bug fixes to make your experience as enjoyable as possible.
+	    </_p>
+	    <ul>
+	        <_li>Added HiDPI support for all images so everything looks nice and
+	        sharp no matter how fancy your display is.
+	        </_li>
+	        <_li>Fixed an issue where Vocal would not show you the time elapsed
+	        or remaining in an episode immediately after relaunching the app.
+	        </_li>
+	        <_li>Reduced the animation time for switching between different
+	        views so that it feels extra snappy.
+	        </_li>
+	        <_li>Gave the search results view a shave and a haircut. Two bits.
+	        </_li>
+	        <_li>Fixed a few issues where Vocal would be grouchy about
+	        showing certain episode descriptions.
+	        </_li>
+	        <_li>When importing several podcasts the progress bar now stays
+	        one size so you can actually judge the progress correctly.
+	        </_li>
+	        <_li>You can now drag and drop items in the play queue to rearrange
+	        their order.
+	        </_li>
+	        <_li>Lots more checking to make sure that things exist so it won't
+	        crash nearly as much (hopefully never).
+	        </_li>
+	    </ul>
+      </description>
+    </release>
     <release version="2.0" timestamp="1493395200">
       <description>
         <_p>Vocal's most exciting release yet, featuring full iTunes

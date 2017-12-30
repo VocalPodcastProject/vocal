@@ -42,14 +42,21 @@ namespace Vocal {
         public Episode current_episode;
 
         private Player(string[]? args) {
+        
+            bool new_launch = true;
 
             current_episode = null;
             
             // Check every half-second if the current media is playing, and if it is
             // send a signal that there is a new position available
             GLib.Timeout.add(500, () => {
+                
                 if(playing)
                     new_position_available();
+                if (new_launch && duration > 0.0) {
+                    new_position_available();
+                    new_launch = false;
+                }
                 return true;
             });
         }
@@ -92,8 +99,6 @@ namespace Vocal {
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
             set_position(progress - percentage_of_total_seconds);
-
-            new_position_available();
         }
         
         /*
@@ -104,8 +109,6 @@ namespace Vocal {
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
             set_position(progress + percentage_of_total_seconds);
-            
-            new_position_available();
         }
         
         /*
@@ -153,11 +156,13 @@ namespace Vocal {
         } 
         */
         
+        
         /*
          *  Sets the currently playing media position
          */
         public void set_position (double pos) {
             this.progress = pos;
+            new_position_available();
         }
 
 		/*

@@ -370,7 +370,7 @@ namespace Vocal {
                 int secs_remaining;
                 int mins_elapsed;
                 int secs_elapsed;
-
+                
                 // Progress is a percentage of completiong. Multiple by duration to get elapsed.
                 double total_secs_elapsed = player.duration * player.progress;
 
@@ -787,28 +787,17 @@ namespace Vocal {
     	                                        toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
     	                                        track_changed(current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
 
-    	                                        string new_uri;
-
-    	                                        // Determine how long the track is and set the progress bar to match
-    	                                        if(this.current_episode.local_uri != null) {
-    	                                            new_uri = """file://""" + this.current_episode.local_uri;
-    	                                        } else {
-    	                                            new_uri = this.current_episode.uri;
-    	                                        }
-
-    	                                        bool episode_finished = false;
     	                                        try {
 
-    	                                            player.set_episode(this.current_episode);
-
-    	                                            //toolbar.playback_box.set_progress(percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+    	                                            player.set_episode(current_episode);
+                                                    player.set_position(current_episode.last_played_position);
     	                                            shownotes.set_notes_text(episode.description);
 
     	                                        } catch(Error e) {
     	                                            warning(e.message);
     	                                        }
 
-    	                                        if(current_episode.last_played_position != 0 && !episode_finished) {
+    	                                        if(current_episode.last_played_position != 0) {
     	                                            toolbar.show_playback_box();
     	                                        }
     	                                        else {

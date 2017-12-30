@@ -629,7 +629,7 @@ namespace Vocal {
 
             notebook = new Gtk.Stack();
             notebook.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
-            notebook.transition_duration = 300;
+            notebook.transition_duration = 200;
 
             details = new PodcastView (this, null, on_elementary);
             details.go_back.connect(() => {

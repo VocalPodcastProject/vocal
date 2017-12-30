@@ -51,10 +51,11 @@ namespace Vocal {
             handle.drag_data_get.connect(on_drag_data_get);
 
             try {
-                GLib.File cover = GLib.File.new_for_uri(episode.parent.coverart_uri);
-                InputStream input_stream = cover.read();
-                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 64, 64, true);
-                var image = new Gtk.Image.from_pixbuf(pixbuf);
+                // Load the actual cover art
+				var file = GLib.File.new_for_uri(episode.parent.coverart_uri);
+				var icon = new GLib.FileIcon(file);
+				var image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+				image.pixel_size = 64;
                 image.margin = 0;
                 image.expand = false;
                 image.get_style_context().add_class("album-artwork");

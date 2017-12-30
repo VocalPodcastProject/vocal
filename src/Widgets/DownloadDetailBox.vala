@@ -25,15 +25,13 @@ namespace Vocal {
         public signal void cancel_requested(Episode e);		// Fired when the cancel button gets clicked
 
         // Fired upon successful download
-        public signal void download_has_completed_successfully(string title, string parent_name, Gdk.Pixbuf pixbuf);
+        public signal void download_has_completed_successfully(string title, string parent_name);
 
         // Fired when the box is ready for removal (usually when the download completes)
         public signal void ready_for_removal(DownloadDetailBox box);
 
         public signal void new_percentage_available();		// Fired when a new download percentage is available
 
-        public Gtk.Image	 	image {private get; private set;}
-        public Gdk.Pixbuf		image_pixbuf{ get; set; }
         public Gtk.Label 	 	title_label {private get; private set;}
         public Gtk.Label	 	podcast_label {private get; private set;}
         public Gtk.ProgressBar  progress_bar;
@@ -55,13 +53,16 @@ namespace Vocal {
          * Constructor for the download details box, which shows a an episode title, podcast name, and image
          * along with a progress bar indicating progress of the download.
          */
-        public DownloadDetailBox (Episode episode, Gdk.Pixbuf pixbuf) {
+        public DownloadDetailBox (Episode episode) {
 
             string title = episode.title;
             string parent_podcast_name = episode.parent.name;
 
-            image_pixbuf = pixbuf;
-            image = new Gtk.Image.from_pixbuf(pixbuf);
+			// Load the actual cover art
+			var file = GLib.File.new_for_uri(episode.parent.coverart_uri);
+			var icon = new GLib.FileIcon(file);
+			var image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+			image.pixel_size = 64;
 
             this.episode_title = title;
             this.parent_podcast_name = parent_podcast_name;
@@ -93,8 +94,6 @@ namespace Vocal {
             var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             label_box.add(title_label);
             label_box.add(podcast_label);
-
-            this.image = image;
 
             var details_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
             details_box.add(image);
@@ -163,7 +162,7 @@ namespace Vocal {
                 // bar will see the completed value
                 this.percentage = 1.0;
                 new_percentage_available();
-                download_has_completed_successfully(episode_title, parent_podcast_name, image_pixbuf);
+                download_has_completed_successfully(episode_title, parent_podcast_name);
                 ready_for_removal(this);
                 signal_has_been_sent = true;
                 return;

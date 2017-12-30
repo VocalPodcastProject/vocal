@@ -516,16 +516,10 @@ namespace Vocal {
 
             // Set the path of the new file and create another object for the local file
             try {
-
-                GLib.File test_cover = GLib.File.new_for_uri(episode.parent.coverart_uri);
-
-                InputStream input_stream = test_cover.read();
-                var pixbuf = new Gdk.Pixbuf.from_stream_at_scale(input_stream, 64, 64, true);
-
                 string path = library_location + "/%s/%s".printf(episode.parent.name.replace("%27", "'").replace("%", "_"), remote_file.get_basename());
                 GLib.File local_file = GLib.File.new_for_path(path);
 
-                detail_box = new DownloadDetailBox(episode, pixbuf);
+                detail_box = new DownloadDetailBox(episode);
                 detail_box.download_has_completed_successfully.connect(on_successful_download);
                 FileProgressCallback callback = detail_box.download_delegate;
                 GLib.Cancellable cancellable = new GLib.Cancellable();
@@ -787,7 +781,7 @@ namespace Vocal {
         /*
          * Notifies the user that a download has completed successfully
          */
-        public void on_successful_download(string episode_title, string parent_podcast_name, Gdk.Pixbuf notification_pixbuf) {
+        public void on_successful_download(string episode_title, string parent_podcast_name) {
 
             batch_download_count--;
             try {
@@ -799,7 +793,6 @@ namespace Vocal {
             if(!batch_notification_needed) {
                 string message = _("'%s' from '%s' has finished downloading.").printf(episode_title.replace("%27", "'"), parent_podcast_name.replace("%27","'"));
                 var notification = new Notify.Notification(_("Episode Download Complete"), message, null);
-                notification.set_icon_from_pixbuf(notification_pixbuf);
                 if(!main_window.focus_visible)
                     notification.show();
             } else {

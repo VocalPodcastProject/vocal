@@ -8,7 +8,7 @@ set (GETTEXT_PACKAGE "vocal")
 set (RELEASE_NAME "Gomer")
 set (VERSION "2.1.0")
 set (VERSION_INFO "Release")
-set (EXEC_NAME "vocal")
+set (EXEC_NAME "com.github.needle-and-thread.vocal")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (CACHE_DIR "~/.cache/vocal")
 set (USER_AGENT "vocal ${VERSION}")
@@ -155,7 +155,7 @@ configure_file (
 add_custom_target (uninstall
     COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/Uninstall.cmake)
 
-install (TARGETS vocal RUNTIME DESTINATION bin)
+install (TARGETS com.github.needle-and-thread.vocal RUNTIME DESTINATION bin)
 
 #configure_file (data/com.github.needle-and-thread.vocal.desktop.in.in ${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.desktop.in)
 #configure_file_translation (${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.desktop.in ${CMAKE_CURRENT_BINARY_DIR}/com.github.needle-and-thread.vocal.desktop ${CMAKE_SOURCE_DIR}/po/)

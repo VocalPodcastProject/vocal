@@ -2,44 +2,44 @@
 <!-- Copyright 2017 Needle & Thread -->
 <component type="desktop">
   <id>com.github.needle-and-thread.vocal.desktop</id>
-  <metadata_license>CC0</metadata_license>
-  <project_license>GPL-3.0+</project_license>
+  <metadatalicense>CC0</metadatalicense>
+  <projectlicense>GPL-3.0+</projectlicense>
   <name>Vocal</name>
-  <_summary>A Great Podcast Client for the Modern Free Desktop</_summary>
-  <developer_name>Needle &amp; Thread</developer_name>
+  <summary>A Great Podcast Client for the Modern Free Desktop</summary>
+  <developername>Needle &amp; Thread</developername>
   
   <screenshots>
     <screenshot type="default">
-      <_caption>Library View</_caption>
+      <caption>Library View</caption>
       <image width="2440" height="1628">http://vocalproject.net/screenshots/libraryview.png</image>
     </screenshot>
     <screenshot type="default">
-      <_caption>Podcast View</_caption>
+      <caption>Podcast View</caption>
       <image width="2440" height="1628">http://vocalproject.net/screenshots/podcastview.png</image>
     </screenshot>
     <screenshot type="default">
-      <_caption>iTunes Top 100 Podcasts</_caption>
+      <caption>iTunes Top 100 Podcasts</caption>
       <image width="2440" height="1628">http://vocalproject.net/screenshots/itunes.png</image>
     </screenshot>
   </screenshots>
 
   <description>
-    <_p>
+    <p>
       Vocal is the best way to find interesting new podcasts, maintain a growing library,
       and enjoy audio and video shows that automatically get updated with new content.
-    </_p>
-    <_p>Features include:</_p>
+    </p>
+    <p>Features include:</p>
     <ul>
-      <_li>Audio and video podcast support</_li>
-      <_li>Built-in iTunes podcast store browsing and search</_li>
-      <_li>Episode streaming and downloading</_li>
-      <_li>Custom skip intervals</_li>
-      <_li>Full system integration</_li>
-      <_li>Automatic downloads</_li>
-      <_li>Smart library management</_li>
-      <_li>Playback position saving</_li>
-      <_li>Library importing and exporting</_li>
-      <_li>... and much more!</_li>
+      <li>Audio and video podcast support</li>
+      <li>Built-in iTunes podcast store browsing and search</li>
+      <li>Episode streaming and downloading</li>
+      <li>Custom skip intervals</li>
+      <li>Full system integration</li>
+      <li>Automatic downloads</li>
+      <li>Smart library management</li>
+      <li>Playback position saving</li>
+      <li>Library importing and exporting</li>
+      <li>... and much more!</li>
     </ul>
   </description>
 
@@ -59,45 +59,45 @@
   <releases>
     <release version="2.1" timestamp="1514653432">
       <description>
-        <_p>Grab some hot chocolate and curl up with a nice podcast this winter
+        <p>Grab some hot chocolate and curl up with a nice podcast this winter
         season, it's time for a new Vocal release! This time around, enjoy
         a ton of stability and performance enhancements, full HiDPI support, 
         and other bug fixes to make your experience as enjoyable as possible.
-	    </_p>
+	    </p>
 	    <ul>
-	        <_li>Added HiDPI support for all images so everything looks nice and
+	        <li>Added HiDPI support for all images so everything looks nice and
 	        sharp no matter how fancy your display is.
-	        </_li>
-	        <_li>Fixed an issue where Vocal would not show you the time elapsed
+	        </li>
+	        <li>Fixed an issue where Vocal would not show you the time elapsed
 	        or remaining in an episode immediately after relaunching the app.
-	        </_li>
-	        <_li>Reduced the animation time for switching between different
+	        </li>
+	        <li>Reduced the animation time for switching between different
 	        views so that it feels extra snappy.
-	        </_li>
-	        <_li>Gave the search results view a shave and a haircut. Two bits.
-	        </_li>
-	        <_li>Fixed a few issues where Vocal would be grouchy about
+	        </li>
+	        <li>Gave the search results view a shave and a haircut. Two bits.
+	        </li>
+	        <li>Fixed a few issues where Vocal would be grouchy about
 	        showing certain episode descriptions.
-	        </_li>
-	        <_li>When importing several podcasts the progress bar now stays
+	        </li>
+	        <li>When importing several podcasts the progress bar now stays
 	        one size so you can actually judge the progress correctly.
-	        </_li>
-	        <_li>You can now drag and drop items in the play queue to rearrange
+	        </li>
+	        <li>You can now drag and drop items in the play queue to rearrange
 	        their order.
-	        </_li>
-	        <_li>Lots more checking to make sure that things exist so it won't
+	        </li>
+	        <li>Lots more checking to make sure that things exist so it won't
 	        crash nearly as much (hopefully never).
-	        </_li>
+	        </li>
 	    </ul>
       </description>
     </release>
     <release version="2.0" timestamp="1493395200">
       <description>
-        <_p>Vocal's most exciting release yet, featuring full iTunes
+        <p>Vocal's most exciting release yet, featuring full iTunes
 		directory and search support, improved performance, a
 		redesigned podcast view, and tons of other great
 		improvements.
-	    </_p>
+	    </p>
       </description>
     </release>
   </releases>

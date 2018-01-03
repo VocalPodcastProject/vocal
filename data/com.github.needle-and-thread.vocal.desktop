@@ -10,7 +10,7 @@ Categories=AudioVideo;Audio;Video;
 X-PulseAudio-Properties=media.role=music
 Actions=AboutDialog;
 
-Name[en_US]=com.github.needle-and-thread.vocal.desktop
+Name[en_US]=Vocal
 
 [Desktop Action AboutDialog]
 Exec=com.github.needle-and-thread.vocal --about

@@ -29,7 +29,7 @@ namespace Vocal {
 
     public class VocalApp : Granite.Application {
 
-        private MainWindow window = null;
+        private Controller controller = null;
         public string[] args;
 
         construct {
@@ -74,17 +74,18 @@ namespace Vocal {
         }
 
         public override void activate () {
-
-            // Set Vocal to use the dark theme (if available)
-            //var settings = Gtk.Settings.get_default();
-            //settings.gtk_application_prefer_dark_theme = true;
+        
+            if (controller == null) {
+                controller = new Controller(this);
+            }
 
             if (get_windows () == null) {
-                window = new MainWindow (this, Option.OPEN_HIDDEN);
+                controller.window = new MainWindow (controller);
+                controller.open_hidden = Option.OPEN_HIDDEN;
                 if(!Option.OPEN_HIDDEN)
-                	window.show_all ();
+                	controller.window.show_all ();
             } else {
-                window.present ();
+                controller.window.present ();
             }
         }
 

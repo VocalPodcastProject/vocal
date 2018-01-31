@@ -78,14 +78,14 @@ namespace Vocal {
 
         public Gee.ArrayList<Episode> queue = new Gee.ArrayList<Episode>();
 
-        private Gtk.Window main_window;
+        private Controller controller;
 
         /*
          * Constructor for the library
          */
-        public Library(Gtk.Window window) {
+        public Library(Controller controller) {
 
-            this.main_window = window;
+            this.controller = controller;
 
             vocal_config_dir = GLib.Environment.get_user_config_dir() + """/vocal""";
             this.db_directory = vocal_config_dir + """/database""";
@@ -793,13 +793,13 @@ namespace Vocal {
             if(!batch_notification_needed) {
                 string message = _("'%s' from '%s' has finished downloading.").printf(episode_title.replace("%27", "'"), parent_podcast_name.replace("%27","'"));
                 var notification = new Notify.Notification(_("Episode Download Complete"), message, null);
-                if(!main_window.focus_visible)
+                if(!controller.window.focus_visible)
                     notification.show();
             } else {
                 if(batch_download_count == 0) {
                     var notification = new Notify.Notification(_("Downloads Complete"), _("New episodes have been downloaded."), "vocal");
                     batch_notification_needed = false;
-                    if(!main_window.focus_visible)
+                    if(!controller.window.focus_visible)
                         notification.show();
                 }
             }

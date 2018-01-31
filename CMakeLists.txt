@@ -6,7 +6,7 @@ set (DATADIR "${CMAKE_INSTALL_PREFIX}/share")
 set (PKGDATADIR "${DATADIR}/vocal")
 set (GETTEXT_PACKAGE "vocal")
 set (RELEASE_NAME "Gomer")
-set (VERSION "2.1.0")
+set (VERSION "2.1.6")
 set (VERSION_INFO "Release")
 set (EXEC_NAME "com.github.needle-and-thread.vocal")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
@@ -103,6 +103,7 @@ ensure_vala_version("0.26.2" MINIMUM)
 include(ValaPrecompile)
 vala_precompile(VALA_C ${EXEC_NAME}
     src/Vocal.vala
+    src/Controller.vala
     src/MainWindow.vala
     src/config.vala
     src/Library.vala

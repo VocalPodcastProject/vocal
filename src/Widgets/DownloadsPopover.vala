@@ -49,7 +49,7 @@ namespace Vocal {
             scroll.min_content_height = 200;
 
             downloads_complete = new Gtk.Label(_("No Active Downloads"));
-            Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, downloads_complete);
+            downloads_complete.get_style_context ().add_class("h3");
             downloads_complete.sensitive = false;
             downloads_complete.margin = 12;
             listbox.prepend(downloads_complete);

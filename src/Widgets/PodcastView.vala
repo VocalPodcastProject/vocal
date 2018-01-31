@@ -46,8 +46,7 @@ namespace Vocal {
 
 
         public Podcast 			podcast;				// The parent podcast
-        public MainWindow 		parent;					// The parent window
-        private VocalSettings 	settings;				// Vocal's current settings
+        private Controller controller;
         public int 				current_episode_index;  // The index of the episode currently being used
         private int 			boxes_index;        	// Refers to an index in the list of boxes
 
@@ -81,10 +80,8 @@ namespace Vocal {
 		/*
 		 * Constructor for a Sidepane given a parent window and pocast
 		 */
-        public PodcastView (MainWindow parent, Podcast? podcast, bool? on_elementary = true) {
-            this.podcast = podcast;
-            this.parent = parent;
-            this.settings = VocalSettings.get_default_instance();
+        public PodcastView (Controller controller) {
+            this.controller = controller;
 
             largest_box_size = 500;
 
@@ -124,10 +121,10 @@ namespace Vocal {
             hide_played.tooltip_text = _("Hide episodes that have already been played");
             hide_played.clicked.connect(() => {
 
-                if(settings.hide_played) {
-                    settings.hide_played = false;
+                if(controller.settings.hide_played) {
+                    controller.settings.hide_played = false;
                 } else {
-                    settings.hide_played = true;
+                    controller.settings.hide_played = true;
                 }
 
                 populate_episodes();
@@ -182,7 +179,7 @@ namespace Vocal {
             description_window.height_request = 130;
             description_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
 
-			Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H2, name_label);
+			name_label.get_style_context().add_class("h2");
             count_label.get_style_context().add_class("h4");
 
 			label_box.pack_start(name_label, false, false, 5);
@@ -392,7 +389,7 @@ namespace Vocal {
                     var delete_menuitem = new Gtk.MenuItem.with_label(_("Delete local files for selected episodes"));
                     delete_menuitem.activate.connect(() => {
 
-                        Gtk.MessageDialog msg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
+                        Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
                              _("Are you sure you want to delete the downloaded files for the selected episodes?"));
 
 
@@ -468,7 +465,7 @@ namespace Vocal {
                         var delete_menuitem = new Gtk.MenuItem.with_label(_("Delete Local File"));
 
                         delete_menuitem.activate.connect(() => {
-                            Gtk.MessageDialog msg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
+                            Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
                                  _("Are you sure you want to delete the downloaded episode '%s'?").printf(podcast.episodes[current_episode_index].title.replace("%27", "'")));
 
 
@@ -568,7 +565,7 @@ namespace Vocal {
                 set_unplayed_text();
 
                 // Re-mark the box so it doesn't show if hide played is enabled
-                if(settings.hide_played && unplayed_count > 0) {
+                if(controller.settings.hide_played && unplayed_count > 0) {
                     previously_activated_box. get_parent (). set_no_show_all(true);
                     previously_activated_box. get_parent (). visible = false;
                 }
@@ -686,7 +683,7 @@ namespace Vocal {
 
                 while (count >= 0 && ((podcast.episodes.size - 1) - count) >= 0) {
                 	Episode current_episode = podcast.episodes[(podcast.episodes.size - 1) - count];
-                    EpisodeDetailBox current_episode_box = new EpisodeDetailBox(current_episode, ((podcast.episodes.size - 1) - count), boxes.size, parent.on_elementary);
+                    EpisodeDetailBox current_episode_box = new EpisodeDetailBox(current_episode, ((podcast.episodes.size - 1) - count), boxes.size, controller.on_elementary);
                     current_episode_box.streaming_button_clicked.connect(on_streaming_button_clicked);
                     current_episode_box.margin_top = 6;
                     current_episode_box.margin_left = 6;
@@ -706,14 +703,14 @@ namespace Vocal {
                     // Determine whether or not the episode has been played
                     if(current_episode.status == EpisodeStatus.UNPLAYED) {
                         unplayed_count++;
-                    } else if(current_episode == parent.current_episode) {
+                    } else if(current_episode == controller.current_episode) {
                         current_episode_box.mark_as_now_playing();
-                        if(settings.hide_played) {
+                        if(controller.settings.hide_played) {
                             current_episode_box.set_no_show_all(true);
                             current_episode_box.hide();
                         }
                     } else {
-                        if(settings.hide_played) {
+                        if(controller.settings.hide_played) {
                             current_episode_box.set_no_show_all(true);
                             current_episode_box.hide();
                         }
@@ -723,7 +720,7 @@ namespace Vocal {
                 }
 
                 // Check to see if there are more episodes left
-                if(this.limit < podcast.episodes.size && !settings.hide_played)
+                if(this.limit < podcast.episodes.size && !controller.settings.hide_played)
                 {
 
                 	// If so, add a button that will increase the limit
@@ -736,10 +733,10 @@ namespace Vocal {
             		listbox.insert(increase_button, -1);
                 }
 
-                if(settings.hide_played && unplayed_count == 0) {
+                if(controller.settings.hide_played && unplayed_count == 0) {
                     var no_new_label = new Gtk.Label(_("No new episodes."));
                     no_new_label.margin_top = 25;
-                    Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, no_new_label);
+                    no_new_label.get_style_context().add_class("h3");
                     listbox.prepend(no_new_label);
                 }
 
@@ -750,7 +747,7 @@ namespace Vocal {
                 empty_label.justify = Gtk.Justification.CENTER;
                 empty_label.margin = 10;
 
-                Granite.Widgets.Utils.apply_text_style_to_label (TextStyle.H3, empty_label);
+                empty_label.get_style_context().add_class("h3");
                 listbox.prepend(empty_label);
             }
 
@@ -791,7 +788,7 @@ namespace Vocal {
         
         private void on_change_album_art() {
             var file_chooser = new Gtk.FileChooserDialog (_("Select Album Art"),
-                 parent,
+                 controller.window,
                  Gtk.FileChooserAction.OPEN,
                  _("Cancel"), Gtk.ResponseType.CANCEL,
                  _("Open"), Gtk.ResponseType.ACCEPT);
@@ -854,7 +851,7 @@ namespace Vocal {
         }
 
         private void on_link_to_file() {
-            Gdk.Display display = parent.get_display ();
+            Gdk.Display display = controller.window.get_display ();
             Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
             string uri = podcast.episodes[current_episode_index].uri;
             clipboard.set_text(uri,uri.length);
@@ -868,7 +865,7 @@ namespace Vocal {
         }
 
         private void on_copy_shareable_link() {
-            Gdk.Display display = parent.get_display ();
+            Gdk.Display display = controller.window.get_display ();
             Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
             string uri = Utils.get_shareable_link_for_episode(podcast.episodes[current_episode_index]);
             clipboard.set_text(uri,uri.length);

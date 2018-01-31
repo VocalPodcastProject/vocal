@@ -48,10 +48,11 @@ namespace Vocal {
 		 * Constructor for CoverArt given an image path and a podcast
 		 */
 		public CoverArt(string path, Podcast podcast, bool? show_mimetype = false) {
-
+		
 			this.podcast = podcast;
 			this.margin = 10;
 			this.orientation = Gtk.Orientation.VERTICAL;
+			
 
 			try {
 
@@ -80,9 +81,10 @@ namespace Vocal {
 				triangle_overlay.add(image);
 
 			} catch (Error e) {
-				critical("Unable to load podcast cover art.");
+				warning ("Unable to load podcast cover art.");
 			}
-
+			
+            
 			if(triangle_overlay == null)
 				triangle_overlay = new Gtk.Overlay();
 			if(count_overlay == null)
@@ -95,7 +97,6 @@ namespace Vocal {
 			count_label.set_alignment(1,0);
 			count_label.margin_right = 5;
 
-
 			// Add a tooltip
 			this.tooltip_text = podcast.name.replace("%27", "'");
 
@@ -103,12 +104,10 @@ namespace Vocal {
 
 			count_overlay.add_overlay(count_label);
 			triangle_overlay.add_overlay(count_overlay);
-
+			
 			this.pack_start(triangle_overlay, false, false, 0);
 
 			this.valign = Align.START;
-			image.set_no_show_all(false);
-			image.show();
 			
 			podcast_name_label = new Gtk.Label("<b>" + GLib.Uri.unescape_string(podcast.name).replace("&", """&amp;""") + "</b>");
 			podcast_name_label.wrap = true;
@@ -158,10 +157,12 @@ namespace Vocal {
 		 */
 		public void hide_count()
 		{
-			count_label.set_no_show_all(true);
-			count_label.hide();
-			triangle.set_no_show_all(true);
-			triangle.hide();
+		    if (count_label != null && triangle != null) {
+			    count_label.set_no_show_all(true);
+			    count_label.hide();
+			    triangle.set_no_show_all(true);
+			    triangle.hide();
+		    }
 		}
 	
 		/*
@@ -169,15 +170,16 @@ namespace Vocal {
 		 */
 		public void set_count(int count)
 		{
-			count_label.use_markup = true;
-			count_label.set_markup("<span foreground='white'><b>%d</b></span>".printf(count));
-			count_label.get_style_context().add_class("text-shadow");
-			if(count < 10) {
-				count_label.margin_right = 12;
-			} else {
-				count_label.margin_right = 6;
-			}
-
+		    if (count_label != null) {
+			    count_label.use_markup = true;
+			    count_label.set_markup("<span foreground='white'><b>%d</b></span>".printf(count));
+			    count_label.get_style_context().add_class("text-shadow");
+			    if(count < 10) {
+				    count_label.margin_right = 12;
+			    } else {
+				    count_label.margin_right = 6;
+			    }
+            }
 		}
 		
 		/*
@@ -185,10 +187,12 @@ namespace Vocal {
 		 */
 		public void show_count()
 		{
-			count_label.set_no_show_all(false);
-			count_label.show();
-			triangle.set_no_show_all(false);
-			triangle.show();
+		    if (count_label != null && triangle != null) {
+			    count_label.set_no_show_all(false);
+			    count_label.show();
+			    triangle.set_no_show_all(false);
+			    triangle.show();
+		    }
 		}
 
 
@@ -196,16 +200,20 @@ namespace Vocal {
 		 * Shows the name label underneath the cover art
 		 */
 		public void show_name_label() {
-			podcast_name_label.no_show_all = false;
-			podcast_name_label.visible = true;
+		    if(podcast_name_label != null) {
+			    podcast_name_label.no_show_all = false;
+			    podcast_name_label.visible = true;
+		    }
 		}
 
 		/*
 		 * Hides the name label underneath the cover art
 		 */
 	 	public void hide_name_label() {
-	 		podcast_name_label.no_show_all = true;
-			podcast_name_label.visible = false;
+	 	    if(podcast_name_label != null) {
+	     		podcast_name_label.no_show_all = true;
+			    podcast_name_label.visible = false;
+		    }
 	 	}
 	}
 }

@@ -54,7 +54,7 @@ namespace Vocal {
             itunes_title.halign = Gtk.Align.CENTER;
             itunes_title.valign = Gtk.Align.CENTER;
 
-            Granite.Widgets.Utils.apply_text_style_to_label (Granite.TextStyle.H2, itunes_title);
+            itunes_title.get_style_context ().add_class ("h2");
 
             if(first_run) {
                 return_button = new Gtk.Button.with_label(_("Go Back"));
@@ -122,8 +122,10 @@ namespace Vocal {
 
                 flowbox = new Gtk.FlowBox();
 
-                Gee.ArrayList<DirectoryEntry> entries = itunes.get_top_podcasts(100);
-
+                info ("Getting top podcasts asynchronously.");
+                var entries = itunes.get_top_podcasts(100);
+                info ("Top 100 podcasts loaded.");
+                
                 int i = 1;
                 foreach(DirectoryEntry e in entries) {
                     DirectoryArt a = new DirectoryArt(e.itunesUrl, "%d. %s".printf(i, e.title), e.artist, e.summary, e.artworkUrl170);

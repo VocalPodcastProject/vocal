@@ -81,7 +81,7 @@ namespace Vocal {
             title_label.justify = Gtk.Justification.CENTER;
             title_label.expand = false;
             title_label.use_markup = true;
-            Granite.Widgets.Utils.apply_text_style_to_label (Granite.TextStyle.H2, title_label);
+            title_label.get_style_context ().add_class("h2");
 
             var local_episodes_label = new Gtk.Label(_("Episodes from Your Library"));
             var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));
@@ -122,7 +122,6 @@ namespace Vocal {
             return_button_box.add (new Gtk.Label (""));
 
             this.add(return_button_box);
-            this.add(title_label);
 
             // Create the lists container
             content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);

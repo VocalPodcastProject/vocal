@@ -86,8 +86,11 @@ namespace Vocal {
             Gdk.Pixbuf pixbuf = null;
             Soup.Request req = soup_session.request(url);
             InputStream image_stream = req.send(null);
-	        pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
-
+            try {
+	            pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
+            } catch (Error e) {
+                warning (e.message);
+            }
             return pixbuf;
         }
 

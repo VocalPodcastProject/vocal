@@ -1441,7 +1441,9 @@ namespace Vocal {
                     }
                 }
 
-                add_feed.destroy();
+                if (add_feed != null) {
+                    add_feed.destroy();
+                }
 
                 // Hide the shownotes button
                 toolbar.hide_shownotes_button();

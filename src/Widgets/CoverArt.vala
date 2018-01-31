@@ -57,10 +57,14 @@ namespace Vocal {
 
 				// Load the actual cover art
 				var file = GLib.File.new_for_uri(path.replace("%27", "'"));
+
 				var icon = new GLib.FileIcon(file);
+
 				var image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
 				image.pixel_size = COVER_SIZE;
-                
+				image.set_no_show_all(false);
+				image.show();
+
 
 	            // Load the banner to be drawn on top of the cover art
                 File triangle_file = GLib.File.new_for_path(GLib.Path.build_filename (Constants.PKGDATADIR, "banner.png"));
@@ -107,9 +111,7 @@ namespace Vocal {
 			this.pack_start(triangle_overlay, false, false, 0);
 
 			this.valign = Align.START;
-			image.set_no_show_all(false);
-			image.show();
-			
+
 			podcast_name_label = new Gtk.Label("<b>" + GLib.Uri.unescape_string(podcast.name).replace("&", """&amp;""") + "</b>");
 			podcast_name_label.wrap = true;
 			podcast_name_label.use_markup = true;

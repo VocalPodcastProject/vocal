@@ -296,52 +296,69 @@ namespace Vocal {
 
 
         public void hide_downloads_menuitem() {
-            download.no_show_all = true;
-            download.hide();
+            if(download != null) {
+                download.no_show_all = true;
+                download.hide();
+            }
             show_all();
         }
 
         public void hide_playback_box() {
-
-            this.headerbar_box.no_show_all = true;
-            this.headerbar_box.hide();
+            if(headerbar_box != null) {
+                this.headerbar_box.no_show_all = true;
+                this.headerbar_box.hide();
+            }
         }
 
 
         public void show_playback_box() {
-            this.headerbar_box.no_show_all = false;
-            this.headerbar_box.show();
-            show_all();
+            if(headerbar_box != null) {
+                this.headerbar_box.no_show_all = false;
+                this.headerbar_box.show();
+                show_all();
+            }
         }
 
         public void show_shownotes_button() {
-        	shownotes_button.set_no_show_all(false);
-            shownotes_button.show();
+            if(shownotes_button != null) {
+            	shownotes_button.set_no_show_all(false);
+                shownotes_button.show();
+            }
         }
 
         public void hide_shownotes_button() {
-        	shownotes_button.set_no_show_all(true);
-            shownotes_button.hide();
+            if(shownotes_button != null) {
+            	shownotes_button.set_no_show_all(true);
+                shownotes_button.hide();
+            }
         }
 
 		public void show_playlist_button() {
-			playlist_button.set_no_show_all(false);
-			playlist_button.show();
+		    if(playlist_button != null) {
+			    playlist_button.set_no_show_all(false);
+			    playlist_button.show();
+		    }
 		}
 
 		public void hide_playlist_button() {
-			playlist_button.set_no_show_all(true);
-			playlist_button.hide();
+		    if(playlist_button != null) {
+			    playlist_button.set_no_show_all(true);
+			    playlist_button.hide();
+		    }
 		}
 
         public void hide_download_button() {
-        	this.download.set_no_show_all(true);
-            this.download.hide();
+            if(download != null) {
+            	this.download.set_no_show_all(true);
+                this.download.hide();
+            }
         }
 
         public void show_download_button() {
-        	this.download.set_no_show_all(false);
-            this.download.show();
+            if(download != null) {
+            	this.download.set_no_show_all(false);
+                this.download.show();
+            }
         }
 
         public void set_play_pause_image(Gtk.Image new_img) {

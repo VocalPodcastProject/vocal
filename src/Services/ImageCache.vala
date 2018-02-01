@@ -87,11 +87,10 @@ namespace Vocal {
             Soup.Request req = soup_session.request(url);
             InputStream image_stream = req.send(null);
             try {
-                pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
+	            pixbuf = yield new Gdk.Pixbuf.from_stream_async(image_stream, null);
             } catch (Error e) {
-                warning ( "Error loading image: %s. %s", url, e.message );
+                warning (e.message);
             }
-
             return pixbuf;
         }
 

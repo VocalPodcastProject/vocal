@@ -73,7 +73,8 @@ namespace Vocal {
         /*
          * Finds the top n podcasts (100 by default) and returns it in an ArrayList
          */
-        public Gee.ArrayList<DirectoryEntry>? get_top_podcasts(int? limit = 100) {
+        public GLib.List<DirectoryEntry>? get_top_podcasts(int? limit = 100) {
+        
 
             var settings = VocalSettings.get_default_instance();
 
@@ -81,38 +82,43 @@ namespace Vocal {
             var session = new Soup.Session ();
             var message = new Soup.Message ("GET", uri);
             session.send_message (message);
+            
+            GLib.List<DirectoryEntry> entries = new GLib.List<DirectoryEntry>();
 
-            Gee.ArrayList<DirectoryEntry> entries = new Gee.ArrayList<DirectoryEntry>();
+            var parser = new Json.Parser ();
+            parser.load_from_data ((string) message.response_body.flatten ().data, -1);
 
-            try {
-                var parser = new Json.Parser ();
-                parser.load_from_data ((string) message.response_body.flatten ().data, -1);
+            var root_object = parser.get_root ().get_object ();
 
-                var root_object = parser.get_root ().get_object ();
+            if(root_object == null) {
+                error ("Error loading iTunes results. Root object was null.");
+                return null;
+            }
 
-                if(root_object == null) {
-                    stdout.puts("Error. Root object was null.");
-                    return null;
-                }
+            var elements = root_object.get_object_member("feed").get_array_member ("entry").get_elements();
+            
 
-                var elements = root_object.get_object_member("feed").get_array_member ("entry").get_elements();
+            foreach(Json.Node e in elements) {
 
-                foreach(Json.Node e in elements) {
+                // Create a new DirectoryEntry to store the results
+                DirectoryEntry ent = new DirectoryEntry();
 
-                    // Create a new DirectoryEntry to store the results
-                    DirectoryEntry ent = new DirectoryEntry();
-
-                    var obj = e.get_object();
+                var obj = e.get_object();
+                if (obj != null) {
 
                     // Objects
                     var id = obj.get_object_member("id"); // The podcast store URL
-                    ent.itunesUrl = id.get_string_member("label");
+                    if (id != null)
+                        ent.itunesUrl = id.get_string_member("label");
                     var title = obj.get_object_member("title");
-                    ent.title = title.get_string_member("label");
+                    if (title != null)
+                        ent.title = title.get_string_member("label");
                     var summary = obj.get_object_member("summary");
-                    ent.summary = summary.get_string_member("label");
+                    if (summary != null)
+                        ent.summary = summary.get_string_member("label");
                     var artist = obj.get_object_member("im:artist");
-                    ent.artist = artist.get_string_member("label");
+                    if (artist != null) 
+                        ent.artist = artist.get_string_member("label");
 
                     // Remove the artist name from the title
                     ent.title = ent.title.replace(" - " + ent.artist, "");
@@ -137,13 +143,11 @@ namespace Vocal {
                         i++;
                     }
 
-                    entries.add(ent);
-
+                    entries.append(ent);
                 }
 
-            } catch (Error e) {
-                warning ("An error occurred while loading the iTunes results");
             }
+            
 
             return entries;
         }

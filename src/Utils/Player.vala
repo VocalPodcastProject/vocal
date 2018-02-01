@@ -23,7 +23,7 @@ using Gst;
 using Gst.PbUtils;
 
 namespace Vocal {
-    class Player : ClutterGst.Playback {
+    public class Player : ClutterGst.Playback {
 
     	private static Player? player = null;
         public static Player? get_default (string[] args) {

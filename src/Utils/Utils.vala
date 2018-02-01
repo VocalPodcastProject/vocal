@@ -138,7 +138,6 @@ public class Utils
         string markup = GLib.Uri.unescape_string(original);
 
         if ( markup == null ) {
-            warning ("unable to unescape markup: " + original);
             markup = original;
         }
 

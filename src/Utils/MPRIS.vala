@@ -34,17 +34,17 @@ namespace Vocal {
     public class MPRIS : GLib.Object {
 	    public MprisPlayer 	player = null;
 	    public MprisRoot 	root = null;
-	
-	    private MainWindow  window;
+	    
+	    private Controller controller;
 
 	    private unowned 	DBusConnection conn;
 	    private uint 		owner_id;
 
 		/*
-		 * Default constructor that simply sets the window
+		 * Default constructor that simply sets the controller.window
 		 */
-	    public MPRIS(MainWindow w) {
-	        this.window = w;
+	    public MPRIS(Controller controller) {
+	        this.controller = controller;
 	    }
 
 		/*
@@ -75,37 +75,37 @@ namespace Vocal {
 			    connection.register_object("/org/mpris/MediaPlayer2", root);
 
 			    root.quit_requested.connect(() => {
-			    	window.destroy();
+			    	controller.window.destroy();
 		    	});
 			    root.raise_requiested.connect(() => {
-			    	window.present();
+			    	controller.window.present();
 		    	});
 
 			    
 			    player = new MprisPlayer(connection);
 
 			    // Set up all the signals
-			    window.track_changed.connect(player.set_media_metadata);
-			    window.playback_status_changed.connect(player.set_playback_status);
+			    controller.track_changed.connect(player.set_media_metadata);
+			    controller.playback_status_changed.connect(player.set_playback_status);
 
 			    player.play.connect(() => {
-			    	window.play();
+			    	controller.play();
 		    	});
 
 		    	player.pause.connect(() => {
-		    		window.pause();
+		    		controller.pause();
 		    	});
 
 		    	player.play_pause.connect(() => {
-		    		window.play_pause();
+		    		controller.play_pause();
 	    		});	
 
 		    	player.next.connect(() => {
-		    		window.seek_forward();
+		    		controller.seek_forward();
 		    	});
 
 		    	player.previous.connect(() => {
-		    		window.seek_backward();
+		    		controller.seek_backward();
 		    	});
 
 			    connection.register_object("/org/mpris/MediaPlayer2", player);
@@ -387,7 +387,7 @@ namespace Vocal {
 	    
 	    public string DesktopEntry { 
 	        owned get {
-	            return "vocal";
+	            return "com.github.needle-and-thread.vocal";
 	        } 
 	    }
 	    
@@ -439,7 +439,7 @@ namespace Vocal {
 						"audio/x-pn-realaudio",
 						"audio/x-pn-realaudio-plugin",
 						"audio/x-pn-wav",
-						"audio/x-pn-windows-acm",
+						"audio/x-pn-controller.windows-acm",
 						"audio/x-realaudio",
 						"audio/x-real-audio",
 						"audio/x-sbc",

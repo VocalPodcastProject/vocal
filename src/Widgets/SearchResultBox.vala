@@ -62,8 +62,7 @@ namespace Vocal {
 
             // Do we only have a podcast?
             if(episode == null) {
-                var missing_pixbuf = new Gdk.Pixbuf.from_file_at_scale("""//usr/share/vocal/vocal-missing.png""",
-                                                                       32, 32, true);
+                var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/missing.png", 32, 32, true);
                 var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
                 image.margin = 0;
                 image.expand = false;

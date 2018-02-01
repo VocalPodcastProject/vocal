@@ -25,6 +25,9 @@ configure_file (${CMAKE_SOURCE_DIR}/src/config.vala.cmake ${CMAKE_SOURCE_DIR}/sr
 include(GSettings)
 add_schema("com.github.needle-and-thread.vocal.gschema.xml")
 
+include (GResource)
+glib_compile_resources (GLIB_RESOURCES_VIEW SOURCE data/com.github.needle-and-thread.vocal.gresource.xml)
+
 # Definitions
 add_definitions ("-DGETTEXT_PACKAGE=\"${GETTEXT_PACKAGE}\"")
 
@@ -145,7 +148,7 @@ OPTIONS
 
 add_subdirectory (po)
 
-add_executable(${EXEC_NAME} ${VALA_C})
+add_executable(${EXEC_NAME} ${VALA_C} ${GLIB_RESOURCES_VIEW})
 
 # uninstall target
 configure_file (

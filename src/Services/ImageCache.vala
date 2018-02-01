@@ -82,7 +82,7 @@ namespace Vocal {
             return pixbuf;
         }
 
-        private async Gdk.Pixbuf load_image_async(string url) {
+        private async Gdk.Pixbuf? load_image_async(string url) {
             Gdk.Pixbuf pixbuf = null;
             Soup.Request req = soup_session.request(url);
             InputStream image_stream = req.send(null);

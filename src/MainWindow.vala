@@ -331,7 +331,7 @@ namespace Vocal {
             // Set up the box that gets displayed when importing from .OPML or .XML files during the first launch
             import_message_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 25);
             var import_h1_label = new Gtk.Label(_("Good Stuff is On Its Way"));
-            var import_h3_label = new Gtk.Label(_("If you are importing several podcasts it can take a few minutes. Your controller.library will be ready shortly."));
+            var import_h3_label = new Gtk.Label(_("If you are importing several podcasts it can take a few minutes. Your library will be ready shortly."));
             import_h1_label.get_style_context ().add_class("h1");
             import_h3_label.get_style_context ().add_class("h3");
             import_h1_label.margin_top = 200;
@@ -360,7 +360,7 @@ namespace Vocal {
                 switch_visible_page(welcome);
             });
             directory_scrolled.add(directory);
-            
+
 
             // Add the remaining widgets to the notebook. At this point, the gang's all here
             notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
@@ -407,6 +407,7 @@ namespace Vocal {
             toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
 
             toolbar.store_selected.connect (() => {
+                directory.load_top_podcasts();
                 details.pane_should_hide ();
                 switch_visible_page (directory_scrolled);
             });
@@ -632,8 +633,6 @@ namespace Vocal {
                 show_all();
         }
 
-
-
         /*
          * When a user double-clicks and episode in the queue, remove it from the queue and
          * immediately begin playback
@@ -709,12 +708,10 @@ namespace Vocal {
          * requesting the download from the controller.library
          */
         public void download_episode(Episode episode) {
-
-            // Show the download menuitem
+            //  Show the download menuitem
             toolbar.show_download_button();
 
-
-            // Begin the process of downloading the episode (asynchronously)
+            //  Begin the process of downloading the episode (asynchronously)
             var details_box = controller.library.download_episode(episode);
             details_box.cancel_requested.connect(on_download_canceled);
 
@@ -729,8 +726,7 @@ namespace Vocal {
                 }
             });
 
-
-            // Add the download to the downloads popup
+            //  Add the download to the downloads popup
             downloads.add_download(details_box);
         }
 
@@ -834,64 +830,54 @@ namespace Vocal {
                 var loop = new MainLoop();
                 controller.library.add_from_OPML(file_name, (obj, res) => {
 
-                    bool success = controller.library.add_from_OPML.end(res);
+                    Gee.ArrayList<string> failed_feed_list = controller.library.add_from_OPML.end(res);
 
-                    if(success) {
+                    if(!controller.player.playing) {
+                        toolbar.hide_playback_box();
+                    }
 
-                        if(!controller.player.playing)
-                            toolbar.hide_playback_box();
-
-                        // Is there now at least one podcast in the controller.library?
-                        if(controller.library.podcasts.size > 0) {
-
-                            // Make the refresh and export items sensitive now
-                            toolbar.export_item.sensitive = true;
-
-                            toolbar.show_shownotes_button();
-                            toolbar.show_playlist_button();
-
-                            populate_views();
-
-                            if(current_widget == import_message_box) {
-                                switch_visible_page(all_scrolled);
-                            }
-
-                            controller.library_empty = false;
-
-                            show_all();
-                        }
-
+                    if(failed_feed_list.size == 0) {
+                        info("Successfully imported all podcasts from OPML.");
                     } else {
-
-                        if(!controller.player.playing)
-                            toolbar.hide_playback_box();
-
-                        var add_err_dialog = new Gtk.MessageDialog(add_feed,
-                            Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
-                            Gtk.ButtonsType.OK, "");
-                            add_err_dialog.response.connect((response_id) => {
-                                add_err_dialog.destroy();
-                            });
-                            
-                        // Determine if it was a network issue, or just a problem with the feed
-                        
-                        bool network_okay = Utils.confirm_internet_functional();
-                        
-                        string error_message;
-                        
-                        if(network_okay) {
-                            error_message = _("Please check that you selected the correct file and that it is not corrupted.");
-                        } else {
-                            error_message = _("There seems to be a problem with your internet connection. Make sure you are online and then try again.");
+                        string failed_feeds = "";
+                        foreach(string failed_feed in failed_feed_list) {
+                            failed_feeds = "%s\n %s".printf(failed_feeds, failed_feed);
                         }
+                        string error_message = "Vocal was unable to import podcasts from the following feeds in the OPML file. \n%s\n".printf(failed_feeds);
+                        warning(error_message);
 
                         var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
+
+                        var add_err_dialog = new Gtk.MessageDialog(add_feed, Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "");
+                        add_err_dialog.response.connect((response_id) => {
+                            add_err_dialog.destroy();
+                        });
                         add_err_dialog.set_transient_for(this);
                         add_err_dialog.text = _("Error Importing from File");
                         add_err_dialog.secondary_text = error_message;
                         add_err_dialog.set_image(error_img);
                         add_err_dialog.show_all();
                     }
+                    // Is there now at least one podcast in the controller.library?
+                    if(controller.library.podcasts.size > 0) {
+                        controller.library_empty = false;
+                    }
+
+                    populate_views();
+
+                    // Make the refresh and export items sensitive now
+                    toolbar.export_item.sensitive = true;
+
+                    toolbar.show_shownotes_button();
+                    toolbar.show_playlist_button();
+
+                    if(current_widget == import_message_box) {
+                        switch_visible_page(all_scrolled);
+                    }
+
+                    controller.library_empty = false;
+
+                    show_all();
 
                     controller.currently_importing = false;
 
@@ -1028,7 +1014,12 @@ namespace Vocal {
          * the add feed menuitem
          */
         public void on_add_podcast_feed(int response_id) {
-            controller.add_podcast_feed(response_id, add_feed.entry.get_text(), null);
+            if(response_id == Gtk.ResponseType.OK) {
+                controller.add_podcast_feed(add_feed.entry.get_text());
+            }
+
+            // Destroy the add podcast dialog box
+            add_feed.destroy();
         }
 
 
@@ -1059,6 +1050,7 @@ namespace Vocal {
 		 * Called when the user requests to download all episodes from the sidepane
 		 */
         public void on_download_all_request() {
+            // TODO: Warn user if too many (more than 50?) podcasts will be downloaded.
             foreach(Episode e in controller.highlighted_podcast.episodes) {
                 download_episode(e);
             }
@@ -1356,16 +1348,10 @@ namespace Vocal {
          */
         public void on_new_subscription(string itunes_url) {
 
-            string name;
-
             // We are given an iTunes store URL. We need to get the actual RSS feed from  this
-            string rss = controller.itunes.get_rss_from_itunes_url(itunes_url, out name);
+            string rss = controller.itunes.get_rss_from_itunes_url(itunes_url);
 
-            if(name == null) {
-                name = "Unknown";
-            }
-
-            controller.add_podcast_feed(Gtk.ResponseType.OK, rss, name);
+            controller.add_podcast_feed(rss);
         }
 
 

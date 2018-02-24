@@ -82,10 +82,10 @@ namespace Vocal {
 				} else if (url.contains("itunes.apple")) {
 					var itunes = new iTunesProvider();
 					string rss_url = itunes.get_rss_from_itunes_url(url);
-							var fp = new FeedParser();
-					string details_summary =  fp.find_description_from_file(rss_url);
+					var feed_parser = new FeedParser();
+					string details_summary =  feed_parser.find_description_from_file(rss_url);
 					summary_label.set_text(details_summary.length > 0 ? details_summary : _("No summary available."));
-					fp = null;
+					feed_parser = null;
                 }
 				summary_label.max_width_chars = 64;
 				summary_label.margin = 20;

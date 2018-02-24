@@ -32,6 +32,11 @@ namespace Vocal {
 
         private Gee.ArrayList<string> queue = new Gee.ArrayList<string>();
 
+        private SoupClient soup_client = null;
+
+        public FeedParser () {
+            soup_client = new SoupClient();
+        }
 
         /*
          * Creates a new podcast by iterating through the queue and finding appropriate
@@ -263,13 +268,10 @@ namespace Vocal {
             return null;
         }
         
-        
-        
         /*
          * Parses a given XML file and returns a new podcast object if able to parse it properly
          */
         public Podcast? get_podcast_from_file(string path) throws GLib.Error {
-        
             /*
                 For reference: podcast rss feeds typically have the structure:
                 0. Rss
@@ -287,19 +289,15 @@ namespace Vocal {
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
             Xml.Doc* doc;
-            
             if(path.contains("http")) {
-                // Use libsoup because otherwise it freaks when
-                // given secure pages
-                var session = new Soup.Session ();
-                var message = new Soup.Message ("GET", path);
-
-                session.user_agent = Constants.USER_AGENT;
-                session.send_message (message);
-
-                doc = Parser.parse_doc ( (string) message.response_body.data);
+                try {
+                    doc = XmlUtils.parse_string((string) soup_client.send_message(HttpMethod.GET, path));
+                } catch (PublishingError e) {
+                    warning("Failed to get podcast. %s", e.message);
+                    return null;
+                }
             } else {
-                doc = Parser.parse_file (path);
+                doc = Xml.Parser.parse_file (path);
             }
             
             // Make sure that it didn't return a null reference
@@ -313,7 +311,6 @@ namespace Vocal {
             
             // Make sure that it didn't return a null reference, either
             if (root == null) {
-            
                 // If it did, free the document manually (since unowned)
                 delete doc;
                 warning ("The XML file '%s' is empty", path);
@@ -344,7 +341,7 @@ namespace Vocal {
             return podcast;
         }
         
-         /*
+        /*
          * Parses an OPML file and returns an array listing each feed discovered within
          */
         public string[] parse_feeds_from_OPML(string path) throws VocalLibraryError{
@@ -442,7 +439,7 @@ namespace Vocal {
         /*
          * Re-parses the feed for a given podcast and finds episodes newer than the previous newest episode
          */
-        public int update_feed(Podcast podcast) throws VocalUpdateError{
+        public int update_feed(Podcast podcast) throws GLib.Error {
         
             Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode>();
             bool previous_found = false;
@@ -460,21 +457,14 @@ namespace Vocal {
             Xml.Doc* doc;
             
             if(path.contains("http")) {
-                // Use libsoup because otherwise it freaks when
-                // given secure pages
-                var session = new Soup.Session ();
-                var message = new Soup.Message ("GET", path);
-
-                session.send_message (message);
-
-                doc = Parser.parse_doc ( (string) message.response_body.data);
+                doc = XmlUtils.parse_string((string) soup_client.send_message(HttpMethod.GET, path));
             } else {
-                doc = Parser.parse_file (path);
-            }
-            
-            // Make sure that it didn't return a null reference
-            if (doc == null) {
-                throw new VocalUpdateError.NETWORK_ERROR("Error opening file %s".printf(path));
+                doc = Xml.Parser.parse_file (path);
+                
+                // Make sure that it didn't return a null reference
+                if (doc == null) {
+                    throw new VocalUpdateError.NETWORK_ERROR("Error opening file %s. Parser returned null.".printf(path));
+                }
             }
 
             // Get the root node

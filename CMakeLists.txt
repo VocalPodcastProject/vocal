@@ -138,6 +138,8 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Utils/Utils.vala
     src/Utils/MPRIS.vala
     src/Utils/iTunesProvider.vala
+    src/Utils/SoupClient.vala
+    src/Utils/XmlUtils.vala
     src/Services/ImageCache.vala
 PACKAGES
     ${DEPS_PACKAGES}

@@ -36,7 +36,9 @@ namespace Vocal {
 
         private Gtk.ScrolledWindow scrolled_window;
 
-        public DirectoryView(iTunesProvider p, bool first_run = false) {
+        private bool top_podcasts_loaded = false;
+
+        public DirectoryView(iTunesProvider itunes_provider, bool first_run = false) {
 
             this.set_orientation(Gtk.Orientation.VERTICAL);
 
@@ -95,7 +97,7 @@ namespace Vocal {
             itunes_title.vexpand = false;
             itunes_title.hexpand  = true;
 
-            this.itunes = p;
+            this.itunes = itunes_provider;
             this.add(banner_box);
             this.add(itunes_title);
             
@@ -111,32 +113,42 @@ namespace Vocal {
             scrolled_window = new Gtk.ScrolledWindow(null, null);
             this.pack_start(scrolled_window, true, true, 15);
 
-            load_top_podcasts();
         }
 
         public async void load_top_podcasts() {
-
             SourceFunc callback = load_top_podcasts.callback;
 
             ThreadFunc<void*> run = () => {
+                if(top_podcasts_loaded) {
+                    info("Already loaded top 100 podcasts. Doing nothing.");
+                    return null;
+                }
 
                 flowbox = new Gtk.FlowBox();
 
-                info ("Getting top podcasts asynchronously.");
+                // TODO: not actually asyncronous.
+                info ("Getting top podcasts asynchronously?.");
                 var entries = itunes.get_top_podcasts(100);
                 info ("Top 100 podcasts loaded.");
-                
+
                 int i = 1;
-                foreach(DirectoryEntry e in entries) {
-                    DirectoryArt a = new DirectoryArt(e.itunesUrl, "%d. %s".printf(i, e.title), e.artist, e.summary, e.artworkUrl170);
-                    a.expand = false;
-                    a.subscribe_button_clicked.connect((url) => {
+                if(entries == null) {
+                    info("iterating over entries");
+                    return null;
+                }
+
+                foreach(DirectoryEntry entry in entries) {
+                    DirectoryArt directory_art = new DirectoryArt(entry.itunesUrl, "%d. %s".printf(i, entry.title), entry.artist, entry.summary, entry.artworkUrl170);
+                    directory_art.expand = false;
+                    directory_art.subscribe_button_clicked.connect((url) => {
                         first_run_continue_button.sensitive = true;
                         on_new_subscription(url);
                     });
-                    flowbox.add(a);
+                    flowbox.add(directory_art);
                     i++;
                 }
+
+                top_podcasts_loaded = true;
 
                 Idle.add((owned) callback);
                 return null;

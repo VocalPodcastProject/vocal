@@ -32,10 +32,10 @@ namespace Vocal {
 
         public signal void new_percentage_available();		// Fired when a new download percentage is available
 
-        public Gtk.Label 	 	title_label {private get; private set;}
-        public Gtk.Label	 	podcast_label {private get; private set;}
-        public Gtk.ProgressBar  progress_bar;
-        public Gtk.Label 		download_label;
+        public Gtk.Label 	 	title_label = null;
+        public Gtk.Label	 	podcast_label = null;
+        public Gtk.ProgressBar  progress_bar = null;
+        public Gtk.Label 		download_label = null;
 
         public double	percentage;
         public int 		secs_elapsed;

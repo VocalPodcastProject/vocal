@@ -44,7 +44,7 @@ namespace Vocal {
 
             try {
                 var parser = new Json.Parser ();
-                parser.load_from_data ((string) soup_client.send_message(HttpMethod.GET, uri), -1);
+                parser.load_from_stream (soup_client.request(HttpMethod.GET, uri));
 
                 var root_object = parser.get_root ().get_object ();
 

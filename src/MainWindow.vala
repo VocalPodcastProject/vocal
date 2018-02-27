@@ -1059,8 +1059,10 @@ namespace Vocal {
 		 * Called when the user requests to download all episodes from the sidepane
 		 */
         public void on_download_all_request() {
-            foreach(Episode e in controller.highlighted_podcast.episodes) {
-                download_episode(e);
+            foreach(Episode episode in controller.highlighted_podcast.episodes) {
+                if(episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
+                    download_episode(episode);
+                }
             }
         }
 

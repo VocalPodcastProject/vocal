@@ -75,7 +75,11 @@ namespace Vocal {
             episodes = new ArrayList<Episode>();
             content_type = MediaType.UNKNOWN;
   	    }
-    	    
+        
+        public Podcast.with_name(string name) {
+            this();
+            this.name = name;
+        }
             
         /*
          * Add a new episode to the library

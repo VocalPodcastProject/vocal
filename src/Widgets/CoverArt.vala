@@ -110,8 +110,13 @@ namespace Vocal {
 			this.pack_start(triangle_overlay, false, false, 0);
 
 			this.valign = Align.START;
+			string podcast_name = GLib.Uri.unescape_string(podcast.name);
+			if (podcast_name == null) {
+			    podcast_name = podcast.name.replace("%25", "%");
+			}
+			podcast_name = podcast_name.replace("&", """&amp;""");
 
-			podcast_name_label = new Gtk.Label("<b>" + GLib.Uri.unescape_string(podcast.name).replace("&", """&amp;""") + "</b>");
+			podcast_name_label = new Gtk.Label("<b>" + podcast_name + "</b>");
 			podcast_name_label.wrap = true;
 			podcast_name_label.use_markup = true;
 			podcast_name_label.max_width_chars = 15;

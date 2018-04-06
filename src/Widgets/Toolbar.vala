@@ -100,7 +100,6 @@ namespace Vocal {
 
             headerbar_box.add(shownotes_button);
             headerbar_box.add(playback_box);
-            headerbar_box.add (new_episodes_button);
             headerbar_box.add(playlist_button);
             headerbar_box.halign = Gtk.Align.CENTER;
 
@@ -298,6 +297,7 @@ namespace Vocal {
             pack_end (search_button);
 			pack_end (podcast_store_button);
 	        pack_end (download);
+	        pack_end (new_episodes_button);
 		}
 
 

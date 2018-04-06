@@ -29,6 +29,7 @@ namespace Vocal {
         private GLib.List<Episode> episodes;
         public signal void go_back();
         public signal void play_episode_requested (Episode episode);
+        public signal void add_all_new_to_queue (GLib.List<Episode> episodes);
         
         public NewEpisodesView (Controller cont) {
             controller = cont;
@@ -56,11 +57,15 @@ namespace Vocal {
             var add_all_to_queue_button = new Gtk.Button.with_label (_("Add all new episodes to the queue"));
             add_all_to_queue_button.margin_left = 50;
             add_all_to_queue_button.margin_right = 50;
+            add_all_to_queue_button.clicked.connect ( () => {
+                add_all_new_to_queue(episodes);
+            });
             this.orientation = Gtk.Orientation.VERTICAL;
             this.pack_start (new_episodes_listbox, true, true, 15);
             this.pack_start (add_all_to_queue_button, false, false, 15);
             new_episodes_listbox.activate_on_single_click = false;
             new_episodes_listbox.row_activated.connect(on_row_activated);
+            
         }
         
         public void populate_episodes_list () {

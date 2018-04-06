@@ -301,6 +301,11 @@ namespace Vocal {
             new_episodes_view.play_episode_requested.connect((episode) => {
                 play_different_track(episode);
             });
+            new_episodes_view.add_all_new_to_queue.connect ((episodes) => {
+                foreach (Episode e in episodes) {
+                    enqueue_episode (e);
+                }
+            });
                         
             info ("Creating scrolled containers and album art views.");
 

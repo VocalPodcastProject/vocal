@@ -119,7 +119,7 @@ namespace Vocal {
             var bigartwork = artworkUrl170.replace("170", "600");
 
             // Load the album artwork
-            var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/missing.png", 32, 32, true);
+            var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/missing.png", 200, 200, true);
             
             var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
             image.margin = 0;
@@ -130,6 +130,7 @@ namespace Vocal {
             image.get_style_context().add_class("directory-art-image");
             this.pack_start(image, false, false, 0);
 
+            
             ImageCache image_cache = new ImageCache();
             image_cache.get_image.begin(bigartwork, (obj, res) => {
                 Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
@@ -139,6 +140,7 @@ namespace Vocal {
                     image.pixel_size = 200;
                 }
             });
+            
 
             this.pack_start(hor_box, false, false, 0);
 

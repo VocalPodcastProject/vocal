@@ -643,10 +643,12 @@ namespace Vocal {
             }
             
             new_episodes_view.populate_episodes_list ();
+            
 
             // If the app is supposed to open hidden, don't present the window. Instead, hide it
             if(!controller.open_hidden && !controller.is_closing)
                 show_all();
+                
         }
 
         /*

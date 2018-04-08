@@ -125,6 +125,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/VideoControls.vala
     src/Widgets/DirectoryView.vala
     src/Widgets/DirectoryArt.vala
+    src/Widgets/NewEpisodesView.vala
     src/Widgets/CloudLoginDialog.vala
     src/Widgets/SearchResultsView.vala
     src/Widgets/PodcastView.vala

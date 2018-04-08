@@ -526,7 +526,7 @@ namespace Vocal {
                     window.toolbar.export_item.sensitive = true;
 
                     // Populate views no matter what
-                    window.populate_views();
+                    window.populate_views_async();
 
                     if(window.current_widget == window.welcome) {
                         window.switch_visible_page(window.all_scrolled);
@@ -624,7 +624,7 @@ namespace Vocal {
                 // Lastly, if there are new episodes, repopulate the views to obtain new counts
                 if(new_episode_count > 0) {
                     info ("Repopulating views after the update process has finished.");
-                    window.populate_views();
+                    window.populate_views_async();
                 }
             } else {
                 info("Vocal is already checking for updates.");

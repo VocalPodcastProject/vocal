@@ -26,7 +26,7 @@ namespace Vocal {
 
         /* Signals */
 
-    	public signal void play_episode_requested();
+    	public signal void play_episode_requested(Episode e);
         public signal void enqueue_episode(Episode episode);
     	public signal void download_episode_requested(Episode episode);
         public signal void delete_local_episode_requested(Episode episode);
@@ -215,7 +215,7 @@ namespace Vocal {
 			horizontal_box.pack_start(paned, true, true, 0);
 
 			shownotes = new Shownotes();
-            shownotes.play_button.clicked.connect(() => { play_episode_requested(); });
+            shownotes.play_button.clicked.connect(() => { play_episode_requested(null); });
             shownotes.queue_button.clicked.connect(() => { enqueue_episode_internal(); });
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
@@ -574,7 +574,7 @@ namespace Vocal {
             // No matter what, mark this box as now playing
             previously_activated_box.mark_as_now_playing();
 
-            play_episode_requested();
+            play_episode_requested(null);
         }
 
 

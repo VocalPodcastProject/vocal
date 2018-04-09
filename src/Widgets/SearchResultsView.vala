@@ -306,9 +306,12 @@ namespace Vocal {
                         parent = p;
                     }
                 }
-                SearchResultBox srb = new SearchResultBox(parent, e);
-                local_episodes_widgets.add(srb);
-                local_episodes_listbox.add(srb);
+
+                if(parent != null) {
+                    SearchResultBox srb = new SearchResultBox(parent, e);
+                    local_episodes_widgets.add(srb);
+                    local_episodes_listbox.add(srb);
+                }
             }
 
             if(e_matches.size == 0) {

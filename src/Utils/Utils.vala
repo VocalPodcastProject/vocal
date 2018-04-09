@@ -51,50 +51,6 @@ public class Utils
 #endif
     }
     
-    
-    /*
-     * Attempts to load a webpage to confirm that the internet is functional
-     * (called when Vocal fails to parse a podcast and needs to know where
-     * the problem actually exists: the parser or the network)
-     */
-    public static bool confirm_internet_functional() {
-        /*
-            Note: this code is primarily borrowed from the Vala
-            GIONetworkingSample from the GNOME Wiki:
-            https://wiki.gnome.org/Projects/Vala/GIONetworkingSample
-        */
-        var host = "www.needleandthread.co";
-
-        try {
-            // Resolve hostname to IP address
-            var resolver = Resolver.get_default ();
-            var addresses = resolver.lookup_by_name (host, null);
-            var address = addresses.nth_data (0);
-            print ("Test internet connection...\n");
-            print (@"Resolved $host to $address\n");
-
-            // Connect
-            var client = new SocketClient ();
-            var conn = client.connect (new InetSocketAddress (address, 80));
-            print (@"Connected to $host\n");
-
-            // Send HTTP GET request
-            var message = @"GET / HTTP/1.1\r\nHost: $host\r\n\r\n";
-            conn.output_stream.write (message.data);
-            print ("Wrote request\n");
-
-            // Receive response
-            var response = new DataInputStream (conn.input_stream);
-            var status_line = response.read_line (null).strip ();
-            print ("Received status line: %s\n", status_line);
-            return true;
-
-        } catch (Error e) {
-            stderr.printf ("%s\n", e.message);
-            return false;
-        }
-    }
-    
     /*
     * Find the real URI for a resource (locates redirected URIs, etc)
     *

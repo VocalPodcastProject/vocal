@@ -58,7 +58,6 @@ namespace Vocal {
         private Unity.LauncherEntry launcher;
 #endif
 
-        private FeedParser parser;				// Parser for parsing feeds
 		private VocalSettings settings;			// Vocal's settings
 
         Episode downloaded_episode = null;
@@ -98,8 +97,6 @@ namespace Vocal {
             // Set the local library path (and replace ~ with the absolute home directory if need be)
             local_library_path = settings.library_location.replace("~", GLib.Environment.get_home_dir());
 
-            parser = new FeedParser();
-
 #if HAVE_LIBUNITY
             launcher = Unity.LauncherEntry.get_for_desktop_id("vocal.desktop");
             launcher.count = new_episode_count;
@@ -110,37 +107,33 @@ namespace Vocal {
         }
 
 
-
         /*
          * Adds podcasts to the library from the provided OPML file path
          */
-        public async bool add_from_OPML(string path) {
-
-            bool successful = true;
-
+        public async Gee.ArrayList<string> add_from_OPML(string path) {
+            Gee.ArrayList<string> failed_feeds = new Gee.ArrayList<string>();
+            
             SourceFunc callback = add_from_OPML.callback;
-
+            
             ThreadFunc<void*> run = () => {
-
                 try {
+                    FeedParser feed_parser = new FeedParser();
+                    string[] feeds = feed_parser.parse_feeds_from_OPML(path);
+                    info("Done parsing feeds.");
 
-                    string[] feeds = parser.parse_feeds_from_OPML(path);
                     int i = 0;
                     foreach (string feed in feeds) {
                         i++;
                         import_status_changed(i, feeds.length, feed);
                         bool temp_status = add_podcast_from_file(feed);
-                        if(temp_status == false)
-                            successful = false;
+                        if(temp_status == false) {
+                            failed_feeds.add(feed);
+                            warning("Failed to add podcast from feed because add_podcast_from_file returned false. for: %s", feed);
+                        }
                     }
-
                 } catch (Error e) {
-                    info("Error parsing OPML file.");
-                    info(e.message);
-                    successful = false;
-
+                    info("Error parsing OPML file. %s", e.message);
                 }
-
 
                 Idle.add((owned) callback);
                 return null;
@@ -149,7 +142,7 @@ namespace Vocal {
 
             yield;
 
-            return successful;
+            return failed_feeds;
         }
 
 
@@ -158,10 +151,7 @@ namespace Vocal {
          * Adds a new podcast to the library
          */
         public bool add_podcast(Podcast podcast) throws VocalLibraryError {
-
-            if(podcast == null){
-                throw new VocalLibraryError.ADD_ERROR(_("Unable to add podcast"));
-            }
+            info("Podcast %s being added to library.", podcast.name);
 
             // Set all but the most recent episode as played on initial add to library
             if(podcast.episodes.size > 0) {
@@ -175,38 +165,31 @@ namespace Vocal {
             // Create a directory for downloads and artwork caching in the local library
             GLib.DirUtils.create_with_parents(podcast_path, 0775);
 
-
             //  Locally cache the album art if necessary
             try {
-
                 // Don't use the default coverart_path getter, we want to make sure we are using the remote URI
                 GLib.File remote_art = GLib.File.new_for_uri(podcast.remote_art_uri);
+                if(remote_art.query_exists()) {
+                    // Set the path of the new file and create another object for the local file
+                    string art_path = podcast_path + """/""" + remote_art.get_basename().replace("%", "_");
+                    GLib.File local_art = GLib.File.new_for_path(art_path);
 
-                // Set the path of the new file and create another object for the local file
-
-                string art_path = podcast_path + """/""" + remote_art.get_basename().replace("%", "_");
-
-                GLib.File local_art = GLib.File.new_for_path(art_path);
-
-                // If the local album art doesn't exist
-                if(!local_art.query_exists()) {
-
-                    // Cache the art
-                    remote_art.copy(local_art, FileCopyFlags.NONE);
-
-                    // Mark the local path on the podcast
-                    podcast.local_art_uri = """file://""" + art_path;
+                    // If the local album art doesn't exist
+                    if(!local_art.query_exists()) {
+                        // Cache the art
+                        remote_art.copy(local_art, FileCopyFlags.NONE);
+                        // Mark the local path on the podcast
+                        podcast.local_art_uri = """file://""" + art_path;
+                    }
                 }
-
             } catch(Error e) {
-                stderr.puts("Unable to save a local copy of the album art.\n");
+                error("Unable to save a local copy of the album art. %s", e.message);
             }
-
 
             // Open the database
             int ec = Sqlite.Database.open (db_location, out db);
 	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
+		        error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
 		        return false;
 	        }
 
@@ -223,7 +206,6 @@ namespace Vocal {
 	            content_type_text = "unknown";
 	        }
 
-
             // Add the podcast
 
             string name, feed_uri, album_art_url, album_art_local_uri, description;
@@ -234,15 +216,11 @@ namespace Vocal {
             album_art_local_uri = podcast.local_art_uri.replace("'", "%27");
             description = podcast.description.replace("'", "%27");
 
-
-
             string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type)
                 VALUES ('%s','%s','%s','%s', '%s', '%s');""".printf(name, feed_uri, album_art_url, album_art_local_uri,
                 description, content_type_text);
 
-
             string errmsg;
-
 
             ec = db.exec (query, null, out errmsg);
 	        if (ec != Sqlite.OK) {
@@ -278,7 +256,6 @@ namespace Vocal {
                 query = """INSERT OR REPLACE INTO Episode (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');"""
                     .printf(title, parent_podcast_name, uri, episode.local_uri, episode_description, episode.date_released, download_text, played_text);
 
-
                 ec = db.exec (query, null, out errmsg);
                 if (ec != Sqlite.OK) {
                     stderr.printf ("Error: %s\n", errmsg);
@@ -294,24 +271,23 @@ namespace Vocal {
 		 * Adds a new podcast to the library from a given file path by parsing the file's contents
 		 */
         public bool add_podcast_from_file(string path) {
-
             string uri = path;
             
             // Discover the real URI (avoid redirects)
             if(path.contains("http")) {
                 uri = Utils.get_real_uri(path);
             }
-            info("Adding podcast from: %s".printf(uri));
-            parser = new FeedParser();
+            info("Adding podcast from: %s", uri);
 
-            Podcast new_podcast = parser.get_podcast_from_file(uri);
+            FeedParser feed_parser = new FeedParser();
+            Podcast new_podcast = feed_parser.get_podcast_from_file(uri);
             if(new_podcast == null) {
+                warning("Failed to parse %s", uri);
                 return false;
             } else {
                 add_podcast(new_podcast);
                 return true;
             }
-
         }
 
 
@@ -319,39 +295,36 @@ namespace Vocal {
          * Adds a new podcast from a file, asynchronously
          */
         public async bool async_add_podcast_from_file(string path) {
-
             bool successful = true;
 
             SourceFunc callback = async_add_podcast_from_file.callback;
 
             ThreadFunc<void*> run = () => {
+                info("Adding podcast from file: %s", path);
 
-                info("Adding podcast from file: %s".printf(path));
-                parser = new FeedParser();
-
+                FeedParser parser = new FeedParser();
                 try {
                     Podcast new_podcast = parser.get_podcast_from_file(path);
                     if(new_podcast == null) {
-                        info("New podcast found to be null.");
+                        info("New podcast found to be null. %s", path);
                         successful = false;
                     } else {
+                        info("Async Adding %s", new_podcast.name);
                         add_podcast(new_podcast);
                     }
                 } catch (Error e) {
+                    error("Failed to add podcast: %s", e.message);
                     successful = false;
                 }
 
-
                 Idle.add((owned) callback);
                 return null;
-
             };
             Thread.create<void*>(run, false);
 
             yield;
 
             return successful;
-
         }
 
         /*
@@ -400,41 +373,39 @@ namespace Vocal {
         /*
          * Checks each feed in the library to see if new episodes are available
          */
-        public async Gee.ArrayList<Episode> check_for_updates() throws Error{
-
+        public async Gee.ArrayList<Episode> check_for_updates() {
             SourceFunc callback = check_for_updates.callback;
             Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode>();
 
-            parser = new FeedParser();
+            FeedParser parser = new FeedParser();
 
             ThreadFunc<void*> run = () => {
                 foreach(Podcast podcast in podcasts) {
-                    try {
-                    
-                        int added = -1;
-                        if (podcast.feed_uri != null && podcast.feed_uri.length > 4) {
-                            added = parser.update_feed(podcast);
-                        }
-
-                        while(added > 0) {
-                            int index = podcast.episodes.size - added;
-
-                            // Add the new episode to the arraylist in case it needs to be downloaded later
-
-                            new_episodes.add(podcast.episodes[index]);
-
-                            write_episode_to_database(podcast.episodes[index]);
-                            added--;
-                        }
+                    int added = -1;
+                    if (podcast.feed_uri != null && podcast.feed_uri.length > 4) {
+                        info("updating feed %s", podcast.feed_uri);
                         
-                        if (added == -1) {
-                            critical ("Unable to update podcast due to missing feed URL: " + podcast.name);
+                        try {
+                            added = parser.update_feed(podcast);
+                        } catch(Error e) {
+                            warning("Failed to update feed for podcast: %s. %s", podcast.name, e.message);
+                            continue;
                         }
+                    }
 
-                    } catch(Error e) {
-                        throw e;
+                    while(added > 0) {
+                        int index = podcast.episodes.size - added;
+
+                        // Add the new episode to the arraylist in case it needs to be downloaded later
+                        new_episodes.add(podcast.episodes[index]);
+
+                        write_episode_to_database(podcast.episodes[index]);
+                        added--;
                     }
                     
+                    if (added == -1) {
+                        critical ("Unable to update podcast due to missing feed URL: " + podcast.name);
+                    }
                 }
 
                 Idle.add((owned) callback);
@@ -827,7 +798,8 @@ namespace Vocal {
                     mark_episode_as_downloaded(downloaded_episode);
                 }
 
-            } catch(Error error) {
+            } catch(Error e) {
+                error("%s", e.message);
             } finally {
                 download_finished(downloaded_episode);
             }

@@ -21,7 +21,11 @@ namespace Vocal {
 
     public class iTunesProvider {
 
-        public iTunesProvider() {}
+        private SoupClient soup_client = null;
+
+        public iTunesProvider() {
+            soup_client = new SoupClient();
+        }
 
         /*
          * Finds the public RSS feed address from any given iTunes store URL
@@ -37,14 +41,10 @@ namespace Vocal {
             string id = itunes_url.slice(start_index, stop_index);
 
             var uri =  "https://itunes.apple.com/lookup?id=%s&entity=podcast".printf(id);
-            var session = new Soup.Session ();
-            var message = new Soup.Message ("GET", uri);
-            session.user_agent = Constants.USER_AGENT;
-            session.send_message (message);
 
             try {
                 var parser = new Json.Parser ();
-                parser.load_from_data ((string) message.response_body.flatten ().data, -1);
+                parser.load_from_stream (soup_client.request(HttpMethod.GET, uri));
 
                 var root_object = parser.get_root ().get_object ();
 
@@ -60,14 +60,11 @@ namespace Vocal {
                     rss = obj.get_string_member("feedUrl");
                     name = obj.get_string_member("trackName");
                 }
-                
-
             } catch (Error e) {
-                warning ("An error occurred while discovering the real RSS feed address");
+                warning ("An error occurred while discovering the real RSS feed address %s\n", e.message);
             }
 
             return rss;
-
         }
 
         /*
@@ -79,17 +76,19 @@ namespace Vocal {
             var settings = VocalSettings.get_default_instance();
 
             var uri =  "https://itunes.apple.com/%s/rss/toppodcasts/limit=%d/json".printf(settings.itunes_store_country, limit);
-            var session = new Soup.Session ();
-            var message = new Soup.Message ("GET", uri);
-            session.send_message (message);
-            
+
             GLib.List<DirectoryEntry> entries = new GLib.List<DirectoryEntry>();
 
             var parser = new Json.Parser ();
-            parser.load_from_data ((string) message.response_body.flatten ().data, -1);
+
+            try {
+                parser.load_from_stream (soup_client.request(HttpMethod.GET, uri));
+            } catch (Error e) {
+                warning ("An error occured fetching the top podcasts. %s", e.message);
+                return null;
+            }
 
             var root_object = parser.get_root ().get_object ();
-
             if(root_object == null) {
                 error ("Error loading iTunes results. Root object was null.");
                 return null;
@@ -160,15 +159,11 @@ namespace Vocal {
 
             var uri = "https://itunes.apple.com/search?term=%s&entity=podcast&limit=%d".printf(term.replace(" ", "+"), limit);
 
-            var session = new Soup.Session ();
-            var message = new Soup.Message ("GET", uri);
-            session.send_message (message);
-
             Gee.ArrayList<DirectoryEntry> entries = new Gee.ArrayList<DirectoryEntry>();
 
             try {
                 var parser = new Json.Parser ();
-                parser.load_from_data ((string) message.response_body.flatten ().data, -1);
+                parser.load_from_stream (soup_client.request(HttpMethod.GET, uri));
 
                 var root_object = parser.get_root ().get_object ();
 
@@ -201,7 +196,7 @@ namespace Vocal {
                 }
 
             } catch (Error e) {
-                warning ("An error occurred while loading the iTunes results");
+                warning ("An error occurred while loading the iTunes results. %s", e.message);
             }
 
             return entries;

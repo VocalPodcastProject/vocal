@@ -32,7 +32,7 @@ namespace Vocal {
 
         private static DiskCacher cacher;
         private static Gee.HashMap<uint, File> cache;
-        private static Soup.Session soup_session;
+        private static SoupClient soup_client = null;
         private static CacheState state;
 
         static construct {
@@ -44,8 +44,7 @@ namespace Vocal {
             var home_dir = GLib.Environment.get_home_dir();
             var cache_directory = Constants.CACHE_DIR.replace("~", home_dir);
 
-            soup_session = new Soup.Session();
-            soup_session.user_agent = Constants.USER_AGENT;
+            soup_client = new SoupClient();            
             cacher = new DiskCacher(cache_directory);
             cacher.get_cached_files.begin((obj, res) => {
                 cache = cacher.get_cached_files.end(res);
@@ -54,7 +53,7 @@ namespace Vocal {
             });
         }
 
-        public ImageCache() { }
+        public ImageCache() {}
 
         // Get image and cache it
         public async Gdk.Pixbuf get_image(string url) {
@@ -84,16 +83,14 @@ namespace Vocal {
 
         private async Gdk.Pixbuf? load_image_async(string url) {
             Gdk.Pixbuf pixbuf = null;
-            Soup.Request req = soup_session.request(url);
-            if(req == null) {
-                warning ("Request null.");
-            }
-            InputStream image_stream = req.send(null);
+
             try {
-	            pixbuf = new Gdk.Pixbuf.from_stream(image_stream, null);
+	            pixbuf = new Gdk.Pixbuf.from_stream_async(soup_client.request(HttpMethod.GET, url), null);
             } catch (Error e) {
-                warning (e.message);
+                warning ("Failed to load image. %s", e.message);
+                return null;
             }
+
             return pixbuf;
         }
 

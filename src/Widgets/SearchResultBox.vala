@@ -129,10 +129,10 @@ namespace Vocal {
 
                 details_button.clicked.connect(() => {
                     if(!details_visible) {
-                        var fp = new FeedParser();
-                        string summary =  fp.find_description_from_file(rss_url);
+                        var feed_parser = new FeedParser();
+                        string summary =  feed_parser.find_description_from_file(rss_url);
                         summary_label.set_text(summary.length > 0 ? summary : _("No summary available."));
-                        fp = null;
+                        feed_parser = null;
                         details_box.set_no_show_all(false);
                         details_box.show();
                         show_all();

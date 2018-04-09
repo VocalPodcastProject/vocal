@@ -469,114 +469,101 @@ namespace Vocal {
         /*
          * Does the actual adding of podcast feeds
          */
-        public void add_podcast_feed(int response_id, string feed, string? name) {
+        public void add_podcast_feed(string feed) {
+            if(feed.length == 0) {
+                return;
+            }
+            // Destroy the add podcast dialog box
+            //  window.add_feed.destroy();
 
+            info("Adding feed %s", feed);
             currently_importing = true;
 
-            if(response_id == Gtk.ResponseType.OK) {
-                string entered_feed = "";
-                if(feed == null && window.add_feed != null)
-                    entered_feed = window.add_feed.entry.get_text();
-                else
-                    entered_feed = feed;
-
-                // Was the RSS feed an iTunes URL? If so, find the actual RSS feed address
-                if(entered_feed.contains("itunes.apple.com")) {
-                    string actual_rss = itunes.get_rss_from_itunes_url(entered_feed);
-                    if(actual_rss != null) {
-                        info("Original iTunes URL: %s, Vocal found matching RSS address: %s", entered_feed, actual_rss);
-                        entered_feed = actual_rss;
-                    }
-                }
-
-                window.add_feed.destroy();
-
-                // Hide the shownotes button
-                window.toolbar.hide_shownotes_button();
-                window.toolbar.hide_playlist_button();
-
-                if(name == null)
-                    window.toolbar.playback_box.set_message(_("Adding new podcast: <b>" + entered_feed + "</b>"));
-                else
-                    window.toolbar.playback_box.set_message(_("Adding new podcast: <b>" + name + "</b>"));
-                window.toolbar.show_playback_box();
-
-                var loop = new MainLoop();
-                bool success = false;
-
-                library.async_add_podcast_from_file(entered_feed, (obj, res) => {
-                    success = library.async_add_podcast_from_file.end(res);
-                    currently_importing = false;
-                    if(player.playing) {
-                        window.toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-                        window.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-                    }
-                    loop.quit();
-                });
-
-                loop.run();
-
-                if(success) {
-                    window.toolbar.show_shownotes_button();
-                    window.toolbar.show_playlist_button();
-
-                    if(!player.playing)
-                        window.toolbar.hide_playback_box();
-
-                    // Is there now at least one podcast in the library?
-                    if(library.podcasts.size > 0) {
-
-                        // Make the refresh and export items sensitive now
-                        //refresh_item.sensitive = true;
-                        window.toolbar.export_item.sensitive = true;
-
-                        // Populate views no matter what
-                        window.populate_views_async();
-
-                        if(window.current_widget == window.welcome) {
-                            window.switch_visible_page(window.all_scrolled);
-                        }
-
-                        library_empty = false;
-
-                        window.show_all();
-                    }
+            // Was the RSS feed an iTunes URL? If so, find the actual RSS feed address
+            if(feed.contains("itunes.apple.com")) {
+                string actual_rss = itunes.get_rss_from_itunes_url(feed);
+                if(actual_rss != null) {
+                    info("Original iTunes URL: %s, Vocal found matching RSS address: %s", feed, actual_rss);
+                    feed = actual_rss;
                 } else {
+                    return;
+                }
+            }
 
-                    if(!player.playing)
-                        window.toolbar.hide_playback_box();
+            // Hide the shownotes button
+            window.toolbar.hide_shownotes_button();
+            window.toolbar.hide_playlist_button();
 
-                    var add_err_dialog = new Gtk.MessageDialog(window.add_feed,
-                    Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
-                    Gtk.ButtonsType.OK, "");
-                    add_err_dialog.response.connect((response_id) => {
-                        add_err_dialog.destroy();
-                    });
-                    
-                    // Determine if it was a network issue, or just a problem with the feed
-                    
-                    bool network_okay = Utils.confirm_internet_functional();
-                    
-                    string error_message;
-                    
-                    if(network_okay) {
-                        error_message = _("Please make sure you selected the correct feed and that it is still available.");
-                    } else {
-                        error_message = _("There seems to be a problem with your internet connection. Make sure you are online and then try again.");
+            window.toolbar.playback_box.set_message(_("Adding new podcast: <b>" + feed + "</b>"));
+            window.toolbar.show_playback_box();
+
+            var loop = new MainLoop();
+            bool success = false;
+
+            library.async_add_podcast_from_file(feed, (obj, res) => {
+                success = library.async_add_podcast_from_file.end(res);
+                currently_importing = false;
+                if(player.playing) {
+                    window.toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                    window.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                }
+                loop.quit();
+            });
+
+            loop.run();
+
+            if(success) {
+                window.toolbar.show_shownotes_button();
+                window.toolbar.show_playlist_button();
+
+                if(!player.playing)
+                    window.toolbar.hide_playback_box();
+
+                // Is there now at least one podcast in the library?
+                if(library.podcasts.size > 0) {
+                    // Make the refresh and export items sensitive now
+                    //refresh_item.sensitive = true;
+                    window.toolbar.export_item.sensitive = true;
+
+                    // Populate views no matter what
+                    window.populate_views_async();
+
+                    if(window.current_widget == window.welcome) {
+                        window.switch_visible_page(window.all_scrolled);
                     }
 
-                    var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
-                    add_err_dialog.set_transient_for(window);
-                    add_err_dialog.text = _("Error Adding Podcast");
-                    add_err_dialog.secondary_text = error_message;
-                    add_err_dialog.set_image(error_img);
-                    add_err_dialog.show_all();
+                    library_empty = false;
+                    window.show_all();
+                }
+            } else {
+                if(!player.playing) {
+                    window.toolbar.hide_playback_box();
                 }
 
-            }
-            else {
-            	// Destroy the add podcast dialog box
-            	window.add_feed.destroy();
+                var add_err_dialog = new Gtk.MessageDialog(window.add_feed,
+                Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
+                Gtk.ButtonsType.OK, "");
+                add_err_dialog.response.connect((response_id) => {
+                    add_err_dialog.destroy();
+                });
+                
+                // Determine if it was a network issue, or just a problem with the feed
+                bool network_okay = SoupClient.check_connection();
+                
+                string error_message;
+                
+                if(network_okay) {
+                    error_message = _("Please make sure you selected the correct feed and that it is still available.");
+                } else {
+                    error_message = _("There seems to be a problem with your internet connection. Make sure you are online and then try again.");
+                }
+
+                var error_img = new Gtk.Image.from_icon_name ("dialog-error", Gtk.IconSize.DIALOG);
+                add_err_dialog.set_transient_for(window);
+                add_err_dialog.text = _("Error Adding Podcast");
+                add_err_dialog.secondary_text = error_message;
+                add_err_dialog.set_image(error_img);
+                add_err_dialog.show_all();
             }
         }
         

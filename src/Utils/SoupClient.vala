@@ -8,9 +8,6 @@ public class SoupClient {
     }
 
     public InputStream request (HttpMethod method, string url) throws PublishingError {
-        // Soup needs the url to start with http or https or vocal crashes
-        assert (url.index_of("http://") == 0 || url.index_of("https://") == 0);
-
         var message = new Soup.Message (method.to_string (), url);
         InputStream stream = soup_session.send (message);
         check_response_headers(message);
@@ -19,9 +16,6 @@ public class SoupClient {
     }
 
     public uint8[] send_message (HttpMethod method, string url) throws PublishingError {
-        // Soup needs the url to start with http or https or vocal crashes
-        assert (url.index_of("http://") == 0 || url.index_of("https://") == 0);
-
         var message = new Soup.Message (method.to_string (), url);
         soup_session.send_message (message);
         check_response_headers(message);

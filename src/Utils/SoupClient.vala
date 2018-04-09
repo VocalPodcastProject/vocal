@@ -8,6 +8,10 @@ public class SoupClient {
     }
 
     public InputStream request (HttpMethod method, string url) throws PublishingError {
+        if (!valid_http_uri(url)) {
+            throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
+        }
+
         var message = new Soup.Message (method.to_string (), url);
         InputStream stream = soup_session.send (message);
         check_response_headers(message);
@@ -16,6 +20,10 @@ public class SoupClient {
     }
 
     public uint8[] send_message (HttpMethod method, string url) throws PublishingError {
+        if (!valid_http_uri(url)) {
+            throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
+        }
+
         var message = new Soup.Message (method.to_string (), url);
         soup_session.send_message (message);
         check_response_headers(message);
@@ -26,6 +34,10 @@ public class SoupClient {
         }
 
         return message.response_body.data;
+    }
+
+    public static bool valid_http_uri(string url) {
+        return url.index_of("http://") == 0 || url.index_of("https://") == 0;
     }
 
     public static bool check_connection() {

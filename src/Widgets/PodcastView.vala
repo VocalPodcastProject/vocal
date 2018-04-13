@@ -527,7 +527,7 @@ namespace Vocal {
             } catch (Error e) {}
 
 			name_label.set_text(podcast.name.replace("%27", "'"));
-            description_label.set_text(GLib.Uri.unescape_string(podcast.description).replace("""\n""",""));
+            description_label.set_text(podcast.description.replace("""\n""",""));
 
             populate_episodes();
 

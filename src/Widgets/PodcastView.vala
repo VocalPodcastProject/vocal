@@ -346,7 +346,8 @@ namespace Vocal {
                             Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
 
                             foreach(ListBoxRow row in selected_rows) {
-                                indexes.add(row.get_index());
+                                EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                                indexes.add(b.index);
                                 boxes[row.get_index()].mark_as_played();
                             }
 
@@ -362,7 +363,8 @@ namespace Vocal {
                         Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
 
                         foreach(ListBoxRow row in selected_rows) {
-                            indexes.add(row.get_index());
+                            EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                            indexes.add(b.index);
                             boxes[row.get_index()].mark_as_unplayed();
                         }
 
@@ -391,7 +393,8 @@ namespace Vocal {
                                     Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
 
                                     foreach(ListBoxRow row in selected_rows) {
-                                        indexes.add(row.get_index());
+                                        EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                                        indexes.add(b.index);
                                     }
 
                                     delete_multiple_episodes_requested(indexes);

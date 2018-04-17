@@ -929,7 +929,7 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Episode WHERE title LIKE ? ORDER BY title";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text(1, term, -1, null);
+            ec = stmt.bind_text(1, "%" + term + "%", -1, null);
             if (ec != Sqlite.OK) {
                 warning("%d: %s\n".printf(db.errcode (), db.errmsg ()));
                 return matches;
@@ -944,7 +944,7 @@ namespace Vocal {
 
                 //Add the new episode
                 matches.add(current_ep);
-
+                
             }
 
             stmt.reset();

@@ -346,7 +346,6 @@ namespace Vocal {
 
                         foreach(ListBoxRow row in selected_rows) {
                             EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                            boxes[row.get_index()].mark_as_played();
                             enqueue_episode(podcast.episodes[b.index]);
                         }
                     });

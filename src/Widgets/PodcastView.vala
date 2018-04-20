@@ -341,6 +341,16 @@ namespace Vocal {
                     // Multiple rows selected
                     right_click_menu = new Gtk.Menu();
 
+                    var add_to_queue_menu_item = new Gtk.MenuItem.with_label(_("Add selected episodes to queue"));
+                    add_to_queue_menu_item.activate.connect(() => {
+
+                        foreach(ListBoxRow row in selected_rows) {
+                            EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                            enqueue_episode(podcast.episodes[b.index]);
+                        }
+                    });
+                    right_click_menu.add(add_to_queue_menu_item);
+
                     var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as played"));
                     mark_played_menuitem.activate.connect(() => {
                             Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();

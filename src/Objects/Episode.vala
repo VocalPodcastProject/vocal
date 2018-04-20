@@ -21,7 +21,7 @@ using GLib;
 
 namespace Vocal {
 
-	public class Episode {
+	public class Episode : GLib.Object {
 
 		public string           title = "";              // the title of the episode
 		public string           description = "";        // the description/shownotes

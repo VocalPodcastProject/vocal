@@ -23,10 +23,10 @@ using Granite;
 namespace Vocal {
 
     public class NewEpisodesView : Gtk.Box {
-    
+
         private Controller controller;
         private ListBox new_episodes_listbox;
-        private GLib.List<Episode> episodes;
+        GLib.ListStore episodeListModel = new GLib.ListStore ( typeof (Episode) );
         public signal void go_back();
         public signal void play_episode_requested (Episode episode);
         public signal void add_all_new_to_queue (GLib.List<Episode> episodes);
@@ -58,6 +58,12 @@ namespace Vocal {
             add_all_to_queue_button.margin_left = 50;
             add_all_to_queue_button.margin_right = 50;
             add_all_to_queue_button.clicked.connect ( () => {
+                GLib.List<Episode> episodes = new GLib.List<Episode>();
+                for (int x = 0; ; x++) {
+                    var e = (Episode) episodeListModel.get_item(x);
+                    if (e == null) { break; } // No more items
+                    episodes.append(e);
+                }
                 add_all_new_to_queue(episodes);
             });
             this.orientation = Gtk.Orientation.VERTICAL;
@@ -67,29 +73,32 @@ namespace Vocal {
             new_episodes_listbox.row_activated.connect(on_row_activated);
             
         }
-        
+
         public void populate_episodes_list () {
-            episodes = new GLib.List<Episode>();
-            var children = new_episodes_listbox.get_children ();
-            for (int i = 0; i < children.length (); i++) {
-                children.remove (children.nth_data (0));
-            }
+
+            episodeListModel.remove_all();
+
             foreach (Podcast p in controller.library.podcasts) {
                 foreach (Episode e in p.episodes) {
                     if (e.status == EpisodeStatus.UNPLAYED) {
-                        var new_episode = new EpisodeDetailBox (e, 0, 0, false, true);
-                        new_episode.margin_top = 12;
-                        new_episodes_listbox.prepend (new_episode);
-                        episodes.prepend(e);
+                        episodeListModel.insert_sorted (e, (a, b) => {
+                                var e1 = (Episode) a;
+                                var e2 = (Episode) b;
+                                return  e2.datetime_released.compare(e1.datetime_released);
+                        });
                     }
                 }
             }
+
+            new_episodes_listbox.bind_model(episodeListModel, (item) => {
+                    return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
+            });
         }
-        
+
         public void on_row_activated (Gtk.ListBoxRow row) {
             var index = row.get_index ();
             info("Index: %d".printf(index));
-            Episode ep = episodes.nth(index).data;
+            Episode ep = (Episode) episodeListModel.get_item(index);
             play_episode_requested (ep);
         }
         

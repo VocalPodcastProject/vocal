@@ -277,7 +277,8 @@ namespace Vocal {
                 unplayed_count--;
                 set_unplayed_text();
 
-                boxes[current_episode_index].mark_as_played();
+                Gtk.ListBoxRow selected_row = listbox.get_selected_row();
+                boxes[selected_row.get_index()].mark_as_played();
 
                 mark_episode_as_played_requested(podcast.episodes[current_episode_index]);
             }
@@ -292,8 +293,8 @@ namespace Vocal {
                 unplayed_count++;
                 set_unplayed_text();
 
-                boxes[current_episode_index].mark_as_unplayed();
-
+                Gtk.ListBoxRow selected_row = listbox.get_selected_row();
+                boxes[selected_row.get_index()].mark_as_unplayed();
 
                 mark_episode_as_unplayed_requested (podcast.episodes[current_episode_index]);
             }
@@ -426,7 +427,7 @@ namespace Vocal {
                     current_episode_index = b.index;
 
                     if(current_episode_index >= 0 && current_episode_index < boxes.size) {
-                        previously_selected_box = boxes[current_episode_index];
+                        previously_selected_box = boxes[select_row.get_index()];
                     }
 
                     // Populate the right click menu based on the current conditions
@@ -581,7 +582,7 @@ namespace Vocal {
             boxes_index = boxes.size - new_row.get_index() - 1;
 
             if(current_episode_index >= 0 && current_episode_index < boxes.size) {
-                previously_selected_box = boxes[current_episode_index];
+                previously_selected_box = boxes[new_row.get_index()];
             }
 
             shownotes.episode = podcast.episodes[current_episode_index];

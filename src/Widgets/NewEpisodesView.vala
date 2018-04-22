@@ -93,6 +93,7 @@ namespace Vocal {
             new_episodes_listbox.bind_model(episodeListModel, (item) => {
                     return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
             });
+            show_all ();
         }
 
         public void on_row_activated (Gtk.ListBoxRow row) {
@@ -100,19 +101,6 @@ namespace Vocal {
             info("Index: %d".printf(index));
             Episode ep = (Episode) episodeListModel.get_item(index);
             play_episode_requested (ep);
-        }
-        
-        
-        
-        public void remove_episode_from_list (Episode e) {
-            var children = new_episodes_listbox.get_children ();
-            for (int i = 0; i < children.length (); i++) {
-                var box = children.nth_data (i) as EpisodeDetailBox;
-                if (box.episode.title == e.title) {
-                    new_episodes_listbox.remove (box);
-                    return;
-                }
-            }
         }
     }
 }

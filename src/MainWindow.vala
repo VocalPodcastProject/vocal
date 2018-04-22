@@ -1561,8 +1561,6 @@ namespace Vocal {
             controller.library.set_episode_playback_position(controller.player.current_episode);
 
             controller.playback_status_changed("Stopped");
-            
-            new_episodes_view.remove_episode_from_list (controller.player.current_episode);
 
             controller.current_episode = controller.library.get_next_episode_in_queue();
 
@@ -1577,6 +1575,9 @@ namespace Vocal {
             } else {
                 controller.player.playing = false;
             }
+            
+            // Regenerate the new episode list in case the ended episode was one of the new episodes
+            new_episodes_view.populate_episodes_list ();
 
         }
 

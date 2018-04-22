@@ -427,7 +427,7 @@ namespace Vocal {
                     current_episode_index = b.index;
 
                     if(current_episode_index >= 0 && current_episode_index < boxes.size) {
-                        previously_selected_box = boxes[select_row.get_index()];
+                        previously_selected_box = boxes[selected_row.get_index()];
                     }
 
                     // Populate the right click menu based on the current conditions

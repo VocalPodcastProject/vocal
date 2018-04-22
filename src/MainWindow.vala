@@ -1280,6 +1280,8 @@ namespace Vocal {
                         }
                     }
                 }
+                
+                new_episodes_view.populate_episodes_list ();
             }
         }
 

@@ -51,12 +51,12 @@ namespace Vocal {
             new_episodes_label.margin_top = 12;
             this.pack_start(new_episodes_label, false, true, 0);
             
+            var new_episodes_scrolled = new Gtk.ScrolledWindow (null, null);
+            new_episodes_scrolled.margin_left = 50;
+            new_episodes_scrolled.margin_right = 50;
             new_episodes_listbox = new Gtk.ListBox ();
-            new_episodes_listbox.margin_left = 50;
-            new_episodes_listbox.margin_right = 50;
             var add_all_to_queue_button = new Gtk.Button.with_label (_("Add all new episodes to the queue"));
-            add_all_to_queue_button.margin_left = 50;
-            add_all_to_queue_button.margin_right = 50;
+            add_all_to_queue_button.halign = Gtk.Align.CENTER;
             add_all_to_queue_button.clicked.connect ( () => {
                 GLib.List<Episode> episodes = new GLib.List<Episode>();
                 for (int x = 0; ; x++) {
@@ -67,7 +67,9 @@ namespace Vocal {
                 add_all_new_to_queue(episodes);
             });
             this.orientation = Gtk.Orientation.VERTICAL;
-            this.pack_start (new_episodes_listbox, true, true, 15);
+            
+            new_episodes_scrolled.add (new_episodes_listbox);
+            this.pack_start (new_episodes_scrolled, true, true, 15);
             this.pack_start (add_all_to_queue_button, false, false, 15);
             new_episodes_listbox.activate_on_single_click = false;
             new_episodes_listbox.row_activated.connect(on_row_activated);

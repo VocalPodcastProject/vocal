@@ -63,7 +63,6 @@ namespace Vocal {
         public Gtk.ScrolledWindow all_scrolled;
         public Gtk.ScrolledWindow directory_scrolled;
         public Gtk.ScrolledWindow search_results_scrolled;
-        public Gtk.ScrolledWindow new_episodes_scrolled;
 
         /* Video playback */
 
@@ -312,8 +311,6 @@ namespace Vocal {
             // Set up scrolled windows so that content will scoll instead of causing the window to expand
             all_scrolled = new Gtk.ScrolledWindow (null, null);
             directory_scrolled = new Gtk.ScrolledWindow (null, null);
-            new_episodes_scrolled = new Gtk.ScrolledWindow (null, null);
-            new_episodes_scrolled.add (new_episodes_view);
             search_results_scrolled = new Gtk.ScrolledWindow(null, null);
             search_results_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             search_results_scrolled.add (search_results_box);
@@ -365,7 +362,7 @@ namespace Vocal {
             notebook.add_titled (import_message_box, "import", _("Importing"));
             notebook.add_titled (all_scrolled, "all", _("All Podcasts"));
             notebook.add_titled (details, "details", _("Details"));
-            notebook.add_titled (new_episodes_scrolled, "new_episodes", _("New Episodes"));
+            notebook.add_titled (new_episodes_view, "new_episodes", _("New Episodes"));
             notebook.add_titled (video_widget, "video_player", _("Video"));
             
             bool show_complete_button = controller.first_run || controller.library_empty;
@@ -420,7 +417,7 @@ namespace Vocal {
             });
             
             toolbar.new_episodes_button.clicked.connect (() => {
-                switch_visible_page (new_episodes_scrolled);
+                switch_visible_page (new_episodes_view);
             });
 
             toolbar.refresh_selected.connect (controller.on_update_request);
@@ -1003,8 +1000,8 @@ namespace Vocal {
                 notebook.set_visible_child(welcome);
                 current_widget = welcome;
             }
-            else if (widget == new_episodes_scrolled) {
-                notebook.set_visible_child (new_episodes_scrolled);
+            else if (widget == new_episodes_view) {
+                notebook.set_visible_child (new_episodes_view);
                 current_widget = new_episodes_view;
             }
             else {

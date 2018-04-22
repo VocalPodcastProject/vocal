@@ -11,15 +11,19 @@
   <screenshots>
     <screenshot type="default">
       <caption>Library View</caption>
-      <image width="2440" height="1628">http://vocalproject.net/screenshots/libraryview.png</image>
+      <image width="1284" height="843">http://vocalproject.net/screenshots/libraryview.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>Podcast View</caption>
-      <image width="2440" height="1628">http://vocalproject.net/screenshots/podcastview.png</image>
+      <image width="1284" height="843">http://vocalproject.net/screenshots/podcastview.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>iTunes Top 100 Podcasts</caption>
-      <image width="2440" height="1628">http://vocalproject.net/screenshots/itunes.png</image>
+      <image width="1284" height="843">http://vocalproject.net/screenshots/itunes.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>New Episode View</caption>
+      <image width="1284" height="843">http://vocalproject.net/screenshots/newepisodes.png</image>
     </screenshot>
   </screenshots>
 

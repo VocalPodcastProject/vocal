@@ -42,14 +42,14 @@ namespace Vocal {
             build_version = Constants.VERSION;
             build_version_info = Constants.VERSION_INFO;
 
-            app_years = "2015-2017";
+            app_years = "2015-2018";
             app_icon = "com.github.needle-and-thread.vocal";
             app_launcher = "com.github.needle-and-thread.vocal.desktop";
             application_id = "com.github.needle-and-thread.vocal";
 
-            main_url = "http://needleandthread.co/apps/vocal";
+            main_url = "https://vocalproject.net";
             bug_url = "https://github.com/needle-and-thread/vocal/issues";
-            help_url = "http://needleandthread.co/apps/vocal";
+            help_url = "https://vocalproject.net";
             translate_url = "https://www.transifex.com/needle-and-thread/vocal/";
 
             about_authors = { "Nathan Dyer <mail@nathandyer.me>" };

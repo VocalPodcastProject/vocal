@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2017 Needle & Thread -->
+<!-- Copyright 2018 Needle & Thread -->
 <component type="desktop">
   <id>com.github.needle-and-thread.vocal.desktop</id>
   <metadata_license>CC0</metadata_license>
@@ -81,6 +81,35 @@
 
 
   <releases>
+    <release version = "2.2" timestamp="1524422931">
+      <description>
+        <p>This update features a metric ton of bug fixes and stability
+        improvements, as well as a brand new way to see all your new episodes
+        at a glance.
+        </p>
+        <ul>
+            <li>Fixed the infamous "freeze on launch" bug which prevented some
+            users from accessing their library.
+            </li>
+            <li>Added a New Episode view to see all the unplayed episodes in
+            your library at once.
+            </li>
+            <li>Fixed an annoyance where Vocal would sometimes re-download an
+            episode that had already been downloaded.
+            </li>
+            <li>Performance and stability improvements with checking for new
+            episodes.
+            </li>
+            <li>Improved performance of the iTunes podcast directory
+            (specifically related to the loading of hi res images).
+            </li>
+            <li>Improved logging and debugging support.
+            </li>
+            <li>Many other small performance and stability enhancements.
+            </li>
+        </ul>
+      </description>
+    </release>
     <release version="2.1" timestamp="1514653432">
       <description>
         <p>Grab some hot chocolate and curl up with a nice podcast this winter

@@ -25,7 +25,7 @@ An official snap package is not yet available, although some community members a
 ### Official OS packages
 We're working with a number of distributions to make sure it's as simple as possible to get Vocal out-of-the-box. Check below for the list of distributions where Vocal can be downloaded from the official repositories.
 
-* [Fedora](https://admin.fedoraproject.org/pkgdb/package/rpms/vocal/)
+* [Fedora](https://apps.fedoraproject.org/packages/vocal)
 * [openSUSE](https://software.opensuse.org//download.html?project=multimedia%3Aapps&package=vocal)
 
 ## Get Involved

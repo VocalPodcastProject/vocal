@@ -94,7 +94,10 @@ namespace Vocal {
             playlist_button.relief = Gtk.ReliefStyle.NONE;
             playlist_button.valign = Gtk.Align.CENTER;
             
-            new_episodes_button = new Gtk.Button.from_icon_name ("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            if(on_elementary)
+                new_episodes_button = new Gtk.Button.from_icon_name ("help-about-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+            else
+                new_episodes_button = new Gtk.Button.from_icon_name ("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             new_episodes_button.tooltip_text = _("New Episodes");
             new_episodes_button.relief = Gtk.ReliefStyle.NONE;
 

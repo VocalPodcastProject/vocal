@@ -87,7 +87,11 @@ namespace Vocal {
 
             // Determine whether or not the episode has been played
             if(episode.status == EpisodeStatus.UNPLAYED) {
-                unplayed = "starred-symbolic";
+                if (Utils.check_elementary ()) {
+                    unplayed = "help-about-symbolic";
+                } else {
+                    unplayed = "starred-symbolic";
+                }
                 this.unplayed = true;
             }
 

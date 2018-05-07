@@ -30,6 +30,7 @@ namespace Vocal {
         public string       local_art_uri = "";      // where the locally cached album art is located
         public string       description = "";        // the episode's description
         public MediaType    content_type;            // is the podcast an audio or video feed?
+		public License license = License.UNKNOWN; // the type of license
 
         /*
          * Gets and sets the coverart, whether it's from a remote source
@@ -96,6 +97,13 @@ namespace Vocal {
      */
     public enum MediaType {
           AUDIO, VIDEO, UNKNOWN;
+    }
+    
+    /*
+     * The legal license that a podcast is listed as (if known)
+     */
+    public enum License {
+        UNKNOWN, RESERVED, CC, PUBLIC;
     }
 
 }

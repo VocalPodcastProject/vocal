@@ -120,6 +120,13 @@ namespace Vocal {
                     found_cover_art = true;
                     i++;
                 }
+                else if (current == "license") {
+                    i++;
+                    if (queue[i].up ().contains ("CREATIVE")) {
+                        podcast.license = License.CC;
+                    }
+                    i++;
+                }
                 
                 // We've found an episode!!
                 else if (current == "item") {

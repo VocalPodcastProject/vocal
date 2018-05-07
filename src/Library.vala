@@ -105,6 +105,65 @@ namespace Vocal {
             new_episode_count_changed.connect(set_new_badge);
             new_episode_count = 0;
         }
+        
+        /*
+         * As Vocal gets updated,the database must grow to meet new needs.
+         * This method is used to test whether certain columns exist,
+         * and alters the tables as needed if they don't.
+         */
+        public void run_database_update_check () {
+        
+            if (!check_database_exists ()) {
+                return;
+            }
+        
+            info ("Performing database update check.");
+            
+            // Open the database
+            int ec = Sqlite.Database.open (db_location, out db);
+	        if (ec != Sqlite.OK) {
+		        error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
+		        return;
+	        }
+	        
+	        // Temporarily add a dummy podcast
+            string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type)
+                VALUES ('%s','%s','%s','%s', '%s', '%s');""".printf("dummy", "dummy", "dummy", "dummy", "dummy", "dummy");
+
+            string errmsg;
+
+            ec = db.exec (query, null, out errmsg);
+	        if (ec != Sqlite.OK) {
+		        warning ("Error: %s\n", errmsg);
+		        return;
+	        }
+	        
+	        // Check that license is in the database (added 2018-05-06)
+	        query = """SELECT license FROM Podcast WHERE name = "dummy";""";
+	        errmsg = null;
+
+            ec = db.exec (query, null, out errmsg);
+
+            if (ec != Sqlite.OK) {
+                info ("License column does not exist in podcast table. Altering table to update.");
+                
+                // Check that license is in the database (added 2018-05-06)
+	            query = """ALTER TABLE Podcast ADD license TEXT;""";
+	            errmsg = null;
+
+                ec = db.exec (query, null, out errmsg);
+
+                if (ec != Sqlite.OK) {
+                    error ("Unable to create new license column in database.");
+                } else {
+                    info ("License column successfully added to database.");
+                }
+            }
+            
+            // Clean up by removing the dummy podcast
+            query = """DELETE FROM Podcast WHERE name = "dummy";""";
+            ec = db.exec (query, null, out errmsg);
+        }
 
 
         /*
@@ -205,6 +264,17 @@ namespace Vocal {
 	        else {
 	            content_type_text = "unknown";
 	        }
+	        
+	        string license_text;
+	        if (podcast.license == License.CC) {
+	            license_text = "cc";
+	        } else if (podcast.license == License.PUBLIC) {
+	            license_text = "public";
+	        } else if (podcast.license == License.RESERVED) {
+	            license_text = "reserved";
+	        } else {
+	            license_text = "unknown";
+	        }
 
             // Add the podcast
 
@@ -216,9 +286,9 @@ namespace Vocal {
             album_art_local_uri = podcast.local_art_uri.replace("'", "%27");
             description = podcast.description.replace("'", "%27");
 
-            string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type)
-                VALUES ('%s','%s','%s','%s', '%s', '%s');""".printf(name, feed_uri, album_art_url, album_art_local_uri,
-                description, content_type_text);
+            string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type, license)
+                VALUES ('%s','%s','%s','%s', '%s', '%s', '%s');""".printf(name, feed_uri, album_art_url, album_art_local_uri,
+                description, content_type_text, license_text);
 
             string errmsg;
 
@@ -1095,6 +1165,16 @@ namespace Vocal {
                     else {
                         podcast.content_type = MediaType.UNKNOWN;
                     }
+                } else if (col_name == "license") {
+                    if (val == "cc") {
+                        podcast.license = License.CC;
+                    } else if (val == "public") {
+                        podcast.license = License.PUBLIC;
+                    } else if (val == "reserved") {
+                        podcast.license = License.RESERVED;
+                    } else {
+                        podcast.license = License.UNKNOWN;
+                    }
                 }
             }
 
@@ -1222,7 +1302,8 @@ namespace Vocal {
 			        album_art_url       TEXT,
 			        album_art_local_uri TEXT,
 			        description         TEXT                    NOT NULL,
-			        content_type        TEXT
+			        content_type        TEXT,
+			        license             TEXT
 
 		            );
 

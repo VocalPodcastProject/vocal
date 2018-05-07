@@ -91,6 +91,7 @@ namespace Vocal {
             info ("Establishing a connection to your podcast library.");
 
             library = new Library (this);
+            library.run_database_update_check ();
             
             
             // IMPORTANT NOTE: the player, library, and iTunes provider MUST exist before the MainWindow is created

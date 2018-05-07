@@ -79,6 +79,7 @@ namespace Vocal {
         
         private Gtk.Box show_more_episodes_box;
         private Gtk.Button increase_button;
+        private Gtk.Image cc_image;
 
 		/*
 		 * Constructor for a Sidepane given a parent window and pocast
@@ -109,7 +110,7 @@ namespace Vocal {
                 mark_all_episodes_as_played_requested();
             });
             mark_as_played.margin = 6;
-
+            
             toolbar.pack_start(go_back_button, false, false, 0);
             toolbar.pack_end(mark_as_played, false, false, 0);
             this.pack_start(toolbar, false, true, 0);
@@ -190,6 +191,17 @@ namespace Vocal {
             label_box.pack_start(description_window, true, true, 0);
 
 			label_box.pack_start(count_label, false, false, 0);
+			
+			            
+            // Creative commons
+            // Load the album artwork
+            var cc_pb = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/creativecommons.svg", 151, 36, true);
+            cc_image = new Gtk.Image.from_pixbuf (cc_pb);
+            cc_image.margin = 12;
+            cc_image.expand = false;
+            cc_image.pixel_size = 32;
+            
+            label_box.pack_start (cc_image, false, false, 0);
 
 			actions_box.pack_start(download_all, true, true, 0);
             actions_box.pack_start(edit, true, true, 0);
@@ -522,6 +534,14 @@ namespace Vocal {
 
             reset_episode_list();
             populate_episodes();
+            
+            if (podcast.license == License.CC) {
+                cc_image.no_show_all = false;
+                cc_image.show ();
+            } else {
+                cc_image.no_show_all = true;
+                cc_image.hide ();
+            }
 
             // Select the first podcast
             var first_row = listbox.get_row_at_index(0);

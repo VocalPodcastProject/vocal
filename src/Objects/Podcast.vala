@@ -62,9 +62,9 @@ namespace Vocal {
 		        string[] split = value.split(":");
 		        if(split[0] == "http" || split[0] == "HTTP") {
 		            remote_art_uri = value.replace("%27", "'");
-            } else {
-                local_art_uri = """file://""" + value.replace("%27", "'");
-            }
+                } else {
+                    local_art_uri = """file://""" + value.replace("%27", "'");
+                }
 		    }
 		}
 		

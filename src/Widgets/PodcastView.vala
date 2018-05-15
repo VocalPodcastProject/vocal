@@ -724,15 +724,17 @@ namespace Vocal {
             detail_box.margin_top = 6;
             detail_box.margin_left = 6;
             detail_box.border_width = 0;
+
             if(detail_box.top_box_width > this.largest_box_size) {
                 this.largest_box_size = detail_box.top_box_width;
             }
-            detail_box.download_button.clicked.connect(() => {
+            
+            detail_box.download_button_clicked.connect(() => {
                 detail_box.hide_download_button();
                 download_episode_requested(current_episode);
             });
 
-           if(current_episode == controller.current_episode) {
+            if(current_episode == controller.current_episode) {
                 detail_box.mark_as_now_playing();
             }
 

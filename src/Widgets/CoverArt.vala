@@ -48,49 +48,33 @@ namespace Vocal {
 		 * Constructor for CoverArt given an image path and a podcast
 		 */
 		public CoverArt(string path, Podcast podcast, bool? show_mimetype = false) {
-		
 			this.podcast = podcast;
 			this.margin = 10;
 			this.orientation = Gtk.Orientation.VERTICAL;
 			
+			triangle_overlay = new Gtk.Overlay();
+			count_overlay = new Gtk.Overlay();
 
 			try {
-
-				// Load the actual cover art
-				var file = GLib.File.new_for_uri(path.replace("%27", "'"));
-
-				var icon = new GLib.FileIcon(file);
-
-				var image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+				image = new Gtk.Image();
 				image.pixel_size = COVER_SIZE;
+				image.set_alignment(1,0);
 				image.set_no_show_all(false);
 				image.show();
-
-
+				set_art(path);
+				
 	            // Load the banner to be drawn on top of the cover art
 				var triangle_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/banner.png", 75, 75, true);
 	            triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);
-
 	            // Align everything to the top right corner
 				triangle.set_alignment(1, 0);
-				image.set_alignment(1,0);
-
-				triangle_overlay = new Gtk.Overlay();
-				count_overlay = new Gtk.Overlay();
 
 				// Partially set up the overlays
 				count_overlay.add(triangle);
 				triangle_overlay.add(image);
-
 			} catch (Error e) {
-				warning ("Unable to load podcast cover art.");
+				warning ("Unable to load podcast cover art. %s", e.message);
 			}
-			
-            
-			if(triangle_overlay == null)
-				triangle_overlay = new Gtk.Overlay();
-			if(count_overlay == null)
-				count_overlay = new Gtk.Overlay();
 
 			// Create a label to display the number of new episodes
 			count_label = new Gtk.Label("");
@@ -130,10 +114,33 @@ namespace Vocal {
 			show_all();
 		}
 
+		public void set_art(string path) {
+			if(image != null) {
+				image.clear();
+			}
+			
+			try {
+				GLib.File cover = null;
+				if(path.index_of("file:") == 0 || path.index_of("resource:") == 0) { 
+					cover = GLib.File.new_for_uri(path);
+				} else {
+					cover = GLib.File.new_for_path(path);
+				}
+
+				FileInputStream stream = cover.read();
+				Gdk.Pixbuf pixbuf = create_cover_image(stream);
+				image.set_from_pixbuf(pixbuf);
+
+				show_all();
+			} catch (Error e) {
+				warning("Failed to load cover art from %s. %s", path, e.message);
+			}
+		}
+
 		/*
 		 * Creates a pixbuf given an InputStream
 		 */
-        public Gdk.Pixbuf create_cover_image (InputStream input_stream) {
+        private Gdk.Pixbuf create_cover_image (InputStream input_stream) {
             var cover_image = new Gdk.Pixbuf.from_stream (input_stream);
 
             if (cover_image.height == cover_image.width)

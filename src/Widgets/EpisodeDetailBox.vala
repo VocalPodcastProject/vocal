@@ -23,6 +23,7 @@ namespace Vocal {
 
 		// Fired when the streaming/play button gets clicked
         public signal void streaming_button_clicked(int index, int box_index);
+        public signal void download_button_clicked();
 
         private bool unplayed;
         private bool played;
@@ -41,7 +42,7 @@ namespace Vocal {
         private Gtk.Box     streaming_box;
         private Gtk.Image   unplayed_image;
         private Gtk.Image   now_playing_image;
-        public  Gtk.Button  download_button;
+        private  Gtk.Button  download_button;
         public  Gtk.Button  streaming_button;
         private Gtk.Label description_label;
 
@@ -96,11 +97,12 @@ namespace Vocal {
             }
 
             // Determine whether or not the episode has been downloaded
-            if(episode.current_download_status != DownloadStatus.DOWNLOADED) {
-                if(on_elementary)
+            if(episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
+                if(on_elementary) {
                     location_image = "browser-download-symbolic";
-                else
+                } else {
                     location_image = "document-save-symbolic";
+                }
                 streaming_image =  "network-wireless-signal-excellent-symbolic";
             }
 
@@ -148,8 +150,11 @@ namespace Vocal {
                 download_button.has_tooltip = true;
                 download_button.tooltip_text = _("Download Episode");
                 download_box.pack_start(download_button, false, false, 0);
+                if(episode.current_download_status == DownloadStatus.DOWNLOADED) {
+                    hide_download_button();
+                }
             }
-            
+
             top_box.pack_start(unplayed_box, false, false, 0);
 
             // Set up the title and details labels
@@ -183,8 +188,7 @@ namespace Vocal {
             label_box.pack_start(release_label, true, true, 0);
             top_box.pack_start(label_box, true, true, 0);
 
-            if(episode.current_download_status == DownloadStatus.DOWNLOADED)
-                hide_download_button();
+            
 
             top_box_width = top_box.width_request;
 

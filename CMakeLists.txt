@@ -114,6 +114,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Objects/Podcast.vala
     src/Objects/Episode.vala
     src/Objects/DirectoryEntry.vala
+    src/Widgets/AllPodcastView.vala
     src/Widgets/EpisodeDetailBox.vala
     src/Widgets/AddFeedDialog.vala
     src/Widgets/DownloadsPopover.vala

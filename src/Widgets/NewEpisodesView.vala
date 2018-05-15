@@ -93,7 +93,7 @@ namespace Vocal {
             }
 
             new_episodes_listbox.bind_model(episodeListModel, (item) => {
-                    return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
+                return new EpisodeDetailBox((Episode) item, 0, 0, false, true);
             });
             show_all ();
         }

@@ -308,8 +308,7 @@ namespace Vocal {
                 // Populate the IconViews from the library
                 window.populate_views();
                 window.show_all();
-                window.switch_visible_page(window.all_scrolled);
-
+                window.switch_visible_page(window.all_podcasts);
             }
         }
         
@@ -530,7 +529,7 @@ namespace Vocal {
                     window.populate_views_async();
 
                     if(window.current_widget == window.welcome) {
-                        window.switch_visible_page(window.all_scrolled);
+                        window.switch_visible_page(window.all_podcasts);
                     }
 
                     library_empty = false;

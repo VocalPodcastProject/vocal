@@ -301,8 +301,8 @@ namespace Vocal {
                 play_different_track(episode);
             });
             new_episodes_view.add_all_new_to_queue.connect ((episodes) => {
-                foreach (Episode e in episodes) {
-                    enqueue_episode (e);
+                foreach (Episode episode in episodes) {
+                    controller.library.enqueue_episode(episode);
                 }
             });
                         
@@ -329,17 +329,21 @@ namespace Vocal {
 		    
             // Set up all the signals for the podcast view
             details.play_episode_requested.connect(play_different_track);
-            details.download_episode_requested.connect(download_episode);
-            details.enqueue_episode.connect(enqueue_episode);
+            details.download_episodes_requested.connect(download_episodes);
+            details.enqueue_episode.connect(controller.library.enqueue_episode);
             details.mark_episode_as_played_requested.connect(on_mark_episode_as_played_request);
             details.mark_episode_as_unplayed_requested.connect(on_mark_episode_as_unplayed_request);
-            details.delete_local_episode_requested.connect(on_episode_delete_request);
             details.mark_all_episodes_as_played_requested.connect(on_mark_as_played_request);
-            details.download_all_requested.connect(on_download_all_request);
+            details.download_all_requested.connect(() => {
+                // TODO: Warn user if too many (more than 50?) podcasts will be downloaded.
+                download_episodes(controller.highlighted_podcast.episodes);
+            });
             details.delete_podcast_requested.connect(on_remove_request);
-            details.delete_multiple_episodes_requested.connect(on_delete_multiple_episodes);
-            details.mark_multiple_episodes_as_played_requested.connect(on_mark_multiple_episodes_as_played);
-            details.mark_multiple_episodes_as_unplayed_requested.connect(on_mark_multiple_episodes_as_unplayed);
+            details.delete_episodes_requested.connect((episodes) => {
+                foreach(var episode in episodes) {
+                    on_episode_delete_request(episode);
+                }
+            });
             details.unplayed_count_changed.connect(on_unplayed_count_changed);
             details.new_cover_art_set.connect(on_new_cover_art_set);
 
@@ -754,32 +758,30 @@ namespace Vocal {
          * Handles request to download an episode, by showing the downloads menuitem and
          * requesting the download from the controller.library
          */
-        public void download_episode(Episode episode) {
-            //  Show the download menuitem
+        public void download_episodes(Gee.ArrayList<Episode> episodes) {
             toolbar.show_download_button();
 
-            //  Begin the process of downloading the episode (asynchronously)
-            var details_box = controller.library.download_episode(episode);
-            details_box.cancel_requested.connect(on_download_canceled);
+            foreach (var episode in episodes) {
+                if(episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
+                    //  Begin the process of downloading the episode (asynchronously)
+                    var details_box = controller.library.download_episode(episode);
+                    details_box.cancel_requested.connect(on_download_canceled);
 
-            // Every time a new percentage is available re-calculate the overall percentage
-            details_box.new_percentage_available.connect(() => {
-                double overall_percentage = 1.0;
+                    // Every time a new percentage is available re-calculate the overall percentage
+                    details_box.new_percentage_available.connect(() => {
+                        double overall_percentage = 1.0;
 
-                foreach(DownloadDetailBox d in downloads.downloads) {
-                    if(d.percentage > 0.0) {
-                        overall_percentage *= d.percentage;
-                    }
+                        foreach(DownloadDetailBox d in downloads.downloads) {
+                            if(d.percentage > 0.0) {
+                                overall_percentage *= d.percentage;
+                            }
+                        }
+                    });
+
+                    //  Add the download to the downloads popup
+                    downloads.add_download(details_box);
                 }
-            });
-
-            //  Add the download to the downloads popup
-            downloads.add_download(details_box);
-        }
-
-
-        public void enqueue_episode (Episode episode) {
-            controller.library.enqueue_episode(episode);
+            }
         }
 
 
@@ -1090,24 +1092,11 @@ namespace Vocal {
 		/*
 		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to delete
 		 */
-        public void on_delete_multiple_episodes(Gee.ArrayList<int> indexes) {
-            foreach(int i in indexes) {
-                on_episode_delete_request(details.podcast.episodes[i]);
-            }
-        }
-
-
-		/*
-		 * Called when the user requests to download all episodes from the sidepane
-		 */
-        public void on_download_all_request() {
-            // TODO: Warn user if too many (more than 50?) podcasts will be downloaded.
-            foreach(Episode episode in controller.highlighted_podcast.episodes) {
-                if(episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                    download_episode(episode);
-                }
-            }
-        }
+        //  public void on_delete_multiple_episodes(Gee.ArrayList<int> indexes) {
+        //      foreach(int i in indexes) {
+        //          on_episode_delete_request(details.podcast.episodes[i]);
+        //      }
+        //  }
 
 
         /*

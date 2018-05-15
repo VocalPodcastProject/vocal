@@ -20,21 +20,30 @@
 using Gtk;
 using Gee;
 using Granite;
-	namespace Vocal {
+namespace Vocal {
 
-	    public class Shownotes : Gtk.ScrolledWindow {
+	public class Shownotes : Gtk.ScrolledWindow {
 
+		public signal void play_button_clicked(Episode episode);
+		public signal void download_button_clicked(Episode episode);
+		public signal void queue_button_clicked(Episode episode);
+		public signal void share_button_clicked(Episode episode);
+		public signal void mark_as_played_button_clicked(Episode episode);
+		public signal void mark_as_new_button_clicked(Episode episode);
+		public signal void delete_button_clicked(Episode episode);
+		
     	public signal void copy_shareable_link();
     	public signal void send_tweet();
     	public signal void copy_direct_link();
 
-		public Gtk.Button play_button;
-		public Gtk.Button queue_button;
-		public Gtk.Button download_button;
-		public Gtk.Button share_button;
-		public Gtk.Button mark_as_played_button;
-		public Gtk.Button mark_as_new_button;
-		public Gtk.Button delete_button;
+		private Gtk.Button play_button;
+		private Gtk.Button queue_button;
+		private Gtk.Button download_button;
+		private Gtk.Button share_button;
+		private Gtk.Button mark_as_played_button;
+		private Gtk.Button mark_as_new_button;
+		private Gtk.Button delete_button;
+
 		public Episode episode = null;
 
 		public Gtk.MenuItem shareable_link;
@@ -66,16 +75,25 @@ using Granite;
 			mark_as_played_button.has_tooltip = true;
 			mark_as_played_button.relief = Gtk.ReliefStyle.NONE;
 			mark_as_played_button.tooltip_text = _("Mark this episode as played");
+			mark_as_played_button.clicked.connect(() => {
+				mark_as_played_button_clicked(this.episode);
+			});
 
 			mark_as_new_button = new Gtk.Button.from_icon_name("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			mark_as_new_button.has_tooltip = true;
 			mark_as_new_button.relief = Gtk.ReliefStyle.NONE;
 			mark_as_new_button.tooltip_text = _("Mark this episode as new");
+			mark_as_new_button.clicked.connect(() => {
+				mark_as_new_button_clicked(this.episode);
+			});
 
 			download_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			download_button.has_tooltip = true;
 			download_button.relief = Gtk.ReliefStyle.NONE;
 			download_button.tooltip_text = _("Download episode");
+			download_button.clicked.connect(() => { 
+				download_button_clicked(this.episode); 
+			});
 
 			share_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "send-to-symbolic" : "emblem-shared-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			share_button.has_tooltip = true;
@@ -123,9 +141,17 @@ using Granite;
 			title_label.set_property("xalign", 0);
 
 			play_button = new Gtk.Button.with_label("Play this episode");
+			play_button.clicked.connect(() => { 
+				play_button_clicked(this.episode); 
+			});
+
 			queue_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			queue_button.has_tooltip = true;
 			queue_button.tooltip_text = _("Add this episode to the up next list");
+			queue_button.clicked.connect(() => {
+				queue_button_clicked(this.episode); 
+			});
+			
 
 			var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
 			button_box.pack_start(play_button, false, false, 0);
@@ -178,7 +204,8 @@ using Granite;
 	        mark_as_played_button.hide ();
 
 	        mark_as_new_button.no_show_all = false;
-	        mark_as_new_button.show ();
+			mark_as_new_button.show ();
+			show_all();
 	    }
 
 	    public void show_mark_as_played_button () {
@@ -186,7 +213,8 @@ using Granite;
 	        mark_as_played_button.show ();
 
 	        mark_as_new_button.no_show_all = true;
-	        mark_as_new_button.hide ();
+			mark_as_new_button.hide ();
+			show_all();
 	    }
 	}
 }

@@ -612,9 +612,7 @@ namespace Vocal {
 
                 // Automatically download episodes if set to do so
                 if(settings.auto_download && new_episodes.size > 0) {
-                    foreach(Episode e in new_episodes) {
-                        window.download_episode(e);
-                    }
+                    window.download_episodes(new_episodes);
                 }
 
                 int new_episode_count = new_episodes.size;

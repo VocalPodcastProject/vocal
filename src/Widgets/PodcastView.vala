@@ -28,14 +28,11 @@ namespace Vocal {
 
     	public signal void play_episode_requested(Episode e);
         public signal void enqueue_episode(Episode episode);
-    	public signal void download_episode_requested(Episode episode);
-        public signal void delete_local_episode_requested(Episode episode);
-        public signal void delete_multiple_episodes_requested(Gee.ArrayList<int> indexes);
+    	public signal void download_episodes_requested(Gee.ArrayList<Episode> episode);
+        public signal void delete_episodes_requested(Gee.ArrayList<Episode> indexes);
         public signal void mark_all_episodes_as_played_requested();
         public signal void mark_episode_as_played_requested(Episode episode);
-        public signal void mark_multiple_episodes_as_played_requested(Gee.ArrayList<int> indexes);
         public signal void mark_episode_as_unplayed_requested(Episode episode);
-        public signal void mark_multiple_episodes_as_unplayed_requested(Gee.ArrayList<int> indexes);
     	public signal void pane_should_hide();
         public signal void download_all_requested();
         public signal void delete_podcast_requested();
@@ -231,11 +228,37 @@ namespace Vocal {
 			horizontal_box.pack_start(paned, true, true, 0);
 
 			shownotes = new Shownotes();
-            shownotes.play_button.clicked.connect(() => { play_episode_requested(null); });
-            shownotes.queue_button.clicked.connect(() => { enqueue_episode_internal(); });
-            shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
-            shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
-            shownotes.mark_as_new_button.clicked.connect(() => { mark_episode_as_new_requested_internal(); });
+            shownotes.play_button_clicked.connect((episode) => {
+                play_episode_requested(episode);
+            });
+            shownotes.queue_button_clicked.connect((episode) => { 
+                enqueue_episode(episode);
+            });
+            shownotes.download_button_clicked.connect((episode) => { 
+                var episodes = new Gee.ArrayList<Episode>();
+                episodes.add(episode);
+                download_episodes_requested(episodes);
+            });
+            shownotes.mark_as_played_button_clicked.connect((episode) => { 
+                boxes[get_box_index_from_episode(episode)].mark_as_played();
+
+                if (shownotes.episode != null && episode == shownotes.episode) {
+                    shownotes.show_mark_as_new_button ();
+                }
+                
+                mark_episode_as_played_requested (episode);
+                reset_unplayed_count();
+            });
+            shownotes.mark_as_new_button_clicked.connect((episode) => { 
+                boxes[get_box_index_from_episode(episode)].mark_as_unplayed();
+
+                if (shownotes.episode != null && episode == shownotes.episode) {
+                    shownotes.show_mark_as_played_button ();
+                }
+                
+                mark_episode_as_unplayed_requested (episode);
+                reset_unplayed_count();
+            });
 
             shownotes.copy_shareable_link.connect(on_copy_shareable_link);
             shownotes.send_tweet.connect(on_tweet);
@@ -275,47 +298,6 @@ namespace Vocal {
             this.pack_start(horizontal_box, true, true, 0);
         }
 
-        // Convenience method for triggering the signal
-        private void download_episode_requested_internal() {
-            download_episode_requested(podcast.episodes[current_episode_index]);
-        }
-
-        private void enqueue_episode_internal() {
-            enqueue_episode(podcast.episodes[current_episode_index]);
-        }
-
-        private void mark_episode_as_played_requested_internal() {
-            if(podcast.episodes[current_episode_index].status != EpisodeStatus.PLAYED) {
-                unplayed_count--;
-                set_unplayed_text();
-
-                Gtk.ListBoxRow selected_row = listbox.get_selected_row();
-                boxes[selected_row.get_index()].mark_as_played();
-
-                mark_episode_as_played_requested(podcast.episodes[current_episode_index]);
-            }
-
-            if (shownotes.episode != null && podcast.episodes[current_episode_index] == shownotes.episode) {
-                shownotes.show_mark_as_new_button ();
-            }
-        }
-
-        private void mark_episode_as_new_requested_internal() {
-            if(podcast.episodes[current_episode_index].status != EpisodeStatus.UNPLAYED) {
-                unplayed_count++;
-                set_unplayed_text();
-
-                Gtk.ListBoxRow selected_row = listbox.get_selected_row();
-                boxes[selected_row.get_index()].mark_as_unplayed();
-
-                mark_episode_as_unplayed_requested (podcast.episodes[current_episode_index]);
-            }
-
-            if (shownotes.episode != null && podcast.episodes[current_episode_index] == shownotes.episode) {
-                shownotes.show_mark_as_played_button ();
-            }
-        }
-
         /*
          * Gets an episode's corresponding box index in the list of EpisodeDetailBoxes
          */
@@ -350,152 +332,108 @@ namespace Vocal {
 
                 GLib.List<weak ListBoxRow> selected_rows = listbox.get_selected_rows();
 
-                if(selected_rows.length() > 1) {
-                    // Multiple rows selected
-                    right_click_menu = new Gtk.Menu();
+                right_click_menu = new Gtk.Menu();
 
-                    var add_to_queue_menu_item = new Gtk.MenuItem.with_label(_("Add selected episodes to queue"));
-                    add_to_queue_menu_item.activate.connect(() => {
+                var download_menu_item = new Gtk.MenuItem.with_label(_("Download episodes"));
+                download_menu_item.activate.connect(() => {
+                    var episodes = new Gee.ArrayList<Episode>();
 
-                        foreach(ListBoxRow row in selected_rows) {
-                            EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                            enqueue_episode(podcast.episodes[b.index]);
-                        }
-                    });
-                    right_click_menu.add(add_to_queue_menu_item);
+                    foreach(ListBoxRow row in selected_rows) {
+                        EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                        episodes.add(b.episode);
+                        boxes[row.get_index()].mark_as_played();
+                    }
 
-                    var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as played"));
-                    mark_played_menuitem.activate.connect(() => {
-                            Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
+                    download_episodes_requested(episodes);
+                });
+                right_click_menu.add(download_menu_item);
 
-                            foreach(ListBoxRow row in selected_rows) {
-                                EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                                indexes.add(b.index);
-                                boxes[row.get_index()].mark_as_played();
+                var add_to_queue_menu_item = new Gtk.MenuItem.with_label(_("Add episodes to queue"));
+                add_to_queue_menu_item.activate.connect(() => {
+
+                    foreach(ListBoxRow row in selected_rows) {
+                        EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                        enqueue_episode(podcast.episodes[b.index]);
+                    }
+                });
+                right_click_menu.add(add_to_queue_menu_item);
+
+                if (selected_rows.length() == 1) {}
+                var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark episodes as played"));
+                mark_played_menuitem.activate.connect(() => {
+                    foreach(ListBoxRow row in selected_rows) {
+                        EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+
+                        if(b.episode.status == EpisodeStatus.UNPLAYED) {                                    
+                            boxes[row.get_index()].mark_as_played();
+
+                            if (shownotes.episode != null && b.episode == shownotes.episode) {
+                                shownotes.show_mark_as_new_button ();
                             }
+                            mark_episode_as_played_requested(b.episode);
+                        }
+                    }
 
-                            mark_multiple_episodes_as_played_requested(indexes);
-                            reset_unplayed_count();
+                    reset_unplayed_count();
 
-                    });
-                    right_click_menu.add(mark_played_menuitem);
+                });
+                right_click_menu.add(mark_played_menuitem);
 
 
-                    var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as new"));
-                    mark_unplayed_menuitem.activate.connect(() => {
-                        Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
-
-                        foreach(ListBoxRow row in selected_rows) {
-                            EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                            indexes.add(b.index);
+                var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark episodes as new"));
+                mark_unplayed_menuitem.activate.connect(() => {
+                    foreach(ListBoxRow row in selected_rows) {
+                        EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                        
+                        if(b.episode.status == EpisodeStatus.PLAYED) {
                             boxes[row.get_index()].mark_as_unplayed();
-                        }
 
-                        mark_multiple_episodes_as_unplayed_requested(indexes);
-
-                        reset_unplayed_count();
-                    });
-                    right_click_menu.add(mark_unplayed_menuitem);
-
-
-                    var delete_menuitem = new Gtk.MenuItem.with_label(_("Delete local files for selected episodes"));
-                    delete_menuitem.activate.connect(() => {
-                        Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                             _("Are you sure you want to delete the downloaded files for the selected episodes?"));
-
-                        msg.add_button ("_No", Gtk.ResponseType.CANCEL);
-                        Gtk.Button delete_button = (Gtk.Button) msg.add_button("_Yes", Gtk.ResponseType.YES);
-                        delete_button.get_style_context().add_class("destructive-action");
-
-                        var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
-                        msg.image = image;
-                        msg.image.show_all();
-                        msg.response.connect ((response_id) => {
-                            switch (response_id) {
-                                case Gtk.ResponseType.YES:
-                                    Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
-
-                                    foreach(ListBoxRow row in selected_rows) {
-                                        EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                                        indexes.add(b.index);
-                                    }
-
-                                    delete_multiple_episodes_requested(indexes);
-                                    break;
-                                case Gtk.ResponseType.NO:
-                                    break;
+                            if (shownotes.episode != null && b.episode == shownotes.episode) {
+                                shownotes.show_mark_as_played_button ();
                             }
-                            msg.destroy();
-                        });
-                        msg.show ();
-
-                    });
-                    right_click_menu.add(delete_menuitem);
-                } else {
-
-                    // Only a single row selected
-                    ListBoxRow selected_row = listbox.get_row_at_y((int)e.y);
-                    EpisodeDetailBox b = selected_row.get_child() as EpisodeDetailBox;
-                    current_episode_index = b.index;
-
-                    if(current_episode_index >= 0 && current_episode_index < boxes.size) {
-                        previously_selected_box = boxes[selected_row.get_index()];
+                            mark_episode_as_unplayed_requested(b.episode);
+                        }
                     }
 
-                    // Populate the right click menu based on the current conditions
-                    right_click_menu = new Gtk.Menu();
-
-                    // Mark as played
-                    if(podcast.episodes[current_episode_index].status == EpisodeStatus.UNPLAYED) {
-                        var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark as played"));
-                        mark_played_menuitem.activate.connect(() => {
-                            mark_episode_as_played_requested_internal();
-                        });
-                        right_click_menu.add(mark_played_menuitem);
-
-                    // Mark as unplayed
-                    } else {
-                        var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark as new"));
-                        mark_unplayed_menuitem.activate.connect(() => {
-                            mark_episode_as_new_requested_internal();
-                        });
-                        right_click_menu.add(mark_unplayed_menuitem);
-                    }
-
-                    if(podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
-                        var delete_menuitem = new Gtk.MenuItem.with_label(_("Delete Local File"));
-
-                        delete_menuitem.activate.connect(() => {
-                            Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                                 _("Are you sure you want to delete the downloaded episode '%s'?").printf(podcast.episodes[current_episode_index].title.replace("%27", "'")));
+                    reset_unplayed_count();
+                });
+                right_click_menu.add(mark_unplayed_menuitem);
+                
 
 
-                            msg.add_button ("_No", Gtk.ResponseType.CANCEL);
-                            Gtk.Button delete_button = (Gtk.Button) msg.add_button("_Yes", Gtk.ResponseType.YES);
-                            delete_button.get_style_context().add_class("destructive-action");
+                var delete_menuitem = new Gtk.MenuItem.with_label(_("Delete local files for episodes"));
+                delete_menuitem.activate.connect(() => {
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
+                            _("Are you sure you want to delete the downloaded files for the selected episodes?"));
 
-                            var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
-                            msg.image = image;
-                            msg.image.show_all();
+                    msg.add_button ("_No", Gtk.ResponseType.CANCEL);
+                    Gtk.Button delete_button = (Gtk.Button) msg.add_button("_Yes", Gtk.ResponseType.YES);
+                    delete_button.get_style_context().add_class("destructive-action");
 
-                            msg.response.connect ((response_id) => {
-                                switch (response_id) {
-                                    case Gtk.ResponseType.YES:
-                                        delete_local_episode_requested(podcast.episodes[current_episode_index]);
-                                        break;
-                                    case Gtk.ResponseType.NO:
-                                        break;
+                    var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
+                    msg.image = image;
+                    msg.image.show_all();
+                    msg.response.connect ((response_id) => {
+                        switch (response_id) {
+                            case Gtk.ResponseType.YES:
+                                var episodes = new Gee.ArrayList<Episode>();
+
+                                foreach(ListBoxRow row in selected_rows) {
+                                    EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
+                                    episodes.add(b.episode);
                                 }
 
-                                msg.destroy();
-                            });
-                            msg.show ();
+                                delete_episodes_requested(episodes);
+                                break;
+                            case Gtk.ResponseType.NO:
+                                break;
+                        }
+                        msg.destroy();
+                    });
+                    msg.show ();
 
-                        });
-
-                        right_click_menu.add(delete_menuitem);
-                    }
-                }
+                });
+                right_click_menu.add(delete_menuitem);
 
                 right_click_menu.show_all();
                 right_click_menu.popup(null, null, null, e.button, e.time);
@@ -729,7 +667,9 @@ namespace Vocal {
             }
             detail_box.download_button.clicked.connect(() => {
                 detail_box.hide_download_button();
-                download_episode_requested(current_episode);
+                var episodes = new Gee.ArrayList<Episode>();
+                episodes.add(current_episode);
+                download_episodes_requested(episodes);
             });
 
            if(current_episode == controller.current_episode) {
@@ -748,7 +688,6 @@ namespace Vocal {
          * Resets the unplayed count and iterates through the boxes to obtain a new one
          */
         public void reset_unplayed_count() {
-
             int previous_count = unplayed_count;
 
             unplayed_count = 0;

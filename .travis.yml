@@ -1,6 +1,6 @@
 language: c
 
-dist: trusty
+dist: xenial
 sudo: required
 
 # Install required distro packages

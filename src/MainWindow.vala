@@ -1088,17 +1088,6 @@ namespace Vocal {
             show_details(art.podcast);
         }
 
-
-		/*
-		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to delete
-		 */
-        //  public void on_delete_multiple_episodes(Gee.ArrayList<int> indexes) {
-        //      foreach(int i in indexes) {
-        //          on_episode_delete_request(details.podcast.episodes[i]);
-        //      }
-        //  }
-
-
         /*
          * Mark the episode as not being downloaded
          */

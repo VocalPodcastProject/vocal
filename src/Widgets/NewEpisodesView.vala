@@ -23,7 +23,7 @@ using Granite;
 namespace Vocal {
 
     public class NewEpisodesView : Gtk.Box {
-
+        
         private Controller controller;
         private ListBox new_episodes_listbox;
         GLib.ListStore episodeListModel = new GLib.ListStore ( typeof (Episode) );
@@ -77,10 +77,11 @@ namespace Vocal {
         }
 
         public void populate_episodes_list () {
-
             episodeListModel.remove_all();
 
-            foreach (Podcast p in controller.library.podcasts) {
+            for(int i = 0; i < controller.library.podcasts.get_n_items(); i++) {
+                Podcast p = controller.library.podcasts.get_object(i) as Podcast;
+
                 foreach (Episode e in p.episodes) {
                     if (e.status == EpisodeStatus.UNPLAYED) {
                         episodeListModel.insert_sorted (e, (a, b) => {
@@ -100,7 +101,6 @@ namespace Vocal {
 
         public void on_row_activated (Gtk.ListBoxRow row) {
             var index = row.get_index ();
-            info("Index: %d".printf(index));
             Episode ep = (Episode) episodeListModel.get_item(index);
             play_episode_requested (ep);
         }

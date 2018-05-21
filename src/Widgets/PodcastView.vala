@@ -46,7 +46,7 @@ namespace Vocal {
 
 
         public Podcast 			podcast;				// The parent podcast
-        private Controller controller;
+        private Controller      controller;
         public int 				current_episode_index;  // The index of the episode currently being used
         private int 			boxes_index;        	// Refers to an index in the list of boxes
 
@@ -544,8 +544,10 @@ namespace Vocal {
             }
 
             // Select the first podcast
-            var first_row = listbox.get_row_at_index(0);
-            listbox.select_row(first_row);
+            if(this.podcast.episodes.size > 0) {
+                var first_row = listbox.get_row_at_index(0);
+                listbox.select_row(first_row);
+            }
 
             show_all();
         }

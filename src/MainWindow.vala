@@ -82,7 +82,7 @@ namespace Vocal {
 		 * Constructor for the main window. Creates the window and gets everything going.
 		 */
         public MainWindow (Controller controller) {
-        
+
             this.controller = controller;
 
             const string ELEMENTARY_STYLESHEET = """
@@ -496,12 +496,6 @@ namespace Vocal {
 
                 info ("Populating the main podcast view.");
         		controller.currently_repopulating = true;
-	            //  bool has_video = false;
-
-                // If it's not the first run or newly launched go ahead and remove all the widgets from the flowboxes
-                if(!controller.first_run && !controller.newly_launched) {
-                    all_podcasts.clear();
-                }
 
                 //TODO: Move this to the controller
                 
@@ -516,7 +510,9 @@ namespace Vocal {
 	                    // Split the media into two different strings
 	                    string[] fields = controller.settings.last_played_media.split(",");
 	                    bool found = false;
-	                    foreach(Podcast podcast in controller.library.podcasts) {
+	                    //  foreach(Podcast podcast in controller.library.podcasts) {
+                        for(int i = 0; i < controller.library.podcasts.get_n_items(); i++) {
+                            Podcast podcast = controller.library.podcasts.get_object(i) as Podcast;
 
 	                        if(!found) {
 	                            if(podcast.name == fields[1]) {
@@ -558,17 +554,13 @@ namespace Vocal {
 	            // which case it has already been filled)
 	            if(!controller.newly_launched){
 	                info ("Refilling library.");
-	                controller.library.refill_library();
+	                //  controller.library.refill_library();
 	            }
 
 	            // Clear flags since we have an established controller.library at this point
 	            controller.newly_launched = false;
 	            controller.first_run = false;
 	            controller.library_empty = false;
-	            
-	            info ("Creating coverart for each podcast in library.");
-                all_podcasts.refresh_art();
- 
 
 	            controller.currently_repopulating = false;
         	}
@@ -582,29 +574,6 @@ namespace Vocal {
             if(!controller.open_hidden && !controller.is_closing) {
                 show_all();
             }
-
-        }
-
-        /*
-         * Populates the three views (all, audio, video) from the contents of the controller.library
-         */
-        public async void populate_views_async() {
-        
-
-            SourceFunc callback = populate_views_async.callback;
-
-            ThreadFunc<void*> run = () => {
-
-            	populate_views ();
-
-                Idle.add((owned) callback);
-                return null;
-            };
-
-
-            Thread.create<void*>(run, false);
-
-            yield;
         }
 
         /*
@@ -830,11 +799,11 @@ namespace Vocal {
                         add_err_dialog.show_all();
                     }
                     // Is there now at least one podcast in the controller.library?
-                    if(controller.library.podcasts.size > 0) {
+                    if(controller.library.podcasts.get_n_items() > 0) {
                         controller.library_empty = false;
                     }
 
-                    populate_views_async();
+                    populate_views();
 
                     // Make the refresh and export items sensitive now
                     toolbar.export_item.sensitive = true;
@@ -1302,7 +1271,7 @@ namespace Vocal {
 					        controller.library.remove_podcast(controller.highlighted_podcast);
 					        controller.highlighted_podcast = null;
                             switch_visible_page(all_podcasts);
-                            populate_views_async();
+                            populate_views();
 					        break;
 				        case Gtk.ResponseType.NO:
 					        break;

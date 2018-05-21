@@ -304,7 +304,8 @@ namespace Vocal {
 
             foreach(Episode e in e_matches) {
                 Podcast parent = null;
-                foreach(Podcast p in library.podcasts) {
+                for(int i = 0; i < library.podcasts.get_n_items(); i++) {
+                    Podcast p = library.podcasts.get_object(i) as Podcast;
                     if(e.parent.name == p.name) {
                         parent = p;
                     }

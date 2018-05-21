@@ -20,7 +20,7 @@
 using Gee;
 
 namespace Vocal {
-    public class Podcast {
+    public class Podcast : GLib.Object {
     
         public  ArrayList<Episode> episodes = null;  // the episodes belonging to this podcast
         
@@ -41,13 +41,13 @@ namespace Vocal {
             //the album art is saved locally, return that path. Otherwise, return main album art URI
             get {
 
-                if(local_art_uri != null) {
+                if(local_art_uri != null && local_art_uri != "(null)" && local_art_uri != "") {
                     GLib.File local_art = GLib.File.new_for_uri(local_art_uri);
                     if(local_art.query_exists()) {
                         return local_art_uri;
                     }
-                } else if(remote_art_uri != null) {
-                    GLib.File remote_art = GLib.File.new_for_path(remote_art_uri);
+                } else if(remote_art_uri != null && remote_art_uri != "(null)"  && remote_art_uri != "") {
+                    GLib.File remote_art = GLib.File.new_for_uri(remote_art_uri);
                     if(remote_art.query_exists()) {
                         return remote_art_uri;
                     }

@@ -28,12 +28,12 @@ namespace Vocal {
         private Library library;
 
         public AllPodcastView(Library library) {
-            //  base(null, null);
             this.library = library;
 
             all_art = new Gee.ArrayList<CoverArt>();
 
             all_flowbox = new Gtk.FlowBox();
+            all_flowbox.bind_model(library.podcasts, create_coverart);
             all_flowbox.get_style_context().add_class("notebook-art");
             all_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             all_flowbox.activate_on_single_click = true;
@@ -47,43 +47,32 @@ namespace Vocal {
             all_flowbox.homogeneous = true;
             all_flowbox.row_spacing = 20;
 
-            refresh_art();
             add(all_flowbox);
         }
 
-        public void clear() {
-            for(int i = 0; i < all_art.size; i++) {
-                all_flowbox.remove(all_flowbox.get_child_at_index(0));
+        private Widget create_coverart(Object item) {
+            Podcast podcast = item as Podcast;
+
+            CoverArt coverart = new CoverArt(podcast, true);
+            coverart.get_style_context().add_class("coverart");
+            coverart.halign = Gtk.Align.START;
+            coverart.valign = Gtk.Align.START;
+            
+            int currently_unplayed = 0;
+            foreach(Episode episode in podcast.episodes) {
+                if (episode.status == EpisodeStatus.UNPLAYED) {
+                    currently_unplayed++;
+                }
             }
 
-            all_art.clear();
-        }
-
-        public void refresh_art() {
-            foreach(Podcast podcast in library.podcasts) {
-                CoverArt coverart = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast, true);
-                
-                coverart.get_style_context().add_class("coverart");
-                coverart.halign = Gtk.Align.START;
-                coverart.valign = Gtk.Align.START;
-                
-                int currently_unplayed = 0;
-                foreach(Episode episode in podcast.episodes) {
-                    if (episode.status == EpisodeStatus.UNPLAYED) {
-                        currently_unplayed++;
-                    }
-                }
-
-                if(currently_unplayed > 0) {
-                    coverart.set_count(currently_unplayed);
-                    coverart.show_count();
-                } else {
-                    coverart.hide_count();
-                }
-
-                all_art.add(coverart);
-                all_flowbox.add(coverart);
+            if(currently_unplayed > 0) {
+                coverart.set_count(currently_unplayed);
+                coverart.show_count();
+            } else {
+                coverart.hide_count();
             }
+
+            return coverart;
         }
 
         public void unselect_all() {

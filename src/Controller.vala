@@ -251,7 +251,7 @@ namespace Vocal {
             if (!first_run) {
                 info ("Refilling library.");
                 library.refill_library ();
-                if (library.podcasts.size < 1) {
+                if (library.podcasts.get_n_items() < 1) {
                     info("It seems that the library is empty.");
                     library_empty = true;
                 }
@@ -308,8 +308,7 @@ namespace Vocal {
                 // Populate the IconViews from the library
                 window.populate_views();
                 window.show_all();
-                window.switch_visible_page(window.all_scrolled);
-
+                window.switch_visible_page(window.all_podcasts);
             }
         }
         
@@ -500,10 +499,10 @@ namespace Vocal {
 
             var loop = new MainLoop();
             bool success = false;
-
             library.async_add_podcast_from_file(feed, (obj, res) => {
                 success = library.async_add_podcast_from_file.end(res);
                 currently_importing = false;
+
                 if(player.playing) {
                     window.toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     window.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
@@ -521,16 +520,16 @@ namespace Vocal {
                     window.toolbar.hide_playback_box();
 
                 // Is there now at least one podcast in the library?
-                if(library.podcasts.size > 0) {
+                if(library.podcasts.get_n_items() > 0) {
                     // Make the refresh and export items sensitive now
-                    //refresh_item.sensitive = true;
+                    //  refresh_item.sensitive = true;
                     window.toolbar.export_item.sensitive = true;
 
                     // Populate views no matter what
-                    window.populate_views_async();
+                    window.populate_views();
 
                     if(window.current_widget == window.welcome) {
-                        window.switch_visible_page(window.all_scrolled);
+                        window.switch_visible_page(window.all_podcasts);
                     }
 
                     library_empty = false;
@@ -625,7 +624,7 @@ namespace Vocal {
                 // Lastly, if there are new episodes, repopulate the views to obtain new counts
                 if(new_episode_count > 0) {
                     info ("Repopulating views after the update process has finished.");
-                    window.populate_views_async();
+                    window.populate_views();
                 }
             } else {
                 info("Vocal is already checking for updates.");

@@ -331,7 +331,6 @@ namespace Vocal {
             Podcast podcast = create_podcast_from_queue();
             foreach(Episode child in podcast.episodes) {
                 child.parent = podcast;
-                
             }
             
             if(podcast.coverart_uri == null || podcast.coverart_uri.length < 1) {

@@ -20,7 +20,7 @@
 using Gtk;
 namespace Vocal {
 
-    public class SearchResultsView : Gtk.Box {
+    public class SearchResultsView : Gtk.ScrolledWindow {
 
         public signal void on_new_subscription(string url);
         public signal void return_to_library(); 
@@ -35,6 +35,7 @@ namespace Vocal {
         private Gtk.Label title_label;
         private iTunesProvider itunes;
 
+        private Gtk.Box container;
         private Gtk.ListBox     local_episodes_listbox;
         private Gtk.ListBox     local_podcasts_listbox;
         private Gtk.FlowBox     cloud_results_flowbox;
@@ -58,11 +59,12 @@ namespace Vocal {
         /*
          * Constructor for the full search results view. Shows all matches from the local library and across the iTunes ecosystem
          */
-        public SearchResultsView(Library library) {
+        public SearchResultsView(Library library, iTunesProvider itunes_provider) {
+            container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            add(container);
 
             string query = "";
-            this.set_orientation(Gtk.Orientation.VERTICAL);
-            this.itunes = new iTunesProvider();
+            this.itunes = itunes_provider;
             this.library = library;
 
             var return_button = new Gtk.Button.with_label(_("Return to Library"));
@@ -114,7 +116,7 @@ namespace Vocal {
             search_entry.activate.connect (() => {
                 this.search_term = search_entry.text;
                 title_label.label = _("Search Results for <i>%s</i>".printf(search_term));
-		search_entry.grab_focus_without_selecting ();
+                search_entry.grab_focus_without_selecting ();
                 reset ();
                 load_from_itunes ();
                 load_local_results ();
@@ -122,14 +124,14 @@ namespace Vocal {
             return_button_box.add (search_entry);
             return_button_box.add (new Gtk.Label (""));
 
-            this.add(return_button_box);
+            container.add(return_button_box);
 
             // Create the lists container
             content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 10);
             var scrolled = new Gtk.ScrolledWindow(null, null);
             content_box.add(title_label);
             scrolled.add(content_box);
-            this.add(scrolled);
+            container.add(scrolled);
 
             local_episodes_listbox = new Gtk.ListBox();
             local_podcasts_listbox = new Gtk.ListBox();
@@ -302,7 +304,8 @@ namespace Vocal {
 
             foreach(Episode e in e_matches) {
                 Podcast parent = null;
-                foreach(Podcast p in library.podcasts) {
+                for(int i = 0; i < library.podcasts.get_n_items(); i++) {
+                    Podcast p = library.podcasts.get_object(i) as Podcast;
                     if(e.parent.name == p.name) {
                         parent = p;
                     }

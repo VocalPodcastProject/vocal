@@ -47,50 +47,29 @@ namespace Vocal {
 		/*
 		 * Constructor for CoverArt given an image path and a podcast
 		 */
-		public CoverArt(string path, Podcast podcast, bool? show_mimetype = false) {
-		
+		public CoverArt(Podcast podcast, bool? show_mimetype = false) {
 			this.podcast = podcast;
 			this.margin = 10;
 			this.orientation = Gtk.Orientation.VERTICAL;
 			
+			triangle_overlay = new Gtk.Overlay();
+			count_overlay = new Gtk.Overlay();
 
 			try {
-
-				// Load the actual cover art
-				var file = GLib.File.new_for_uri(path.replace("%27", "'"));
-
-				var icon = new GLib.FileIcon(file);
-
-				var image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
-				image.pixel_size = COVER_SIZE;
-				image.set_no_show_all(false);
-				image.show();
-
+				set_art(podcast.coverart_uri.replace("%27", "'"));
 
 	            // Load the banner to be drawn on top of the cover art
 				var triangle_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/banner.png", 75, 75, true);
 	            triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);
-
 	            // Align everything to the top right corner
 				triangle.set_alignment(1, 0);
-				image.set_alignment(1,0);
-
-				triangle_overlay = new Gtk.Overlay();
-				count_overlay = new Gtk.Overlay();
 
 				// Partially set up the overlays
 				count_overlay.add(triangle);
 				triangle_overlay.add(image);
-
 			} catch (Error e) {
-				warning ("Unable to load podcast cover art.");
+				warning ("Unable to load podcast cover art. %s", e.message);
 			}
-			
-            
-			if(triangle_overlay == null)
-				triangle_overlay = new Gtk.Overlay();
-			if(count_overlay == null)
-				count_overlay = new Gtk.Overlay();
 
 			// Create a label to display the number of new episodes
 			count_label = new Gtk.Label("");
@@ -113,8 +92,8 @@ namespace Vocal {
 			string podcast_name = GLib.Uri.unescape_string(podcast.name);
 			if (podcast_name == null) {
 			    podcast_name = podcast.name.replace("%25", "%");
+				podcast_name = podcast_name.replace("&", """&amp;""");
 			}
-			podcast_name = podcast_name.replace("&", """&amp;""");
 
 			podcast_name_label = new Gtk.Label("<b>" + podcast_name + "</b>");
 			podcast_name_label.wrap = true;
@@ -130,11 +109,34 @@ namespace Vocal {
 			show_all();
 		}
 
+		public void set_art(string path) {
+			if(image != null) {
+				image.clear();
+			} else {
+				image = new Gtk.Image();
+				image.pixel_size = COVER_SIZE;
+				image.set_alignment(1, 0);
+				image.set_no_show_all(false);
+				image.show();
+			}
+			
+			try {
+				create_cover_image.begin (image, path.replace("%27", "'"), (obj, async_res) => {
+					show_all();
+				});
+			} catch (Error e) {
+				warning("Failed to load cover art from %s. %s", path, e.message);
+			}
+		}
+
 		/*
 		 * Creates a pixbuf given an InputStream
 		 */
-        public Gdk.Pixbuf create_cover_image (InputStream input_stream) {
-            var cover_image = new Gdk.Pixbuf.from_stream (input_stream);
+        private async void create_cover_image (Gtk.Image image, string path) throws Error {
+			GLib.File file = Utils.open_file(path);
+
+			GLib.InputStream stream = yield file.read_async ();
+			Gdk.Pixbuf cover_image = yield Gdk.Pixbuf.new_from_stream_async (stream);
 
             if (cover_image.height == cover_image.width)
                 cover_image = cover_image.scale_simple (COVER_SIZE, COVER_SIZE, Gdk.InterpType.BILINEAR);
@@ -156,7 +158,7 @@ namespace Vocal {
                 cover_image = new Gdk.Pixbuf.subpixbuf(cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR), offset, 0, COVER_SIZE, COVER_SIZE);
             }
 
-            return cover_image;
+			image.set_from_pixbuf (cover_image);
         }
 
 		/*
@@ -175,8 +177,7 @@ namespace Vocal {
 		/*
 		 * Sets the banner count
 		 */
-		public void set_count(int count)
-		{
+		public void set_count(int count) {
 		    if (count_label != null) {
 			    count_label.use_markup = true;
 			    count_label.set_markup("<span foreground='white'><b>%d</b></span>".printf(count));
@@ -192,8 +193,7 @@ namespace Vocal {
 		/*
 		 * Shows the banner and the count
 		 */
-		public void show_count()
-		{
+		public void show_count() {
 		    if (count_label != null && triangle != null) {
 			    count_label.set_no_show_all(false);
 			    count_label.show();

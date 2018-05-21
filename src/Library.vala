@@ -45,7 +45,7 @@ namespace Vocal {
         // Fired when the queue changes
         public signal void queue_changed();
 
-        public ArrayList<Podcast> podcasts;		// Holds all the podcasts in the library
+        public ListStore podcasts = new ListStore(typeof (Podcast) );	// Holds all the podcasts in the library
 
         private Sqlite.Database db;				// The database
 
@@ -89,8 +89,6 @@ namespace Vocal {
             vocal_config_dir = GLib.Environment.get_user_config_dir() + """/vocal""";
             this.db_directory = vocal_config_dir + """/database""";
             this.db_location = this.db_directory + """/vocal.db""";
-
-            this.podcasts = new ArrayList<Podcast>();
 
             settings = VocalSettings.get_default_instance();
 
@@ -230,7 +228,7 @@ namespace Vocal {
                 GLib.File remote_art = GLib.File.new_for_uri(podcast.remote_art_uri);
                 if(remote_art.query_exists()) {
                     // Set the path of the new file and create another object for the local file
-                    string art_path = podcast_path + """/""" + remote_art.get_basename().replace("%", "_");
+                    string art_path = podcast_path + "/" + remote_art.get_basename().replace("%", "_");
                     GLib.File local_art = GLib.File.new_for_path(art_path);
 
                     // If the local album art doesn't exist
@@ -238,7 +236,7 @@ namespace Vocal {
                         // Cache the art
                         remote_art.copy(local_art, FileCopyFlags.NONE);
                         // Mark the local path on the podcast
-                        podcast.local_art_uri = """file://""" + art_path;
+                        podcast.local_art_uri = "file://" + art_path;
                     }
                 }
             } catch(Error e) {
@@ -294,13 +292,11 @@ namespace Vocal {
 
             ec = db.exec (query, null, out errmsg);
 	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Error: %s\n", errmsg);
+		        error("Error: %s\n", errmsg);
 		        return false;
 	        }
 
 	        // Now that the podcast is in the database, add it to the local arraylist
-	        podcasts.add(podcast);
-
 
             foreach(Episode episode in podcast.episodes) {
                 string title, parent_podcast_name, uri, episode_description;
@@ -332,6 +328,7 @@ namespace Vocal {
                 }
             }
 
+	        podcasts.append(podcast);
 
 	        return true;
 
@@ -409,7 +406,8 @@ namespace Vocal {
                 GLib.DateTime week_ago = new GLib.DateTime.now_utc();
                 week_ago.add_weeks(-1);
 
-                foreach(Podcast p in podcasts) {
+                for(int i = 0; i < podcasts.get_n_items(); i++) {
+                    Podcast p = podcasts.get_object(i) as Podcast;
                     foreach(Episode e in p.episodes) {
 
                         // If e is downloaded, played, and more than a week old
@@ -450,7 +448,8 @@ namespace Vocal {
             FeedParser parser = new FeedParser();
 
             ThreadFunc<void*> run = () => {
-                foreach(Podcast podcast in podcasts) {
+                for(int i = 0; i < podcasts.get_n_items(); i++) {
+                    Podcast podcast = podcasts.get_object(i) as Podcast;
                     int added = -1;
                     if (podcast.feed_uri != null && podcast.feed_uri.length > 4) {
                         info("updating feed %s", podcast.feed_uri);
@@ -570,7 +569,7 @@ namespace Vocal {
                         try {
                             local_file.delete();
                         } catch(Error e) {
-                            stderr.puts("Unable to delete file.\n");
+                            error("Unable to delete file.\n");
                         }
                     }
 
@@ -578,13 +577,13 @@ namespace Vocal {
 
                 remote_file.copy_async(local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, cancellable, callback);
 
-
                 // Set the episode's local uri to the new path
                 episode.local_uri = path;
                 mark_episode_as_downloaded(episode);
 
 
             } catch (Error e) {
+                error(e.message);
             }
 
             if(batch_download_count > 0) {
@@ -721,7 +720,8 @@ namespace Vocal {
 
 		        string output_line;
 
-		        foreach(Podcast p in podcasts) {
+                for(int i = 0; i < podcasts.get_n_items(); i++) {
+                    Podcast p = podcasts.get_object(i) as Podcast;
 
 		            output_line =
     """<outline text="%s" type="rss" xmlUrl="%s"/>
@@ -848,7 +848,8 @@ namespace Vocal {
                 downloaded_episode = null;
                 bool found = false;
 
-                foreach(Podcast podcast in podcasts) {
+                for(int i = 0; i < podcasts.get_n_items(); i++) {
+                    Podcast podcast = podcasts.get_object(i) as Podcast;
                     if(!found) {
                         if(parent_podcast_name == podcast.name) {
                             foreach(Episode episode in podcast.episodes) {
@@ -898,7 +899,8 @@ namespace Vocal {
          */
         public void recount_unplayed() {
             new_episode_count = 0;
-            foreach(Podcast p in podcasts) {
+            for(int i = 0; i < podcasts.get_n_items(); i++) {
+                Podcast p = podcasts.get_object(i) as Podcast;
                 foreach(Episode e in p.episodes) {
                     if(e.status == EpisodeStatus.UNPLAYED) {
                         new_episode_count++;
@@ -913,7 +915,7 @@ namespace Vocal {
          * Refills the local library from the contents stored in the database
          */
         public void refill_library() {
-            podcasts.clear();
+            podcasts.remove_all();
             prepare_database();
 
             Sqlite.Statement stmt;
@@ -929,15 +931,15 @@ namespace Vocal {
 
 	        while (stmt.step () == Sqlite.ROW) {
 	            Podcast current = podcast_from_row(stmt);
-		        podcasts.add(current);
+		        podcasts.append(current);
 	        }
 
 	        stmt.reset();
 
 
 	        // Repeat the process with the episodes
-
-	        foreach(Podcast podcast in podcasts) {
+            for(int i = 0; i < podcasts.get_n_items(); i++) {
+                Podcast podcast = podcasts.get_object(i) as Podcast;
 
 	            prepared_query_str = "SELECT * FROM Episode WHERE parent_podcast_name = '%s' ORDER BY rowid ASC".printf(podcast.name);
 	            ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
@@ -1049,7 +1051,13 @@ namespace Vocal {
             }
 
             // Remove the local object as well
-            podcasts.remove(podcast);
+            for(int i = 0; i < podcasts.get_n_items(); i++) {
+                Podcast p = podcasts.get_object(i) as Podcast;
+                if(p == podcast) {
+                    podcasts.remove(i);
+                    break;
+                }
+            }
         }
 
         public Gee.ArrayList<Podcast>? search_by_term(string term) {

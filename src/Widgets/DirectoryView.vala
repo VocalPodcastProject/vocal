@@ -19,12 +19,13 @@
 
 namespace Vocal {
 
-    public class DirectoryView : Gtk.Box {
+    public class DirectoryView : Gtk.ScrolledWindow {
 
         public signal void return_to_library();
         public signal void return_to_welcome();
         public signal void on_new_subscription(string url);
 
+        private Gtk.Box container;
         private iTunesProvider itunes;
         private Gtk.FlowBox flowbox;
         private Gtk.Box banner_box;
@@ -40,8 +41,8 @@ namespace Vocal {
 
         public DirectoryView(iTunesProvider itunes_provider, bool first_run = false) {
 
-            this.set_orientation(Gtk.Orientation.VERTICAL);
-
+            container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            add(container);
             // Set up the banner
 
             banner_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
@@ -97,9 +98,9 @@ namespace Vocal {
             itunes_title.vexpand = false;
             itunes_title.hexpand  = true;
 
-            this.itunes = itunes_provider;
-            this.add(banner_box);
-            this.add(itunes_title);
+            itunes = itunes_provider;
+            container.add(banner_box);
+            container.add(itunes_title);
             
             loading_box = new  Gtk.Box(Gtk.Orientation.VERTICAL, 5);
             var spinner = new Gtk.Spinner();
@@ -108,10 +109,10 @@ namespace Vocal {
             loading_label.get_style_context().add_class("h2");
             loading_box.add(loading_label);
             loading_box.add(spinner);
-            this.pack_start(loading_box, true, true, 5);
+            container.pack_start(loading_box, true, true, 5);
 
             scrolled_window = new Gtk.ScrolledWindow(null, null);
-            this.pack_start(scrolled_window, true, true, 15);
+            container.pack_start(scrolled_window, true, true, 15);
 
         }
 
@@ -126,7 +127,6 @@ namespace Vocal {
 
                 flowbox = new Gtk.FlowBox();
 
-                // TODO: not actually asyncronous.
                 info ("Getting top podcasts asynchronously?.");
                 var entries = itunes.get_top_podcasts(100);
                 info ("Top 100 podcasts loaded.");

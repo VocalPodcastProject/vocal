@@ -38,8 +38,7 @@ namespace Vocal {
 		private Gtk.Box button_box;
 
 		public DirectoryArt(string url, string title, string? artist, string? summary, string artworkUrl170, bool? in_library = false) {
-
-			this.set_orientation(Gtk.Orientation.VERTICAL);
+            this.set_orientation(Gtk.Orientation.VERTICAL);
 
 			this.width_request = 200;
 			this.margin = 10;
@@ -130,7 +129,6 @@ namespace Vocal {
             image.get_style_context().add_class("directory-art-image");
             this.pack_start(image, false, false, 0);
 
-            
             ImageCache image_cache = new ImageCache();
             image_cache.get_image.begin(bigartwork, (obj, res) => {
                 Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);

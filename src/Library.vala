@@ -245,91 +245,16 @@ namespace Vocal {
                 error("Unable to save a local copy of the album art. %s", e.message);
             }
 
-            // Open the database
-            int ec = Sqlite.Database.open (db_location, out db);
-	        if (ec != Sqlite.OK) {
-		        error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
-		        return false;
-	        }
-
-	        string content_type_text;
-	        string played_text;
-
-	        if(podcast.content_type == MediaType.AUDIO) {
-	            content_type_text = "audio";
-	        }
-	        else if(podcast.content_type == MediaType.VIDEO) {
-	            content_type_text = "video";
-	        }
-	        else {
-	            content_type_text = "unknown";
-	        }
-	        
-	        string license_text;
-	        if (podcast.license == License.CC) {
-	            license_text = "cc";
-	        } else if (podcast.license == License.PUBLIC) {
-	            license_text = "public";
-	        } else if (podcast.license == License.RESERVED) {
-	            license_text = "reserved";
-	        } else {
-	            license_text = "unknown";
-	        }
-
             // Add the podcast
+            if ( write_podcast_to_database (podcast) ) {
+                // Now that the podcast is in the database, add it to the local arraylist
+                podcasts.add(podcast);
 
-            string name, feed_uri, album_art_url, album_art_local_uri, description;
-
-            name = podcast.name.replace("'", "%27");
-            feed_uri = podcast.feed_uri.replace("'", "%27");
-            album_art_url = podcast.remote_art_uri.replace("'", "%27");
-            album_art_local_uri = podcast.local_art_uri.replace("'", "%27");
-            description = podcast.description.replace("'", "%27");
-
-            string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type, license)
-                VALUES ('%s','%s','%s','%s', '%s', '%s', '%s');""".printf(name, feed_uri, album_art_url, album_art_local_uri,
-                description, content_type_text, license_text);
-
-            string errmsg;
-
-            ec = db.exec (query, null, out errmsg);
-	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Error: %s\n", errmsg);
-		        return false;
-	        }
-
-	        // Now that the podcast is in the database, add it to the local arraylist
-	        podcasts.add(podcast);
-
-
-            foreach(Episode episode in podcast.episodes) {
-                string title, parent_podcast_name, uri, episode_description;
-                title = episode.title.replace("'", "%27");
-                parent_podcast_name = podcast.name.replace("'", "%27");
-                uri = episode.uri.replace("'", "%27");
-                episode_description = episode.description.replace("'", "%27");
-
-                if(episode.status == EpisodeStatus.PLAYED) {
-	                played_text = "played";
-	            }
-	            else {
-	                played_text = "unplayed";
-	            }
-
-    	        string download_text;
-	            if(episode.current_download_status == DownloadStatus.DOWNLOADED) {
-	                download_text = "downloaded";
-	            } else {
-	                download_text = "not_downloaded";
-	            }
-
-                query = """INSERT OR REPLACE INTO Episode (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');"""
-                    .printf(title, parent_podcast_name, uri, episode.local_uri, episode_description, episode.date_released, download_text, played_text);
-
-                ec = db.exec (query, null, out errmsg);
-                if (ec != Sqlite.OK) {
-                    stderr.printf ("Error: %s\n", errmsg);
+                foreach (Episode episode in podcast.episodes) {
+                    write_episode_to_database (episode);
                 }
+            } else {
+                warning ("failed adding podcast '%s'.", podcast.name);
             }
 
 
@@ -501,25 +426,11 @@ namespace Vocal {
                 local.delete();
             }
 
-            string query, errmsg;
-            int ec;
-            string title;
-
             // Clear the fields in the episode
-            title = e.title.replace("'", "%27");
             e.current_download_status = DownloadStatus.NOT_DOWNLOADED;
             e.local_uri = null;
 
-            // Write the episode to database
-            query = """UPDATE Episode SET download_status = 'not_downloaded', local_uri = NULL WHERE title = '%s'""".printf(title);
-
-
-            ec = db.exec (query, null, out errmsg);
-
-            if (ec != Sqlite.OK) {
-                error(errmsg);
-            }
-
+            write_episode_to_database (e);
             recount_unplayed();
         }
 
@@ -753,21 +664,10 @@ namespace Vocal {
          * Marks an episode as downloaded in the database
          */
         public void mark_episode_as_downloaded(Episode episode) {
-            string query, errmsg;
-            int ec;
-            string title, uri;
 
-            title = episode.title.replace("'", "%27");
-            uri = episode.local_uri;
+            episode.current_download_status = DownloadStatus.DOWNLOADED;
+            write_episode_to_database (episode);
 
-            query = """UPDATE Episode SET download_status = 'downloaded', local_uri = '%s' WHERE title = '%s'""".printf(uri,title);
-
-
-            ec = db.exec (query, null, out errmsg);
-
-            if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
-            }
         }
 
         /*
@@ -779,41 +679,17 @@ namespace Vocal {
                 error("Episode null!");
 
             episode.status = EpisodeStatus.PLAYED;
-            string query, errmsg;
-            int ec;
-            string title;
-            title = episode.title.replace("'", "%27");
-
-
-            query = """UPDATE Episode SET play_status = 'played' WHERE title = '%s'""".printf(title);
-
-            ec = db.exec (query, null, out errmsg);
-
-            if (ec != Sqlite.OK) {
-                error(errmsg);
-            }
+            write_episode_to_database (episode);
         }
 
         /*
-         * Marks an episode as played in the database
+         * Marks an episode as unplayed in the database
          */
         public void mark_episode_as_unplayed(Episode episode) {
 
             episode.status = EpisodeStatus.UNPLAYED;
+            write_episode_to_database (episode);
 
-            string query, errmsg;
-            int ec;
-            string title;
-            title = episode.title.replace("'", "%27");
-
-
-            query = """UPDATE Episode SET play_status = 'unplayed' WHERE title = '%s'""".printf(title);
-
-            ec = db.exec (query, null, out errmsg);
-
-            if (ec != Sqlite.OK) {
-                error(errmsg);
-            }
         }
 
         /*
@@ -1183,21 +1059,10 @@ namespace Vocal {
 
         /*
          * Sets the latest playback position in the database for a provided episode
-         *
+         * The `last_played_position` property must have already been updated in the episode object.
          */
         public void set_episode_playback_position(Episode episode) {
-            string query, errmsg;
-            int ec;
-            string title = episode.title.replace("'", "%27");
-            string position_text = episode.last_played_position.to_string();
-
-            query = """UPDATE Episode SET latest_position = '%s' WHERE title = '%s'""".printf(position_text,title);
-
-            ec = db.exec (query, null, out errmsg);
-
-            if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
-            }
+            write_episode_to_database (episode);
         }
 
 /*
@@ -1330,48 +1195,114 @@ namespace Vocal {
         }
 
 
-
         /*
-         * Writes a new episode to the database
+         * INSERT/REPLACE a Podcast in the database
          */
-        public void write_episode_to_database(Episode episode) {
+        public bool write_podcast_to_database(Podcast podcast) {
 
-            string query, errmsg;
-            int ec;
-            string title, parent_podcast_name, uri, episode_description;
-            title = episode.title.replace("'", "%27");
+            string content_type_text;
+            if (podcast.content_type == MediaType.AUDIO) {
+                content_type_text = "audio";
+            } else if (podcast.content_type == MediaType.VIDEO) {
+                content_type_text = "video";
+            } else {
+                content_type_text = "unknown";
+            }
 
-            parent_podcast_name = episode.parent.name.replace("'", "%27");
-
-            uri = episode.uri;
-            episode_description = episode.description.replace("'", "%27");
-
-
-            string played_text;
-
-            if(episode.status == EpisodeStatus.PLAYED) {
-	            played_text = "played";
-	        }
-	        else {
-	            played_text = "unplayed";
-	        }
-
-	        string download_text;
-	        if(episode.current_download_status == DownloadStatus.DOWNLOADED) {
-	            download_text = "downloaded";
-	        } else {
-	            download_text = "not_downloaded";
-	        }
-
-            query = """INSERT OR REPLACE INTO Episode (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status) VALUES ('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s');"""
-                .printf(title, parent_podcast_name, uri, episode.local_uri, episode_description, episode.date_released, download_text, played_text);
+            string license_text;
+            if (podcast.license == License.CC) {
+                license_text = "cc";
+            } else if (podcast.license == License.PUBLIC) {
+                license_text = "public";
+            } else if (podcast.license == License.RESERVED) {
+                license_text = "reserved";
+            } else {
+                license_text = "unknown";
+            }
 
 
-            ec = db.exec (query, null, out errmsg);
+            string query = "INSERT OR REPLACE INTO Podcast " +
+            " (name, feed_uri, album_art_url, album_art_local_uri, description, content_type, license) " +
+            " VALUES (?1,?2, ?3, ?4, ?5, ?6, ?7);";
+
+
+            Sqlite.Statement stmt;
+            int ec = db.prepare_v2 (query, query.length, out stmt);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                warning ("Unable to prepare podcast update statement. %d: %s", db.errcode (), db.errmsg ());
+                return false;
             }
+            /* This is here for compatibility. Escaping the name should not be necessary
+             * but is left to remain consitent with existing db entries since the name
+             * is currently used as the key field. */
+            string name = podcast.name.replace("'", "%27");
+
+            stmt.bind_text (1, name);
+            stmt.bind_text (2, podcast.feed_uri);
+            stmt.bind_text (3, podcast.remote_art_uri);
+            stmt.bind_text (4, podcast.local_art_uri);
+            stmt.bind_text (5, podcast.description);
+            stmt.bind_text (6, content_type_text);
+            stmt.bind_text (7, license_text);
+
+            ec = stmt.step ();
+
+            if (ec != Sqlite.DONE) {
+                warning ("Unable to insert/update podcast. %d: %s", db.errcode (), db.errmsg ());
+                return false;
+            }
+
+            return true;
+        }
+
+
+
+        /*
+         * Insert/Replace an episode in the database
+         */
+        public bool write_episode_to_database(Episode episode) {
+
+            string query = "INSERT OR REPLACE INTO Episode " +
+                           " (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status, latest_position) " +
+                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9);";
+
+            Sqlite.Statement stmt;
+            int ec = db.prepare_v2 (query, query.length, out stmt);
+
+            if (ec != Sqlite.OK) {
+                warning ("Unable to prepare episode update statement. %d: %s", db.errcode (), db.errmsg ());
+                return false;
+            }
+
+            /* This is here for compatibility. Escaping these values should not be necessary
+             * but is done to remain consitent with existing db entries since the title
+             * and podcast name are currently used as key fields. */
+            string title = episode.title.replace("'", "%27");
+            string parent_podcast_name = episode.parent.name.replace("'", "%27");
+
+            // convert enums to text representations.
+            string played_text = (episode.status == EpisodeStatus.PLAYED) ? "played" : "unplayed";
+            string download_text = (episode.current_download_status == DownloadStatus.DOWNLOADED) ? "downloaded" : "not_downloaded";
+
+            stmt.bind_text (1, title);
+            stmt.bind_text (2, parent_podcast_name);
+            stmt.bind_text (3, episode.uri);
+            stmt.bind_text (4, episode.local_uri);
+            stmt.bind_text (5, episode.description);
+            stmt.bind_text (6, episode.date_released);
+            stmt.bind_text (7, download_text);
+            stmt.bind_text (8, played_text);
+            stmt.bind_text (9, episode.last_played_position.to_string ());
+
+            ec = stmt.step ();
+
+            if (ec != Sqlite.DONE) {
+                warning ("Unable to insert/update episode. %d: %s", db.errcode (), db.errmsg ());
+                return false;
+            }
+
+            return true;
         }
     }
 }

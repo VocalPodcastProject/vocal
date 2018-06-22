@@ -163,6 +163,52 @@ namespace Vocal {
             // Clean up by removing the dummy podcast
             query = """DELETE FROM Podcast WHERE name = "dummy";""";
             ec = db.exec (query, null, out errmsg);
+
+
+            /*
+             * Ensure 'published' column exists in Episode. If not, add column
+             * and attempt to populate from existing data.
+             */
+            ec = db.exec ("SELECT published FROM Episode LIMIT 1", null, out errmsg);
+            if (ec != Sqlite.OK) {
+                info ("Episode `published` column not found, creating...");
+                ec = db.exec ("""
+                    BEGIN;
+                    ALTER TABLE Episode ADD published INT;
+                    CREATE INDEX episode_published_idx ON Episode (published);
+                    COMMIT;
+                """);
+                if (ec != Sqlite.OK) {
+                    error ("Unable to alter Episode table: (%d) %s", ec, db.errmsg ());
+                } else {
+                    info ("Episode 'published' column added.");
+                }
+
+                info ("Updating published dates for existing entries. This may take a bit...");
+
+                Sqlite.Statement stmt;
+                string update_pub_sql = "SELECT rowid, * from Episode where published is null and trim(release_date) <> ''";
+                ec = db.prepare_v2 (update_pub_sql, update_pub_sql.length, out stmt);
+                if (ec != Sqlite.OK) {
+                    error ("%d: %s", db.errcode (), db.errmsg ());
+                } else {
+                    int progress_counter = 0;
+                    while (stmt.step () == Sqlite.ROW) {
+                        Episode e = episode_from_row (stmt);
+                        e.set_datetime_from_pubdate ();
+                        write_episode_to_database (e);
+                        if (progress_counter % 5 == 0) {
+                            // Indicate progress...
+                            stdout.puts ("."); stdout.flush ();
+                        }
+                        progress_counter++;
+                    }
+                    stdout.puts ("\n");
+                }
+
+                info ("Finished updating published dates.");
+            }
+
         }
 
 
@@ -1003,6 +1049,8 @@ namespace Vocal {
                 }
                 else if(col_name == "parent_podcast_name") {
                     episode.parent = new Podcast.with_name(val);
+                } else if (col_name == "published") {
+                    episode.published = int64.parse(val);
                 }
             }
 
@@ -1172,18 +1220,20 @@ namespace Vocal {
 
 		            );
 
-		            CREATE TABLE Episode (
-			        title	            TEXT	PRIMARY KEY		NOT NULL,
-			        parent_podcast_name TEXT                    NOT NULL,
-			        parent_podcast_id   INT,
-			        uri	                TEXT					NOT NULL,
-			        local_uri           TEXT,
-			        release_date        TEXT,
+                    CREATE TABLE Episode (
+                    title               TEXT    PRIMARY KEY         NOT NULL,
+                    parent_podcast_name TEXT                    NOT NULL,
+                    parent_podcast_id   INT,
+                    uri                     TEXT                    NOT NULL,
+                    local_uri           TEXT,
+                    release_date        TEXT,
+                    published           INT,
                     description         TEXT,
                     latest_position     TEXT,
                     download_status     TEXT,
                     play_status         TEXT
-		            );
+                    );
+                    CREATE INDEX episode_published_idx ON Episode (published);
 
 		            """;
 	            ec = db.exec (query, null, out error_message);
@@ -1264,8 +1314,8 @@ namespace Vocal {
         public bool write_episode_to_database(Episode episode) {
 
             string query = "INSERT OR REPLACE INTO Episode " +
-                           " (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status, latest_position) " +
-                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9);";
+                           " (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status, latest_position, published) " +
+                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10);";
 
             Sqlite.Statement stmt;
             int ec = db.prepare_v2 (query, query.length, out stmt);
@@ -1294,6 +1344,7 @@ namespace Vocal {
             stmt.bind_text (7, download_text);
             stmt.bind_text (8, played_text);
             stmt.bind_text (9, episode.last_played_position.to_string ());
+            stmt.bind_int64 (10, episode.published);
 
             ec = stmt.step ();
 

@@ -1013,7 +1013,6 @@ namespace Vocal {
                 Episode e = episode_from_row (stmt);
                 // Update the episode with podcast data loaded above.
                 if ( podcasts.has_key (e.parent.name) ) {
-                    info ("found cached parent");
                     e.parent = podcasts.get (e.parent.name);
                 }
                 episodes.add (e);

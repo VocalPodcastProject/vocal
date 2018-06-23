@@ -73,28 +73,22 @@ namespace Vocal {
             this.pack_start (add_all_to_queue_button, false, false, 15);
             new_episodes_listbox.activate_on_single_click = false;
             new_episodes_listbox.row_activated.connect(on_row_activated);
-            
+
         }
 
         public void populate_episodes_list () {
 
-            episodeListModel.remove_all();
+            GLib.ListStore elm = new GLib.ListStore ( typeof (Episode) );
 
-            foreach (Podcast p in controller.library.podcasts) {
-                foreach (Episode e in p.episodes) {
-                    if (e.status == EpisodeStatus.UNPLAYED) {
-                        episodeListModel.insert_sorted (e, (a, b) => {
-                                var e1 = (Episode) a;
-                                var e2 = (Episode) b;
-                                return  e2.datetime_released.compare(e1.datetime_released);
-                        });
-                    }
-                }
+            foreach (Episode e in controller.library.get_new_episodes ()) {
+                elm.append (e);
             }
 
-            new_episodes_listbox.bind_model(episodeListModel, (item) => {
+            this.episodeListModel = elm;
+            new_episodes_listbox.bind_model(this.episodeListModel, (item) => {
                     return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
             });
+
             show_all ();
         }
 

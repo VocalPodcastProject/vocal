@@ -34,6 +34,7 @@ namespace Vocal {
 
 		public Podcast          parent;                  // the parent that the episode belongs to
 		public DateTime         datetime_released;       // the datetime corresponding the when the episode was released
+		public int64            published = 0;           // int (unix timestamp) representation of episode date.
 
 		/*
 		 * Gets the playback uri based on whether the file is local or remote
@@ -114,6 +115,10 @@ namespace Vocal {
                 GLib.Time tm = GLib.Time ();
                 tm.strptime (date_released, "%a, %d %b %Y %H:%M:%S %Z");
                 datetime_released = new DateTime.local(1900 + tm.year, 1 + tm.month, tm.day, tm.hour, tm.minute, tm.second);
+            }
+
+            if (this.published <= 0 && datetime_released != null) {
+                this.published = datetime_released.to_unix ();
             }
         }
 

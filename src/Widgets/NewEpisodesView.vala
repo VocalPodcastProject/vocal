@@ -76,14 +76,15 @@ namespace Vocal {
             
         }
 
+
         public void populate_episodes_list () {
 
-            episodeListModel.remove_all();
+            GLib.ListStore elm = new GLib.ListStore ( typeof (Episode) );
 
             foreach (Podcast p in controller.library.podcasts) {
                 foreach (Episode e in p.episodes) {
                     if (e.status == EpisodeStatus.UNPLAYED) {
-                        episodeListModel.insert_sorted (e, (a, b) => {
+                        elm.insert_sorted (e, (a, b) => {
                                 var e1 = (Episode) a;
                                 var e2 = (Episode) b;
                                 return  e2.datetime_released.compare(e1.datetime_released);
@@ -92,11 +93,19 @@ namespace Vocal {
                 }
             }
 
-            new_episodes_listbox.bind_model(episodeListModel, (item) => {
-                    return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
+            GLib.Idle.add ( () => {
+
+                this.episodeListModel = elm;
+                new_episodes_listbox.bind_model(elm, (item) => {
+                        return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
+                });
+
+                show_all ();
+
+                return false;
             });
-            show_all ();
         }
+
 
         public void on_row_activated (Gtk.ListBoxRow row) {
             var index = row.get_index ();

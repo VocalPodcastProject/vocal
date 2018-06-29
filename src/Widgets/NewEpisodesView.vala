@@ -87,6 +87,12 @@ namespace Vocal {
                         elm.insert_sorted (e, (a, b) => {
                                 var e1 = (Episode) a;
                                 var e2 = (Episode) b;
+                                if (e2.datetime_released == null) {
+                                    if (e1.datetime_released == null) {
+                                        return 0;
+                                    }
+                                    return -1;
+                                }
                                 return  e2.datetime_released.compare(e1.datetime_released);
                         });
                     }

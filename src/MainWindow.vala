@@ -369,7 +369,7 @@ namespace Vocal {
             
             info ("Creating directory view.");
             
-            directory = new DirectoryView(controller.itunes, show_complete_button);
+            directory = new DirectoryView(controller.itunes, controller.first_run);
             directory.on_new_subscription.connect(on_new_subscription);
             directory.return_to_library.connect(on_return_to_library);
             directory.return_to_welcome.connect(() => {

@@ -44,7 +44,7 @@ namespace Vocal {
     
         /* Runtime flags */
         
-        public bool first_run = false;
+        public bool first_run = true;
         public bool newly_launched = true;
         public bool library_empty = false;
         public bool should_quit_immediately = true;

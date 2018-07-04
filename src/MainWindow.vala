@@ -370,6 +370,7 @@ namespace Vocal {
             info ("Creating directory view.");
             
             directory = new DirectoryView(controller.itunes, controller.first_run);
+            directory.load_top_podcasts();
             directory.on_new_subscription.connect(on_new_subscription);
             directory.return_to_library.connect(on_return_to_library);
             directory.return_to_welcome.connect(() => {
@@ -427,7 +428,6 @@ namespace Vocal {
             toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
 
             toolbar.store_selected.connect (() => {
-                directory.load_top_podcasts();
                 details.pane_should_hide ();
                 switch_visible_page (directory_scrolled);
             });

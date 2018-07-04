@@ -420,6 +420,11 @@ namespace Vocal {
             toolbar.new_episodes_button.clicked.connect (() => {
                 switch_visible_page (new_episodes_view);
             });
+            
+            if (controller.first_run || controller.library_empty) {
+                toolbar.new_episodes_button.set_no_show_all (true);
+                toolbar.new_episodes_button.hide ();
+            }
 
             toolbar.refresh_selected.connect (controller.on_update_request);
             toolbar.play_pause_selected.connect (controller.play_pause);
@@ -1450,14 +1455,21 @@ namespace Vocal {
 
 
         /*
-         * Called when the video needs to be hidden and the controller.library shown again
+         * Called when the video needs to be hidden and the library shown again
          */
         public void on_return_to_library() {
 
             // If fullscreen, first exit fullscreen so you won't be "trapped" in fullscreen mode
             if(fullscreened)
                 on_fullscreen_request();
-
+                
+            // It's possible this was triggered by the directory on a first run, so check
+            // the new episodes button
+            if (toolbar.new_episodes_button.no_show_all == true) {
+                toolbar.new_episodes_button.set_no_show_all (false);
+                toolbar.new_episodes_button.show ();
+            }
+                
             // Since we can't see the video any more pause playback if necessary
             if(current_widget == video_widget && controller.player.playing)
                 controller.pause();

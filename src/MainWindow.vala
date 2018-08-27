@@ -1435,22 +1435,27 @@ namespace Vocal {
                 msg.image = image;
                 msg.image.show_all();
 
-			    msg.response.connect ((response_id) => {
-			        switch (response_id) {
-				        case Gtk.ResponseType.YES:
-					        controller.library.remove_podcast(controller.highlighted_podcast);
-					        controller.highlighted_podcast = null;
-                            switch_visible_page(all_scrolled);
-                            populate_views_async();
-					        break;
-				        case Gtk.ResponseType.NO:
-					        break;
-			        }
+                msg.response.connect ((response_id) => {
+                    switch (response_id) {
+                        case Gtk.ResponseType.YES:
+                            controller.library.remove_podcast(controller.highlighted_podcast);
+                            controller.highlighted_podcast = null;
+                            if ( controller.library.empty ()) {
+                                switch_visible_page (welcome);
+                            } else {
+                                switch_visible_page(all_scrolled);
+                                populate_views_async();
+                            }
+                            break;
 
-			        msg.destroy();
-		        });
-		        msg.show ();
-	        }
+                        case Gtk.ResponseType.NO:
+                            break;
+                    }
+
+                    msg.destroy();
+                });
+                msg.show ();
+            }
         }
 
 

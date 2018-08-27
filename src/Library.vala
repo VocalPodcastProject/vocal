@@ -764,6 +764,7 @@ namespace Vocal {
          * Opens the database and prepares for queries
          */
         private int prepare_database() {
+
             assert(db_location != null);
 
             // Open a database:
@@ -1158,48 +1159,40 @@ namespace Vocal {
             GLib.DirUtils.create_with_parents(db_directory, 0775);
 
 
-            // Create the database
-            Sqlite.Database db;
-            string error_message;
+            prepare_database ();
 
-            int ec = Sqlite.Database.open(db_location, out db);
-            if(ec != Sqlite.OK) {
-                stderr.printf("Unable to create database at %s\n", db_location);
-                return false;
-            } else {
-                string query = """
-                    CREATE TABLE Podcast (
-                    id                  INT,
-			        name	            TEXT	PRIMARY KEY		NOT NULL,
-			        feed_uri	        TEXT					NOT NULL,
-			        album_art_url       TEXT,
-			        album_art_local_uri TEXT,
-			        description         TEXT                    NOT NULL,
-			        content_type        TEXT,
-			        license             TEXT
+            string query = """
+              CREATE TABLE Podcast (
+                id                  INT,
+                name                TEXT    PRIMARY KEY     NOT NULL,
+                feed_uri            TEXT                    NOT NULL,
+                album_art_url       TEXT,
+                album_art_local_uri TEXT,
+                description         TEXT                    NOT NULL,
+                content_type        TEXT,
+                license             TEXT
+              );
 
-		            );
+              CREATE TABLE Episode (
+                title               TEXT    PRIMARY KEY     NOT NULL,
+                parent_podcast_name TEXT                    NOT NULL,
+                parent_podcast_id   INT,
+                uri                 TEXT                    NOT NULL,
+                local_uri           TEXT,
+                release_date        TEXT,
+                description         TEXT,
+                latest_position     TEXT,
+                download_status     TEXT,
+                play_status         TEXT
+              );
+            """;
 
-		            CREATE TABLE Episode (
-			        title	            TEXT	PRIMARY KEY		NOT NULL,
-			        parent_podcast_name TEXT                    NOT NULL,
-			        parent_podcast_id   INT,
-			        uri	                TEXT					NOT NULL,
-			        local_uri           TEXT,
-			        release_date        TEXT,
-                    description         TEXT,
-                    latest_position     TEXT,
-                    download_status     TEXT,
-                    play_status         TEXT
-		            );
-
-		            """;
-	            ec = db.exec (query, null, out error_message);
-	            if(ec != Sqlite.OK) {
-	                stderr.printf("Unable to execute query at %s\n", db_location);
-                }
-                return true;
+            int ec = db.exec (query, null);
+            if (ec != Sqlite.OK) {
+                error ("unable to create database %d: %s", db.errcode (), db.errmsg ());
             }
+            return true;
+
         }
 
 
@@ -1227,7 +1220,6 @@ namespace Vocal {
             } else {
                 license_text = "unknown";
             }
-
 
             string query = "INSERT OR REPLACE INTO Podcast " +
             " (name, feed_uri, album_art_url, album_art_local_uri, description, content_type, license) " +

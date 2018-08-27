@@ -167,6 +167,14 @@ namespace Vocal {
 
 
         /*
+         * Returns true if the library is empty, false otherwise.
+         */
+        public bool empty () {
+            return podcasts.size == 0;
+        }
+
+
+        /*
          * Adds podcasts to the library from the provided OPML file path
          */
         public async Gee.ArrayList<string> add_from_OPML(string path) {

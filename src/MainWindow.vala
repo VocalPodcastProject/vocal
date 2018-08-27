@@ -1474,10 +1474,15 @@ namespace Vocal {
             if(current_widget == video_widget && controller.player.playing)
                 controller.pause();
 
-            if(previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
-                previous_widget = all_scrolled;
-            switch_visible_page(previous_widget);
+            // If the library is empty, always return to the welcome screen.
+            if (controller.library.empty ()) {
+                previous_widget = welcome;
+            }
 
+            if (previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
+                previous_widget = all_scrolled;
+
+            switch_visible_page(previous_widget);
 
             // Make sure the cursor is visible again
             this.get_window ().set_cursor (null);

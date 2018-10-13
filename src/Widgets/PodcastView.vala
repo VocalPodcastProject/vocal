@@ -522,7 +522,11 @@ namespace Vocal {
 				image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
                 image.pixel_size = 250;
                 image.margin = 0;
-                image.get_style_context().add_class("podcast-view-coverart");
+                if(controller.on_elementary) {
+                    image.get_style_context ().add_class ("card");
+                } else {
+                    image.get_style_context().add_class("podcast-view-coverart");
+                }
 
             	image_box.pack_start(image, true, true, 0);
             } catch (Error e) {

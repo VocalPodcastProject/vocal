@@ -104,15 +104,12 @@ namespace Vocal {
             player.eos.connect (window.on_stream_ended);
             player.additional_plugins_required.connect (window.on_additional_plugins_needed);
             
-            /*
             
             info ("Initializing MPRIS playback.");
             
             // Set up the MPRIS playback functionality
             MPRIS mpris = new MPRIS (this);
             mpris.initialize ();
-            
-            */
             
             
             // Connect the new player position available signal from the player

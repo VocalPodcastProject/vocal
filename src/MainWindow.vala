@@ -113,7 +113,6 @@ namespace Vocal {
 
                 .coverart, .directory-art {
                     background-color: #FFF;
-
                     border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
                     box-shadow: 3px 3px 3px #777;
                     border-style: solid;
@@ -155,10 +154,6 @@ namespace Vocal {
                     border-bottom: 0.3px solid black;
                 }
 
-                .notebook-art {
-                    /*background-color: #D8D8D8;*/
-                }
-
                 .podcast-view-coverart {
                     box-shadow: 5px 5px 5px #777;
                     border-style: none;
@@ -188,7 +183,6 @@ namespace Vocal {
 
             this.set_application (controller.app);
 
-            //TODO: use dark theme universally across systems
             if (!controller.on_elementary) {
                 Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
             }
@@ -607,7 +601,11 @@ namespace Vocal {
                     
                     CoverArt a = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast, true);
                     
-                    a.get_style_context().add_class("coverart");
+                    if (controller.on_elementary) {
+                        a.get_style_context ().add_class ("card");
+                    } else {
+                        a.get_style_context().add_class("coverart");
+                    }
                     a.halign = Gtk.Align.START;
                     
                     int currently_unplayed = 0;

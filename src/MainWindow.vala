@@ -1435,22 +1435,27 @@ namespace Vocal {
                 msg.image = image;
                 msg.image.show_all();
 
-			    msg.response.connect ((response_id) => {
-			        switch (response_id) {
-				        case Gtk.ResponseType.YES:
-					        controller.library.remove_podcast(controller.highlighted_podcast);
-					        controller.highlighted_podcast = null;
-                            switch_visible_page(all_scrolled);
-                            populate_views_async();
-					        break;
-				        case Gtk.ResponseType.NO:
-					        break;
-			        }
+                msg.response.connect ((response_id) => {
+                    switch (response_id) {
+                        case Gtk.ResponseType.YES:
+                            controller.library.remove_podcast(controller.highlighted_podcast);
+                            controller.highlighted_podcast = null;
+                            if ( controller.library.empty ()) {
+                                switch_visible_page (welcome);
+                            } else {
+                                switch_visible_page(all_scrolled);
+                                populate_views_async();
+                            }
+                            break;
 
-			        msg.destroy();
-		        });
-		        msg.show ();
-	        }
+                        case Gtk.ResponseType.NO:
+                            break;
+                    }
+
+                    msg.destroy();
+                });
+                msg.show ();
+            }
         }
 
 
@@ -1474,10 +1479,15 @@ namespace Vocal {
             if(current_widget == video_widget && controller.player.playing)
                 controller.pause();
 
-            if(previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
-                previous_widget = all_scrolled;
-            switch_visible_page(previous_widget);
+            // If the library is empty, always return to the welcome screen.
+            if (controller.library.empty ()) {
+                previous_widget = welcome;
+            }
 
+            if (previous_widget == directory_scrolled || previous_widget == search_results_scrolled)
+                previous_widget = all_scrolled;
+
+            switch_visible_page(previous_widget);
 
             // Make sure the cursor is visible again
             this.get_window ().set_cursor (null);

@@ -58,13 +58,12 @@ namespace Vocal {
 
             itunes_title.get_style_context ().add_class ("h2");
 
-            if(first_run) {
+            if (first_run) {
                 return_button = new Gtk.Button.with_label(_("Go Back"));
-                return_button.clicked.connect(on_first_run_return_clicked);
             } else  {
                 return_button = new Gtk.Button.with_label(_("Return to Library"));
-                return_button.clicked.connect(() => { return_to_library (); });
             }
+            return_button.clicked.connect(() => { return_to_library (); });
             return_button.get_style_context().add_class("back-button");
             return_button.margin = 6;
             return_button.expand = false;
@@ -76,8 +75,6 @@ namespace Vocal {
             first_run_continue_button.expand = false;
             first_run_continue_button.halign = Gtk.Align.END;
             first_run_continue_button.clicked.connect(() => {
-                return_button.clicked.disconnect(on_first_run_return_clicked);
-                return_button.clicked.connect(() => { return_to_library(); });
                 return_button.label = _("Return to Library");
                 hide_first_run_continue_button();
                 return_to_library();
@@ -174,8 +171,5 @@ namespace Vocal {
             first_run_continue_button.hide();
         }
 
-        private void on_first_run_return_clicked() {
-            return_to_welcome();
-        }
     }
 }

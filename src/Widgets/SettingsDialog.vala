@@ -50,9 +50,9 @@ namespace Vocal {
          */
         public SettingsDialog(VocalSettings settings, Gtk.Window parent) {
             
-            Object (use_header_bar: 1);
             title = _("Preferences");
             this.settings = settings; 
+            
 
             (get_header_bar () as Gtk.HeaderBar).show_close_button = false;
             get_header_bar ().get_style_context ().remove_class ("header-bar");

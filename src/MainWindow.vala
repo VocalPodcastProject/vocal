@@ -1469,7 +1469,7 @@ namespace Vocal {
                 
             // It's possible this was triggered by the directory on a first run, so check
             // the new episodes button
-            if (toolbar.new_episodes_button.no_show_all == true) {
+            if (!controller.library.empty ()) {
                 toolbar.new_episodes_button.set_no_show_all (false);
                 toolbar.new_episodes_button.show ();
             }

@@ -1,12 +1,33 @@
-language: c
+---
 
-dist: xenial
+language: node_js
+
+node_js:
+  - lts/*
+
 sudo: required
 
-# Install required distro packages
-before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -qq cmake debhelper libgee-0.8-dev libgranite-dev libgtk-3-dev valac libunity-dev libnotify-dev libxml2-dev libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libclutter-gtk-1.0-dev libclutter-1.0-dev libclutter-gst-3.0-dev libsqlite3-dev libsoup2.4-dev libwebkit2gtk-4.0-dev
+services:
+  - docker
 
-# Build Vocal.
-script: mkdir build && cd build && cmake ../ && make
+addons:
+  apt:
+    sources:
+      - ubuntu-toolchain-r-test
+    packages:
+      - libstdc++-5-dev
+
+cache:
+  directories:
+    - /tmp/liftoff
+
+matrix:
+  include:
+    - env: DIST=juno
+
+install:
+  - npm install @elementaryos/houston
+
+script:
+  - houston ci
+    --distribution $DIST

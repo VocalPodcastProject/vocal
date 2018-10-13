@@ -363,7 +363,7 @@ namespace Vocal {
             notebook.add_titled (new_episodes_view, "new_episodes", _("New Episodes"));
             notebook.add_titled (video_widget, "video_player", _("Video"));
             
-            bool show_complete_button = controller.first_run || controller.library_empty;
+            bool show_complete_button = controller.first_run || controller.library.empty ();
             
             info ("Creating directory view.");
             
@@ -419,7 +419,7 @@ namespace Vocal {
                 switch_visible_page (new_episodes_view);
             });
             
-            if (controller.first_run || controller.library_empty) {
+            if (controller.first_run || controller.library.empty ()) {
                 toolbar.new_episodes_button.set_no_show_all (true);
                 toolbar.new_episodes_button.hide ();
             }
@@ -494,7 +494,11 @@ namespace Vocal {
             search_results_view = new SearchResultsView(controller.library);
             search_results_view.on_new_subscription.connect(on_new_subscription);
             search_results_view.return_to_library.connect(() => {
-                switch_visible_page(previous_widget);
+                if (controller.library.empty ()) {
+                    switch_visible_page (welcome);
+                } else {
+                    switch_visible_page(all_scrolled);
+                }
             });
             search_results_view.episode_selected.connect(on_search_popover_episode_selected);
             search_results_view.podcast_selected.connect(on_search_popover_podcast_selected);
@@ -592,7 +596,6 @@ namespace Vocal {
 	            // Clear flags since we have an established controller.library at this point
 	            controller.newly_launched = false;
 	            controller.first_run = false;
-	            controller.library_empty = false;
 	            
 	            info ("Creating coverart for each podcast in library.");
 
@@ -912,10 +915,6 @@ namespace Vocal {
                         add_err_dialog.set_image(error_img);
                         add_err_dialog.show_all();
                     }
-                    // Is there now at least one podcast in the controller.library?
-                    if(controller.library.podcasts.size > 0) {
-                        controller.library_empty = false;
-                    }
 
                     populate_views_async();
 
@@ -928,8 +927,6 @@ namespace Vocal {
                     if(current_widget == import_message_box) {
                         switch_visible_page(all_scrolled);
                     }
-
-                    controller.library_empty = false;
 
                     show_all();
 

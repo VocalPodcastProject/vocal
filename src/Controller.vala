@@ -46,7 +46,6 @@ namespace Vocal {
         
         public bool first_run = true;
         public bool newly_launched = true;
-        public bool library_empty = false;
         public bool should_quit_immediately = true;
         public bool plugins_are_installing = false;
         public bool checking_for_updates = false;
@@ -248,10 +247,6 @@ namespace Vocal {
             if (!first_run) {
                 info ("Refilling library.");
                 library.refill_library ();
-                if (library.podcasts.size < 1) {
-                    info("It seems that the library is empty.");
-                    library_empty = true;
-                }
             } else {
                 info ("Setting up library.");
                 library.setup_library();
@@ -297,7 +292,7 @@ namespace Vocal {
         private void post_creation_sequence() {
         
             // Show the welcome widget if it's the first run, or if the library is empty
-            if(first_run || library_empty) {
+            if(first_run || library.empty ()) {
                 window.show_all();
                 window.switch_visible_page(window.welcome);
 
@@ -530,7 +525,6 @@ namespace Vocal {
                         window.switch_visible_page(window.all_scrolled);
                     }
 
-                    library_empty = false;
                     window.show_all();
                 }
             } else {

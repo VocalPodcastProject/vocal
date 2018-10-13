@@ -17,6 +17,7 @@
   END LICENSE
 ***/
 
+
 using Gtk;
 
 namespace Vocal {
@@ -51,6 +52,7 @@ namespace Vocal {
             scale.set_value(0.0);
             scale.hexpand = true;
             scale.draw_value = false;
+            scale.get_style_context ().add_class ("seekbar");
             left_time = new Gtk.Label ("0:00");
             right_time = new Gtk.Label ("0:00");
             

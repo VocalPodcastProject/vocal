@@ -124,6 +124,10 @@ namespace Vocal {
                 .coverart-overlay {
                     font-size: 1.7em;
                     font-family: sans;
+                    color: white;
+                    background-color: #af81d6;
+                    border-radius: 100%;
+                    padding: 12px; 
                 }
 
                 .directory-art-image {

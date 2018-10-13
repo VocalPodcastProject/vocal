@@ -34,8 +34,6 @@ namespace Vocal {
         private const int COVER_SIZE = 170;
 
 		public Gtk.Image 	image;					// The actual coverart image
-		private Gtk.Image 	triangle;				// The banner in the top right corner
-		private Gtk.Overlay triangle_overlay;		// Overlays the banner on top of the image
 		private Gtk.Overlay count_overlay;			// Overlays the count on top of the banner
 		private Gtk.Label 	count_label;			// The label that stores the unplayed count
 		private Gtk.Label   podcast_name_label;     // The label that show the name of the podcast
@@ -65,39 +63,31 @@ namespace Vocal {
 				image.pixel_size = COVER_SIZE;
 				image.set_no_show_all(false);
 				image.show();
-
-
-	            // Load the banner to be drawn on top of the cover art
-				var triangle_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/banner.png", 75, 75, true);
-	            triangle = new Gtk.Image.from_pixbuf(triangle_pixbuf);
-
-	            // Align everything to the top right corner
-				triangle.set_alignment(1, 0);
-				image.set_alignment(1,0);
-
-				triangle_overlay = new Gtk.Overlay();
+				
 				count_overlay = new Gtk.Overlay();
 
 				// Partially set up the overlays
-				count_overlay.add(triangle);
-				triangle_overlay.add(image);
+				count_overlay.add(image);
 
 			} catch (Error e) {
 				warning ("Unable to load podcast cover art.");
 			}
 			
             
-			if(triangle_overlay == null)
-				triangle_overlay = new Gtk.Overlay();
 			if(count_overlay == null)
 				count_overlay = new Gtk.Overlay();
 
 			// Create a label to display the number of new episodes
 			count_label = new Gtk.Label("");
 			count_label.use_markup = true;
-			count_label.get_style_context (). add_class ("coverart-overlay");
 			count_label.set_alignment(1,0);
-			count_label.margin_right = 5;
+			count_label.get_style_context().add_class("coverart-overlay");
+			count_label.halign = Gtk.Align.END;
+			count_label.valign = Gtk.Align.START;
+			count_label.width_chars = 2;
+			count_label.xalign = 0.50f;
+			count_label.margin_top = 3;
+			count_label.margin_right = 3;
 
 			// Add a tooltip
 			this.tooltip_text = podcast.name.replace("%27", "'");
@@ -105,9 +95,8 @@ namespace Vocal {
 			// Set up the overlays
 
 			count_overlay.add_overlay(count_label);
-			triangle_overlay.add_overlay(count_overlay);
 			
-			this.pack_start(triangle_overlay, false, false, 0);
+			this.pack_start(count_overlay, false, false, 0);
 
 			this.valign = Align.START;
 			string podcast_name = GLib.Uri.unescape_string(podcast.name);
@@ -164,11 +153,9 @@ namespace Vocal {
 		 */
 		public void hide_count()
 		{
-		    if (count_label != null && triangle != null) {
+		    if (count_label != null) {
 			    count_label.set_no_show_all(true);
 			    count_label.hide();
-			    triangle.set_no_show_all(true);
-			    triangle.hide();
 		    }
 		}
 	
@@ -178,14 +165,7 @@ namespace Vocal {
 		public void set_count(int count)
 		{
 		    if (count_label != null) {
-			    count_label.use_markup = true;
-			    count_label.set_markup("<span foreground='white'><b>%d</b></span>".printf(count));
-			    count_label.get_style_context().add_class("text-shadow");
-			    if(count < 10) {
-				    count_label.margin_right = 12;
-			    } else {
-				    count_label.margin_right = 6;
-			    }
+			    count_label.set_text("%d".printf(count));
             }
 		}
 		
@@ -194,11 +174,9 @@ namespace Vocal {
 		 */
 		public void show_count()
 		{
-		    if (count_label != null && triangle != null) {
+		    if (count_label != null) {
 			    count_label.set_no_show_all(false);
 			    count_label.show();
-			    triangle.set_no_show_all(false);
-			    triangle.show();
 		    }
 		}
 

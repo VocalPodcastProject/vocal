@@ -2,7 +2,6 @@
 <gresources>
   <gresource prefix="/com/github/needle-and-thread/vocal">
     <file compressed="true" alias="missing.png">../icons/assets/vocal-missing.png</file>
-    <file compressed="true" alias="banner.png">../icons/assets/banner.png</file>
     <file compressed="true" alias="creativecommons.svg">../icons/assets/creativecommons.svg</file>    
   </gresource>
 </gresources>

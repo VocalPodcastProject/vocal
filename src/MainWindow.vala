@@ -450,10 +450,19 @@ namespace Vocal {
                 scale.set_value (controller.player.get_volume ());
                 scale.value_changed.connect (() => {
 			        controller.player.set_volume (scale.get_value ());
-			        if(scale.get_value () > 0.7) {
+			        if (scale.get_value () > 0.7) {
 			            var vol_image = toolbar.volume_button.image as Gtk.Image;
 			            vol_image.icon_name = "audio-volume-high-symbolic";
-			        }
+			        } else if (scale.get_value () > 0.4) {
+			            var vol_image = toolbar.volume_button.image as Gtk.Image;
+			            vol_image.icon_name = "audio-volume-medium-symbolic";
+			        } else if  (scale.get_value () > 0.1) {
+			            var vol_image = toolbar.volume_button.image as Gtk.Image;
+			            vol_image.icon_name = "audio-volume-low-symbolic";
+		            } else {
+		                var vol_image = toolbar.volume_button.image as Gtk.Image;
+			            vol_image.icon_name = "audio-volume-muted-symbolic";
+		            }
 		        });
                 popover.add(scale);
                 popover.show_all ();

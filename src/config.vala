@@ -1,6 +1,6 @@
 namespace Constants {
-    public const string DATADIR = "/usr/local/share";
-    public const string PKGDATADIR = "/usr/local/share/vocal";
+    public const string DATADIR = "/usr/share";
+    public const string PKGDATADIR = "/usr/share/vocal";
     public const string GETTEXT_PACKAGE = "vocal";
     public const string RELEASE_NAME = "Sleek Black Beauty";
     public const string VERSION = "2.2.0";

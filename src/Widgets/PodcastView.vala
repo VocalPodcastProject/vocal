@@ -195,7 +195,13 @@ namespace Vocal {
 			            
             // Creative commons
             // Load the album artwork
-            var cc_pb = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/creativecommons.svg", 151, 36, true);
+            var ccicon_name = "";
+            if (Gtk.Settings.get_default().gtk_application_prefer_dark_theme == true) {
+                ccicon_name = "/com/github/needle-and-thread/vocal/creativecommons-light.png";
+            } else {
+                ccicon_name = "/com/github/needle-and-thread/vocal/creativecommons-dark.png";
+            }
+            var cc_pb = new Gdk.Pixbuf.from_resource_at_scale(ccicon_name, 151, 36, true);
             cc_image = new Gtk.Image.from_pixbuf (cc_pb);
             cc_image.margin = 12;
             cc_image.expand = false;

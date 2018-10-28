@@ -89,6 +89,7 @@ namespace Vocal {
         public MainWindow (Controller controller) {
         
             this.controller = controller;
+            title = _("Vocal");
 
             const string ELEMENTARY_STYLESHEET = """
 

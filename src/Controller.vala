@@ -252,6 +252,11 @@ namespace Vocal {
                 library.setup_library();
             }
             
+            if (first_run || library.empty ()) {
+                window.toolbar.new_episodes_button.set_no_show_all (true);
+                window.toolbar.new_episodes_button.hide ();
+            }
+            
             // Autoclean the library if necessary
             if (settings.autoclean_library) {
                 info ("Performing library autoclean.");

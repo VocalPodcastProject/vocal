@@ -419,11 +419,6 @@ namespace Vocal {
             toolbar.new_episodes_button.clicked.connect (() => {
                 switch_visible_page (new_episodes_view);
             });
-            
-            if (controller.first_run || controller.library.empty ()) {
-                toolbar.new_episodes_button.set_no_show_all (true);
-                toolbar.new_episodes_button.hide ();
-            }
 
             toolbar.refresh_selected.connect (controller.on_update_request);
             toolbar.play_pause_selected.connect (controller.play_pause);

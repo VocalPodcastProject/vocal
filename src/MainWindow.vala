@@ -903,6 +903,7 @@ namespace Vocal {
 
                 // Hide the shownotes button
                 toolbar.hide_shownotes_button();
+                toolbar.hide_volume_button ();
                 toolbar.hide_playlist_button();
 
                 if(current_widget == welcome) {
@@ -947,6 +948,7 @@ namespace Vocal {
                     toolbar.export_item.sensitive = true;
 
                     toolbar.show_shownotes_button();
+                    toolbar.show_volume_button ();
                     toolbar.show_playlist_button();
 
                     if(current_widget == import_message_box) {

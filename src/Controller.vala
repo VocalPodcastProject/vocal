@@ -490,6 +490,7 @@ namespace Vocal {
 
             // Hide the shownotes button
             window.toolbar.hide_shownotes_button();
+            window.toolbar.hide_volume_button ();
             window.toolbar.hide_playlist_button();
 
             window.toolbar.playback_box.set_message(_("Adding new podcast: <b>" + feed + "</b>"));
@@ -512,6 +513,7 @@ namespace Vocal {
 
             if(success) {
                 window.toolbar.show_shownotes_button();
+                window.toolbar.show_volume_button ();
                 window.toolbar.show_playlist_button();
 
                 if(!player.playing)

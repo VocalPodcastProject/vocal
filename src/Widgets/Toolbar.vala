@@ -344,6 +344,20 @@ namespace Vocal {
                 shownotes_button.hide();
             }
         }
+        
+        public void show_volume_button() {
+            if(volume_button != null) {
+            	volume_button.set_no_show_all(false);
+                volume_button.show();
+            }
+        }
+
+        public void hide_volume_button() {
+            if(volume_button != null) {
+            	volume_button.set_no_show_all(true);
+                volume_button.hide();
+            }
+        }
 
 		public void show_playlist_button() {
 		    if(playlist_button != null) {

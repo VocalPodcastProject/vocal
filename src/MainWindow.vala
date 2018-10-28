@@ -439,6 +439,26 @@ namespace Vocal {
             toolbar.export_selected.connect (export_podcasts);
             toolbar.downloads_selected.connect (show_downloads_popover);
             toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
+            
+            toolbar.volume_button.clicked.connect(() => {
+                var popover = new Gtk.Popover (toolbar.volume_button);
+                var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
+                scale.inverted = true;
+                scale.draw_value = false;
+                scale.margin = 5;
+                scale.height_request = 120;
+                scale.set_value (controller.player.get_volume ());
+                scale.value_changed.connect (() => {
+			        controller.player.set_volume (scale.get_value ());
+			        if(scale.get_value () > 0.7) {
+			            var vol_image = toolbar.volume_button.image as Gtk.Image;
+			            vol_image.icon_name = "audio-volume-high-symbolic";
+			        }
+		        });
+                popover.add(scale);
+                popover.show_all ();
+                
+            });
 
             // Repeat for the video playback box scale
             video_controls.progress_bar_scale_changed.connect (() => {

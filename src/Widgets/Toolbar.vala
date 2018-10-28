@@ -49,6 +49,7 @@ namespace Vocal {
         private Gtk.Button          refresh;
         public  Gtk.Button          download;
         public  Gtk.Button 			shownotes_button;
+        public  Gtk.Button          volume_button;
         public  Gtk.Button          search_button;
         private Gtk.Button          podcast_store_button;
 		public Gtk.Button 			playlist_button;
@@ -84,7 +85,8 @@ namespace Vocal {
                 shownotes_selected();
             });
             shownotes_button.relief = Gtk.ReliefStyle.NONE;
-
+            
+            volume_button = new Gtk.Button.from_icon_name("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 
             playlist_button = new Gtk.Button.from_icon_name("media-playlist-consecutive-symbolic");
             playlist_button.tooltip_text = _("Coming up next");
@@ -102,6 +104,7 @@ namespace Vocal {
             new_episodes_button.relief = Gtk.ReliefStyle.NONE;
 
             headerbar_box.add(shownotes_button);
+            headerbar_box.add (volume_button);
             headerbar_box.add(playback_box);
             headerbar_box.add(playlist_button);
             headerbar_box.halign = Gtk.Align.CENTER;

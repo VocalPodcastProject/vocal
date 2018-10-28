@@ -169,7 +169,14 @@ namespace Vocal {
 		 * Sets the current volume
 		 */
 	    public void set_volume (double val) {
-	        this.set_property ("volume", val);
+	        this.audio_volume = val;
+	    }
+	    
+	    /*
+		 * Gets the current volume
+		 */
+	    public double get_volume () {
+	        return this.audio_volume;
 	    }
     }
 }

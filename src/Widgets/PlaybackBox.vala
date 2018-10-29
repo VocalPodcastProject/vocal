@@ -73,6 +73,9 @@ namespace Vocal {
             // Add the components to the box
             this.add(info_label);
             this.add(scale_grid);
+            
+            this.margin_left = 30;
+            this.margin_right = 30;
         }
 
         public override void get_preferred_width (out int minimum_width, out int natural_width) {

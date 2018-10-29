@@ -325,7 +325,7 @@ namespace Vocal {
             all_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             all_flowbox.activate_on_single_click = true;
             all_flowbox.child_activated.connect(on_child_activated);
-            all_flowbox.valign = Gtk.Align.FILL;
+            all_flowbox.valign = Gtk.Align.START;
             all_flowbox.homogeneous = true;
 
 		    all_scrolled.add(all_flowbox);

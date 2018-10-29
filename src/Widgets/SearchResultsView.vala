@@ -86,6 +86,11 @@ namespace Vocal {
             var local_episodes_label = new Gtk.Label(_("Episodes from Your Library"));
             var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));
             var cloud_results_label = new Gtk.Label(_("iTunes Podcast Results"));
+            
+            local_episodes_label.margin_right = 12;
+            local_episodes_label.margin_left = 12;
+            local_podcasts_label.margin_right = 12;
+            local_podcasts_label.margin_left = 12;
 
             local_episodes_label.get_style_context().add_class("h3");
             local_episodes_label.set_property("xalign", 0);
@@ -96,10 +101,6 @@ namespace Vocal {
 
             var iTunes_box = new  Gtk.Box(Gtk.Orientation.HORIZONTAL, 5);
             spinner = new Gtk.Spinner();
-            spinner.active = true;
-            spinner.halign = Gtk.Align.START;
-            iTunes_box.add(cloud_results_label);
-            iTunes_box.add(spinner);
 
             var return_button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             return_button_box.homogeneous = true;
@@ -116,6 +117,7 @@ namespace Vocal {
                 title_label.label = _("Search Results for <i>%s</i>".printf(search_term));
 		search_entry.grab_focus_without_selecting ();
                 reset ();
+                show_spinner ();
                 load_from_itunes ();
                 load_local_results ();
             });
@@ -163,7 +165,6 @@ namespace Vocal {
             var local_podcasts_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
             local_podcasts_container.margin_left = 12;
             local_podcasts_container.margin_right = 12;
-            local_podcasts_container.add(local_podcasts_label);
             local_podcasts_container.add(no_local_podcasts_label);
             local_podcasts_container.add(local_podcasts_listbox);
             local_podcasts_revealer.add(local_podcasts_container);
@@ -171,7 +172,6 @@ namespace Vocal {
             var local_episodes_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
             local_episodes_container.margin_left = 12;
             local_episodes_container.margin_right = 12;
-            local_episodes_container.add(local_episodes_label);
             local_episodes_container.add(no_local_episodes_label);
             local_episodes_container.add(local_episodes_listbox);
             local_episodes_revealer.add(local_episodes_container);
@@ -183,11 +183,19 @@ namespace Vocal {
             cloud_results_container.add(cloud_results_flowbox);
             cloud_results_revealer.add(cloud_results_container);
             
+            var cloud_title_spinner_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+            cloud_title_spinner_box.margin_left = 12;
+            cloud_title_spinner_box.margin_right = 12;
+            cloud_title_spinner_box.pack_start (cloud_results_label, false, false);
+            cloud_title_spinner_box.pack_start (spinner, false, false);
+            
+            content_box.add (local_podcasts_label);
             content_box.add(local_podcasts_revealer);
+            content_box.add (local_episodes_label);
             content_box.add(local_episodes_revealer);
+            content_box.add (cloud_title_spinner_box);
             content_box.add(cloud_results_revealer);
 
-            hide_spinner ();
             hide_no_local_podcasts ();
             hide_no_local_episodes ();
         }
@@ -243,13 +251,14 @@ namespace Vocal {
                 cloud_results_flowbox.add(w);
             }
             
-            hide_spinner ();
             show_all();
             if (cloud_results_widgets.size < 1) {
                 cloud_results_revealer.reveal_child = false;
             } else {
                 cloud_results_revealer.reveal_child = true;
             }
+            
+            hide_spinner ();
 
         }
 
@@ -350,11 +359,13 @@ namespace Vocal {
         }
 
         private void hide_spinner () {
+            spinner.active = false;
             spinner.no_show_all = true;
             spinner.hide ();
         }
 
         private void show_spinner () {
+            spinner.active = true;
             spinner.no_show_all = false;
             spinner.show ();
         }

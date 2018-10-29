@@ -176,6 +176,10 @@ namespace Vocal {
                 .sidepane-toolbar {
                     background-color: #fff;
                 }
+                
+                .video-widgets-background {
+                    background-color: #af81d6;
+                }
 
                 """;
 
@@ -250,7 +254,7 @@ namespace Vocal {
             video_widget.motion_notify_event.connect (on_motion_event);
 
             return_to_library = new Gtk.Button.with_label (_("Return to Library"));
-            return_to_library.get_style_context ().add_class ("video-back-button");
+            return_to_library.get_style_context ().add_class ("video-widgets-background");
             return_to_library.has_tooltip = true;
             return_to_library.tooltip_text = _("Return to Library");
             return_to_library.relief = Gtk.ReliefStyle.NONE;

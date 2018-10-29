@@ -246,9 +246,9 @@ namespace Vocal {
 
 
             if(on_elementary) {
-                podcast_store_button = new Gtk.Button.from_icon_name("applications-internet-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
+                podcast_store_button = new Gtk.Button.from_icon_name("system-software-install-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             } else {
-                podcast_store_button = new Gtk.Button.from_icon_name("application-rss+xml-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
+                podcast_store_button = new Gtk.Button.from_icon_name("application-rss+xml-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             }
             podcast_store_button.tooltip_text = _("View the top podcasts in the iTunes Store");
             podcast_store_button.relief = Gtk.ReliefStyle.NONE;

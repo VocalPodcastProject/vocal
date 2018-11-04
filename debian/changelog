@@ -1,3 +1,58 @@
+com.github.needle-and-thread.vocal (2.3.0) xenial; urgency=low
+
+  * Updated for elementary OS 5.0 Juno
+  * Added new in-app volume controls
+  * Dramatic improvements to the new episode count badges
+  * Improved the search view to make it clear when Vocal is loading results from iTunes
+  * Podcasts licensed as Creative Commons now display a Creative Commons logo
+  * Improved look and feel throughout the app
+  * New episodes are now sorted by release date rather than just their position in the RSS feed (most users will not notice a difference as this was an edge-case)
+  * Fixed navigation issues that could cause new users to get stuck during the setup process
+  * Fixed several issues with the new episodes view button either being visible when it should not be, or not being visible when it should
+  * Database handling and performance improvements
+  * General stability improvements
+
+ -- Nathan Dyer <mail@nathandyer.me>  Sun, 4 Nov 2018 11:00:00 -0500
+
+com.github.needle-and-thread.vocal (2.2.0) xenial; urgency=low
+
+  * Fixed the infamous "freeze on launch" bug which prevented some users from accessing their library.
+  * Added a New Episode view to see all the unplayed episodes in your library at once.
+  * Fixed an annoyance where Vocal would sometimes re-download an episode that had already been downloaded.
+  * Performance and stability improvements with checking for new episodes.
+  * Improved performance of the iTunes podcast directory (specifically related to the loading of hi res images).
+  * Improved logging and debugging support.
+  * Many other small performance and stability enhancements.
+  
+ -- Nathan Dyer <mail@nathandyer.me>  Sun, 22 Apr 2018 17:00:00 -0500
+
+com.github.needle-and-thread.vocal (2.1.6) trusty; urgency=low
+
+  * This update fixes an issue where the .desktop file was using the RDNN instead of the actual app name.
+  
+ -- Nathan Dyer <mail@nathandyer.me>  Mon, 29 Jan 2018 17:00:00 -0500
+
+com.github.needle-and-thread.vocal (2.1.5) trusty; urgency=low
+
+  * Added HiDPI support for all images so everything looks nice and sharp no matter how fancy your display is.
+  * Fixed an issue where Vocal would not show you the time elapsed or remaining in an episode immediately after relaunching the app.
+  * Reduced the animation time for switching between different views so that it feels extra snappy.
+  * Gave the search results view a shave and a haircut. Two bits.
+  * Fixed a few issues where Vocal would be grouchy about showing certain episode descriptions.
+  * When importing several podcasts the progress bar now stays one size so you can actually judge the progress correctly.
+  * You can now drag and drop items in the play queue to rearrange their order.
+  * Lots more checking to make sure that things exist so it won't crash nearly as much (hopefully never).
+  
+ -- Nathan Dyer <mail@nathandyer.me>  Sun, 31 Dec 2017 17:00:00 -0500
+
+com.github.needle-and-thread.vocal (2.0.1) trusty; urgency=low
+
+  * Fixed a major bug that was leading to crashing when clicking on certain podcasts in the library view
+  * Use the built-in card CSS class for items in the podcast directory when running on elementary OS to make things look even sexier
+  * Added drag-and-drop support to the queue and prevent adding duplicate episodes
+  
+ -- Nathan Dyer <mail@nathandyer.me>  Mon, 5 Jun 2017 17:00:00 -0500
+
 com.github.needle-and-thread.vocal (2.0) trusty; urgency=low
 
   * iTunes Store integration

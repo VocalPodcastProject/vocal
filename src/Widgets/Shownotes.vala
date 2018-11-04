@@ -67,7 +67,7 @@ using Granite;
 			mark_as_played_button.relief = Gtk.ReliefStyle.NONE;
 			mark_as_played_button.tooltip_text = _("Mark this episode as played");
 
-			mark_as_new_button = new Gtk.Button.from_icon_name("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+			mark_as_new_button = new Gtk.Button.from_icon_name("non-starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
 			mark_as_new_button.has_tooltip = true;
 			mark_as_new_button.relief = Gtk.ReliefStyle.NONE;
 			mark_as_new_button.tooltip_text = _("Mark this episode as new");

@@ -118,6 +118,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/AddFeedDialog.vala
     src/Widgets/DownloadsPopover.vala
     src/Widgets/ShowNotesPopover.vala
+    src/Widgets/InternetArchiveUploadDialog.vala
     src/Widgets/PlaybackBox.vala
     src/Widgets/SettingsDialog.vala
     src/Widgets/DownloadDetailBox.vala

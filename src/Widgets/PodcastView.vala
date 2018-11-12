@@ -245,6 +245,10 @@ namespace Vocal {
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
             shownotes.mark_as_new_button.clicked.connect(() => { mark_episode_as_new_requested_internal(); });
+            shownotes.internet_archive_upload_requested.connect (() => { 
+                var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, (podcast.episodes[current_episode_index]));
+                internet_archive_dialog.show_all ();
+            });
 
             shownotes.copy_shareable_link.connect(on_copy_shareable_link);
             shownotes.send_tweet.connect(on_tweet);

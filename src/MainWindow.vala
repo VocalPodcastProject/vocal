@@ -91,9 +91,9 @@ namespace Vocal {
             this.controller = controller;
             title = _("Vocal");
 
-            const string ELEMENTARY_STYLESHEET = """
-
-                @define-color colorPrimary #af81d6;
+            const string HEADERBAR_STYLESHEET = "@define-color colorPrimary #af81d6;";
+            
+            const string PRIMARY_STYLESHEET = """
 
                 .album-artwork {
                     border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
@@ -183,17 +183,23 @@ namespace Vocal {
 
                 """;
 
-            info ("Loading CSS provider.");
+            info ("Loading CSS providers.");
             var css_provider = new Gtk.CssProvider ();
-            css_provider.load_from_buffer (ELEMENTARY_STYLESHEET.data);
+            css_provider.load_from_buffer (PRIMARY_STYLESHEET.data);
+            
+            var headerbar_css_provider = new Gtk.CssProvider ();
+            headerbar_css_provider.load_from_buffer (HEADERBAR_STYLESHEET.data);
+            
             var screen = Gdk.Screen.get_default ();
             var style_context = this.get_style_context ();
-            style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            
 
             this.set_application (controller.app);
 
-            if (!controller.on_elementary) {
+            if (controller.settings.dark_mode_enabled) {
                 Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
+            } else {
+                style_context.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             }
 
             // Set window properties
@@ -412,6 +418,16 @@ namespace Vocal {
 
             toolbar.about_selected.connect (() => {
                 controller.app.show_about (this);
+            });
+            
+            toolbar.theme_toggled.connect (() => {
+                if (controller.settings.dark_mode_enabled) {
+                    Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
+                    style_context.remove_provider_for_screen(screen, headerbar_css_provider);
+                } else {
+                    Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", false);
+                    style_context.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+                }
             });
 
             toolbar.preferences_selected.connect (() => {

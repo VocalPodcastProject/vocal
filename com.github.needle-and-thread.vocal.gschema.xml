@@ -89,14 +89,6 @@
 				Whether or not Vocal should keep running in the background for feed updates and downloads.
 			</description>
 		</key>
-
-		<key name="hide-played" type="b">
-			<default>false</default>
-			<summary>Whether or not to hide played episodes in the sidepane</summary>
-			<description>
-				Whether or not to hide played episodes in the sidepane.
-			</description>
-		</key>
 		
 		<key name="itunes-store-country" type="s">
 			<default>"us"</default>

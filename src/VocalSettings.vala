@@ -24,7 +24,6 @@ public class VocalSettings : Granite.Services.Settings {
     public bool auto_download { get; set; }
     public bool autoclean_library { get; set; }
     public bool continue_running_after_close { get; set; }
-    public bool hide_played { get; set; }
     public bool show_name_label { get; set; }
     
     public int update_interval { get; set; }

@@ -78,7 +78,6 @@ namespace Vocal {
         public Shownotes shownotes;
         
         private Gtk.Box show_more_episodes_box;
-        private Gtk.Button increase_button;
         private Gtk.Image cc_image;
 
 		/*
@@ -119,21 +118,6 @@ namespace Vocal {
             download_all.tooltip_text = _("Download all episodes");
             download_all.clicked.connect(() => {
                 download_all_requested();
-            });
-
-            var hide_played = new Gtk.Button.from_icon_name("view-list-symbolic", Gtk.IconSize.MENU);
-            hide_played.tooltip_text = _("Hide episodes that have already been played");
-            hide_played.clicked.connect(() => {
-
-                if(controller.settings.hide_played) {
-                    controller.settings.hide_played = false;
-                } else {
-                    controller.settings.hide_played = true;
-                }
-
-                reset_episode_list();
-                populate_episodes();
-                show_all();
             });
 
             var edit = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "edit-symbolic" : "document-properties-symbolic",Gtk.IconSize.MENU);
@@ -211,7 +195,6 @@ namespace Vocal {
 
 			actions_box.pack_start(download_all, true, true, 0);
             actions_box.pack_start(edit, true, true, 0);
-			actions_box.pack_start(hide_played, true, true, 0);
 			actions_box.pack_start(remove, true, true, 0);
 
 			var vertical_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
@@ -262,20 +245,11 @@ namespace Vocal {
             listbox.get_style_context().add_class("sidepane_listbox");
             listbox.get_style_context().add_class("view");
 
-
-            increase_button = new Gtk.Button.with_label(_("Show more episodes"));
-            increase_button.clicked.connect(() => {
-                populate_episodes();
-                this.show_all();
-            });
-
             show_more_episodes_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             show_more_episodes_box.pack_start(listbox, true, true, 0);
-            show_more_episodes_box.pack_end(increase_button, false, false, 0);
 
             scrolled.add(show_more_episodes_box);
             
-
             paned.pack1(scrolled, true, true);
 
             this.pack_start(horizontal_box, true, true, 0);
@@ -583,11 +557,6 @@ namespace Vocal {
                 unplayed_count--;
                 set_unplayed_text();
 
-                // Re-mark the box so it doesn't show if hide played is enabled
-                if(controller.settings.hide_played && unplayed_count > 0) {
-                    previously_activated_box. get_parent (). set_no_show_all(true);
-                    previously_activated_box. get_parent (). visible = false;
-                }
             }
 
             // No matter what, mark this box as now playing
@@ -693,23 +662,6 @@ namespace Vocal {
                     }
                 }
 
-                // Check to see if there are more episodes left
-                if(this.actually_loaded_episodes_count < podcast.episodes.size && !controller.settings.hide_played) {
-                    
-                    increase_button.set_no_show_all(false);
-                    increase_button.show();
-                } else {
-                    increase_button.set_no_show_all(true);
-                    increase_button.hide();
-                }
-
-                if(controller.settings.hide_played && unplayed_count == 0) {
-                    var no_new_label = new Gtk.Label(_("No new episodes."));
-                    no_new_label.margin_top = 25;
-                    no_new_label.get_style_context().add_class("h3");
-                    listbox.prepend(no_new_label);
-                }
-
 
             // Otherwise, simply create a new label to tell user that the feed is empty
             } else {
@@ -744,11 +696,6 @@ namespace Vocal {
 
            if(current_episode == controller.current_episode) {
                 detail_box.mark_as_now_playing();
-            }
-
-            if(controller.settings.hide_played && current_episode.status == EpisodeStatus.PLAYED) {
-                detail_box.set_no_show_all(true);
-                detail_box.hide();
             }
 
             return detail_box;

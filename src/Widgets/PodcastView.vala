@@ -572,11 +572,15 @@ namespace Vocal {
          */
         private void on_row_activated(ListBoxRow? row) {
         
-            // TODO: Clear playing/not playing icons and check icon counts
-            // I'm moving this to its own recurring function to better ensure
-            // a consistent state and to accomodate new options for playing/unplayed/started
-
             play_episode_requested (current_episode);
+            foreach (EpisodeDetailBox b in boxes) {
+                if (b.episode == current_episode) {
+                    b.mark_as_now_playing ();
+                } else {
+                    b.clear_now_playing ();
+                }
+            }
+            reset_unplayed_count ();
         }
 
 

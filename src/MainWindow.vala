@@ -340,9 +340,6 @@ namespace Vocal {
             details.mark_all_episodes_as_played_requested.connect(on_mark_as_played_request);
             details.download_all_requested.connect(on_download_all_request);
             details.delete_podcast_requested.connect(on_remove_request);
-            details.delete_multiple_episodes_requested.connect(on_delete_multiple_episodes);
-            details.mark_multiple_episodes_as_played_requested.connect(on_mark_multiple_episodes_as_played);
-            details.mark_multiple_episodes_as_unplayed_requested.connect(on_mark_multiple_episodes_as_unplayed);
             details.unplayed_count_changed.connect(on_unplayed_count_changed);
             details.new_cover_art_set.connect(on_new_cover_art_set);
 
@@ -740,8 +737,7 @@ namespace Vocal {
 
             // Get the episode
             if (episode == null) {
-                int index = details.current_episode_index;
-                controller.current_episode = details.podcast.episodes[index];
+                controller.current_episode = details.current_episode;
             } else {
                 controller.current_episode = episode;
             }
@@ -1123,16 +1119,6 @@ namespace Vocal {
 
 
 		/*
-		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to delete
-		 */
-        public void on_delete_multiple_episodes(Gee.ArrayList<int> indexes) {
-            foreach(int i in indexes) {
-                on_episode_delete_request(details.podcast.episodes[i]);
-            }
-        }
-
-
-		/*
 		 * Called when the user requests to download all episodes from the sidepane
 		 */
         public void on_download_all_request() {
@@ -1319,28 +1305,6 @@ namespace Vocal {
                 }
                 
                 new_episodes_view.populate_episodes_list ();
-            }
-        }
-
-
-		/*
-		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to
-		 * mark them all as played
-		 */
-        public void on_mark_multiple_episodes_as_played(Gee.ArrayList<int> indexes) {
-            foreach(int i in indexes) {
-                on_mark_episode_as_played_request(details.podcast.episodes[i]);
-            }
-        }
-
-
-		/*
-		 * Called when multiple episodes are highlighted in the sidepane and the user wishes to
-		 * mark them all as played
-		 */
-        public void on_mark_multiple_episodes_as_unplayed(Gee.ArrayList<int> indexes) {
-            foreach(int i in indexes) {
-                on_mark_episode_as_unplayed_request(details.podcast.episodes[i]);
             }
         }
 

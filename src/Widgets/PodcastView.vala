@@ -30,12 +30,9 @@ namespace Vocal {
         public signal void enqueue_episode(Episode episode);
     	public signal void download_episode_requested(Episode episode);
         public signal void delete_local_episode_requested(Episode episode);
-        public signal void delete_multiple_episodes_requested(Gee.ArrayList<int> indexes);
         public signal void mark_all_episodes_as_played_requested();
         public signal void mark_episode_as_played_requested(Episode episode);
-        public signal void mark_multiple_episodes_as_played_requested(Gee.ArrayList<int> indexes);
         public signal void mark_episode_as_unplayed_requested(Episode episode);
-        public signal void mark_multiple_episodes_as_unplayed_requested(Gee.ArrayList<int> indexes);
     	public signal void pane_should_hide();
         public signal void download_all_requested();
         public signal void delete_podcast_requested();
@@ -45,10 +42,9 @@ namespace Vocal {
         public signal void new_cover_art_set(string path);
 
 
-        public Podcast 			podcast;				// The parent podcast
-        private Controller controller;
-        public int 				current_episode_index;  // The index of the episode currently being used
-        private int 			boxes_index;        	// Refers to an index in the list of boxes
+        public Podcast podcast;
+        public Controller controller;
+        public Episode current_episode;
 
         private Gtk.ListBox listbox;
         private Gtk.Paned paned;
@@ -66,8 +62,7 @@ namespace Vocal {
         private EpisodeDetailBox previously_activated_box;
 		private Gtk.ScrolledWindow scrolled;
 		private int largest_box_size;
-		public  int  unplayed_count;
-		private int actually_loaded_episodes_count;
+		public  int unplayed_count;
 
 		private Gtk.Box image_box;
 		private Gtk.Box details_box;
@@ -88,8 +83,6 @@ namespace Vocal {
 
             largest_box_size = 500;
 
-			this.current_episode_index = 0;
-            this.boxes_index = 0;
 			this.orientation = Gtk.Orientation.VERTICAL;
             var horizontal_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
@@ -268,41 +261,41 @@ namespace Vocal {
 
         // Convenience method for triggering the signal
         private void download_episode_requested_internal() {
-            download_episode_requested(podcast.episodes[current_episode_index]);
+            download_episode_requested(current_episode);
         }
 
         private void enqueue_episode_internal() {
-            enqueue_episode(podcast.episodes[current_episode_index]);
+            enqueue_episode(current_episode);
         }
 
         private void mark_episode_as_played_requested_internal() {
-            if(podcast.episodes[current_episode_index].status != EpisodeStatus.PLAYED) {
+            if(current_episode.status != EpisodeStatus.PLAYED) {
                 unplayed_count--;
                 set_unplayed_text();
 
                 Gtk.ListBoxRow selected_row = listbox.get_selected_row();
                 boxes[selected_row.get_index()].mark_as_played();
 
-                mark_episode_as_played_requested(podcast.episodes[current_episode_index]);
+                mark_episode_as_played_requested(current_episode);
             }
 
-            if (shownotes.episode != null && podcast.episodes[current_episode_index] == shownotes.episode) {
+            if (shownotes.episode != null && current_episode == shownotes.episode) {
                 shownotes.show_mark_as_new_button ();
             }
         }
 
         private void mark_episode_as_new_requested_internal() {
-            if(podcast.episodes[current_episode_index].status != EpisodeStatus.UNPLAYED) {
+            if(current_episode.status != EpisodeStatus.UNPLAYED) {
                 unplayed_count++;
                 set_unplayed_text();
 
                 Gtk.ListBoxRow selected_row = listbox.get_selected_row();
                 boxes[selected_row.get_index()].mark_as_unplayed();
 
-                mark_episode_as_unplayed_requested (podcast.episodes[current_episode_index]);
+                mark_episode_as_unplayed_requested (current_episode);
             }
 
-            if (shownotes.episode != null && podcast.episodes[current_episode_index] == shownotes.episode) {
+            if (shownotes.episode != null && current_episode == shownotes.episode) {
                 shownotes.show_mark_as_played_button ();
             }
         }
@@ -350,22 +343,20 @@ namespace Vocal {
 
                         foreach(ListBoxRow row in selected_rows) {
                             EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                            enqueue_episode(podcast.episodes[b.index]);
+                            enqueue_episode (b.episode);
                         }
                     });
                     right_click_menu.add(add_to_queue_menu_item);
 
                     var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as played"));
                     mark_played_menuitem.activate.connect(() => {
-                            Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
-
+                            
                             foreach(ListBoxRow row in selected_rows) {
                                 EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                                indexes.add(b.index);
-                                boxes[row.get_index()].mark_as_played();
+                                mark_episode_as_played_requested (b.episode);
+                                b.mark_as_played ();
                             }
 
-                            mark_multiple_episodes_as_played_requested(indexes);
                             reset_unplayed_count();
 
                     });
@@ -374,15 +365,12 @@ namespace Vocal {
 
                     var mark_unplayed_menuitem = new Gtk.MenuItem.with_label(_("Mark selected episodes as new"));
                     mark_unplayed_menuitem.activate.connect(() => {
-                        Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
 
                         foreach(ListBoxRow row in selected_rows) {
                             EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                            indexes.add(b.index);
-                            boxes[row.get_index()].mark_as_unplayed();
+                            mark_episode_as_unplayed_requested (b.episode);
+                            b.mark_as_unplayed ();
                         }
-
-                        mark_multiple_episodes_as_unplayed_requested(indexes);
 
                         reset_unplayed_count();
                     });
@@ -404,14 +392,12 @@ namespace Vocal {
                         msg.response.connect ((response_id) => {
                             switch (response_id) {
                                 case Gtk.ResponseType.YES:
-                                    Gee.ArrayList<int> indexes = new Gee.ArrayList<int>();
 
                                     foreach(ListBoxRow row in selected_rows) {
                                         EpisodeDetailBox b = row.get_child() as EpisodeDetailBox;
-                                        indexes.add(b.index);
+                                        delete_local_episode_requested (b.episode);
                                     }
 
-                                    delete_multiple_episodes_requested(indexes);
                                     break;
                                 case Gtk.ResponseType.NO:
                                     break;
@@ -427,17 +413,19 @@ namespace Vocal {
                     // Only a single row selected
                     ListBoxRow selected_row = listbox.get_row_at_y((int)e.y);
                     EpisodeDetailBox b = selected_row.get_child() as EpisodeDetailBox;
-                    current_episode_index = b.index;
+                    current_episode = b.episode;
 
+                    /*
                     if(current_episode_index >= 0 && current_episode_index < boxes.size) {
                         previously_selected_box = boxes[selected_row.get_index()];
                     }
+                    */
 
                     // Populate the right click menu based on the current conditions
                     right_click_menu = new Gtk.Menu();
 
                     // Mark as played
-                    if(podcast.episodes[current_episode_index].status == EpisodeStatus.UNPLAYED) {
+                    if(current_episode.status == EpisodeStatus.UNPLAYED) {
                         var mark_played_menuitem = new Gtk.MenuItem.with_label(_("Mark as played"));
                         mark_played_menuitem.activate.connect(() => {
                             mark_episode_as_played_requested_internal();
@@ -453,12 +441,12 @@ namespace Vocal {
                         right_click_menu.add(mark_unplayed_menuitem);
                     }
 
-                    if(podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
+                    if(current_episode.current_download_status == DownloadStatus.DOWNLOADED) {
                         var delete_menuitem = new Gtk.MenuItem.with_label(_("Delete Local File"));
 
                         delete_menuitem.activate.connect(() => {
                             Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                                 _("Are you sure you want to delete the downloaded episode '%s'?").printf(podcast.episodes[current_episode_index].title.replace("%27", "'")));
+                                 _("Are you sure you want to delete the downloaded episode '%s'?").printf(current_episode.title.replace("%27", "'")));
 
 
                             msg.add_button ("_No", Gtk.ResponseType.CANCEL);
@@ -472,7 +460,7 @@ namespace Vocal {
                             msg.response.connect ((response_id) => {
                                 switch (response_id) {
                                     case Gtk.ResponseType.YES:
-                                        delete_local_episode_requested(podcast.episodes[current_episode_index]);
+                                        delete_local_episode_requested(current_episode);
                                         break;
                                     case Gtk.ResponseType.NO:
                                         break;
@@ -550,30 +538,12 @@ namespace Vocal {
          * the corresponding episode be played
          */
         private void on_row_activated(ListBoxRow? row) {
-            if(previously_activated_box != null) {
-                previously_activated_box.clear_now_playing();
-            }
+        
+            // TODO: Clear playing/not playing icons and check icon counts
+            // I'm moving this to its own recurring function to better ensure
+            // a consistent state and to accomodate new options for playing/unplayed/started
 
-            if(boxes_index >= 0 && boxes_index < boxes.size) {
-                previously_activated_box = boxes[boxes_index];
-            }
-
-            // Clear the unplayed icon
-            if(podcast.episodes[current_episode_index].status == EpisodeStatus.UNPLAYED) {
-
-                // Mark the box as played
-                previously_activated_box.mark_as_played();
-
-                // Set the new unplayed count in the top area
-                unplayed_count--;
-                set_unplayed_text();
-
-            }
-
-            // No matter what, mark this box as now playing
-            previously_activated_box.mark_as_now_playing();
-
-            play_episode_requested(null);
+            play_episode_requested (current_episode);
         }
 
 
@@ -581,34 +551,29 @@ namespace Vocal {
          * When a row is selected, highlight it and show the details
          */
         private void on_row_selected() {
+        
             GLib.List<weak ListBoxRow> rows = listbox.get_selected_rows();
             if(rows.length() < 1) {
                 return;
             }
 
-
             ListBoxRow new_row = listbox.get_selected_row();
-            current_episode_index = (podcast.episodes.size - new_row.get_index() - 1);
-            boxes_index = boxes.size - new_row.get_index() - 1;
+            current_episode = boxes[new_row.get_index()].episode;
 
-            if(current_episode_index >= 0 && current_episode_index < boxes.size) {
-                previously_selected_box = boxes[new_row.get_index()];
-            }
-
-            shownotes.episode = podcast.episodes[current_episode_index];
-            shownotes.set_html(podcast.episodes[current_episode_index].description != "(null)" ? Utils.html_to_markup(podcast.episodes[current_episode_index].description) : _("No show notes available."));
-            shownotes.set_title(podcast.episodes[current_episode_index].title);
-            shownotes.set_date(podcast.episodes[current_episode_index].datetime_released);
+            shownotes.episode = current_episode;
+            shownotes.set_html(current_episode.description != "(null)" ? Utils.html_to_markup(current_episode.description) : _("No show notes available."));
+            shownotes.set_title(current_episode.title);
+            shownotes.set_date(current_episode.datetime_released);
 
             // Check to see if the episode has been downloaded or not
-            if(podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
+            if(current_episode.current_download_status == DownloadStatus.DOWNLOADED) {
                 shownotes.hide_download_button();
             } else {
                 shownotes.show_download_button();
             }
 
             // Check the playback status
-            if(podcast.episodes[current_episode_index].status == EpisodeStatus.PLAYED) {
+            if(current_episode.status == EpisodeStatus.PLAYED) {
                 shownotes.show_mark_as_new_button();
             } else {
                 shownotes.show_mark_as_played_button();
@@ -632,10 +597,7 @@ namespace Vocal {
          * When a streaming button gets clicked set the current episode and treat
          * it like a row has been activated
          */
-        private void on_streaming_button_clicked(int index, int box_index) {
-
-            current_episode_index = index;
-            boxes_index = box_index;
+        private void on_streaming_button_clicked (Episode episode) {
             on_row_activated(null);
         }
 
@@ -645,37 +607,34 @@ namespace Vocal {
             }
 
             boxes.clear();
-            actually_loaded_episodes_count = 0;
         }
 
         /*
          * Creates an EpisodeDetailBox for each episode and adds it to the window
          */
-        public void populate_episodes(int? limit = 25) {
+        public void populate_episodes() {
+        
             // If there are episodes, create an episode detail box for each of them
-            if(this.podcast.episodes.size > 0) {
-                int prev_actually_loaded_episodes_count = this.actually_loaded_episodes_count;
-
+            if (this.podcast.episodes.size > 0) {
+            
                 unplayed_count = 0;
-
-                for (; this.actually_loaded_episodes_count < (limit + prev_actually_loaded_episodes_count) && this.actually_loaded_episodes_count < podcast.episodes.size ; this.actually_loaded_episodes_count++) {
-                    int episode_index = (podcast.episodes.size - 1) - this.actually_loaded_episodes_count;
-                    Episode current_episode = podcast.episodes[episode_index];
-
-                    EpisodeDetailBox current_episode_box = create_episode_detail_box(current_episode, episode_index);
-
+                foreach (Episode current_episode in podcast.episodes) {
+                                   
+                    EpisodeDetailBox current_episode_box = new EpisodeDetailBox (current_episode, controller, false);
                     boxes.add(current_episode_box);
-                    listbox.insert(current_episode_box, this.actually_loaded_episodes_count);
-
+                    
                     // Determine whether or not the episode has been played
                     if(current_episode.status == EpisodeStatus.UNPLAYED) {
                         unplayed_count++;
                     }
                 }
-
-
-            // Otherwise, simply create a new label to tell user that the feed is empty
+                
+                foreach (EpisodeDetailBox box in boxes) {
+                    listbox.prepend (box);
+                }
+                
             } else {
+                // Otherwise, simply create a new label to tell user that the feed is empty
                 var empty_label = new Gtk.Label(_("No episodes available."));
                 empty_label.justify = Gtk.Justification.CENTER;
                 empty_label.margin = 10;
@@ -689,27 +648,6 @@ namespace Vocal {
             });
 
             set_unplayed_text();
-        }
-
-        private EpisodeDetailBox create_episode_detail_box(Episode current_episode, int box_index) {
-            EpisodeDetailBox detail_box = new EpisodeDetailBox(current_episode, box_index, boxes.size, controller.on_elementary);
-            detail_box.streaming_button_clicked.connect(on_streaming_button_clicked);
-            detail_box.margin_top = 6;
-            detail_box.margin_left = 6;
-            detail_box.border_width = 0;
-            if(detail_box.top_box_width > this.largest_box_size) {
-                this.largest_box_size = detail_box.top_box_width;
-            }
-            detail_box.download_button.clicked.connect(() => {
-                detail_box.hide_download_button();
-                download_episode_requested(current_episode);
-            });
-
-           if(current_episode == controller.current_episode) {
-                detail_box.mark_as_now_playing();
-            }
-
-            return detail_box;
         }
 
         /*
@@ -785,7 +723,7 @@ namespace Vocal {
 
         public void select_episode(Episode e) {
             reset_episode_list();
-            populate_episodes(podcast.episodes.size);
+            populate_episodes ();
 
             for(int i = 0; i < boxes.size; i++) {
                 ListBoxRow r = listbox.get_row_at_index(i);
@@ -800,13 +738,13 @@ namespace Vocal {
         private void on_link_to_file() {
             Gdk.Display display = controller.window.get_display ();
             Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
-            string uri = podcast.episodes[current_episode_index].uri;
+            string uri = current_episode.uri;
             clipboard.set_text(uri,uri.length);
         }
 
         private void on_tweet() {
-            string uri = Utils.get_shareable_link_for_episode(podcast.episodes[current_episode_index]);
-            string message_text = GLib.Uri.escape_string(_("I'm listening to %s from %s").printf(podcast.episodes[current_episode_index].title,podcast.episodes[current_episode_index].parent.name));
+            string uri = Utils.get_shareable_link_for_episode(current_episode);
+            string message_text = GLib.Uri.escape_string(_("I'm listening to %s from %s").printf(current_episode.title,current_episode.parent.name));
             string new_tweet_uri = "https://twitter.com/intent/tweet?text=%s&url=%s".printf(message_text, GLib.Uri.escape_string(uri));
             Gtk.show_uri (null, new_tweet_uri, 0);
         }
@@ -814,7 +752,7 @@ namespace Vocal {
         private void on_copy_shareable_link() {
             Gdk.Display display = controller.window.get_display ();
             Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
-            string uri = Utils.get_shareable_link_for_episode(podcast.episodes[current_episode_index]);
+            string uri = Utils.get_shareable_link_for_episode(current_episode);
             clipboard.set_text(uri,uri.length);
         }
     }

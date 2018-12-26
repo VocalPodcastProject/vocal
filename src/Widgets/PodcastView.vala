@@ -104,6 +104,16 @@ namespace Vocal {
             go_back_button.get_style_context().add_class("back-button");
             go_back_button.margin = 6;
 
+            var add_unplayed_to_queue = new Gtk.Button.with_label(_("Add New Episodes to Queue"));
+            add_unplayed_to_queue.clicked.connect ( () => {
+                foreach (EpisodeDetailBox b in boxes) {
+                    if (b.episode.status == EpisodeStatus.UNPLAYED) {
+                        enqueue_episode (b.episode);
+                    }
+                }
+            });
+            add_unplayed_to_queue.margin = 6;
+            
             var mark_as_played = new Gtk.Button.with_label(_("Mark All Played"));
             mark_as_played.clicked.connect(() => {
                 mark_all_episodes_as_played_requested();
@@ -112,6 +122,7 @@ namespace Vocal {
             
             toolbar.pack_start(go_back_button, false, false, 0);
             toolbar.pack_end(mark_as_played, false, false, 0);
+            toolbar.pack_end (add_unplayed_to_queue, false, false, 0);
             this.pack_start(toolbar, false, true, 0);
 
             var download_all = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);

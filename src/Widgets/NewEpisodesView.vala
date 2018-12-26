@@ -103,7 +103,7 @@ namespace Vocal {
 
                 this.episodeListModel = elm;
                 new_episodes_listbox.bind_model(elm, (item) => {
-                        return  new EpisodeDetailBox( (Episode) item, 0, 0, false, true);
+                        return  new EpisodeDetailBox( (Episode) item, controller, true);
                 });
 
                 show_all ();

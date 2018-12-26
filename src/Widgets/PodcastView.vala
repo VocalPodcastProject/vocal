@@ -96,8 +96,39 @@ namespace Vocal {
             go_back_button.clicked.connect(() => { go_back(); });
             go_back_button.get_style_context().add_class("back-button");
             go_back_button.margin = 6;
+            
+            string newest_icon_name = null;
+            if (controller.settings.newest_episodes_first) {
+                newest_icon_name = "view-sort-ascending-symbolic";
+            } else {
+                newest_icon_name = "view-sort-descending-symbolic";
+            }
+            var newest_episodes_first_button = new Gtk.Button.from_icon_name (newest_icon_name, Gtk.IconSize.MENU);
+            newest_episodes_first_button.margin = 6;
+            if (controller.settings.newest_episodes_first) {
+                newest_episodes_first_button.tooltip_text = _("Show newer episodes at the top of the list");
+            } else {
+                newest_episodes_first_button.tooltip_text = _("Show older episodes at the top of the list");
+            }
+            newest_episodes_first_button.clicked.connect ( () => {
+                if (controller.settings.newest_episodes_first) {
+                    controller.settings.newest_episodes_first = false;
+                    var image = new Gtk.Image.from_icon_name ("view-sort-descending-symbolic", Gtk.IconSize.MENU);
+                    newest_episodes_first_button.image = image;
+                    newest_episodes_first_button.tooltip_text = _("Show older episodes at the top of the list");
+                } else {
+                    controller.settings.newest_episodes_first = true;
+                    var image = new Gtk.Image.from_icon_name ("view-sort-ascending-symbolic", Gtk.IconSize.MENU);
+                    newest_episodes_first_button.image = image;
+                    newest_episodes_first_button.tooltip_text = _("Show newer episodes at the top of the list");
+                }
+                
+                reset_episode_list ();
+                populate_episodes ();
+            });
 
             var add_unplayed_to_queue = new Gtk.Button.with_label(_("Add New Episodes to Queue"));
+            add_unplayed_to_queue.margin = 6;
             add_unplayed_to_queue.clicked.connect ( () => {
                 foreach (EpisodeDetailBox b in boxes) {
                     if (b.episode.status == EpisodeStatus.UNPLAYED) {
@@ -105,7 +136,13 @@ namespace Vocal {
                     }
                 }
             });
-            add_unplayed_to_queue.margin = 6;
+            
+            var download_all = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);
+            download_all.margin = 6;
+            download_all.tooltip_text = _("Download all episodes");
+            download_all.clicked.connect(() => {
+                download_all_requested();
+            });
             
             var mark_as_played = new Gtk.Button.with_label(_("Mark All Played"));
             mark_as_played.clicked.connect(() => {
@@ -116,13 +153,9 @@ namespace Vocal {
             toolbar.pack_start(go_back_button, false, false, 0);
             toolbar.pack_end(mark_as_played, false, false, 0);
             toolbar.pack_end (add_unplayed_to_queue, false, false, 0);
+            toolbar.pack_end (newest_episodes_first_button, false, false, 0);
+            toolbar.pack_end (download_all, false, false, 0);
             this.pack_start(toolbar, false, true, 0);
-
-            var download_all = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);
-            download_all.tooltip_text = _("Download all episodes");
-            download_all.clicked.connect(() => {
-                download_all_requested();
-            });
 
             var edit = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "edit-symbolic" : "document-properties-symbolic",Gtk.IconSize.MENU);
             edit.tooltip_text = _("Edit podcast details");
@@ -558,8 +591,13 @@ namespace Vocal {
             }
 
             ListBoxRow new_row = listbox.get_selected_row();
-            current_episode = boxes[new_row.get_index()].episode;
-
+            if (controller.settings.newest_episodes_first) {
+                current_episode = boxes[new_row.get_index()].episode;
+            } else {
+                int new_index = boxes.size - new_row.get_index() - 1;
+                current_episode = boxes[new_index].episode;
+            }
+            
             shownotes.episode = current_episode;
             shownotes.set_html(current_episode.description != "(null)" ? Utils.html_to_markup(current_episode.description) : _("No show notes available."));
             shownotes.set_title(current_episode.title);
@@ -629,9 +667,18 @@ namespace Vocal {
                     }
                 }
                 
-                foreach (EpisodeDetailBox box in boxes) {
-                    listbox.prepend (box);
+                if (controller.settings.newest_episodes_first) {
+                    foreach (EpisodeDetailBox box in boxes) {
+                        listbox.add (box);
+                        box.show_all ();
+                    }
+                } else {
+                    foreach (EpisodeDetailBox box in boxes) {
+                        listbox.prepend (box);
+                        box.show_all ();
+                    }
                 }
+                
                 
             } else {
                 // Otherwise, simply create a new label to tell user that the feed is empty

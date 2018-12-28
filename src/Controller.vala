@@ -567,6 +567,14 @@ namespace Vocal {
         }
         
         /*
+         * Sets playback rate
+         */
+         
+        public void set_playback_rate (double rate) {
+            player.set_playback_rate (rate);
+        }
+        
+        /*
          * Check for new episodes
          */
         public void on_update_request() {

@@ -31,7 +31,7 @@ namespace Vocal {
 		public signal void preferences_selected();
 		public signal void donate_selected();
 		public signal void refresh_selected();
-		public signal void rate_button_selected();
+		public signal void rate_button_selected (double rate);
 		public signal void store_selected();
 		public signal void play_pause_selected();
 		public signal void seek_forward_selected();
@@ -235,17 +235,16 @@ namespace Vocal {
             refresh.has_tooltip = true;
             refresh.tooltip_text = _("Check for new episodes");
 
-            var rate_button = new Gtk.Button.with_label("");
-			rate_button.get_style_context().add_class("rate-button");
+            var rate_button = new Gtk.Button.with_label("1.0");
 			rate_button.get_style_context().add_class("h3");
             rate_button.relief = Gtk.ReliefStyle.NONE;
             rate_button.valign = Gtk.Align.CENTER;
+            rate_button.width_request = 75;
 
             search_button = new Gtk.Button.from_icon_name("edit-find-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
             search_button.tooltip_text = _("Search your library or online");
             search_button.relief = Gtk.ReliefStyle.NONE;
             search_button.valign = Gtk.Align.CENTER;
-
 
             if(on_elementary) {
                 podcast_store_button = new Gtk.Button.from_icon_name("system-software-install-symbolic", on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR);
@@ -271,7 +270,38 @@ namespace Vocal {
             	seek_backward_selected();
             });
             rate_button.clicked.connect(() => {
-                rate_button_selected();
+                string text = rate_button.get_label ();
+                string new_text = "";
+                switch (text) {
+                    case "0.5":
+                        new_text = "0.75";
+                        break;
+                    case "0.75":
+                        new_text = "1.0";
+                        break;
+                    case "1.0":
+                        new_text = "1.25";
+                        break;
+                    case "1.25":
+                        new_text = "1.5";
+                        break;
+                    case "1.5":
+                        new_text = "1.75";
+                        break;
+                    case "1.75":
+                        new_text = "2.0";
+                        break;
+                    case "2.0":
+                        new_text = "0.5";
+                        break;
+                    default:
+                        new_text = "1.0";
+                        break;
+                }
+                
+                
+                rate_button.set_label (new_text);
+                rate_button_selected (new_text.to_double ());
             });
             podcast_store_button.clicked.connect(() => {
                 store_selected();
@@ -301,6 +331,7 @@ namespace Vocal {
             pack_start (backward);
 	        pack_start (play_pause);
 	        pack_start (forward);
+	        pack_start (rate_button);
 
             pack_end (search_button);
 			pack_end (podcast_store_button);

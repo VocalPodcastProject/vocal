@@ -426,6 +426,7 @@ namespace Vocal {
             toolbar.seek_forward_selected.connect (controller.seek_forward);
             toolbar.seek_backward_selected.connect (controller.seek_backward);
             toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
+            toolbar.rate_button_selected.connect (controller.set_playback_rate);
 
             toolbar.store_selected.connect (() => {
                 details.pane_should_hide ();

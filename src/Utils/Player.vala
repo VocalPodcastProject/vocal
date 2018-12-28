@@ -146,15 +146,13 @@ namespace Vocal {
         /*
          * Change the playback rate
          */
-        /*
         public void set_playback_rate(double rate) {
-            int64 pos = get_position();
-            this.seek (2.0,
-            Gst.Format.TIME, Gst.SeekFlags.SKIP,
-            Gst.SeekType.NONE, pos,
-            Gst.SeekType.NONE, duration);
+            info ("Changing rate to: %s", rate.to_string());
+            get_pipeline ().seek (rate,
+                Gst.Format.TIME, Gst.SeekFlags.FLUSH,
+                Gst.SeekType.NONE, (int64) get_position (),
+                Gst.SeekType.NONE, (int64) duration);
         } 
-        */
         
         
         /*

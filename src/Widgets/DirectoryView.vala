@@ -19,19 +19,18 @@
 
 namespace Vocal {
 
-    public class DirectoryView : Gtk.Box {
+    public class DirectoryView : Gtk.ScrolledWindow {
 
         public signal void return_to_library();
         public signal void return_to_welcome();
         public signal void on_new_subscription(string url);
 
         private iTunesProvider itunes;
-        private Gtk.FlowBox flowbox;
-        private Gtk.Box banner_box;
         public  Gtk.Button return_button;
         public  Gtk.Button forward_button;
         private Gtk.Button first_run_continue_button;
 
+        private Gtk.Box container;
         private Gtk.Box loading_box;
 
         private Gtk.ScrolledWindow scrolled_window;
@@ -40,11 +39,11 @@ namespace Vocal {
 
         public DirectoryView(iTunesProvider itunes_provider, bool first_run = false) {
 
-            this.set_orientation(Gtk.Orientation.VERTICAL);
+            container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
             // Set up the banner
 
-            banner_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            var banner_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             banner_box.get_style_context().add_class("toolbar");
             banner_box.get_style_context().add_class("library-toolbar");
 
@@ -95,8 +94,8 @@ namespace Vocal {
             itunes_title.hexpand  = true;
 
             this.itunes = itunes_provider;
-            this.add(banner_box);
-            this.add(itunes_title);
+            container.add(banner_box);
+            container.add(itunes_title);
             
             loading_box = new  Gtk.Box(Gtk.Orientation.VERTICAL, 5);
             var spinner = new Gtk.Spinner();
@@ -105,14 +104,17 @@ namespace Vocal {
             loading_label.get_style_context().add_class("h2");
             loading_box.add(loading_label);
             loading_box.add(spinner);
-            this.pack_start(loading_box, true, true, 5);
+            container.pack_start(loading_box, true, true, 5);
 
             scrolled_window = new Gtk.ScrolledWindow(null, null);
-            this.pack_start(scrolled_window, true, true, 15);
+            container.pack_start(scrolled_window, true, true, 15);
 
+            add(container);
         }
 
         public async void load_top_podcasts() {
+            var flowbox = new Gtk.FlowBox();
+
             SourceFunc callback = load_top_podcasts.callback;
 
             ThreadFunc<void*> run = () => {
@@ -121,7 +123,6 @@ namespace Vocal {
                     return null;
                 }
 
-                flowbox = new Gtk.FlowBox();
 
                 // TODO: not actually asyncronous.
                 info ("Getting top podcasts asynchronously?.");

@@ -128,12 +128,14 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/NewEpisodesView.vala
     src/Widgets/CloudLoginDialog.vala
     src/Widgets/SearchResultsView.vala
+    src/Widgets/PodcastDetailView.vala
     src/Widgets/PodcastView.vala
     src/Widgets/Shownotes.vala
     src/Widgets/Toolbar.vala
     src/Widgets/QueuePopover.vala
     src/Widgets/QueueRow.vala
     src/Widgets/SearchResultBox.vala
+    src/Widgets/WelcomeView.vala
     src/Utils/Player.vala
     src/Utils/FeedParser.vala
     src/Utils/Utils.vala

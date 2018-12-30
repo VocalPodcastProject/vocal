@@ -300,13 +300,11 @@ namespace Vocal {
             if(first_run || library.empty ()) {
                 window.show_all();
                 window.switch_visible_page(window.welcome);
-
             } else {
                 // Populate the IconViews from the library
                 window.populate_views();
                 window.show_all();
-                window.switch_visible_page(window.all_scrolled);
-
+                window.switch_visible_page(window.podcast_view);
             }
         }
         
@@ -529,7 +527,7 @@ namespace Vocal {
                     window.populate_views_async();
 
                     if(window.current_widget == window.welcome) {
-                        window.switch_visible_page(window.all_scrolled);
+                        window.switch_visible_page(window.podcast_view);
                     }
 
                     window.show_all();
@@ -539,9 +537,9 @@ namespace Vocal {
                     window.toolbar.hide_playback_box();
                 }
 
-                var add_err_dialog = new Gtk.MessageDialog(window.add_feed,
-                Gtk.DialogFlags.MODAL,Gtk.MessageType.ERROR,
-                Gtk.ButtonsType.OK, "");
+                var add_feed = new AddFeedDialog(window, on_elementary); 
+                var add_err_dialog = new Gtk.MessageDialog(
+                    add_feed, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "");
                 add_err_dialog.response.connect((response_id) => {
                     add_err_dialog.destroy();
                 });

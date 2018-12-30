@@ -27,10 +27,10 @@ namespace Vocal {
         public	Gtk.Entry 	entry;			
         public	Gtk.Button 	add_feed_button;
 
-	      private bool		on_elementary;
+        private bool		on_elementary;
     
         public AddFeedDialog(Window parent, bool? using_elementary = true) {
-	          this.on_elementary = using_elementary;
+            this.on_elementary = using_elementary;
             set_default_response(Gtk.ResponseType.OK);
             set_size_request(500, 150);
             set_modal(true);

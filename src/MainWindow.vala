@@ -41,9 +41,10 @@ namespace Vocal {
         public NewEpisodesView new_episodes_view;
         public PodcastView podcast_view;
         public PodcastDetailView details;
+        private ImportView import_view;
         
         private Gtk.Stack notebook;
-        private Gtk.Box import_message_box;
+        
 
         /* Secondary widgets */
 
@@ -176,10 +177,13 @@ namespace Vocal {
 
             info ("Loading CSS provider.");
             var css_provider = new Gtk.CssProvider ();
-            css_provider.load_from_buffer (ELEMENTARY_STYLESHEET.data);
+            try {
+                css_provider.load_from_buffer (ELEMENTARY_STYLESHEET.data);
+            } catch (Error e) {
+                warning("Failed to load stylesheet. %s", e.message);
+            }
             var screen = Gdk.Screen.get_default ();
-            var style_context = this.get_style_context ();
-            style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             this.set_application (controller.app);
 
@@ -309,29 +313,15 @@ namespace Vocal {
             details.unplayed_count_changed.connect(podcast_view.update_count);
             details.new_cover_art_set.connect(podcast_view.update_cover_art);
 
-            // Set up the box that gets displayed when importing from .OPML or .XML files during the first launch
-            import_message_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 25);
-            var import_h1_label = new Gtk.Label(_("Good Stuff is On Its Way"));
-            var import_h3_label = new Gtk.Label(_("If you are importing several podcasts it can take a few minutes. Your library will be ready shortly."));
-            import_h1_label.get_style_context ().add_class("h1");
-            import_h3_label.get_style_context ().add_class("h3");
-            import_h1_label.margin_top = 200;
-            import_message_box.add(import_h1_label);
-            import_message_box.add(import_h3_label);
-            var spinner = new Gtk.Spinner();
-            spinner.active = true;
-            spinner.start();
-            import_message_box.add(spinner);
+            import_view = new ImportView(controller);
 
             // Add everything into the notebook (except for the iTunes store and search view)
             notebook.add_titled (welcome, "welcome", _("Welcome"));
-            notebook.add_titled (import_message_box, "import", _("Importing"));
+            notebook.add_titled (import_view, "import", _("Importing"));
             notebook.add_titled (podcast_view, "all", _("All Podcasts"));
             notebook.add_titled (details, "details", _("Details"));
             notebook.add_titled (new_episodes_view, "new_episodes", _("New Episodes"));
             notebook.add_titled (video_widget, "video_player", _("Video"));
-            
-            bool show_complete_button = controller.first_run || controller.library.empty ();
             
             info ("Creating directory view.");
             
@@ -385,16 +375,21 @@ namespace Vocal {
             toolbar.play_pause_selected.connect (controller.play_pause);
             toolbar.seek_forward_selected.connect (controller.seek_forward);
             toolbar.seek_backward_selected.connect (controller.seek_backward);
-            toolbar.playlist_button.clicked.connect(() => { queue_popover.show_all(); });
-
+            toolbar.playlist_button.clicked.connect(() => { 
+                queue_popover.show_all(); 
+            });
             toolbar.store_selected.connect (() => {
                 details.pane_should_hide ();
                 switch_visible_page (directory);
             });
 
             toolbar.export_selected.connect (export_podcasts);
-            toolbar.downloads_selected.connect (show_downloads_popover);
-            toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
+            toolbar.downloads_selected.connect (() => {
+                this.downloads.show_all();
+            });
+            toolbar.shownotes_button.clicked.connect(() => { 
+                shownotes.show_all(); 
+            });
             
             toolbar.volume_button.clicked.connect(() => {
                 var popover = new Gtk.Popover (toolbar.volume_button);
@@ -540,15 +535,9 @@ namespace Vocal {
 	                                        toolbar.playback_box.set_info_title(controller.current_episode.title.replace("%27", "'"), controller.current_episode.parent.name.replace("%27", "'"));
 	                                        controller.track_changed(controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
 
-	                                        try {
-
-	                                            controller.player.set_episode(controller.current_episode);
-                                                controller.player.set_position(controller.current_episode.last_played_position);
-	                                            shownotes.set_notes_text(episode.description);
-
-	                                        } catch(Error e) {
-	                                            warning(e.message);
-	                                        }
+                                            controller.player.set_episode(controller.current_episode);
+                                            controller.player.set_position(controller.current_episode.last_played_position);
+                                            shownotes.set_notes_text(episode.description);
 
 	                                        if(controller.current_episode.last_played_position != 0) {
 	                                            toolbar.show_playback_box();
@@ -815,7 +804,7 @@ namespace Vocal {
                 toolbar.hide_playlist_button();
 
                 if(current_widget == welcome) {
-                    switch_visible_page(import_message_box);
+                    switch_visible_page(import_view);
                 }
 
                 var loop = new MainLoop();
@@ -860,7 +849,7 @@ namespace Vocal {
                     toolbar.show_volume_button ();
                     toolbar.show_playlist_button();
 
-                    if(current_widget == import_message_box) {
+                    if(current_widget == import_view) {
                         switch_visible_page(podcast_view);
                     }
 
@@ -924,9 +913,9 @@ namespace Vocal {
                 notebook.set_visible_child(video_widget);
                 current_widget = video_widget;
             }
-            else if (widget == import_message_box) {
-                notebook.set_visible_child(import_message_box);
-                current_widget = import_message_box;
+            else if (widget == import_view) {
+                notebook.set_visible_child(import_view);
+                current_widget = import_view;
             }
             else if (widget == search_results_view) {
                 notebook.set_visible_child(search_results_view);
@@ -1347,9 +1336,6 @@ namespace Vocal {
           */
          private void on_search_popover_episode_selected(Podcast podcast, Episode episode) {
             if(podcast != null && episode != null) {
-                bool podcast_found = false;
-                int i = 0;
-
                 CoverArt coverart = podcast_view.get_art(podcast);
 
                 if(coverart != null) {

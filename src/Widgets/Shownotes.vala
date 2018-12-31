@@ -112,13 +112,13 @@ using Granite;
 			title_label.wrap_mode = Pango.WrapMode.WORD;
 			title_label.margin_top = 20;
 			title_label.margin_bottom = 6;
-			title_label.margin_left = 12;
+			title_label.margin_start = 12;
 			title_label.halign = Gtk.Align.START;
 			title_label.set_property("xalign", 0);
 
 			date_label = new Gtk.Label("");
 			date_label.margin_bottom = 12;
-			date_label.margin_left = 12;
+			date_label.margin_start = 12;
 			date_label.halign = Gtk.Align.START;
 			title_label.set_property("xalign", 0);
 
@@ -131,11 +131,11 @@ using Granite;
 			button_box.pack_start(play_button, false, false, 0);
 			button_box.pack_start(queue_button, false, false, 0);
 			button_box.margin_bottom = 20;
-			button_box.margin_left = 12;
+			button_box.margin_start = 12;
 
 			var summary_label = new Gtk.Label(_("<b>Summary</b>"));
 			summary_label.use_markup = true;
-			summary_label.margin_left = 12;
+			summary_label.margin_start = 12;
 			summary_label.margin_bottom = 6;
 			summary_label.halign = Gtk.Align.START;
 

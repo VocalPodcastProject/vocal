@@ -47,8 +47,8 @@ namespace Vocal {
          */
         private void setup() {
             var content_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-            content_box.margin_right = 12;
-            content_box.margin_left = 12;
+            content_box.margin_end = 12;
+            content_box.margin_start = 12;
             
             var add_label = new Gtk.Label(_("<b>Add a new podcast feed to the library</b>"));
             add_label.use_markup = true;
@@ -65,7 +65,7 @@ namespace Vocal {
       	        add_img = new Gtk.Image.from_icon_name ("list-add-symbolic", Gtk.IconSize.DIALOG);
       	    else
       		      add_img = new Gtk.Image.from_icon_name ("list-add", Gtk.IconSize.DIALOG);
-            add_img.margin_right = 12;
+            add_img.margin_end = 12;
             
             content_box.add(add_img);
             content_box.add(add_label);
@@ -78,14 +78,14 @@ namespace Vocal {
             
             // Set up the text entry activate signal to "click" the add button
             entry.activate.connect(() => {
-                if(add_feed_button.sensitive)
+                if(add_feed_button.sensitive) {
                     add_feed_button.clicked();
+                }
             });
             
             
             this.get_content_area().add(content_box);
             this.get_content_area().add(entry);
-
         }  
         
         /*

@@ -60,9 +60,6 @@ namespace Vocal {
          * Constructor for the full search results view. Shows all matches from the local library and across the iTunes ecosystem
          */
         public SearchResultsView(Library library) {
-
-            string query = "";
-
             container = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             this.itunes = new iTunesProvider();
             this.library = library;
@@ -86,10 +83,10 @@ namespace Vocal {
             var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));
             var cloud_results_label = new Gtk.Label(_("iTunes Podcast Results"));
             
-            local_episodes_label.margin_right = 12;
-            local_episodes_label.margin_left = 12;
-            local_podcasts_label.margin_right = 12;
-            local_podcasts_label.margin_left = 12;
+            local_episodes_label.margin_end = 12;
+            local_episodes_label.margin_start = 12;
+            local_podcasts_label.margin_end = 12;
+            local_podcasts_label.margin_start = 12;
 
             local_episodes_label.get_style_context().add_class("h3");
             local_episodes_label.set_property("xalign", 0);
@@ -163,29 +160,29 @@ namespace Vocal {
             cloud_results_revealer = new Gtk.Revealer();
             
             var local_podcasts_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
-            local_podcasts_container.margin_left = 12;
-            local_podcasts_container.margin_right = 12;
+            local_podcasts_container.margin_start = 12;
+            local_podcasts_container.margin_end = 12;
             local_podcasts_container.add(no_local_podcasts_label);
             local_podcasts_container.add(local_podcasts_listbox);
             local_podcasts_revealer.add(local_podcasts_container);
             
             var local_episodes_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
-            local_episodes_container.margin_left = 12;
-            local_episodes_container.margin_right = 12;
+            local_episodes_container.margin_start = 12;
+            local_episodes_container.margin_end = 12;
             local_episodes_container.add(no_local_episodes_label);
             local_episodes_container.add(local_episodes_listbox);
             local_episodes_revealer.add(local_episodes_container);
             
             var cloud_results_container = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
-            cloud_results_container.margin_left = 12;
-            cloud_results_container.margin_right = 12;
+            cloud_results_container.margin_start = 12;
+            cloud_results_container.margin_end = 12;
             cloud_results_container.add(iTunes_box);
             cloud_results_container.add(cloud_results_flowbox);
             cloud_results_revealer.add(cloud_results_container);
             
             var cloud_title_spinner_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-            cloud_title_spinner_box.margin_left = 12;
-            cloud_title_spinner_box.margin_right = 12;
+            cloud_title_spinner_box.margin_start = 12;
+            cloud_title_spinner_box.margin_end = 12;
             cloud_title_spinner_box.pack_start (cloud_results_label, false, false);
             cloud_title_spinner_box.pack_start (spinner, false, false);
             

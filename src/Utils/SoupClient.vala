@@ -7,13 +7,14 @@ public class SoupClient {
         soup_session.user_agent = Constants.USER_AGENT;
     }
 
-    public InputStream request (HttpMethod method, string url) throws PublishingError {
+    public InputStream request (HttpMethod method, string url) throws Error {
         if (!valid_http_uri(url)) {
             throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
         }
 
         var message = new Soup.Message (method.to_string (), url);
-        InputStream stream = soup_session.send (message);
+        InputStream stream;
+        stream = soup_session.send (message);
         check_response_headers(message);
 
         return stream;

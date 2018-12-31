@@ -40,7 +40,6 @@ namespace Vocal {
 		public DirectoryArt(string url, string title, string? artist, string? summary, string artworkUrl170, bool? in_library = false) {
 
 			this.set_orientation(Gtk.Orientation.VERTICAL);
-
 			this.width_request = 200;
 			this.margin = 10;
 
@@ -96,63 +95,71 @@ namespace Vocal {
 				details_popover.show_all();
 			});
 
-            var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-            subscribe_button.tooltip_text = _("Subscribe");
-            if (Utils.check_elementary ())
-                subscribe_button.relief = Gtk.ReliefStyle.NONE;
-            subscribe_button.clicked.connect(() => {
-                subscribe_button_clicked(url);
-            });
-		    subscribe_button.valign = Gtk.Align.START;
+      var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+      subscribe_button.tooltip_text = _("Subscribe");
+		  subscribe_button.valign = Gtk.Align.START;
 
-            button_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
-            button_box.add(details_button);
-            button_box.add(subscribe_button);
-            button_box.margin = 5;
-            button_box.margin_right = 0;
+      if (Utils.check_elementary ()) {
+          subscribe_button.relief = Gtk.ReliefStyle.NONE;
+      }
 
-            var hor_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-            hor_box.pack_start(label_box, true, true, 0);
-            hor_box.pack_start(button_box, false, false, 0);
+      subscribe_button.clicked.connect(() => {
+          subscribe_button_clicked(url);
+      });
 
-            hor_box.margin_left = 10;
-            hor_box.margin_right = 10;
 
-            
-            // By default we're only given the 170px version, but the 600px is available
-            var bigartwork = artworkUrl170.replace("170", "600");
+      button_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+      button_box.add(details_button);
+      button_box.add(subscribe_button);
+      button_box.margin = 5;
+      button_box.margin_end = 0;
 
-            // Load the album artwork
-            var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/missing.png", 200, 200, true);
-            
-            var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
-            image.margin = 0;
-            image.expand = false;
-            image.pixel_size = 200;
-            image.margin_top = 5;
-            image.margin_bottom = 5;
-            image.get_style_context().add_class("directory-art-image");
-            this.pack_start(image, false, false, 0);
+      var hor_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+      hor_box.pack_start(label_box, true, true, 0);
+      hor_box.pack_start(button_box, false, false, 0);
 
-            
-            ImageCache image_cache = new ImageCache();
-            image_cache.get_image.begin(bigartwork, (obj, res) => {
-                Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
-                if (pixbuf != null) {
-                    image.clear();
-                    image.gicon = pixbuf;
-                    image.pixel_size = 200;
-                }
-            });
-            
+      hor_box.margin_start = 10;
+      hor_box.margin_end = 10;
 
-            this.pack_start(hor_box, false, false, 0);
+      
+      // By default we're only given the 170px version, but the 600px is available
+      var bigartwork = artworkUrl170.replace("170", "600");
 
-            if (Utils.check_elementary()) {
-                this.get_style_context().add_class("card");
-            } else {
-                this.get_style_context().add_class("directory-art");
-            }
-        }
+      // Load the album artwork
+      Gtk.Image image = new Gtk.Image();
+      try {
+        var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale(Constants.VOCAL_MISSING_RESOURCE, 200, 200, true);  
+        image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+        image.margin = 0;
+        image.expand = false;
+        image.pixel_size = 200;
+        image.margin_top = 5;
+        image.margin_bottom = 5;
+        image.get_style_context().add_class("directory-art-image");
+        this.pack_start(image, false, false, 0);
+      } catch (Error e) {
+        warning("Failed to load resource %s. %s", Constants.VOCAL_MISSING_RESOURCE, e.message);
+      }
+
+      
+      ImageCache image_cache = new ImageCache();
+      image_cache.get_image.begin(bigartwork, (obj, res) => {
+          Gdk.Pixbuf pixbuf = image_cache.get_image.end(res);
+          if (pixbuf != null) {
+              image.clear();
+              image.gicon = pixbuf;
+              image.pixel_size = 200;
+          }
+      });
+      
+
+      this.pack_start(hor_box, false, false, 0);
+
+      if (Utils.check_elementary()) {
+          this.get_style_context().add_class("card");
+      } else {
+          this.get_style_context().add_class("directory-art");
+      }
+    }
 	}
 }

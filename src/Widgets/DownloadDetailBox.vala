@@ -69,8 +69,8 @@ namespace Vocal {
             this.orientation = Gtk.Orientation.VERTICAL;
 
             this.margin = 5;
-            this.margin_left = 12;
-            this.margin_right = 12;
+            this.margin_start = 12;
+            this.margin_end = 12;
             this.spacing = 5;
 
             // Set seconds elapsed to zero

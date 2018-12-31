@@ -2,9 +2,9 @@ namespace Vocal {
 
     public class WelcomeView : Gtk.Box {
 
-    	private static const int SHOW_STORE = 0;
-    	private static const int ADD_FEED = 1;
-    	private static const int IMPORT_OPML = 2;
+    	private const int SHOW_STORE = 0;
+    	private const int ADD_FEED = 1;
+    	private const int IMPORT_OPML = 2;
 
     	private Controller controller;
 
@@ -40,7 +40,7 @@ namespace Vocal {
 	            controller.window.import_podcasts();
 	            break;
 	        default:
-	        	error("Unexpected option \"%d\" in welcome view", index);
+	        	warning("Unexpected option \"%d\" in welcome view", index);
 	        	break;
 	        }
         }

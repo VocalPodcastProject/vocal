@@ -124,7 +124,6 @@ namespace Vocal {
             int ec = Sqlite.Database.open (db_location, out db);
 	        if (ec != Sqlite.OK) {
 		        error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
-		        return;
 	        }
 	        
 	        // Temporarily add a dummy podcast
@@ -218,7 +217,7 @@ namespace Vocal {
         /*
          * Adds a new podcast to the library
          */
-        public bool add_podcast(Podcast podcast) throws VocalLibraryError {
+        public bool add_podcast(Podcast podcast) {
             info("Podcast %s being added to library.", podcast.name);
 
             // Set all but the most recent episode as played on initial add to library
@@ -251,7 +250,7 @@ namespace Vocal {
                     }
                 }
             } catch(Error e) {
-                error("Unable to save a local copy of the album art. %s", e.message);
+                warning("Unable to save a local copy of the album art. %s", e.message);
             }
 
             // Add the podcast
@@ -338,23 +337,17 @@ namespace Vocal {
             SourceFunc callback = async_add_podcast_from_file.callback;
 
             ThreadFunc<void*> run = () => {
-            
                 info("Adding podcast from file: %s", path);
                 podcasts_being_added.append (path);
 
                 FeedParser parser = new FeedParser();
-                try {
-                    Podcast new_podcast = parser.get_podcast_from_file(path);
-                    if(new_podcast == null) {
-                        info("New podcast found to be null. %s", path);
-                        successful = false;
-                    } else {
-                        info("Async Adding %s", new_podcast.name);
-                        add_podcast(new_podcast);
-                    }
-                } catch (Error e) {
-                    error("Failed to add podcast: %s", e.message);
+                Podcast new_podcast = parser.get_podcast_from_file(path);
+                if(new_podcast == null) {
+                    info("New podcast found to be null. %s", path);
                     successful = false;
+                } else {
+                    info("Async Adding %s", new_podcast.name);
+                    add_podcast(new_podcast);
                 }
                 
                 podcasts_being_added.remove (path);
@@ -464,13 +457,11 @@ namespace Vocal {
          * Deletes the local media file for an episode
          */
         public void delete_local_episode(Episode e) {
-
-            // First check that the file exists
             GLib.File local = GLib.File.new_for_path(e.local_uri);
-            if(local.query_exists()) {
-
-                // Delete the file
+            try {
                 local.delete();
+            } catch (Error e) {
+                warning("Failed to delete file %s. %s", local.get_path(), e.message);
             }
 
             // Clear the fields in the episode
@@ -511,39 +502,33 @@ namespace Vocal {
             DownloadDetailBox detail_box = null;
 
             // Set the path of the new file and create another object for the local file
-            try {
-                string path = library_location + "/%s/%s".printf(episode.parent.name.replace("%27", "'").replace("%", "_"), remote_file.get_basename());
-                GLib.File local_file = GLib.File.new_for_path(path);
+            string path = library_location + "/%s/%s".printf(episode.parent.name.replace("%27", "'").replace("%", "_"), remote_file.get_basename());
+            GLib.File local_file = GLib.File.new_for_path(path);
 
-                detail_box = new DownloadDetailBox(episode);
-                detail_box.download_has_completed_successfully.connect(on_successful_download);
-                FileProgressCallback callback = detail_box.download_delegate;
-                GLib.Cancellable cancellable = new GLib.Cancellable();
+            detail_box = new DownloadDetailBox(episode);
+            detail_box.download_has_completed_successfully.connect(on_successful_download);
+            FileProgressCallback callback = detail_box.download_delegate;
+            GLib.Cancellable cancellable = new GLib.Cancellable();
 
-                detail_box.cancel_requested.connect( () => {
+            detail_box.cancel_requested.connect( () => {
 
-                    cancellable.cancel();
-                    bool exists = local_file.query_exists();
-                    if(exists) {
-                        try {
-                            local_file.delete();
-                        } catch(Error e) {
-                            stderr.puts("Unable to delete file.\n");
-                        }
+                cancellable.cancel();
+                bool exists = local_file.query_exists();
+                if(exists) {
+                    try {
+                        local_file.delete();
+                    } catch(Error e) {
+                        warning("Unable to delete file.\n");
                     }
+                }
 
-                });
+            });
 
-                remote_file.copy_async(local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, cancellable, callback);
+            remote_file.copy_async(local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, cancellable, callback);
 
-
-                // Set the episode's local uri to the new path
-                episode.local_uri = path;
-                mark_episode_as_downloaded(episode);
-
-
-            } catch (Error e) {
-            }
+            // Set the episode's local uri to the new path
+            episode.local_uri = path;
+            mark_episode_as_downloaded(episode);
 
             if(batch_download_count > 0) {
                 batch_notification_needed = true;
@@ -721,9 +706,10 @@ namespace Vocal {
          * Marks an episode as played in the database
          */
         public void mark_episode_as_played(Episode episode) {
-
-            if(episode == null)
-                error("Episode null!");
+            if(episode == null) {
+                warning("Episode null!");
+                return;
+            }
 
             episode.status = EpisodeStatus.PLAYED;
             write_episode_to_database (episode);
@@ -733,6 +719,10 @@ namespace Vocal {
          * Marks an episode as unplayed in the database
          */
         public void mark_episode_as_unplayed(Episode episode) {
+            if(episode == null) {
+                warning("Episode null!");
+                return;
+            }
 
             episode.status = EpisodeStatus.UNPLAYED;
             write_episode_to_database (episode);
@@ -754,14 +744,24 @@ namespace Vocal {
             if(!batch_notification_needed) {
                 string message = _("'%s' from '%s' has finished downloading.").printf(episode_title.replace("%27", "'"), parent_podcast_name.replace("%27","'"));
                 var notification = new Notify.Notification(_("Episode Download Complete"), message, null);
-                if(!controller.window.focus_visible)
-                    notification.show();
+                if(!controller.window.focus_visible) {
+                    try {
+                        notification.show();
+                    } catch(Error e) {
+                        warning("Unable to show notification. %s", e.message);
+                    }
+                }
             } else {
                 if(batch_download_count == 0) {
                     var notification = new Notify.Notification(_("Downloads Complete"), _("New episodes have been downloaded."), "vocal");
                     batch_notification_needed = false;
-                    if(!controller.window.focus_visible)
-                        notification.show();
+                    if(!controller.window.focus_visible) {
+                        try {
+                            notification.show();
+                        } catch(Error e) {
+                            warning("Unable to show notification. %s", e.message);
+                        }
+                    }
                 }
             }
 
@@ -790,13 +790,9 @@ namespace Vocal {
                     downloaded_episode.current_download_status = DownloadStatus.DOWNLOADED;
                     mark_episode_as_downloaded(downloaded_episode);
                 }
-
-            } catch(Error e) {
-                error("%s", e.message);
             } finally {
                 download_finished(downloaded_episode);
             }
-
         }
 
         /*
@@ -894,15 +890,12 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Podcast WHERE name LIKE ? ORDER BY name";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text(1, term, -1, null);
+            ec = stmt.bind_text(1, term, -1);
             if (ec != Sqlite.OK) {
                 warning("%d: %s\n", db.errcode (), db.errmsg ());
                 return matches;
             }
 
-            // Use the prepared statement:
-
-            int cols = stmt.column_count ();
             while (stmt.step () == Sqlite.ROW) {
                 Podcast current = podcast_from_row(stmt);
 
@@ -923,15 +916,12 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Episode WHERE title LIKE ? ORDER BY title";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text(1, "%" + term + "%", -1, null);
+            ec = stmt.bind_text(1, "%" + term + "%", -1);
             if (ec != Sqlite.OK) {
                 warning("%d: %s\n".printf(db.errcode (), db.errmsg ()));
                 return matches;
             }
 
-            // Use the prepared statement:
-
-            int cols = stmt.column_count ();
             while (stmt.step () == Sqlite.ROW) {
 
                 Episode current_ep = episode_from_row(stmt);
@@ -1148,7 +1138,6 @@ namespace Vocal {
             // Copy the file
             GLib.File current_file = GLib.File.new_for_path(path_to_local_file);
 
-            InputStream input_stream = current_file.read();
             string path = settings.library_location + "/%s/cover.jpg".printf(p.name.replace("%27", "'").replace("%", "_"));
             GLib.File local_file = GLib.File.new_for_path(path);
 

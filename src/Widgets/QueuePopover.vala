@@ -98,8 +98,6 @@ namespace Vocal {
 		 * Called whenever the row is activated (when the user clicks it)
 		 */
 		public void on_row_activated(Gtk.ListBoxRow row) {
-			print("\n\nrow activated\n\n");
-			int index = row.get_index();
 			QueueListRow q = (QueueListRow) row;
 
 			play_episode_from_queue_immediately(q.episode);
@@ -121,7 +119,7 @@ namespace Vocal {
 			rows = new Gee.ArrayList<QueueListRow>();
 
 			Gtk.drag_dest_set(this, Gtk.DestDefaults.ALL, targetEntries, Gdk.DragAction.MOVE);
-      drag_data_received.connect(on_drag_data_received);
+      		drag_data_received.connect(on_drag_data_received);
 
 			foreach(Episode e in queue) {
 				QueueListRow listRow = new QueueListRow(e);

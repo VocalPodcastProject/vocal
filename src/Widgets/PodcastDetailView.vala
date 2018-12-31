@@ -26,14 +26,14 @@ namespace Vocal {
 
         /* Signals */
 
-    	public signal void play_episode_requested(Episode e);
+        public signal void play_episode_requested(Episode? e);
         public signal void enqueue_episode(Episode episode);
-    	public signal void download_episode_requested(Episode episode);
+        public signal void download_episode_requested(Episode episode);
         public signal void delete_local_episode_requested(Episode episode);
         public signal void mark_all_episodes_as_played_requested();
         public signal void mark_episode_as_played_requested(Episode episode);
         public signal void mark_episode_as_unplayed_requested(Episode episode);
-    	public signal void pane_should_hide();
+        public signal void pane_should_hide();
         public signal void download_all_requested();
         public signal void delete_podcast_requested();
         public signal void unplayed_count_changed(Podcast podcast, int n);
@@ -57,36 +57,34 @@ namespace Vocal {
 
         private Gtk.Menu right_click_menu;
 
-		public  Gee.ArrayList<EpisodeDetailBox> boxes;
-		private EpisodeDetailBox previously_selected_box;
-        private EpisodeDetailBox previously_activated_box;
-		private Gtk.ScrolledWindow scrolled;
-		private int largest_box_size;
-		public  int unplayed_count;
+        public  Gee.ArrayList<EpisodeDetailBox> boxes;
+        private Gtk.ScrolledWindow scrolled;
+        private int largest_box_size;
+        public  int unplayed_count;
 
-		private Gtk.Box image_box;
-		private Gtk.Box details_box;
-		private Gtk.Box actions_box;
-		private Gtk.Box label_box;
+        private Gtk.Box image_box;
+        private Gtk.Box details_box;
+        private Gtk.Box actions_box;
+        private Gtk.Box label_box;
 
-		private Gtk.Image image = null;
+        private Gtk.Image image = null;
         public Shownotes shownotes;
         
         private Gtk.Box show_more_episodes_box;
         private Gtk.Image cc_image;
 
-		/*
-		 * Constructor for a Sidepane given a parent window and podcast
-		 */
+        /*
+         * Constructor for a Sidepane given a parent window and podcast
+         */
         public PodcastDetailView (Controller controller) {
             this.controller = controller;
 
             largest_box_size = 500;
 
-			this.orientation = Gtk.Orientation.VERTICAL;
+            this.orientation = Gtk.Orientation.VERTICAL;
             var horizontal_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 
-			count_string = null;
+            count_string = null;
 
             var toolbar = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             toolbar.get_style_context().add_class("toolbar");
@@ -185,11 +183,11 @@ namespace Vocal {
             actions_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 2);
             label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-			name_label = new Gtk.Label("Name");
-			count_label = new Gtk.Label(count_string);
-			name_label.max_width_chars = 15;
-			name_label.wrap = true;
-			name_label.justify = Gtk.Justification.CENTER;
+            name_label = new Gtk.Label("Name");
+            count_label = new Gtk.Label(count_string);
+            name_label.max_width_chars = 15;
+            name_label.wrap = true;
+            name_label.justify = Gtk.Justification.CENTER;
             name_label.margin_bottom = 15;
 
             description_label = new Gtk.Label("Description");
@@ -205,15 +203,15 @@ namespace Vocal {
             description_window.height_request = 130;
             description_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
 
-			name_label.get_style_context().add_class("h2");
+            name_label.get_style_context().add_class("h2");
             count_label.get_style_context().add_class("h4");
 
-			label_box.pack_start(name_label, false, false, 5);
+            label_box.pack_start(name_label, false, false, 5);
             label_box.pack_start(description_window, true, true, 0);
 
-			label_box.pack_start(count_label, false, false, 0);
-			
-			            
+            label_box.pack_start(count_label, false, false, 0);
+            
+                        
             // Creative commons
             // Load the album artwork
             var ccicon_name = "";
@@ -222,41 +220,46 @@ namespace Vocal {
             } else {
                 ccicon_name = "/com/github/needle-and-thread/vocal/creativecommons-dark.png";
             }
-            var cc_pb = new Gdk.Pixbuf.from_resource_at_scale(ccicon_name, 151, 36, true);
-            cc_image = new Gtk.Image.from_pixbuf (cc_pb);
+            try {
+                var cc_pb = new Gdk.Pixbuf.from_resource_at_scale(ccicon_name, 151, 36, true);
+                cc_image = new Gtk.Image.from_pixbuf (cc_pb);
+            } catch (Error e) {
+                warning("Failed to load image from resource %s. %s", ccicon_name, e.message);
+            }
+            
             cc_image.margin = 12;
             cc_image.expand = false;
             cc_image.pixel_size = 32;
             
             label_box.pack_start (cc_image, false, false, 0);
 
-			actions_box.pack_start(download_all, true, true, 0);
+            actions_box.pack_start(download_all, true, true, 0);
             actions_box.pack_start(edit, true, true, 0);
-			actions_box.pack_start(remove, true, true, 0);
+            actions_box.pack_start(remove, true, true, 0);
 
-			var vertical_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
-			vertical_box.pack_start(label_box, true, true, 0);
-			vertical_box.pack_start(actions_box, false, false, 0);
+            var vertical_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+            vertical_box.pack_start(label_box, true, true, 0);
+            vertical_box.pack_start(actions_box, false, false, 0);
             vertical_box.margin = 12;
             vertical_box.margin_bottom = 0;
 
             details_box.pack_start(vertical_box, true, true, 12);
-			details_box.pack_start(image_box, false, false, 0);
+            details_box.pack_start(image_box, false, false, 0);
             details_box.valign = Gtk.Align.FILL;
             details_box.hexpand = false;
             details_box.margin = 0;
 
-			horizontal_box.pack_start(details_box, false, true, 0);
+            horizontal_box.pack_start(details_box, false, true, 0);
 
-			var separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
-			separator.margin = 0;
-			horizontal_box.pack_start(separator, false, false, 0);
+            var separator = new Gtk.Separator (Gtk.Orientation.VERTICAL);
+            separator.margin = 0;
+            horizontal_box.pack_start(separator, false, false, 0);
 
-			paned = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
-			paned.expand = true;
-			horizontal_box.pack_start(paned, true, true, 0);
+            paned = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
+            paned.expand = true;
+            horizontal_box.pack_start(paned, true, true, 0);
 
-			shownotes = new Shownotes();
+            shownotes = new Shownotes();
             shownotes.play_button.clicked.connect(() => { play_episode_requested(null); });
             shownotes.queue_button.clicked.connect(() => { enqueue_episode_internal(); });
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
@@ -359,9 +362,9 @@ namespace Vocal {
             }
         }
 
-		/*
-		 * Handler for when a box has a button press event
-		 */
+        /*
+         * Handler for when a box has a button press event
+         */
         private bool on_button_press_event(Gdk.EventButton e) {
             if(e.button == 3 && podcast.episodes.size > 0) {
 
@@ -523,29 +526,25 @@ namespace Vocal {
 
             this.podcast = podcast;
 
-        	if(image != null) {
-        		image_box.remove(image);
-        		image = null;
-        	}
-
-        	try {
-			    var cover = GLib.File.new_for_uri(podcast.coverart_uri);
-                var icon = new GLib.FileIcon(cover);
-				image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
-                image.pixel_size = 250;
-                image.margin = 0;
-                if(controller.on_elementary) {
-                    image.get_style_context ().add_class ("card");
-                } else {
-                    image.get_style_context().add_class("podcast-view-coverart");
-                }
-
-            	image_box.pack_start(image, true, true, 0);
-            } catch (Error e) {
-                error(e.message);
+            if(image != null) {
+                image_box.remove(image);
+                image = null;
             }
 
-			name_label.set_text(podcast.name.replace("%27", "'"));
+            var cover = GLib.File.new_for_uri(podcast.coverart_uri);
+            var icon = new GLib.FileIcon(cover);
+            image = new Gtk.Image.from_gicon(icon, Gtk.IconSize.DIALOG);
+            image.pixel_size = 250;
+            image.margin = 0;
+            if(controller.on_elementary) {
+                image.get_style_context ().add_class ("card");
+            } else {
+                image.get_style_context().add_class("podcast-view-coverart");
+            }
+
+            image_box.pack_start(image, true, true, 0);
+
+            name_label.set_text(podcast.name.replace("%27", "'"));
             description_label.set_text(podcast.description.replace("""\n""",""));
 
             reset_episode_list();
@@ -753,16 +752,16 @@ namespace Vocal {
             if (decision == Gtk.ResponseType.ACCEPT) {
                 GLib.File cover = GLib.File.new_for_path(file_name);
                 var icon = new GLib.FileIcon(cover);
-				image.gicon = icon;
-				image.pixel_size = 250;
+                image.gicon = icon;
+                image.pixel_size = 250;
                 
                 new_cover_art_set(this.podcast, file_name);
             }
         }
 
-		/*
- 		 * Sets the unplayed text (assumes the unplayed count has already been set)
- 		 */
+        /*
+         * Sets the unplayed text (assumes the unplayed count has already been set)
+         */
         public void set_unplayed_text() {
             string count_string = null;
             if(unplayed_count > 0) {
@@ -798,7 +797,11 @@ namespace Vocal {
             string uri = Utils.get_shareable_link_for_episode(current_episode);
             string message_text = GLib.Uri.escape_string(_("I'm listening to %s from %s").printf(current_episode.title,current_episode.parent.name));
             string new_tweet_uri = "https://twitter.com/intent/tweet?text=%s&url=%s".printf(message_text, GLib.Uri.escape_string(uri));
-            Gtk.show_uri (null, new_tweet_uri, 0);
+            try {
+                Gtk.show_uri (null, new_tweet_uri, 0);
+            } catch (Error e) {
+                warning("Unable to show URI %s", e.message);
+            }
         }
 
         private void on_copy_shareable_link() {

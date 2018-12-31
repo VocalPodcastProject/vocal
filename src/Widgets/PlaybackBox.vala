@@ -62,7 +62,7 @@ namespace Vocal {
                   
             scale_grid = new Gtk.Grid ();
             
-            left_time.margin_right = right_time.margin_left = 3;
+            left_time.margin_end = right_time.margin_start = 3;
 
             scale_grid.attach (left_time, 0, 0, 1, 1);
             scale_grid.attach (scale, 1, 0, 1, 1);

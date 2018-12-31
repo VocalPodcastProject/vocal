@@ -108,8 +108,8 @@ namespace Vocal {
             headerbar_box.add(playback_box);
             headerbar_box.add(playlist_button);
             headerbar_box.halign = Gtk.Align.CENTER;
-            headerbar_box.margin_left = 50;
-            headerbar_box.margin_right = 50;
+            headerbar_box.margin_start = 50;
+            headerbar_box.margin_end = 50;
 
 
             // Create the menus and menuitems

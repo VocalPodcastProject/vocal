@@ -17,11 +17,6 @@
   END LICENSE
 ***/
 
-using Clutter;
-using GLib;
-using Gst;
-using Gst.PbUtils;
-
 namespace Vocal {
     public class Player : ClutterGst.Playback {
 
@@ -37,7 +32,6 @@ namespace Vocal {
         public signal void additional_plugins_required(Gst.Message message);
 
         public signal void new_position_available();
-        private string tag_string;
 
         public Episode current_episode;
 

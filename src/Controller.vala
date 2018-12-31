@@ -69,9 +69,6 @@ namespace Vocal {
 
         public int minutes_elapsed_in_period;
         
-        
-        
-        
         public Controller (VocalApp app) {
         
             info ("Initializing the controller.");
@@ -538,8 +535,7 @@ namespace Vocal {
                 }
 
                 var add_feed = new AddFeedDialog(window, on_elementary); 
-                var add_err_dialog = new Gtk.MessageDialog(
-                    add_feed, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "");
+                var add_err_dialog = new Gtk.MessageDialog(add_feed, Gtk.DialogFlags.MODAL, Gtk.MessageType.ERROR, Gtk.ButtonsType.OK, "");
                 add_err_dialog.response.connect((response_id) => {
                     add_err_dialog.destroy();
                 });
@@ -581,11 +577,7 @@ namespace Vocal {
 
                 var loop = new MainLoop();
                 library.check_for_updates.begin((obj, res) => {
-                    try {
-                        new_episodes = library.check_for_updates.end(res);
-                    } catch (Error e) {
-                        warning(e.message);
-                    }
+                    new_episodes = library.check_for_updates.end(res);
                     loop.quit();
                 });
                 loop.run();

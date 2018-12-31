@@ -138,8 +138,12 @@ namespace Vocal {
                 if(coverart.podcast == podcast) {
                     // TODO: This doesn't work. We update the CoverArt in all_art, but we don't update the widget in the flowbox. 
                     // So this change isn't seen until vocal is restarted.
-                    InputStream input_stream = GLib.File.new_for_path(path).read();
-                    coverart.image.pixbuf = coverart.create_cover_image(input_stream);
+                    try {
+                        InputStream input_stream = GLib.File.new_for_path(path).read();
+                        coverart.image.pixbuf = coverart.create_cover_image(input_stream);
+                    } catch(Error e) {
+                        error("Failed to load image from path %s. %s", path, e.message);
+                    }
 
                     // Now copy the image to controller.library cache and set it in the db
                     controller.library.set_new_local_album_art(path, podcast);

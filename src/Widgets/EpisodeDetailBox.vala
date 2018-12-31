@@ -121,10 +121,11 @@ namespace Vocal {
             streaming_button.expand = false;
             streaming_button.relief = Gtk.ReliefStyle.NONE;
             streaming_button.has_tooltip = true;
-            if(episode.current_download_status == DownloadStatus.DOWNLOADED)
+            if(episode.current_download_status == DownloadStatus.DOWNLOADED) {
                 streaming_button.tooltip_text = _("Play");
-            else
+            } else {
                 streaming_button.tooltip_text = _("Stream Episode");
+            }
 
             // Set up to fire a signal when clicked
             streaming_button.clicked.connect ( () => {
@@ -142,6 +143,10 @@ namespace Vocal {
                 download_button.has_tooltip = true;
                 download_button.tooltip_text = _("Download Episode");
                 download_box.pack_start(download_button, false, false, 0);
+
+                if(episode.current_download_status == DownloadStatus.DOWNLOADED) {
+                    hide_download_button();
+                }
             }
             
             top_box.pack_start(unplayed_box, false, false, 0);
@@ -177,16 +182,17 @@ namespace Vocal {
             label_box.pack_start(release_label, true, true, 0);
             top_box.pack_start(label_box, true, true, 0);
 
-            if(episode.current_download_status == DownloadStatus.DOWNLOADED)
-                hide_download_button();
-
             top_box_width = top_box.width_request;
 
             string text = Utils.html_to_markup(episode.description);
 
             // Remove repeated whitespace from description before adding to label.
-            Regex condense_spaces = new Regex("\\s{2,}");
-            text = condense_spaces.replace(text, -1, 0, " ").strip();
+            try {
+                Regex condense_spaces = new Regex("\\s{2,}");
+                text = condense_spaces.replace(text, -1, 0, " ").strip();
+            } catch (GLib.RegexError e) {
+                warning("RegexError %s", e.message);
+            }
 
             description_label = new Gtk.Label(text != "(null)" ? text : _("No description available."));
             description_label.justify = Gtk.Justification.LEFT;
@@ -198,7 +204,7 @@ namespace Vocal {
 
             description_label.margin = 12;
             if (new_episodes_view == false) {
-                description_label.margin_left = 25;
+                description_label.margin_start = 25;
             }
 
             description_label.set("xalign", 0);

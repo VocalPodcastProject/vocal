@@ -85,8 +85,20 @@ namespace Vocal {
 			    player = new MprisPlayer(connection);
 
 			    // Set up all the signals
-			    controller.track_changed.connect(player.set_media_metadata);
-			    controller.playback_status_changed.connect(player.set_playback_status);
+			    controller.track_changed.connect((episode_title, podcast_name, artwork_uri, duration) => {
+			    	try {
+			    		player.set_media_metadata(episode_title, podcast_name, artwork_uri, duration);
+			    	} catch (Error e) {
+			    		warning("Failed to set_media_metadata. %s", e.message);
+			    	}
+			    });
+			    controller.playback_status_changed.connect((status) => {
+			    	try {
+			    		player.set_playback_status(status);
+			    	} catch (Error e) {
+			    		warning("Failed to set playback_status. %s", e.message);
+			    	}
+			    });
 
 			    player.play.connect(() => {
 			    	controller.play();
@@ -152,7 +164,11 @@ namespace Vocal {
 		    this.conn = conn;
 
 		    // Set the metadata on initialization
-		    this.set_media_metadata(" ", " ", """file:///usr/share/vocal/vocal-missing.png""", 60);
+		    try {
+		    	this.set_media_metadata(" ", " ", "file:///usr/share/vocal/vocal-missing.png", 60);
+			} catch (Error e) {
+				warning("Failed to set media_metadata. %s", e.message);
+			}
 	    }
 
 	    // MPRIS requires a mpris:trackid metadata item.
@@ -176,7 +192,7 @@ namespace Vocal {
 	        });
 	    }
 
-	    public void set_media_metadata (string episode_title, string podcast, string art_uri, uint64 duration) {
+	    public void set_media_metadata (string episode_title, string podcast, string art_uri, uint64 duration) throws Error {
 	    	string[] artists = {podcast};
 	        _metadata = new HashTable<string, Variant> (null, null);
 
@@ -239,8 +255,7 @@ namespace Vocal {
 	        }
 	    }
 
-	    public void set_playback_status(string status)
-	    {
+	    public void set_playback_status(string status) throws Error {
 	    	this.playback_status = status;
 
 	    	trigger_metadata_update();
@@ -312,39 +327,39 @@ namespace Vocal {
 
 	    public signal void Seeked(int64 Position);
 
-	    public void Next() {
+	    public void Next() throws Error {
             next();
 	    }
 
-	    public void Previous() {
+	    public void Previous() throws Error {
             previous();
 	    }
 
-	    public void Pause() {
+	    public void Pause() throws Error {
             pause();
 	    }
 
-	    public void PlayPause() {
+	    public void PlayPause() throws Error {
             play_pause();
 	    }
 
-	    public void Stop() {
+	    public void Stop() throws Error {
             pause();
 	    }
 
-	    public void Play() {
+	    public void Play() throws Error {
             play();
 	    }
 
-	    public void Seek(int64 Offset) {
+	    public void Seek(int64 Offset) throws Error {
 	        
         }
     
-	    public void SetPosition(string dobj, int64 Position) {
+	    public void SetPosition(string dobj, int64 Position) throws Error {
 	        Seeked(Position);
 	    }
 	    
-	    public void OpenUri(string Uri) {
+	    public void OpenUri(string Uri) throws Error {
 	        
 	    }
 
@@ -467,11 +482,11 @@ namespace Vocal {
 	        }
 	    }
 
-	    public void Quit () {
+	    public void Quit () throws Error {
 	        quit_requested();
 	    }
 	    
-	    public void Raise () {
+	    public void Raise () throws Error {
 	        raise_requiested();
 	    }
 	}

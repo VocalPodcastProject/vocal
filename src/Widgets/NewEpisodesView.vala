@@ -52,8 +52,8 @@ namespace Vocal {
             this.pack_start(new_episodes_label, false, true, 0);
             
             var new_episodes_scrolled = new Gtk.ScrolledWindow (null, null);
-            new_episodes_scrolled.margin_left = 50;
-            new_episodes_scrolled.margin_right = 50;
+            new_episodes_scrolled.margin_start = 50;
+            new_episodes_scrolled.margin_end = 50;
             new_episodes_listbox = new Gtk.ListBox ();
             var add_all_to_queue_button = new Gtk.Button.with_label (_("Add all new episodes to the queue"));
             add_all_to_queue_button.halign = Gtk.Align.CENTER;

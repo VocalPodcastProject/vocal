@@ -19,8 +19,8 @@
 
 [DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
 public interface GnomeMediaKeys : GLib.Object {
-    public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws GLib.IOError;
-    public abstract void ReleaseMediaPlayerKeys (string application) throws GLib.IOError;
+    public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws Error;
+    public abstract void ReleaseMediaPlayerKeys (string application) throws Error;
     public signal void MediaPlayerKeyPressed (string application, string key);
 }
 
@@ -47,7 +47,11 @@ public class Utils
     {
 #if HAVE_LIBNOTIFY
         var notification = new Notify.Notification(title, message, "vocal");
-        notification.show();
+        try {
+            notification.show();
+        } catch(Error e) {
+            warning("Unable to display notification %s", e.message);
+        }
 #endif
     }
     
@@ -97,56 +101,61 @@ public class Utils
             markup = original;
         }
 
-        markup = markup.replace("&", "&amp;");
+        try {
+            markup = markup.replace("&", "&amp;");
 
-        // Simplify (keep only href attribute) & preserve anchor tags.
-        Regex simpleLinks = new Regex("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
-                                      RegexCompileFlags.CASELESS | RegexCompileFlags.DOTALL);
-        markup = simpleLinks.replace(markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
+            // Simplify (keep only href attribute) & preserve anchor tags.
+            Regex simpleLinks = new Regex("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
+                                          RegexCompileFlags.CASELESS | RegexCompileFlags.DOTALL);
+            markup = simpleLinks.replace(markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
 
-        // Replace <br> tags with line breaks.
-        Regex lineBreaks = new Regex("<br[\\s\\/]*?>", RegexCompileFlags.CASELESS);
-        markup = lineBreaks.replace(markup, -1, 0, "\n");
+            // Replace <br> tags with line breaks.
+            Regex lineBreaks = new Regex("<br[\\s\\/]*?>", RegexCompileFlags.CASELESS);
+            markup = lineBreaks.replace(markup, -1, 0, "\n");
 
-        markup = markup.replace("<a", "?a?");
-        markup = markup.replace("</a>", "?/a?");
+            markup = markup.replace("<a", "?a?");
+            markup = markup.replace("</a>", "?/a?");
 
-        // Preserve bold tags
-        markup = markup.replace("<b>", "?b?");
-        markup = markup.replace("</b>", "?/b?");
+            // Preserve bold tags
+            markup = markup.replace("<b>", "?b?");
+            markup = markup.replace("</b>", "?/b?");
 
-        int nextOpenBracketIndex = 0;
-        int nextCloseBracketIndex = 0;
-        while (nextOpenBracketIndex >= 0) {
-            nextOpenBracketIndex = markup.index_of("<", 0);
-            nextCloseBracketIndex = markup.index_of(">", nextOpenBracketIndex) + 1;
-            if (nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
-                    && nextCloseBracketIndex >= 0 && nextOpenBracketIndex <= markup.length && nextCloseBracketIndex <= markup.length) {
-                markup = markup.splice(nextOpenBracketIndex, nextCloseBracketIndex);
-                nextOpenBracketIndex = 0;
-                nextCloseBracketIndex = 0;
-            } else {
-                nextOpenBracketIndex = -1;
+            int nextOpenBracketIndex = 0;
+            int nextCloseBracketIndex = 0;
+            while (nextOpenBracketIndex >= 0) {
+                nextOpenBracketIndex = markup.index_of("<", 0);
+                nextCloseBracketIndex = markup.index_of(">", nextOpenBracketIndex) + 1;
+                if (nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
+                        && nextCloseBracketIndex >= 0 && nextOpenBracketIndex <= markup.length && nextCloseBracketIndex <= markup.length) {
+                    markup = markup.splice(nextOpenBracketIndex, nextCloseBracketIndex);
+                    nextOpenBracketIndex = 0;
+                    nextCloseBracketIndex = 0;
+                } else {
+                    nextOpenBracketIndex = -1;
+                }
             }
+
+            // remaining < & > tags are translated
+            markup = markup.replace("<", "&lt;");
+            markup = markup.replace(">", "&gt;");
+
+            // Preserve hyperlinks
+            markup = markup.replace("?a?", "<a");
+            markup = markup.replace("?a-end?", ">");
+            markup = markup.replace("?/a?", "</a>");
+
+            // Preserve bold tags
+            markup = markup.replace("?b?", "<b>");
+            markup = markup.replace("?/b?", "</b>");
+        } catch (GLib.RegexError e) {
+            warning("RegexError %s", e.message);
         }
 
-        // remaining < & > tags are translated
-        markup = markup.replace("<", "&lt;");
-        markup = markup.replace(">", "&gt;");
-
-        // Preserve hyperlinks
-        markup = markup.replace("?a?", "<a");
-        markup = markup.replace("?a-end?", ">");
-        markup = markup.replace("?/a?", "</a>");
-
-        // Preserve bold tags
-        markup = markup.replace("?b?", "<b>");
-        markup = markup.replace("?/b?", "</b>");
-
-        if (markup != null && markup.length > 0)
+        if (markup != null && markup.length > 0) {
             return markup;
-        else
+        } else {
             return markup;
+        }
 
     }
 

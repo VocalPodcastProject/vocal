@@ -134,7 +134,6 @@ namespace Vocal {
                     // Create a new episode
                     Episode episode = new Episode();
                     string next_item_in_queue = null;
-                    bool found_summary = false;
                     
                     while (next_item_in_queue != "item" && i < queue.size - 1) {
                         i++;
@@ -222,7 +221,7 @@ namespace Vocal {
         /*
          * Finds only the podcast description and returns it as a string
          */
-        public string? find_description_from_file(string path) throws GLib.Error{
+        public string? find_description_from_file(string path) {
 
             string description = "";
             
@@ -278,7 +277,7 @@ namespace Vocal {
         /*
          * Parses a given XML file and returns a new podcast object if able to parse it properly
          */
-        public Podcast? get_podcast_from_file(string path) throws GLib.Error {
+        public Podcast? get_podcast_from_file(string path) {
             /*
                 For reference: podcast rss feeds typically have the structure:
                 0. Rss
@@ -498,8 +497,6 @@ namespace Vocal {
                     // Create a new episode
                     Episode episode = new Episode();
                     string next_item_in_queue = null;
-                    bool found_summary = false;
-
                                         
                     while (next_item_in_queue != "item" && i < queue.size - 1) {
                         i++;

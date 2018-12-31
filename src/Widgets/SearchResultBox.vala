@@ -62,12 +62,17 @@ namespace Vocal {
 
             // Do we only have a podcast?
             if(episode == null) {
-                var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale("/com/github/needle-and-thread/vocal/missing.png", 32, 32, true);
-                var image = new Gtk.Image.from_pixbuf(missing_pixbuf);
-                image.margin = 0;
-                image.expand = false;
-                image.get_style_context().add_class("album-artwork");
-                content_box.pack_start(image, false, false, 5);
+                Gtk.Image image = new Gtk.Image();
+                try {
+                    var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale(Constants.VOCAL_MISSING_RESOURCE, 32, 32, true);
+                    image = new Gtk.Image.from_pixbuf(missing_pixbuf);
+                    image.margin = 0;
+                    image.expand = false;
+                    image.get_style_context().add_class("album-artwork");
+                    content_box.pack_start(image, false, false, 5);
+                } catch(Error e) {
+                    warning("Failed to load resource %s. %s", Constants.VOCAL_MISSING_RESOURCE, e.message);
+                }
 
                 var image_cache = new ImageCache();
                 image_cache.get_image.begin(podcast.coverart_uri, (obj, res) => {

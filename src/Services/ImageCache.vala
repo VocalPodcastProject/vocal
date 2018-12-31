@@ -104,13 +104,13 @@ namespace Vocal {
             }
 
             public async Gee.HashMap<uint, File> get_cached_files() {
-                Gee.HashMap<uint, File> files = new Gee.HashMap<uint, File>();
-
-                if (!cache_location.query_exists()) {
-                    cache_location.make_directory_with_parents();
-                }
-
+                var files = new Gee.HashMap<uint, File>();
+            
                 try {
+                    if (!cache_location.query_exists()) {
+                        cache_location.make_directory_with_parents();
+                    }
+
                     FileEnumerator enumerator = yield
                         cache_location.enumerate_children_async("standard::*",
                                                                 FileQueryInfoFlags.NONE,
@@ -135,13 +135,18 @@ namespace Vocal {
                 var cfile = File.new_for_path(file_loc);
 
                 FileIOStream fiostream;
-                if (cfile.query_exists()) {
-                    fiostream = yield cfile.replace_readwrite_async(null, false, FileCreateFlags.NONE);
-                } else {
-                    fiostream = yield cfile.create_readwrite_async(FileCreateFlags.NONE);
+                try {
+                    if (cfile.query_exists()) {
+                        fiostream = yield cfile.replace_readwrite_async(null, false, FileCreateFlags.NONE);
+                    } else {
+                        fiostream = yield cfile.create_readwrite_async(FileCreateFlags.NONE);
+                    }
+
+                    // switch to async version later, currently the bindings have a bug
+                    pixbuf.save_to_stream(fiostream.get_output_stream(), "png");
+                } catch(Error e) {
+                    warning("Failed to write cache file %s. %s", cfile.get_path(), e.message);
                 }
-                // switch to async version later, currently the bindings have a bug
-                pixbuf.save_to_stream(fiostream.get_output_stream(), "png");
 
                 return cfile;
             }

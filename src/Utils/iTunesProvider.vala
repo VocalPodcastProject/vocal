@@ -30,7 +30,7 @@ namespace Vocal {
         /*
          * Finds the public RSS feed address from any given iTunes store URL
          */
-        public string? get_rss_from_itunes_url(string itunes_url, out string? name = null) {
+        public string? get_rss_from_itunes_url(string itunes_url) {
 
             string rss = "";
 
@@ -49,7 +49,7 @@ namespace Vocal {
                 var root_object = parser.get_root ().get_object ();
 
                 if(root_object == null) {
-                    stdout.puts("Error. Root object was null.");
+                    warning("Error. Root object was null.");
                     return null;
                 }
 
@@ -58,7 +58,7 @@ namespace Vocal {
                 foreach(Json.Node e in elements) {
                     var obj = e.get_object();
                     rss = obj.get_string_member("feedUrl");
-                    name = obj.get_string_member("trackName");
+                    // name = obj.get_string_member("trackName");
                 }
             } catch (Error e) {
                 warning ("An error occurred while discovering the real RSS feed address %s\n", e.message);
@@ -90,7 +90,7 @@ namespace Vocal {
 
             var root_object = parser.get_root ().get_object ();
             if(root_object == null) {
-                error ("Error loading iTunes results. Root object was null.");
+                warning ("Error loading iTunes results. Root object was null.");
                 return null;
             }
 

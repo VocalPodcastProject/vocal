@@ -54,7 +54,7 @@ namespace Vocal {
                 }
                 // In rare instances where album art is not available at all, provide a "missing art" image to use
                 // in library view
-                return "resource:///com/github/needle-and-thread/vocal/missing.png";
+                return "resource:///" + Constants.VOCAL_MISSING_RESOURCE;
             }
 
 		    // If the URI begins with "file://" set local uri, otherwise set the remote uri

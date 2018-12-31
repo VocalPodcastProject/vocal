@@ -58,8 +58,8 @@ namespace Vocal {
             pw_entry.visibility = false;
 
             var content_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 15);
-            content_box.margin_right = 12;
-            content_box.margin_left = 12;
+            content_box.margin_end = 12;
+            content_box.margin_start = 12;
 
             content_box.pack_start(uname_entry, false, false, 5);
             content_box.pack_start(pw_entry, false, false, 5);

@@ -37,7 +37,6 @@ add_definitions (-w)
 
 set (BASIC_VALAC_OPTIONS
     --enable-experimental
-    --disable-warnings
     --target-glib=2.32
     --thread
     -g
@@ -125,6 +124,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/VideoControls.vala
     src/Widgets/DirectoryView.vala
     src/Widgets/DirectoryArt.vala
+    src/Widgets/ImportView.vala
     src/Widgets/NewEpisodesView.vala
     src/Widgets/CloudLoginDialog.vala
     src/Widgets/SearchResultsView.vala

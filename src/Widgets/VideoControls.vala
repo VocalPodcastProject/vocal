@@ -52,8 +52,8 @@ namespace Vocal {
 
             playback_box.margin_top = 10;
             playback_box.margin_bottom = 5;
-            playback_box.margin_left = 20;
-            playback_box.margin_right = 20;
+            playback_box.margin_start = 20;
+            playback_box.margin_end = 20;
 
             unfullscreen_button = new Gtk.Button.from_icon_name("window-restore-symbolic", Gtk.IconSize.DIALOG);
             unfullscreen_button.clicked.connect(() => { unfullscreen(); });

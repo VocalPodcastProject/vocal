@@ -122,11 +122,12 @@ namespace Vocal {
 		/*
 		 * Creates a pixbuf given an InputStream
 		 */
-        public Gdk.Pixbuf create_cover_image (InputStream input_stream) {
+        public static Gdk.Pixbuf create_cover_image (InputStream input_stream) {
             var cover_image = new Gdk.Pixbuf.from_stream (input_stream);
 
-            if (cover_image.height == cover_image.width)
+            if (cover_image.height == cover_image.width) {
                 cover_image = cover_image.scale_simple (COVER_SIZE, COVER_SIZE, Gdk.InterpType.BILINEAR);
+            }
 
             if (cover_image.height > cover_image.width) {
 

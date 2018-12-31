@@ -1145,12 +1145,10 @@ namespace Vocal {
         }
         
         public void set_new_local_album_art(string path_to_local_file, Podcast p) {
-            
             // Copy the file
             GLib.File current_file = GLib.File.new_for_path(path_to_local_file);
 
             InputStream input_stream = current_file.read();
-
             string path = settings.library_location + "/%s/cover.jpg".printf(p.name.replace("%27", "'").replace("%", "_"));
             GLib.File local_file = GLib.File.new_for_path(path);
 

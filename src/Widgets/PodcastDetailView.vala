@@ -36,10 +36,10 @@ namespace Vocal {
     	public signal void pane_should_hide();
         public signal void download_all_requested();
         public signal void delete_podcast_requested();
-        public signal void unplayed_count_changed(int n);
+        public signal void unplayed_count_changed(Podcast podcast, int n);
         public signal void go_back();
         
-        public signal void new_cover_art_set(string path);
+        public signal void new_cover_art_set(Podcast podcast, string path);
 
 
         public Podcast podcast;
@@ -718,8 +718,9 @@ namespace Vocal {
             set_unplayed_text();
 
             // Is the number of unplayed episodes now different?
-            if(previous_count != unplayed_count)
-                unplayed_count_changed(unplayed_count);
+            if(previous_count != unplayed_count) {
+                unplayed_count_changed(this.podcast, unplayed_count);
+            }
         }
         
         private void on_change_album_art() {
@@ -755,7 +756,7 @@ namespace Vocal {
 				image.gicon = icon;
 				image.pixel_size = 250;
                 
-                new_cover_art_set(file_name);
+                new_cover_art_set(this.podcast, file_name);
             }
         }
 

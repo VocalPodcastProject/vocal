@@ -53,7 +53,7 @@ namespace Vocal {
             notebook.append_page (confirm_page);
             notebook.append_page (uploading_page);
             
-            var verify_label = new Gtk.Label (_("Please verify that the episode information below is correct before continuing."));
+            var verify_label = new Gtk.Label (_("Please verify that the information below is correct before continuing."));
             verify_label.wrap = true;
             verify_label.max_width_chars = 50;
             verify_label.get_style_context ().add_class ("h3");
@@ -71,19 +71,19 @@ namespace Vocal {
             var podcast_name_entry = new Gtk.Entry ();
             podcast_name_entry.text = episode.parent.name;
             
-            var episode_description_label = new Gtk.Label (_("Episode Description"));
-            episode_description_label.get_style_context ().add_class ("h4");
-            episode_description_label.halign = Gtk.Align.START;
-            var episode_description_entry = new Gtk.TextView ();
-            episode_description_entry.set_wrap_mode (Gtk.WrapMode.WORD);
-            episode_description_entry.buffer.text = episode.description;
+            var podcast_description_label = new Gtk.Label (_("Podcast Description"));
+            podcast_description_label.get_style_context ().add_class ("h4");
+            podcast_description_label.halign = Gtk.Align.START;
+            var podcast_description_entry = new Gtk.TextView ();
+            podcast_description_entry.set_wrap_mode (Gtk.WrapMode.WORD);
+            podcast_description_entry.buffer.text = episode.parent.description;
             
             edit_page.pack_start (episode_title_label, false, false, 5);
             edit_page.pack_start (episode_title_entry, false, false, 0);
             edit_page.pack_start (podcast_name_label, false, false, 5);
             edit_page.pack_start (podcast_name_entry, false, false, 0);
-            edit_page.pack_start (episode_description_label, false, false, 5);
-            edit_page.pack_start (episode_description_entry, false, false, 0);
+            edit_page.pack_start (podcast_description_label, false, false, 5);
+            edit_page.pack_start (podcast_description_entry, false, false, 0);
             
             var next_button = new Gtk.Button.with_label (_("Next…"));
             next_button.halign = Gtk.Align.END;
@@ -100,9 +100,6 @@ namespace Vocal {
             
             var upload_button = new Gtk.Button.with_label(_("Upload to the Internet Archive"));
             upload_button.get_style_context ().add_class ("suggested-action");
-            upload_button.clicked.connect (() => {
-                notebook.next_page ();
-            });
             
             confirm_page.pack_start (warning_label, false, false, 10);
             confirm_page.pack_end (upload_button, false, false, 10);
@@ -110,8 +107,9 @@ namespace Vocal {
             var uploading_message = new Gtk.Label (_("Uploading episode…")); 
             uploading_message.get_style_context ().add_class ("h2");
             
-            var thanks_message = new Gtk.Label (_("Thanks for contributing to the Internet Archive"));
+            var thanks_message = new Gtk.Label (_("Thanks for contributing to the Internet Archive and the Podcast Archival Project"));
             thanks_message.wrap = true;
+            thanks_message.justify = Gtk.Justification.CENTER;
             thanks_message.max_width_chars = 50;
             thanks_message.get_style_context ().add_class ("h3");
             thanks_message.set_no_show_all (true);
@@ -120,7 +118,7 @@ namespace Vocal {
             var spinner = new Gtk.Spinner ();
             spinner.active = true;
             
-            var upload_complete_image = new Gtk.Image.from_icon_name ("process-completed", Gtk.IconSize.DIALOG);
+            var upload_complete_image = new Gtk.Image.from_icon_name ("face-cool-symbolic", Gtk.IconSize.DIALOG);
             upload_complete_image.set_no_show_all (true);
             upload_complete_image.hide ();
             
@@ -139,25 +137,51 @@ namespace Vocal {
             finish.set_no_show_all (true);
             finish.hide ();
             
-            
-            // TODO: remove and add actual uploading
-            GLib.Timeout.add (20000, () => {
-                spinner.active = false;
-                spinner.set_no_show_all (true);
-                spinner.hide();
+            upload_button.clicked.connect (() => {
+                notebook.next_page ();
+                var loop = new MainLoop();
                 
-                upload_complete_image.set_no_show_all (false);
-                upload_complete_image.show ();
-                uploading_message.set_text (_("Upload Complete"));
-                
-                thanks_message.set_no_show_all (false);
-                thanks_message.show ();
-                
-                finish.set_no_show_all (false);
-                finish.show ();
-                
-                return true;
+                Utils.upload_to_internet_archive (episode.local_uri, episode_title_entry.text, podcast_name_entry.text, podcast_description_entry.buffer.text, (obj, res) => {
+                    bool success = Utils.upload_to_internet_archive.end(res);
+                    if (success) {
+                        spinner.active = false;
+                        spinner.set_no_show_all (true);
+                        spinner.hide();
+                        
+                        upload_complete_image.set_no_show_all (false);
+                        upload_complete_image.show ();
+                        uploading_message.set_text (_("Upload Complete"));
+                        
+                        thanks_message.set_no_show_all (false);
+                        thanks_message.show ();
+                        
+                        finish.set_no_show_all (false);
+                        finish.show ();
+                    } else {
+                        spinner.active = false;
+                        spinner.set_no_show_all (true);
+                        spinner.hide();
+                        
+                        upload_complete_image.set_no_show_all (false);
+                        upload_complete_image.show ();
+                        uploading_message.set_text (_("Upload Failed"));
+                        
+                        thanks_message.set_text (_("Be sure to check your network connection and try again later."));
+                        upload_complete_image.set_from_icon_name ("face-confused-symbolic", Gtk.IconSize.DIALOG);
+                        
+                        thanks_message.set_no_show_all (false);
+                        thanks_message.show ();
+                        
+                        finish.set_no_show_all (false);
+                        finish.show ();
+                    }
+                    loop.quit ();
+                });
+
+                loop.run();   
             });
         }
+        
+        
     }
 }

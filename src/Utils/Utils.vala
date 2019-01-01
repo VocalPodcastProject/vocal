@@ -362,5 +362,48 @@ const string CLOSE = """
 
         return str;
     }
+    
+    public static async bool upload_to_internet_archive (string local_uri, string title, string podcast, string description) {
+    
+        info ("Uploading to internet archive");
+        string container = Uri.escape_string (podcast.replace (" ", "-").down ());
+        if (container[container.len() - 1] == '-') {
+            container = container.substring(0, container.len() - 1);
+        }
+        string episode = Uri.escape_string (title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of ("."), 4));
+        info (container);
+        info (episode);
+        var session = new Soup.Session ();
+        var message = new Soup.Message ("PUT","http://s3.us.archive.org/%s/%s".printf (container, episode));
+            
+        SourceFunc callback = upload_to_internet_archive.callback;
+            
+        ThreadFunc<void*> run = () => {
+            uint8[] file_contents;
+            GLib.FileUtils.get_data (local_uri, out file_contents);
+            message.set_request ("audio/mpeg3", Soup.MemoryUse.STATIC, file_contents);
+            string accesskey = "";
+            string secretkey = "";
+            message.request_headers.append ("x-archive-auto-make-bucket", "1");
+            message.request_headers.append ("x-archive-meta-title", podcast);
+            message.request_headers.append ("x-archive-meta-description", description);
+            message.request_headers.append ("authorization", "LOW %s:%s".printf(accesskey, secretkey));
+            session.send_message (message);
+            Idle.add((owned) callback);
+            return null;
+        };
+        Thread.create<void*>(run, false);
+
+        yield;
+        
+        info("archive.org request status code: %u", message.status_code);
+        info ( (string) message.response_body.data);
+        if (message.status_code == 200) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
 
 }

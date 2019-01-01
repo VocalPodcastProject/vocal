@@ -246,8 +246,33 @@ namespace Vocal {
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
             shownotes.mark_as_new_button.clicked.connect(() => { mark_episode_as_new_requested_internal(); });
             shownotes.internet_archive_upload_requested.connect (() => { 
-                var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, (podcast.episodes[current_episode_index]));
-                internet_archive_dialog.show_all ();
+
+                if (podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
+                
+                    var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, (podcast.episodes[current_episode_index]));
+                    internet_archive_dialog.show_all ();
+                    
+                } else {
+                
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _("You must download this episode first before uploading to the Internet Archive. Would you like to download this episode?"));
+                    
+                    var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
+                    msg.image = image;
+                    msg.image.show_all();
+
+			        msg.response.connect ((response_id) => {
+			            switch (response_id) {
+				            case Gtk.ResponseType.YES:
+                                download_episode_requested(podcast.episodes[current_episode_index]);
+					            break;
+				            case Gtk.ResponseType.NO:
+					            break;
+			            }
+
+			            msg.destroy();
+		            });
+		            msg.show ();
+	            }
             });
 
             shownotes.copy_shareable_link.connect(on_copy_shareable_link);

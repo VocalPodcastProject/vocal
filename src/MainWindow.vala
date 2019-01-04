@@ -53,17 +53,10 @@ namespace Vocal {
         private QueuePopover queue_popover;
         private Gtk.MessageDialog missing_dialog;
         private SettingsDialog settings_dialog;
-        public VideoControls video_controls;
-        private Gtk.Revealer return_revealer;
-        private Gtk.Button return_to_library;
 
         /* Video playback */
 
-        public Clutter.Actor actor;
-        public GtkClutter.Actor bottom_actor;
-        public GtkClutter.Actor return_actor;
-        public Clutter.Stage stage;
-        public GtkClutter.Embed video_widget;
+        public VideoView video_view;
         
         /* Miscellaneous Global Variables */
         public CoverArt current_episode_art;
@@ -71,8 +64,6 @@ namespace Vocal {
         public Gtk.Widget previous_widget;
 
         private bool ignore_window_state_change = false;
-        private uint hiding_timer = 0; // Used for hiding video controls
-        private bool mouse_primary_down = false;
         public bool fullscreened = false;
 
 		/*
@@ -211,73 +202,12 @@ namespace Vocal {
             
             info ("Creating video playback widgets.");
             
-            // Create the drawing area for the video widget
-            video_widget = new GtkClutter.Embed ();
-            video_widget.use_layout_size = false;
-            video_widget.button_press_event.connect (on_video_button_press_event);
-            video_widget.button_release_event.connect (on_video_button_release_event);
-
-            stage = (Clutter.Stage) video_widget.get_stage ();
-            stage.background_color = {0, 0, 0, 0};
-            stage.use_alpha = true;
-
-            actor = new Clutter.Actor();
-            var aspect_ratio = new ClutterGst.Aspectratio ();
-            ((ClutterGst.Content) aspect_ratio).player = controller.player;
-            actor.content = aspect_ratio;
-
-            actor.add_constraint (new Clutter.BindConstraint (stage, Clutter.BindCoordinate.WIDTH, 0));
-            actor.add_constraint (new Clutter.BindConstraint (stage, Clutter.BindCoordinate.HEIGHT, 0));
-            stage.add_child (actor);
-
-            // Set up all the video controls
-            video_controls = new VideoControls ();
-            video_controls.vexpand = true;
-            video_controls.set_valign (Gtk.Align.END);
-            video_controls.unfullscreen.connect (on_fullscreen_request);
-            video_controls.play_toggled.connect (controller.play_pause);
-
-            bottom_actor = new GtkClutter.Actor.with_contents (video_controls);
-            stage.add_child (bottom_actor);
-
-            var child1 = video_controls.get_child () as Gtk.Container;
-            foreach(Gtk.Widget child in child1.get_children()) {
-                child.parent.get_style_context ().add_class ("video-toolbar");
-                child.parent.parent.get_style_context ().add_class ("video-toolbar");
-            }
-
-            video_widget.motion_notify_event.connect (on_motion_event);
-
-            return_to_library = new Gtk.Button.with_label (_("Return to Library"));
-            return_to_library.get_style_context ().add_class ("video-widgets-background");
-            return_to_library.has_tooltip = true;
-            return_to_library.tooltip_text = _("Return to Library");
-            return_to_library.relief = Gtk.ReliefStyle.NONE;
-            return_to_library.margin = 5;
-            return_to_library.set_no_show_all (false);
-            return_to_library.show ();
-
-            return_to_library.clicked.connect (on_return_to_library);
-
-            return_revealer = new Gtk.Revealer ();
-            return_revealer.transition_type = Gtk.RevealerTransitionType.CROSSFADE;
-            return_revealer.add (return_to_library);
-
-            return_actor = new GtkClutter.Actor.with_contents (return_revealer);
-            stage.add_child (return_actor);
+            video_view = new VideoView(controller);
             
             info ("Creating notebook.");
-
             notebook = new Gtk.Stack();
             notebook.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
             notebook.transition_duration = 200;
-            
-            info ("Creating podcast view."); 
-            
-            details = new PodcastDetailView (controller);
-            details.go_back.connect(() => {
-                switch_visible_page(podcast_view);
-            });
 
             // Create a welcome screen and add it to the notebook (no matter if first run or not)
             info ("Creating welcome screen.");
@@ -300,7 +230,8 @@ namespace Vocal {
                         
             podcast_view = new PodcastView (controller);
 		    
-            // Set up all the signals for the podcast view
+            info ("Creating podcast detail view."); 
+            details = new PodcastDetailView (controller);
             details.play_episode_requested.connect(play_different_track);
             details.download_episode_requested.connect(download_episode);
             details.enqueue_episode.connect(enqueue_episode);
@@ -312,6 +243,9 @@ namespace Vocal {
             details.delete_podcast_requested.connect(on_remove_request);
             details.unplayed_count_changed.connect(podcast_view.update_count);
             details.new_cover_art_set.connect(podcast_view.update_cover_art);
+            details.go_back.connect(() => {
+                switch_visible_page(podcast_view);
+            });
 
             import_view = new ImportView(controller);
 
@@ -321,7 +255,7 @@ namespace Vocal {
             notebook.add_titled (podcast_view, "all", _("All Podcasts"));
             notebook.add_titled (details, "details", _("Details"));
             notebook.add_titled (new_episodes_view, "new_episodes", _("New Episodes"));
-            notebook.add_titled (video_widget, "video_player", _("Video"));
+            notebook.add_titled (video_view, "video_player", _("Video"));
             
             info ("Creating directory view.");
             
@@ -419,11 +353,6 @@ namespace Vocal {
                 popover.show_all ();
                 
             });
-
-            // Repeat for the video playback box scale
-            video_controls.progress_bar_scale_changed.connect (() => {
-                controller.player.set_position (video_controls.progress_bar_fill);
-            });
             
             this.set_titlebar(toolbar);
             
@@ -484,7 +413,7 @@ namespace Vocal {
             notebook.add_titled(directory, "directory", _("Browse Podcast Directory"));
             notebook.add_titled(search_results_view, "search", _("Search Results"));
 
-             info ("Adding notebook to window.");
+            info ("Adding notebook to window.");
             current_widget = notebook;
             this.add (notebook);
             
@@ -859,7 +788,7 @@ namespace Vocal {
 
                     if(controller.player.playing) {
                         toolbar.playback_box.set_info_title(controller.current_episode.title.replace("%27", "'"), controller.current_episode.parent.name.replace("%27", "'"));
-                        video_controls.set_info_title(controller.current_episode.title.replace("%27", "'"), controller.current_episode.parent.name.replace("%27", "'"));
+                        video_view.video_controls.set_info_title(controller.current_episode.title.replace("%27", "'"), controller.current_episode.parent.name.replace("%27", "'"));
                     }
 
                     loop.quit();
@@ -909,9 +838,9 @@ namespace Vocal {
                 notebook.set_visible_child(details);
                 current_widget = details;
             }
-            else if (widget == video_widget) {
-                notebook.set_visible_child(video_widget);
-                current_widget = video_widget;
+            else if (widget == video_view) {
+                notebook.set_visible_child(video_view);
+                current_widget = video_view;
             }
             else if (widget == import_view) {
                 notebook.set_visible_child(import_view);
@@ -1048,11 +977,9 @@ namespace Vocal {
 
             if(fullscreened) {
                 unfullscreen();
-                video_controls.set_reveal_child(false);
                 fullscreened = false;
                 ignore_window_state_change = true;
             } else {
-
                 fullscreen();
                 fullscreened = true;
             }
@@ -1135,96 +1062,6 @@ namespace Vocal {
         }
 
 
-		/*
-		 * Called when the user moves the cursor when a video is playing
-		 */
-        private bool on_motion_event(Gdk.EventMotion e) {
-
-            // Figure out if you should just move the window
-            if (mouse_primary_down) {
-                mouse_primary_down = false;
-                this.begin_move_drag (Gdk.BUTTON_PRIMARY,
-                    (int)e.x_root, (int)e.y_root, e.time);
-                
-            } else {
-
-                // Show the cursor again
-                this.get_window ().set_cursor (null);
-
-                bool hovering_over_headerbar = false,
-                hovering_over_return_button = false,
-                hovering_over_video_controls = false;
-
-                int min_height, natural_height;
-                video_controls.get_preferred_height(out min_height, out natural_height);
-
-
-                // Figure out whether or not the cursor is over the video bar at the bottom
-                // If so, don't actually hide the cursor
-                if (fullscreened && e.y < natural_height) {
-                    hovering_over_video_controls = true;
-                } else {
-                    hovering_over_video_controls = false;
-                }
-
-
-                // e.y starts at 0.0 (top) and goes for however long
-                // If < 10.0, we can assume it's above the top of the video area, and therefore
-                // in the headerbar area
-                if (!fullscreened && e.y < 10.0) {
-                    hovering_over_headerbar = true;
-                }
-
-
-                if (hiding_timer != 0) {
-                    Source.remove (hiding_timer);
-                }
-
-                if(current_widget == video_widget) {
-
-                    hiding_timer = GLib.Timeout.add (2000, () => {
-
-                        if(current_widget != video_widget)
-                        {
-                            this.get_window ().set_cursor (null);
-                            return false;
-                        }
-
-                        if(!fullscreened && (hovering_over_video_controls || hovering_over_return_button)) {
-                            hiding_timer = 0;
-                            return true;
-                        }
-
-                        else if (hovering_over_video_controls || hovering_over_return_button) {
-                            hiding_timer = 0;
-                            return true;
-                        }
-
-                        video_controls.set_reveal_child(false);
-                        return_revealer.set_reveal_child(false);
-
-                        if(controller.player.playing && !hovering_over_headerbar) {
-                            this.get_window ().set_cursor (new Gdk.Cursor (Gdk.CursorType.BLANK_CURSOR));
-                        }
-
-                        return false;
-                    });
-
-
-                    if(fullscreened) {
-                        bottom_actor.width = stage.width;
-                        bottom_actor.y = stage.height - natural_height;
-                        video_controls.set_reveal_child(true);
-                    }
-                    return_revealer.set_reveal_child(true);
-
-                }
-            }
-
-            return false;
-        }
-
-
         /*
          * Called when the subscribe button is clicked either on the store or on a search page
          */
@@ -1285,8 +1122,9 @@ namespace Vocal {
         public void on_return_to_library() {
 
             // If fullscreen, first exit fullscreen so you won't be "trapped" in fullscreen mode
-            if(fullscreened)
+            if(fullscreened) {
                 on_fullscreen_request();
+            }
                 
             // It's possible this was triggered by the directory on a first run, so check
             // the new episodes button
@@ -1296,8 +1134,9 @@ namespace Vocal {
             }
                 
             // Since we can't see the video any more pause playback if necessary
-            if(current_widget == video_widget && controller.player.playing)
+            if(current_widget == video_view && controller.player.playing) {
                 controller.pause();
+            }
 
             // If the library is empty, always return to the welcome screen.
             if (controller.library.empty ()) {
@@ -1399,24 +1238,6 @@ namespace Vocal {
             new_episodes_view.populate_episodes_list ();
         }
 
-        /*
-         * Requests the app to be taken fullscreen if the video widget
-         * is double-clicked
-         */
-        private bool on_video_button_press_event(EventButton e) {
-            mouse_primary_down = true;
-            if(e.type == Gdk.EventType.2BUTTON_PRESS) {
-                on_fullscreen_request();
-            }
-
-            return false;
-        }
-
-        private bool on_video_button_release_event(EventButton e) {
-            mouse_primary_down = false;
-            return false;
-        }
-
 
         /*
          * Saves the window height and width before closing, and decides whether to close or minimize
@@ -1481,12 +1302,13 @@ namespace Vocal {
                 controller.open_hidden = false;
             }
 
-            if(ignore_window_state_change)
+            if(ignore_window_state_change) {
                 return;
+            }
 
             bool maximized = (state & Gdk.WindowState.MAXIMIZED) == 0;
 
-            if(!maximized && !fullscreened && current_widget == video_widget) {
+            if(!maximized && !fullscreened && current_widget == video_view) {
                 on_fullscreen_request();
             }
         }

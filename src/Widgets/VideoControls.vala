@@ -56,7 +56,9 @@ namespace Vocal {
             playback_box.margin_end = 20;
 
             unfullscreen_button = new Gtk.Button.from_icon_name("window-restore-symbolic", Gtk.IconSize.DIALOG);
-            unfullscreen_button.clicked.connect(() => { unfullscreen(); });
+            unfullscreen_button.clicked.connect(() => { 
+              unfullscreen(); 
+            });
             unfullscreen_button.tooltip_text = _("Exit Fullscreen");
             unfullscreen_button.relief = Gtk.ReliefStyle.NONE;
 

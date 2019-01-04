@@ -133,7 +133,7 @@ namespace Vocal {
 
                 if(!currently_importing && player.progress != 0) {
                     window.toolbar.playback_box.set_progress(player.progress, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
-                    window.video_controls.set_progress(player.progress, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
+                    window.video_view.video_controls.set_progress(player.progress, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
                 }
             });
             
@@ -362,11 +362,11 @@ namespace Vocal {
 
 
                 // Are we playing a video? If so, is the video widget already being displayed?
-                if(player.current_episode.parent.content_type == MediaType.VIDEO && window.current_widget != window.video_widget) {
+                if(player.current_episode.parent.content_type == MediaType.VIDEO && window.current_widget != window.video_view) {
 
                     // If you want to see a pretty animation, you must give the player time to configure everything
                     GLib.Timeout.add (1000, () => {
-                        window.switch_visible_page(window.video_widget);
+                        window.switch_visible_page(window.video_view);
                         return false;
                     });
                 }
@@ -398,15 +398,15 @@ namespace Vocal {
                 window.toolbar.set_play_pause_text(_("Pause"));
 
                 var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                window.video_controls.play_button.image = video_playpause_image;
-                window.video_controls.tooltip_text = _("Pause");
+                window.video_view.video_controls.play_button.image = video_playpause_image;
+                window.video_view.video_controls.tooltip_text = _("Pause");
             
 
                 // Set the media information (assuming we're not importing. If we are, the import status is more important
                 // and the media info will be correctly set after it is finished.)
                 if(!currently_importing) {
                     window.toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-                    window.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                    window.video_view.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                     window.shownotes.set_notes_text(current_episode.description);
                 }
                 window.show_all();
@@ -425,8 +425,8 @@ namespace Vocal {
                 window.toolbar.set_play_pause_text(_("Play"));
 
                 var video_playpause_image = new Gtk.Image.from_icon_name("media-playback-start-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-                window.video_controls.play_button.image = video_playpause_image;
-                window.video_controls.tooltip_text = _("Play");
+                window.video_view.video_controls.play_button.image = video_playpause_image;
+                window.video_view.video_controls.tooltip_text = _("Play");
 
                 // Set last played position
                 current_episode.last_played_position = player.progress;
@@ -437,7 +437,7 @@ namespace Vocal {
             // and the media info will be correctly set after it is finished.)
             if(!currently_importing) {
                 window.toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-                window.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                window.video_view.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                 window.shownotes.set_notes_text(current_episode.description);
             }
 
@@ -499,7 +499,7 @@ namespace Vocal {
                 currently_importing = false;
                 if(player.playing) {
                     window.toolbar.playback_box.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
-                    window.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
+                    window.video_view.video_controls.set_info_title(current_episode.title.replace("%27", "'"), current_episode.parent.name.replace("%27", "'"));
                 }
                 loop.quit();
             });

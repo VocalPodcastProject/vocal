@@ -80,7 +80,7 @@ namespace Vocal {
 			count_label.width_chars = 2;
 			count_label.xalign = 0.50f;
 			count_label.margin_top = 3;
-			count_label.margin_right = 3;
+			count_label.margin_end = 3;
 
 			// Add a tooltip
 			this.tooltip_text = podcast.name.replace("%27", "'");

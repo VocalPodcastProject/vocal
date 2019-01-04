@@ -136,6 +136,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/QueueRow.vala
     src/Widgets/SearchResultBox.vala
     src/Widgets/WelcomeView.vala
+    src/Widgets/VideoView.vala
     src/Utils/Player.vala
     src/Utils/FeedParser.vala
     src/Utils/Utils.vala

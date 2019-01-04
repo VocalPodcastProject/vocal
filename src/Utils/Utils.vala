@@ -24,8 +24,7 @@ public interface GnomeMediaKeys : GLib.Object {
     public signal void MediaPlayerKeyPressed (string application, string key);
 }
 
-public class Utils
-{
+public class Utils {
 
     public static bool check_elementary() {
         string output;

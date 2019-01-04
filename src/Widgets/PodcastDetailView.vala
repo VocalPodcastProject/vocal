@@ -48,8 +48,6 @@ namespace Vocal {
 
         private Gtk.ListBox listbox;
         private Gtk.Paned paned;
-        private Gtk.Toolbar toolbar;
-        private Gtk.Box toolbar_box;
         private Gtk.Label name_label;
         private Gtk.Label count_label;
         private Gtk.Label description_label;
@@ -632,14 +630,6 @@ namespace Vocal {
                 boxes[index].show_playback_button();
                 boxes[index].show_download_button();
             }
-        }
-
-        /*
-         * When a streaming button gets clicked set the current episode and treat
-         * it like a row has been activated
-         */
-        private void on_streaming_button_clicked (Episode episode) {
-            on_row_activated(null);
         }
 
         private void reset_episode_list() {

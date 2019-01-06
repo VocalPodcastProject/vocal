@@ -140,7 +140,7 @@ namespace Vocal {
                     // So this change isn't seen until vocal is restarted.
                     try {
                         InputStream input_stream = GLib.File.new_for_path(path).read();
-                        coverart.image.pixbuf = coverart.create_cover_image(input_stream);
+                        coverart.image.pixbuf = CoverArt.create_cover_image(input_stream);
                     } catch(Error e) {
                         error("Failed to load image from path %s. %s", path, e.message);
                     }

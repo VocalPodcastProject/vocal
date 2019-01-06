@@ -13,8 +13,7 @@ public class SoupClient {
         }
 
         var message = new Soup.Message (method.to_string (), url);
-        InputStream stream;
-        stream = soup_session.send (message);
+        InputStream stream = soup_session.send (message);
         check_response_headers(message);
 
         return stream;

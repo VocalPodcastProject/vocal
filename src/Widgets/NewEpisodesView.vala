@@ -26,7 +26,7 @@ namespace Vocal {
 
         private Controller controller;
         private ListBox new_episodes_listbox;
-        GLib.ListStore episodeListModel = new GLib.ListStore ( typeof (Episode) );
+        private GLib.ListStore episodeListModel = new GLib.ListStore ( typeof (Episode) );
         public signal void go_back();
         public signal void play_episode_requested (Episode episode);
         public signal void add_all_new_to_queue (GLib.List<Episode> episodes);
@@ -99,11 +99,11 @@ namespace Vocal {
                 }
             }
 
-            GLib.Idle.add ( () => {
+            GLib.Idle.add (() => {
 
                 this.episodeListModel = elm;
                 new_episodes_listbox.bind_model(elm, (item) => {
-                        return  new EpisodeDetailBox( (Episode) item, controller, true);
+                        return new EpisodeDetailBox( (Episode) item, controller, true);
                 });
 
                 show_all ();

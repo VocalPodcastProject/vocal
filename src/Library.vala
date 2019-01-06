@@ -205,7 +205,12 @@ namespace Vocal {
                 Idle.add((owned) callback);
                 return null;
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+            } catch (Error e) {
+                warning("Failed to create thread. %s", e.message);
+            }
 
             yield;
 
@@ -355,7 +360,12 @@ namespace Vocal {
                 Idle.add((owned) callback);
                 return null;
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+            } catch(Error e) {
+                warning("Failed to create thread. %s", e.message);
+            }
 
             yield;
 
@@ -392,7 +402,12 @@ namespace Vocal {
                 return null;
 
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+            } catch(Error e) {
+                warning("Failed to create thread. %s", e.message);
+            }
 
             yield;
         }
@@ -446,7 +461,12 @@ namespace Vocal {
                 Idle.add((owned) callback);
                 return null;
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+                } catch(Error e) {
+                    warning("Failed to create thread. %s", e.message);
+                }
 
             yield;
 

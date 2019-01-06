@@ -22,82 +22,77 @@
   
 ***/
 
-
-using Gtk;
-using GLib;
-using Granite;
-
 namespace Vocal {
 
-	public class DirectoryArt : Gtk.Box {
+  public class DirectoryArt : Gtk.Box {
 
-		public signal void subscribe_button_clicked(string url);
+    public signal void subscribe_button_clicked(string url);
 
-		private Gtk.Popover details_popover;
-		private Gtk.Label summary_label;
-		private Gtk.Box button_box;
+    private Gtk.Popover details_popover;
+    private Gtk.Label summary_label;
+    private Gtk.Box button_box;
 
-		public DirectoryArt(string url, string title, string? artist, string? summary, string artworkUrl170, bool? in_library = false) {
+    public DirectoryArt(string url, string title, string? artist, string? summary, string artworkUrl170, bool? in_library = false) {
 
-			this.set_orientation(Gtk.Orientation.VERTICAL);
-			this.width_request = 200;
-			this.margin = 10;
+      this.set_orientation(Gtk.Orientation.VERTICAL);
+      this.width_request = 200;
+      this.margin = 10;
 
-			// Create labels for title and artist
-			var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+      // Create labels for title and artist
+      var label_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 
-			var title_label = new Gtk.Label("""<b>%s</b>""".printf(GLib.Markup.escape_text(title)));
-			title_label.justify = Gtk.Justification.LEFT;
-			title_label.use_markup = true;
-			title_label.max_width_chars = 15;
-			title_label.wrap = true;
-			title_label.set_property("xalign", 0);
-			label_box.pack_start(title_label, false, false, 5);
+      var title_label = new Gtk.Label("""<b>%s</b>""".printf(GLib.Markup.escape_text(title)));
+      title_label.justify = Gtk.Justification.LEFT;
+      title_label.use_markup = true;
+      title_label.max_width_chars = 15;
+      title_label.wrap = true;
+      title_label.set_property("xalign", 0);
+      label_box.pack_start(title_label, false, false, 5);
 
-			artist = artist ?? "";
+      artist = artist ?? "";
 
-			var artist_label = new Gtk.Label(artist);
-			artist_label.justify = Gtk.Justification.LEFT;
-			artist_label.max_width_chars = 15;
-			artist_label.wrap = true;
-			artist_label.set_property("xalign", 0);
-			label_box.pack_start(artist_label, false, false, 5);
+      var artist_label = new Gtk.Label(artist);
+      artist_label.justify = Gtk.Justification.LEFT;
+      artist_label.max_width_chars = 15;
+      artist_label.wrap = true;
+      artist_label.set_property("xalign", 0);
+      label_box.pack_start(artist_label, false, false, 5);
 
-			var details_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "help-info-symbolic" : "dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-			details_button.valign = Gtk.Align.START;
-			details_button.tooltip_text = _("Details");
-			if (Utils.check_elementary ())
-			    details_button.relief = Gtk.ReliefStyle.NONE;
+      var details_button = new Gtk.Button.from_icon_name(Utils.check_elementary() ? "help-info-symbolic" : "dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+      details_button.valign = Gtk.Align.START;
+      details_button.tooltip_text = _("Details");
+      if (Utils.check_elementary ())
+          details_button.relief = Gtk.ReliefStyle.NONE;
 
-			details_popover = new Gtk.Popover(details_button);
-			summary_label = new Gtk.Label ("");
-			summary_label.wrap = true;
-			details_popover.add(summary_label);
+      details_popover = new Gtk.Popover(details_button);
+      summary_label = new Gtk.Label ("");
+      summary_label.wrap = true;
+      details_popover.add(summary_label);
 
-			details_button.clicked.connect(() => {
-				if(summary.length > 0) {
-					summary_label.set_text(summary);
-				} else if (url.contains("itunes.apple")) {
-					var itunes = new iTunesProvider();
-					string rss_url = itunes.get_rss_from_itunes_url(url);
-					var feed_parser = new FeedParser();
+      details_button.clicked.connect(() => {
+        if(summary.length > 0) {
+          summary_label.set_text(summary);
+        } else if (url.contains("itunes.apple")) {
+          var itunes = new iTunesProvider();
+          string rss_url = itunes.get_rss_from_itunes_url(url);
+          var feed_parser = new FeedParser();
 
-					string details_summary =  feed_parser.find_description_from_file(rss_url);
-					if (details_summary == null || details_summary.strip ().length == 0) {
-						details_summary = _("No summary available.");
-					}
+          string details_summary =  feed_parser.find_description_from_file(rss_url);
+          if (details_summary == null || details_summary.strip ().length == 0) {
+            details_summary = _("No summary available.");
+          }
 
-					summary_label.set_text (details_summary);
-					feed_parser = null;
-				}
-				summary_label.max_width_chars = 64;
-				summary_label.margin = 20;
-				details_popover.show_all();
-			});
+          summary_label.set_text (details_summary);
+          feed_parser = null;
+        }
+        summary_label.max_width_chars = 64;
+        summary_label.margin = 20;
+        details_popover.show_all();
+      });
 
       var subscribe_button = new Gtk.Button.from_icon_name("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
       subscribe_button.tooltip_text = _("Subscribe");
-		  subscribe_button.valign = Gtk.Align.START;
+      subscribe_button.valign = Gtk.Align.START;
 
       if (Utils.check_elementary ()) {
           subscribe_button.relief = Gtk.ReliefStyle.NONE;
@@ -161,5 +156,5 @@ namespace Vocal {
           this.get_style_context().add_class("directory-art");
       }
     }
-	}
+  }
 }

@@ -76,7 +76,7 @@ namespace Vocal {
             autodownload_new.margin_start = 4;
             autodownload_new.notify["active"].connect (() => {
                 settings.auto_download = autodownload_new.active;
-		    });
+            });
             
             var autodownload_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             autodownload_box.spacing = 5;
@@ -97,7 +97,7 @@ namespace Vocal {
             autoclean.set_property("xalign", 1);
             autoclean.notify["active"].connect (() => {
                 settings.autoclean_library = autoclean.active;
-		    });
+            });
             
             var autoclean_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             autoclean_box.spacing = 5;
@@ -127,7 +127,7 @@ namespace Vocal {
             content_box.add(show_label_box);
             
             
-		    Gtk.Separator check_spacer = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+            Gtk.Separator check_spacer = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
             check_spacer.expand = false;
             check_spacer.margin = 5;
             check_spacer.margin_top = 10;
@@ -135,45 +135,45 @@ namespace Vocal {
             content_box.add(check_spacer);
             
             // Skip options
-		    var backward_interval_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-		  
-		    backward_interval_label = new Gtk.Label(_("Seconds to skip back:"));
-		    backward_interval_label.justify = Gtk.Justification.LEFT;
-		    backward_interval_label.halign = Gtk.Align.START;
-		    backward_interval_label.margin_end = 5;
-		    
-		    backward_spinner = new Gtk.SpinButton.with_range (0, 240, 15);
-		    backward_spinner.value = (double)settings.rewind_seconds;
-		    backward_spinner.value_changed.connect(() => {
-		        settings.rewind_seconds = (int) backward_spinner.value;
-		    });
+            var backward_interval_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+          
+            backward_interval_label = new Gtk.Label(_("Seconds to skip back:"));
+            backward_interval_label.justify = Gtk.Justification.LEFT;
+            backward_interval_label.halign = Gtk.Align.START;
+            backward_interval_label.margin_end = 5;
+            
+            backward_spinner = new Gtk.SpinButton.with_range (0, 240, 15);
+            backward_spinner.value = (double)settings.rewind_seconds;
+            backward_spinner.value_changed.connect(() => {
+                settings.rewind_seconds = (int) backward_spinner.value;
+            });
             backward_spinner.halign = Gtk.Align.END;
-		    
-		    backward_interval_box.pack_start(backward_interval_label, true, true, 0);
-		    backward_interval_box.pack_start(backward_spinner, false, false, 0);
-		    backward_interval_box.margin = 5;
-		    
-		    content_box.add(backward_interval_box);
-		    
-		    var forward_interval_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
-		    
-		    forward_interval_label = new Gtk.Label(_("Seconds to skip forward:"));
-		    forward_interval_label.justify = Gtk.Justification.LEFT;
-		    forward_interval_label.halign = Gtk.Align.START;
-		    forward_interval_label.margin_end = 5;
-		    
-		    forward_spinner = new Gtk.SpinButton.with_range(0, 240, 15);
-		    forward_spinner.value = (double)settings.fast_forward_seconds;
-		    forward_spinner.value_changed.connect(() => {
-		        settings.fast_forward_seconds = (int) forward_spinner.value;
-		    });
-		    forward_spinner.halign = Gtk.Align.END;
+            
+            backward_interval_box.pack_start(backward_interval_label, true, true, 0);
+            backward_interval_box.pack_start(backward_spinner, false, false, 0);
+            backward_interval_box.margin = 5;
+            
+            content_box.add(backward_interval_box);
+            
+            var forward_interval_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            
+            forward_interval_label = new Gtk.Label(_("Seconds to skip forward:"));
+            forward_interval_label.justify = Gtk.Justification.LEFT;
+            forward_interval_label.halign = Gtk.Align.START;
+            forward_interval_label.margin_end = 5;
+            
+            forward_spinner = new Gtk.SpinButton.with_range(0, 240, 15);
+            forward_spinner.value = (double)settings.fast_forward_seconds;
+            forward_spinner.value_changed.connect(() => {
+                settings.fast_forward_seconds = (int) forward_spinner.value;
+            });
+            forward_spinner.halign = Gtk.Align.END;
 
-		    forward_interval_box.pack_start(forward_interval_label, true, true, 0);
-		    forward_interval_box.pack_start(forward_spinner, false, false, 0);
-		    forward_interval_box.margin = 5;
-		    content_box.add(forward_interval_box);
-		    
+            forward_interval_box.pack_start(forward_interval_label, true, true, 0);
+            forward_interval_box.pack_start(forward_spinner, false, false, 0);
+            forward_interval_box.margin = 5;
+            content_box.add(forward_interval_box);
+            
             // iTunes County Codes
             Gtk.ListStore list_store = new Gtk.ListStore (1, typeof(string));
             Gtk.TreeIter iter;
@@ -236,7 +236,7 @@ namespace Vocal {
 
             content_box.add(itunes_country_label);
             content_box.add(combo_box);
-		    
+
             var close_button = new Gtk.Button.with_label (_("Close"));
             close_button.clicked.connect(() => {
                 destroy();

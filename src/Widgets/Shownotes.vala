@@ -97,7 +97,8 @@ using Granite;
                 share_menu.add(link_to_file);
                 share_menu.attach_to_widget(share_button, null);
                 share_menu.show_all();
-                share_menu.popup(null, null, null, e.button, e.time);
+                share_menu.popup_at_widget(share_button, Gdk.Gravity.CENTER, Gdk.Gravity.CENTER);
+
                 return true;
             });
 

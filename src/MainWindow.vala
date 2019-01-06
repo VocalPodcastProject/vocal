@@ -324,7 +324,6 @@ namespace Vocal {
             toolbar.shownotes_button.clicked.connect(() => { 
                 shownotes.show_all(); 
             });
-            
             toolbar.volume_button.clicked.connect(() => {
                 var popover = new Gtk.Popover (toolbar.volume_button);
                 var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
@@ -354,12 +353,10 @@ namespace Vocal {
                 
             });
             
-            this.set_titlebar(toolbar);
+            set_titlebar(toolbar);
             
             
             info ("Creating show notes popover.");
-            
-            // Create the show notes popover
             shownotes = new ShowNotesPopover(toolbar.shownotes_button);
             
             info ("Creating downloads popover.");
@@ -371,7 +368,6 @@ namespace Vocal {
             downloads.all_downloads_complete.connect(toolbar.hide_downloads_menuitem);
 
             info ("Creating queue popover.");
-            // Create the queue popover
             queue_popover = new QueuePopover(toolbar.playlist_button);
             controller.library.queue_changed.connect(() => {
                 queue_popover.set_queue(controller.library.queue);
@@ -425,7 +421,7 @@ namespace Vocal {
         }
         
         /*
-         * Populates the three views (all, audio, video) from the contents of the controller.library
+         * Populates the three views (all, audio, video) from the contents of the library
          */
         public void populate_views() {
         	if(!controller.currently_repopulating) {
@@ -504,6 +500,7 @@ namespace Vocal {
             info("Adding coverart to view.");
             podcast_view.add_coverart_to_view();
             
+            info("Populating new episodes view");
             new_episodes_view.populate_episodes_list ();
             
 
@@ -530,8 +527,11 @@ namespace Vocal {
                 return null;
             };
 
-
-            Thread.create<void*>(run, false);
+            try {
+                Thread.create<void*>(run, false);
+            } catch(Error e) {
+                warning("Failed to create thread. %s", e.message);
+            }
 
             yield;
         }
@@ -597,7 +597,12 @@ namespace Vocal {
                 Idle.add((owned) callback);
                 return null;
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+            } catch (Error e) {
+                warning("Failed to create thread. %s", e.message);
+            }
 
             yield;
         }

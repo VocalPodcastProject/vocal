@@ -83,10 +83,7 @@ namespace Vocal {
             var local_podcasts_label = new Gtk.Label(_("Podcasts from Your Library"));
             var cloud_results_label = new Gtk.Label(_("iTunes Podcast Results"));
             
-            local_episodes_label.margin_end = 12;
-            local_episodes_label.margin_start = 12;
-            local_podcasts_label.margin_end = 12;
-            local_podcasts_label.margin_start = 12;
+            local_episodes_label.margin = 12;
 
             local_episodes_label.get_style_context().add_class("h3");
             local_episodes_label.set_property("xalign", 0);
@@ -242,7 +239,12 @@ namespace Vocal {
                 Idle.add((owned) callback);
                 return null;
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+            } catch (Error e) {
+                warning("Failed to create thread. %s", e.message);
+            }
 
             yield;
 
@@ -285,7 +287,12 @@ namespace Vocal {
                 Idle.add((owned) callback);
                 return null;
             };
-            Thread.create<void*>(run, false);
+
+            try {
+                Thread.create<void*>(run, false);
+            } catch (Error e) {
+                info("Failed to create thread. %s", e.message);
+            }
 
             yield;
 

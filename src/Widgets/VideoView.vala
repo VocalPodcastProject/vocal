@@ -1,9 +1,9 @@
 namespace Vocal {
 
-	public class VideoView : Gtk.Box {
-		public Controller controller;
+    public class VideoView : Gtk.Box {
+        public Controller controller;
 
-		public Clutter.Actor actor;
+        public Clutter.Actor actor;
         public GtkClutter.Actor bottom_actor;
         public GtkClutter.Actor return_actor;
         public Clutter.Stage stage;
@@ -15,12 +15,12 @@ namespace Vocal {
         private uint hiding_timer = 0; // Used for hiding video controls
         private bool mouse_primary_down = false;
 
-		public VideoView(Controller controller) {
-			orientation = Gtk.Orientation.VERTICAL;
+        public VideoView(Controller controller) {
+            orientation = Gtk.Orientation.VERTICAL;
 
-			this.controller = controller;
+            this.controller = controller;
 
-			// Create the drawing area for the video widget
+            // Create the drawing area for the video widget
             video_widget = new GtkClutter.Embed ();
             video_widget.use_layout_size = false;
             video_widget.button_press_event.connect (on_video_button_press_event);
@@ -44,8 +44,8 @@ namespace Vocal {
             video_controls.vexpand = true;
             video_controls.set_valign (Gtk.Align.END);
             video_controls.unfullscreen.connect (() => {
-            	video_controls.set_reveal_child(false);
-            	controller.window.on_fullscreen_request();
+                video_controls.set_reveal_child(false);
+                controller.window.on_fullscreen_request();
             });
             video_controls.play_toggled.connect (controller.play_pause);
             video_controls.progress_bar_scale_changed.connect (() => {
@@ -72,7 +72,7 @@ namespace Vocal {
             return_to_library.set_no_show_all (false);
             return_to_library.show();
             return_to_library.clicked.connect (() => {
-            	controller.window.on_return_to_library();
+                controller.window.on_return_to_library();
             });
 
             return_revealer = new Gtk.Revealer ();
@@ -83,9 +83,9 @@ namespace Vocal {
             stage.add_child (return_actor);
 
             add(video_widget);
-		}
+        }
 
-		/*
+        /*
          * Requests the app to be taken fullscreen if the video widget
          * is double-clicked
          */
@@ -104,8 +104,8 @@ namespace Vocal {
         }
 
         /*
-		 * Called when the user moves the cursor when a video is playing
-		 */
+         * Called when the user moves the cursor when a video is playing
+         */
         private bool on_motion_event(Gdk.EventMotion e) {
             // Figure out if you should just move the window
             if (mouse_primary_down) {
@@ -187,5 +187,5 @@ namespace Vocal {
 
             return false;
         }
-	}
+    }
 }

@@ -47,15 +47,10 @@ namespace Vocal {
         
 
         /* Secondary widgets */
-
-        private DownloadsPopover downloads;
-        public ShowNotesPopover shownotes;
-        private QueuePopover queue_popover;
+        public SettingsDialog settings_dialog;
         private Gtk.MessageDialog missing_dialog;
-        private SettingsDialog settings_dialog;
 
         /* Video playback */
-
         public VideoView video_view;
         
         /* Miscellaneous Global Variables */
@@ -270,7 +265,7 @@ namespace Vocal {
             info("Creating toolbar.");
 
             // Create the toolbar
-            toolbar = new Toolbar (controller.settings);
+            toolbar = new Toolbar (controller.settings, controller);
             toolbar.get_style_context ().add_class ("vocal-headerbar");
             toolbar.search_button.clicked.connect (on_show_search);
 
@@ -300,17 +295,15 @@ namespace Vocal {
                 settings_dialog.show_name_label_toggled.connect (podcast_view.on_show_name_label_toggled);
                 settings_dialog.show_all ();
             });
-            
             toolbar.new_episodes_button.clicked.connect (() => {
                 switch_visible_page (new_episodes_view);
             });
-
             toolbar.refresh_selected.connect (controller.on_update_request);
             toolbar.play_pause_selected.connect (controller.play_pause);
             toolbar.seek_forward_selected.connect (controller.seek_forward);
             toolbar.seek_backward_selected.connect (controller.seek_backward);
-            toolbar.playlist_button.clicked.connect(() => { 
-                queue_popover.show_all(); 
+            toolbar.play_episode_from_queue_immediately.connect((episode) => {
+                play_episode_from_queue_immediately(episode);
             });
             toolbar.store_selected.connect (() => {
                 details.pane_should_hide ();
@@ -318,79 +311,8 @@ namespace Vocal {
             });
 
             toolbar.export_selected.connect (export_podcasts);
-            toolbar.downloads_selected.connect (() => {
-                this.downloads.show_all();
-            });
-            toolbar.shownotes_button.clicked.connect(() => { 
-                shownotes.show_all(); 
-            });
-            toolbar.volume_button.clicked.connect(() => {
-                var popover = new Gtk.Popover (toolbar.volume_button);
-                var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
-                scale.inverted = true;
-                scale.draw_value = false;
-                scale.margin = 5;
-                scale.height_request = 120;
-                scale.set_value (controller.player.get_volume ());
-                scale.value_changed.connect (() => {
-			        controller.player.set_volume (scale.get_value ());
-			        if (scale.get_value () > 0.7) {
-			            var vol_image = toolbar.volume_button.image as Gtk.Image;
-			            vol_image.icon_name = "audio-volume-high-symbolic";
-			        } else if (scale.get_value () > 0.4) {
-			            var vol_image = toolbar.volume_button.image as Gtk.Image;
-			            vol_image.icon_name = "audio-volume-medium-symbolic";
-			        } else if  (scale.get_value () > 0.1) {
-			            var vol_image = toolbar.volume_button.image as Gtk.Image;
-			            vol_image.icon_name = "audio-volume-low-symbolic";
-		            } else {
-		                var vol_image = toolbar.volume_button.image as Gtk.Image;
-			            vol_image.icon_name = "audio-volume-muted-symbolic";
-		            }
-		        });
-                popover.add(scale);
-                popover.show_all ();
-                
-            });
             
             set_titlebar(toolbar);
-            
-            
-            info ("Creating show notes popover.");
-            shownotes = new ShowNotesPopover(toolbar.shownotes_button);
-            
-            info ("Creating downloads popover.");
-            downloads = new DownloadsPopover(toolbar.download);
-            downloads.closed.connect(() => {
-                if(downloads.downloads.size < 1)
-                    toolbar.hide_downloads_menuitem();
-            });
-            downloads.all_downloads_complete.connect(toolbar.hide_downloads_menuitem);
-
-            info ("Creating queue popover.");
-            queue_popover = new QueuePopover(toolbar.playlist_button);
-            controller.library.queue_changed.connect(() => {
-                queue_popover.set_queue(controller.library.queue);
-            });
-            queue_popover.set_queue(controller.library.queue);
-            queue_popover.move_up.connect((e) => {
-                controller.library.move_episode_up_in_queue(e);
-                queue_popover.show_all();
-            });
-            queue_popover.move_down.connect((e) => {
-                controller.library.move_episode_down_in_queue(e);
-                queue_popover.show_all();
-            });
-            queue_popover.update_queue.connect((oldPos, newPos) => {
-                controller.library.update_queue(oldPos, newPos);
-                queue_popover.show_all();
-            });
-
-            queue_popover.remove_episode.connect((e) => {
-                controller.library.remove_episode_from_queue(e);
-                queue_popover.show_all();
-            });
-            queue_popover.play_episode_from_queue_immediately.connect(play_episode_from_queue_immediately);
 
             // Create the search box
             search_results_view = new SearchResultsView(controller.library);
@@ -462,7 +384,7 @@ namespace Vocal {
 
                                             controller.player.set_episode(controller.current_episode);
                                             controller.player.set_position(controller.current_episode.last_played_position);
-                                            shownotes.set_notes_text(episode.description);
+                                            toolbar.shownotes.set_notes_text(episode.description);
 
 	                                        if(controller.current_episode.last_played_position != 0) {
 	                                            toolbar.show_playback_box();
@@ -543,14 +465,14 @@ namespace Vocal {
         private void play_episode_from_queue_immediately(Episode e) {
 
             controller.current_episode = e;
-            queue_popover.hide();
+            toolbar.queue_popover.hide();
             controller.library.remove_episode_from_queue(e);
 
             controller.play();
 
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed(controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64)controller.player.duration);
-            shownotes.set_notes_text(controller.current_episode.description);
+            toolbar.shownotes.set_notes_text(controller.current_episode.description);
             controller.settings.last_played_media = "%s,%s".printf(controller.current_episode.title, controller.current_episode.parent.name);
         }
         
@@ -571,7 +493,7 @@ namespace Vocal {
 
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed(controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-            shownotes.set_notes_text(controller.current_episode.description);
+            toolbar.shownotes.set_notes_text(controller.current_episode.description);
             controller.settings.last_played_media = "%s,%s".printf(controller.current_episode.title, controller.current_episode.parent.name);
         }
 
@@ -624,7 +546,7 @@ namespace Vocal {
             details_box.new_percentage_available.connect(() => {
                 double overall_percentage = 1.0;
 
-                foreach(DownloadDetailBox d in downloads.downloads) {
+                foreach(DownloadDetailBox d in toolbar.downloads.downloads) {
                     if(d.percentage > 0.0) {
                         overall_percentage *= d.percentage;
                     }
@@ -632,7 +554,7 @@ namespace Vocal {
             });
 
             //  Add the download to the downloads popup
-            downloads.add_download(details_box);
+            toolbar.downloads.add_download(details_box);
         }
 
 
@@ -816,14 +738,6 @@ namespace Vocal {
         public void show_details (Podcast current_podcast) {
             details.set_podcast(current_podcast);
             switch_visible_page(details);
-        }
-
-
-        /*
-         * Shows the downloads popover
-         */
-        public void show_downloads_popover() {
-            this.downloads.show_all();
         }
 
 
@@ -1233,7 +1147,7 @@ namespace Vocal {
 
                 // Set the shownotes, the media information, and update the last played media in the settings
                 controller.track_changed(controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-                shownotes.set_notes_text(controller.current_episode.description);
+                toolbar.shownotes.set_notes_text(controller.current_episode.description);
                 controller.settings.last_played_media = "%s,%s".printf(controller.current_episode.title, controller.current_episode.parent.name);
             } else {
                 controller.player.playing = false;
@@ -1277,7 +1191,7 @@ namespace Vocal {
             if(controller.player.playing) {
                 this.hide();
                 return true;
-            } else if(downloads != null && downloads.downloads.size > 0) {
+            } else if(toolbar.downloads != null && toolbar.downloads.downloads.size > 0) {
 
             	//If there are downloads verify that the user wishes to exit and cancel the downloads
             	var downloads_active_dialog = new Gtk.MessageDialog(this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _("Vocal is currently downloading episodes. Exiting will cause the downloads to be canceled. Are you sure you want to exit?"));

@@ -23,6 +23,7 @@ using Granite;
 namespace Vocal {
 	public class Toolbar : Gtk.HeaderBar {
 
+        public signal void play_episode_from_queue_immediately(Episode episode);
 		public signal void add_podcast_selected();
 		public signal void import_podcasts_selected();
 		public signal void export_selected();
@@ -40,28 +41,32 @@ namespace Vocal {
         public signal void check_for_updates_selected();
         public signal void about_selected ();
 
-        public Gtk.Menu             menu;
-        public Gtk.MenuButton       app_menu;
+        public Gtk.Menu menu;
+        public Gtk.MenuButton app_menu;
 
-		private Gtk.Button          play_pause;
-        private Gtk.Button          forward;
-        private Gtk.Button          backward;
-        private Gtk.Button          refresh;
-        public  Gtk.Button          download;
-        public  Gtk.Button 			shownotes_button;
-        public  Gtk.Button          volume_button;
-        public  Gtk.Button          search_button;
-        private Gtk.Button          podcast_store_button;
-		public Gtk.Button 			playlist_button;
+		private Gtk.Button play_pause;
+        private Gtk.Button forward;
+        private Gtk.Button backward;
+        private Gtk.Button refresh;
+        private Gtk.Button download;
+        private Gtk.Button shownotes_button;
+        private Gtk.Button volume_button;
+        private Gtk.Button podcast_store_button;
+        private Gtk.Button playlist_button;
+        public Gtk.Button search_button;
 		public Gtk.Button new_episodes_button;
 
-        public  Gtk.MenuItem        export_item;
-        private Gtk.Box             headerbar_box;
-        public  PlaybackBox         playback_box;
+        public Gtk.MenuItem export_item;
+        private Gtk.Box headerbar_box;
+        public PlaybackBox playback_box;
 
-        private VocalSettings 		settings;
+        public DownloadsPopover downloads;
+        public ShowNotesPopover shownotes;
+        public QueuePopover queue_popover;
 
-		public Toolbar(VocalSettings settings, bool? first_run = false, bool? on_elementary = Utils.check_elementary()) {
+        private VocalSettings settings;
+
+		public Toolbar(VocalSettings settings, Controller controller, bool? first_run = false, bool? on_elementary = Utils.check_elementary()) {
 
 			this.settings = settings;
 
@@ -75,31 +80,61 @@ namespace Vocal {
 	        playback_box.hexpand = true;
 
             // Create the show notes button
-		    if(on_elementary)
+		    if(on_elementary) {
 	            shownotes_button = new Gtk.Button.from_icon_name("help-info-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-		    else
+            } else {
 	     		shownotes_button = new Gtk.Button.from_icon_name("dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            }
             shownotes_button.tooltip_text = _("View show notes");
             shownotes_button.valign = Gtk.Align.CENTER;
             shownotes_button.clicked.connect(() => {
-                shownotes_selected();
+                shownotes.show_all(); 
             });
             shownotes_button.relief = Gtk.ReliefStyle.NONE;
             
             volume_button = new Gtk.Button.from_icon_name("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            volume_button.clicked.connect(() => {
+                var popover = new Gtk.Popover (volume_button);
+                var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
+                scale.inverted = true;
+                scale.draw_value = false;
+                scale.margin = 5;
+                scale.height_request = 120;
+                scale.set_value (controller.player.get_volume ());
+                scale.value_changed.connect (() => {
+                    controller.player.set_volume (scale.get_value ());
+                    if (scale.get_value () > 0.7) {
+                        var vol_image = volume_button.image as Gtk.Image;
+                        vol_image.icon_name = "audio-volume-high-symbolic";
+                    } else if (scale.get_value () > 0.4) {
+                        var vol_image = volume_button.image as Gtk.Image;
+                        vol_image.icon_name = "audio-volume-medium-symbolic";
+                    } else if  (scale.get_value () > 0.1) {
+                        var vol_image = volume_button.image as Gtk.Image;
+                        vol_image.icon_name = "audio-volume-low-symbolic";
+                    } else {
+                        var vol_image = volume_button.image as Gtk.Image;
+                        vol_image.icon_name = "audio-volume-muted-symbolic";
+                    }
+                });
+                popover.add(scale);
+                popover.show_all ();
+                
+            });
 
             playlist_button = new Gtk.Button.from_icon_name("media-playlist-consecutive-symbolic");
             playlist_button.tooltip_text = _("Coming up next");
-            playlist_button.clicked.connect(() => {
-                playlist_selected();
+            playlist_button.clicked.connect(() => { 
+                queue_popover.show_all(); 
             });
             playlist_button.relief = Gtk.ReliefStyle.NONE;
             playlist_button.valign = Gtk.Align.CENTER;
             
-            if(on_elementary)
+            if(on_elementary) {
                 new_episodes_button = new Gtk.Button.from_icon_name ("help-about-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
-            else
+            } else {
                 new_episodes_button = new Gtk.Button.from_icon_name ("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            }
             new_episodes_button.tooltip_text = _("New Episodes");
             new_episodes_button.relief = Gtk.ReliefStyle.NONE;
 
@@ -290,12 +325,50 @@ namespace Vocal {
             download.tooltip_text = _("Downloads");
             download.relief = Gtk.ReliefStyle.NONE;
             download.valign = Gtk.Align.CENTER;
-
             download.clicked.connect(() => {
-            	downloads_selected();
+            	downloads.show_all();
         	});
             download.set_no_show_all(true);
             download.hide();
+
+            info ("Creating show notes popover.");
+            shownotes = new ShowNotesPopover(shownotes_button);
+            
+            info ("Creating downloads popover.");
+            downloads = new DownloadsPopover(download);
+            downloads.closed.connect(() => {
+                if(downloads.downloads.size < 1) {
+                    hide_downloads_menuitem();
+                }
+            });
+            downloads.all_downloads_complete.connect(hide_downloads_menuitem);
+
+            info ("Creating queue popover.");
+            queue_popover = new QueuePopover(playlist_button);
+            controller.library.queue_changed.connect(() => {
+                queue_popover.set_queue(controller.library.queue);
+            });
+            queue_popover.set_queue(controller.library.queue);
+            queue_popover.move_up.connect((e) => {
+                controller.library.move_episode_up_in_queue(e);
+                queue_popover.show_all();
+            });
+            queue_popover.move_down.connect((e) => {
+                controller.library.move_episode_down_in_queue(e);
+                queue_popover.show_all();
+            });
+            queue_popover.update_queue.connect((oldPos, newPos) => {
+                controller.library.update_queue(oldPos, newPos);
+                queue_popover.show_all();
+            });
+
+            queue_popover.remove_episode.connect((e) => {
+                controller.library.remove_episode_from_queue(e);
+                queue_popover.show_all();
+            });
+            queue_popover.play_episode_from_queue_immediately.connect((episode) => {
+                play_episode_from_queue_immediately(episode);
+            });
 
             // Add the buttons
             pack_start (backward);

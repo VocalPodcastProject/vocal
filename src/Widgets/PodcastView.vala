@@ -246,8 +246,19 @@ namespace Vocal {
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
             shownotes.mark_as_new_button.clicked.connect(() => { mark_episode_as_new_requested_internal(); });
             shownotes.internet_archive_upload_requested.connect (() => { 
+                var settings = VocalSettings.get_default_instance ();
+                if (settings.archive_access_key.length < 1 || settings.archive_secret_key.length < 1) {
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, _("Before you can upload to the Internet Archive you must add your archive.org account's API keys. Visit https://archive.org/account/s3.php to see your keys, then paste them in the settings."));
+                    
+                    var image = new Gtk.Image.from_icon_name("dialog-warning", Gtk.IconSize.DIALOG);
+                    msg.image = image;
+                    msg.image.show_all();
 
-                if (podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
+			        msg.response.connect ((response_id) => {
+			            msg.destroy();
+		            });
+		            msg.show ();
+                } else if (podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
                 
                     var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, (podcast.episodes[current_episode_index]));
                     internet_archive_dialog.show_all ();

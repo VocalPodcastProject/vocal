@@ -41,6 +41,7 @@ namespace Vocal {
             content_box.margin_right = 12;
             
             var notebook = new Gtk.Notebook ();
+            notebook.expand = true;
             notebook.show_tabs = false;
             notebook.show_border = false;
             content_box.add (notebook);

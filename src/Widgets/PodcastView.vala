@@ -278,9 +278,9 @@ namespace Vocal {
 			            msg.destroy();
 		            });
 		            msg.show ();
-                } else if (podcast.episodes[current_episode_index].current_download_status == DownloadStatus.DOWNLOADED) {
+                } else if (current_episode.current_download_status == DownloadStatus.DOWNLOADED) {
                 
-                    var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, (podcast.episodes[current_episode_index]));
+                    var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, current_episode);
                     internet_archive_dialog.show_all ();
                     
                 } else {
@@ -294,7 +294,7 @@ namespace Vocal {
 			        msg.response.connect ((response_id) => {
 			            switch (response_id) {
 				            case Gtk.ResponseType.YES:
-                                download_episode_requested(podcast.episodes[current_episode_index]);
+                                download_episode_requested(current_episode);
 					            break;
 				            case Gtk.ResponseType.NO:
 					            break;
@@ -658,7 +658,7 @@ namespace Vocal {
             }
             
             // Check to see if the episode can be uploaded to the archive or not
-            if(podcast.episodes[current_episode_index].parent.license == License.CC) {
+            if(current_episode.parent.license == License.CC) {
                 shownotes.show_internet_archive_button ();
             } else {
                 shownotes.hide_internet_archive_button ();

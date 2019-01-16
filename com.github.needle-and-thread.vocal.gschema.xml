@@ -113,5 +113,21 @@
 				When enabled, Vocal will show an extra label beneath the cover art in the library with the name of the podcast.
 			</description>
 		</key>
+		
+		<key name="archive-access-key" type="s">
+			<default>""</default>
+			<summary>Your archive.org accounts S3 access key</summary>
+			<description>
+				The S3 access key from an archive.org account (https://archive.org/account/s3.php)
+			</description>
+		</key>
+		
+		<key name="archive-secret-key" type="s">
+			<default>""</default>
+			<summary>Your archive.org accounts S3 secret key</summary>
+			<description>
+				The S3 secret key from an archive.org account (https://archive.org/account/s3.php)
+			</description>
+		</key>
 	</schema>
 </schemalist>

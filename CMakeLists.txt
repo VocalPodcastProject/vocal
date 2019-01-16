@@ -11,7 +11,7 @@ set (VERSION_INFO "Release")
 set (EXEC_NAME "com.github.needle-and-thread.vocal")
 set (PREFIX ${CMAKE_INSTALL_PREFIX})
 set (CACHE_DIR "~/.cache/vocal")
-set (USER_AGENT "vocal ${VERSION}")
+set (USER_AGENT "vocal/${VERSION}")
 set (DOLLAR "$")
 
 list (APPEND CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake)

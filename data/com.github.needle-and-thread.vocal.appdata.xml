@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2018 Needle & Thread -->
 <component type="desktop">
-  <id>com.github.needle-and-thread.vocal.desktop</id>
+  <id>com.github.needle-and-thread.vocal</id>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Vocal</name>

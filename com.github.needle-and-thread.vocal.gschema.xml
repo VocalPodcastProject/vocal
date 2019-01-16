@@ -89,14 +89,6 @@
 				Whether or not Vocal should keep running in the background for feed updates and downloads.
 			</description>
 		</key>
-
-		<key name="hide-played" type="b">
-			<default>false</default>
-			<summary>Whether or not to hide played episodes in the sidepane</summary>
-			<description>
-				Whether or not to hide played episodes in the sidepane.
-			</description>
-		</key>
 		
 		<key name="itunes-store-country" type="s">
 			<default>"us"</default>
@@ -127,6 +119,15 @@
 			<summary>Your archive.org accounts S3 secret key</summary>
 			<description>
 				The S3 secret key from an archive.org account (https://archive.org/account/s3.php)
+			</description>
+		</key>
+
+		<key name="newest-episodes-first" type="b">
+			<default>true</default>
+			<summary>Whether to show the newest episodes highest up in the list, or at the bottom</summary>
+			<description>
+				When set to true, Vocal will show the newest episodes at the top of episode lists. When false, the oldest
+				will be at the top.
 			</description>
 		</key>
 	</schema>

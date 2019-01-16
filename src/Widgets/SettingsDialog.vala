@@ -236,7 +236,7 @@ namespace Vocal {
             
             var archive_api_key_linkbutton = new Gtk.LinkButton.with_label ("https://archive.org/account/s3.php", "See your archive.org API keys");
             
-            archive_access_key_label = new Gtk.Label (_("Achive.org S3 Access Key"));
+            archive_access_key_label = new Gtk.Label (_("Archive.org S3 Access Key"));
             archive_access_key_label.justify = Gtk.Justification.LEFT;
 		    archive_access_key_label.halign = Gtk.Align.START;
             archive_access_key_entry = new Gtk.Entry ();
@@ -245,7 +245,7 @@ namespace Vocal {
                 settings.archive_access_key = archive_access_key_entry.text;
             });
             
-            archive_secret_key_label = new Gtk.Label (_("Achive.org S3 Secret Key"));
+            archive_secret_key_label = new Gtk.Label (_("Archive.org S3 Secret Key"));
             archive_secret_key_label.justify = Gtk.Justification.LEFT;
 		    archive_secret_key_label.halign = Gtk.Align.START;
             archive_secret_key_entry = new Gtk.Entry ();

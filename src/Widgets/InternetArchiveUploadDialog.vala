@@ -166,7 +166,7 @@ namespace Vocal {
                         upload_complete_image.show ();
                         uploading_message.set_text (_("Upload Failed"));
                         
-                        thanks_message.set_text (_("Be sure to check your network connection and try again later."));
+                        thanks_message.set_text (_("Be sure to check your network connection and API keys, then try again later."));
                         upload_complete_image.set_from_icon_name ("face-confused-symbolic", Gtk.IconSize.DIALOG);
                         
                         thanks_message.set_no_show_all (false);

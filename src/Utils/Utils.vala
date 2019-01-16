@@ -382,8 +382,9 @@ const string CLOSE = """
             uint8[] file_contents;
             GLib.FileUtils.get_data (local_uri, out file_contents);
             message.set_request ("audio/mpeg3", Soup.MemoryUse.STATIC, file_contents);
-            string accesskey = "";
-            string secretkey = "";
+            var settings = VocalSettings.get_default_instance ();
+            string accesskey = settings.archive_access_key;
+            string secretkey = settings.archive_secret_key;
             message.request_headers.append ("x-archive-auto-make-bucket", "1");
             message.request_headers.append ("x-archive-meta-title", podcast);
             message.request_headers.append ("x-archive-meta-description", description);

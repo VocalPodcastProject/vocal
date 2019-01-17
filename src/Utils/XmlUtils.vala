@@ -22,10 +22,12 @@ namespace Vocal {
 
         public static string strip_trailing_rss_chars(string rss) {
             // If there is a feed tag , it is atom file, else a rss one.
-            if (rss.last_index_of("</feed>")>0)
+            if (rss.last_index_of("</feed>")>0) {
                 return rss.substring(0, rss.last_index_of("</feed>") + "</feed>".length);
-            else
+            }
+            else {
                 return rss.substring(0, rss.last_index_of("</rss>") + "</rss>".length);
+            }
         }
     
         public static unowned Xml.Doc parse_string (string? input_string) throws PublishingError {

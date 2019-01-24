@@ -43,7 +43,7 @@ msgstr ""
 
 #: ../src/MainWindow.vala:194
 msgid "View show notes"
-msgstr "Voir les notes de mise à jour."
+msgstr "Voir les notes de mise à jour"
 
 #: ../src/MainWindow.vala:237
 msgid "Return to library view"
@@ -78,19 +78,19 @@ msgstr ""
 
 #: ../src/MainWindow.vala:495
 msgid "Check Out the Vocal Starter Pack…"
-msgstr "Essayez le pack Vocal Starter..."
+msgstr "Essayez le pack Vocal Starter…"
 
 #: ../src/MainWindow.vala:495
 msgid ""
 "New to podcasting? Check out our starter pack. Select individual podcasts, "
 "or download the entire pack."
 msgstr ""
-"Vous êtes nouveau? Essayez notre pack starter. Sélectionnez des podcasts un "
+"Vous êtes nouveau ? Essayez notre pack de démarrage. Sélectionnez des podcasts un "
 "par un ou télécharger le pack intégral."
 
 #: ../src/MainWindow.vala:526
 msgid "Export Subscriptions…"
-msgstr "Exporter des abonnements..."
+msgstr "Exporter des abonnements…"
 
 #: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
 msgid "Preferences"
@@ -98,11 +98,11 @@ msgstr "Préférences"
 
 #: ../src/MainWindow.vala:546
 msgid "Check Out The Vocal Starter Pack…"
-msgstr "Essayez le Vocal Starter Pack"
+msgstr "Essayez pack de démarrage de Vocal…"
 
 #: ../src/MainWindow.vala:554
 msgid "Donate…"
-msgstr "Faire un don..."
+msgstr "Faire un don…"
 
 #: ../src/MainWindow.vala:574
 msgid "Add new podcasts to the library"
@@ -114,7 +114,7 @@ msgstr "Ajouter un flux de podcast"
 
 #: ../src/MainWindow.vala:588
 msgid "Import Subscriptions…"
-msgstr "Importer des abonnements..."
+msgstr "Importer des abonnements…"
 
 #: ../src/MainWindow.vala:671
 msgid "All Podcasts"
@@ -141,7 +141,7 @@ msgstr "Avance rapide de %d secondes"
 
 #: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
 msgid "Rewind %d seconds"
-msgstr "Rembobinage %d secondes"
+msgstr "Rembobinage de %d secondes"
 
 #: ../src/MainWindow.vala:709
 msgid "Check for new episodes"
@@ -186,7 +186,7 @@ msgstr "Fichiers OPML"
 
 #: ../src/MainWindow.vala:1448
 msgid "Error Importing from File"
-msgstr "Erreur d'importation depuis le fichier."
+msgstr "Erreur d'importation depuis le fichier"
 
 #: ../src/MainWindow.vala:1449
 msgid ""
@@ -206,7 +206,7 @@ msgstr ""
 
 #: ../src/MainWindow.vala:1540
 msgid "Adding new podcast: <b>"
-msgstr "Ajouter un nouveau podcast: <b>"
+msgstr "Ajouter un nouveau podcast : <b>"
 
 #: ../src/MainWindow.vala:1604
 msgid "Error Adding Podcast"
@@ -221,7 +221,7 @@ msgstr ""
 
 #: ../src/MainWindow.vala:1720
 msgid "Good Stuff is On Its Way"
-msgstr ""
+msgstr "De bonnes choses sont en route"
 
 #: ../src/MainWindow.vala:1721
 msgid ""
@@ -240,8 +240,8 @@ msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to "
 "be canceled. Are you sure you want to exit?"
 msgstr ""
-"Vocal télécharge actuellement des épisodes. Quitter pourrait annuler leurs "
-"téléchargements. Êtes-vous sûr de vouloir quitter ?"
+"Vocal télécharge actuellement des épisodes. Quitter pourrait annuler leur "
+"téléchargement. Êtes-vous sûr de vouloir quitter ?"
 
 #: ../src/Widgets/DownloadDetailBox.vala:107
 msgid "Cancel Download"
@@ -249,7 +249,7 @@ msgstr "Annuler le téléchargement"
 
 #: ../src/Widgets/VideoControls.vala:59
 msgid "Exit Fullscreen"
-msgstr "Quitter le plein écran"
+msgstr "Quitter le plein-écran"
 
 #: ../src/Widgets/DownloadsPopover.vala:50
 msgid "No active downloads."
@@ -273,19 +273,19 @@ msgstr "<b>Sélectionner un épisode pour commencer à le lire...</b>"
 
 #: ../src/Widgets/SettingsDialog.vala:64
 msgid "Automatically download new episodes:"
-msgstr "Télécharger automatiquement les nouveaux épisodes:"
+msgstr "Télécharger automatiquement les nouveaux épisodes :"
 
 #: ../src/Widgets/SettingsDialog.vala:85
 msgid "Automatically delete played files:"
-msgstr "Supprimer automatiquement les fichiers lus:"
+msgstr "Supprimer automatiquement les fichiers lus :"
 
 #: ../src/Widgets/SettingsDialog.vala:115
 msgid "Seconds to skip back:"
-msgstr "Secondes pour le saut arrière:"
+msgstr "Secondes en arrière :"
 
 #: ../src/Widgets/SettingsDialog.vala:136
 msgid "Seconds to skip forward:"
-msgstr ""
+msgstr "Secondes en avant :"
 
 #: ../src/Widgets/SettingsDialog.vala:153
 msgid "Close"
@@ -345,7 +345,7 @@ msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
 msgstr ""
-"Voulez-vous vraiment supprimer les fichiers télécharger pour ces épisodes?"
+"Voulez-vous vraiment supprimer les fichiers télécharger pour ces épisodes ?"
 
 #: ../src/Widgets/Sidepane.vala:372
 msgid "Mark as Played"

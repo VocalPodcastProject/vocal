@@ -162,7 +162,7 @@ namespace Vocal {
             edit.button_press_event.connect((e) => {
                 var edit_menu = new Gtk.Menu();
                 var change_cover_art_item = new Gtk.MenuItem.with_label(_("Select different cover art"));
-                var creative_commons_override_button= new Gtk.MenuItem.with_label (_("Set podcast license to Creative Commons"));
+                var creative_commons_override_button = new Gtk.MenuItem.with_label (_("Set podcast license to Creative Commons"));
                 change_cover_art_item.activate.connect(on_change_album_art);
                 creative_commons_override_button.activate.connect (on_creative_commons_override);
                 edit_menu.add(change_cover_art_item);
@@ -274,7 +274,7 @@ namespace Vocal {
                     msg.image = image;
                     msg.image.show_all();
 
-			        msg.response.connect ((response_id) => {
+                    msg.response.connect ((response_id) => {
 			            msg.destroy();
 		            });
 		            msg.show ();

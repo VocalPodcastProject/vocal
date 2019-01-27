@@ -370,7 +370,7 @@ const string CLOSE = """
         if (container[container.len() - 1] == '-') {
             container = container.substring(0, container.len() - 1);
         }
-        string episode = Uri.escape_string (title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of ("."), 4));
+        string episode = Uri.escape_string (title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of (".")));
         info (container);
         info (episode);
         var session = new Soup.Session ();
@@ -381,7 +381,8 @@ const string CLOSE = """
         ThreadFunc<void*> run = () => {
             uint8[] file_contents;
             GLib.FileUtils.get_data (local_uri, out file_contents);
-            message.set_request ("audio/mpeg3", Soup.MemoryUse.STATIC, file_contents);
+            string mime_type = get_mime_type_for_file (local_uri);
+            message.set_request (mime_type, Soup.MemoryUse.STATIC, file_contents);
             var settings = VocalSettings.get_default_instance ();
             string accesskey = settings.archive_access_key;
             string secretkey = settings.archive_secret_key;
@@ -405,6 +406,45 @@ const string CLOSE = """
             return false;
         }
 
+    }
+    
+    public static string get_mime_type_for_file (string file_uri) {
+    
+        string extension = file_uri.down ().substring (file_uri.last_index_of ("."));
+        
+        // If all else fails, assume MP3
+        string mime = "audio/mpeg3";
+        switch (extension) {
+            case ".mp3":
+                mime = "audio/mpeg";
+                break;
+            case ".mp4":
+                mime = "video/mp4";
+                break;
+            case ".mpeg":
+                mime = "video/mpeg";
+                break;
+            case ".aac":
+                mime = "audio/aac";
+                break;
+            case ".weba":
+                mime = "audio/webm";
+                break;
+            case ".webm":
+                mime = "video/webm";
+                break;
+            case ".oga":
+                mime = "audio/ogg";
+                break;
+            case ".ogv":
+                mime = "video/ogg";
+                break;
+            case ".mov":
+                mime = "video/quicktime";
+                break;
+        }
+        
+        return mime;
     }
 
 }

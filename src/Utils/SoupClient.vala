@@ -7,19 +7,21 @@ public class SoupClient {
         soup_session.user_agent = Constants.USER_AGENT;
     }
 
-    public InputStream request (HttpMethod method, string url) throws PublishingError {
+    public InputStream request (HttpMethod method, string url) throws Error {
         if (!valid_http_uri(url)) {
             throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
         }
 
         var message = new Soup.Message (method.to_string (), url);
+
         InputStream stream = soup_session.send (message);
+
         check_response_headers(message);
 
         return stream;
     }
 
-    public uint8[] send_message (HttpMethod method, string url) throws PublishingError {
+    public uint8[] send_message (HttpMethod method, string url) throws Error {
         if (!valid_http_uri(url)) {
             throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
         }
@@ -54,7 +56,7 @@ public class SoupClient {
         return true;
     }
 
-    private void check_response_headers (Soup.Message message) throws PublishingError {
+    private void check_response_headers (Soup.Message message) throws Error {
         switch (message.status_code) {
             case Soup.Status.OK:
             case Soup.Status.CREATED: // HTTP code 201 (CREATED) signals that a new

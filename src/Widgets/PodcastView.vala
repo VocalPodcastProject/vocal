@@ -233,13 +233,12 @@ namespace Vocal {
             
             label_box.pack_start (cc_image, false, false, 0);
 
-			actions_box.pack_start(download_all, true, true, 0);
             actions_box.pack_start(edit, true, true, 0);
-			actions_box.pack_start(remove, true, true, 0);
+            actions_box.pack_start(remove, true, true, 0);
 
-			var vertical_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
-			vertical_box.pack_start(label_box, true, true, 0);
-			vertical_box.pack_start(actions_box, false, false, 0);
+            var vertical_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 5);
+            vertical_box.pack_start(label_box, true, true, 0);
+            vertical_box.pack_start(actions_box, false, false, 0);
             vertical_box.margin = 12;
             vertical_box.margin_bottom = 0;
 

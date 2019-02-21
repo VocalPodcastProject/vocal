@@ -18,9 +18,9 @@
 ***/
 
 namespace Vocal {
-    
-    public class DirectoryEntry { 
-    
+
+    public class DirectoryEntry {
+
         public string artist = "";
         public string artworkUrl55 = "";
         public string artworkUrl60 = "";
@@ -30,7 +30,7 @@ namespace Vocal {
         public string feedUrl = "";
         public string summary = "";
         public string title = "";
-        
-        public DirectoryEntry() {}
+
+        public DirectoryEntry () {}
     }
 }

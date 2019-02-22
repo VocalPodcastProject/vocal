@@ -35,6 +35,8 @@ namespace Vocal {
 		public Podcast          parent;                  // the parent that the episode belongs to
 		public DateTime         datetime_released;       // the datetime corresponding the when the episode was released
 
+		public string parent_feed_uri { get; set; default=""; }  // The uri of the parent podcast
+
 		/*
 		 * Gets the playback uri based on whether the file is local or remote
 		 * (and if it is local, by making sure it actually exists on disk)

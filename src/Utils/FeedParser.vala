@@ -507,6 +507,7 @@ namespace Vocal {
                         
                         // Create a new episode
                         Episode episode = new Episode();
+                        episode.parent_feed_uri = podcast.feed_uri;
                         string next_item_in_queue = null;
                         bool found_summary = false;
 

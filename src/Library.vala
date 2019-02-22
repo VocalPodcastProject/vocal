@@ -117,41 +117,22 @@ namespace Vocal {
             if (!check_database_exists ()) {
                 return;
             }
-        
-            info ("Performing database update check.");
             
-            // Open the database
-            int ec = Sqlite.Database.open (db_location, out db);
-	        if (ec != Sqlite.OK) {
-		        error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
-		        return;
-	        }
-	        
-	        // Temporarily add a dummy podcast
-            string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type)
-                VALUES ('%s','%s','%s','%s', '%s', '%s');""".printf("dummy", "dummy", "dummy", "dummy", "dummy", "dummy");
+            prepare_database ();
+            int current_db_version = get_db_version ();
 
-            string errmsg;
+            info ("Performing database update check. Current version is %d", current_db_version);
 
-            ec = db.exec (query, null, out errmsg);
-	        if (ec != Sqlite.OK) {
-		        warning ("Error: %s\n", errmsg);
-		        return;
-	        }
-	        
-	        // Check that license is in the database (added 2018-05-06)
-	        query = """SELECT license FROM Podcast WHERE name = "dummy";""";
-	        errmsg = null;
-
-            ec = db.exec (query, null, out errmsg);
+            // Check that license is in the database (added 2018-05-06)
+            string query = """SELECT license FROM Podcast LIMIT 1;""";
+            string errmsg = null;
+            int ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
                 info ("License column does not exist in podcast table. Altering table to update.");
-                
-                // Check that license is in the database (added 2018-05-06)
-	            query = """ALTER TABLE Podcast ADD license TEXT;""";
-	            errmsg = null;
 
+                query = """ALTER TABLE Podcast ADD license TEXT;""";
+                errmsg = null;
                 ec = db.exec (query, null, out errmsg);
 
                 if (ec != Sqlite.OK) {
@@ -160,10 +141,65 @@ namespace Vocal {
                     info ("License column successfully added to database.");
                 }
             }
-            
-            // Clean up by removing the dummy podcast
-            query = """DELETE FROM Podcast WHERE name = "dummy";""";
-            ec = db.exec (query, null, out errmsg);
+
+            if (current_db_version < 1) {
+                info ("Upgrading database to v1 ...");
+
+                string upgrade_sql = "BEGIN TRANSACTION;
+                     CREATE TABLE IF NOT EXISTS Podcast_V1 (
+                             name   TEXT    NOT NULL,
+                             feed_uri            TEXT PRIMARY KEY NOT NULL,
+                             album_art_url       TEXT,
+                             album_art_local_uri TEXT,
+                             description         TEXT             NOT NULL,
+                             content_type        TEXT,
+                             license             TEXT
+                            );
+
+                     INSERT INTO Podcast_V1
+                        SELECT name, feed_uri, album_art_url, album_art_local_uri, description,
+                               content_type, license
+                        FROM Podcast;
+                     DROP TABLE Podcast; ALTER TABLE Podcast_V1 RENAME TO Podcast;
+                     CREATE INDEX podcast_name ON Podcast (name);
+
+
+                     CREATE TABLE IF NOT EXISTS Episode_V1 (
+                             title              TEXT NOT NULL,
+                             parent_feed_uri    TEXT NOT NULL,
+                             uri                TEXT NOT NULL,
+                             local_uri          TEXT,
+                             release_date       TEXT,
+                             description        TEXT,
+                             latest_position    TEXT,
+                             download_status    TEXT,
+                             play_status        TEXT
+                      );
+
+                      INSERT INTO Episode_V1
+                        SELECT e.title, p.feed_uri, e.uri, e.local_uri, e.release_date, e.description,
+                                 e.latest_position, e.download_status, e.play_status
+                              FROM Episode e LEFT JOIN Podcast p ON e.parent_podcast_name = p.name;
+                      DROP TABLE Episode; ALTER TABLE Episode_V1 RENAME TO Episode;
+
+                      CREATE UNIQUE INDEX episode_uri_unique ON Episode (uri, parent_feed_uri);
+                      CREATE INDEX episode_podcast_uri ON Episode (parent_feed_uri);
+                      CREATE INDEX episode_name ON Episode (title);
+
+                     PRAGMA user_version = 1;
+
+                     END TRANSACTION; ";
+
+                ec = db.exec (upgrade_sql, null, null);
+                if (ec != Sqlite.OK) {
+                    error ("Failed database upgrade! (%d) %s.", db.errcode (), db.errmsg ());
+                }
+
+                current_db_version = get_db_version ();
+                assert (current_db_version == 1);
+                info ("Upgrade to v1 complete.");
+            }
+
         }
 
 
@@ -180,9 +216,9 @@ namespace Vocal {
          */
         public async Gee.ArrayList<string> add_from_OPML(string path) {
             Gee.ArrayList<string> failed_feeds = new Gee.ArrayList<string>();
-            
+
             SourceFunc callback = add_from_OPML.callback;
-            
+
             ThreadFunc<void*> run = () => {
                 try {
                     FeedParser feed_parser = new FeedParser();
@@ -742,7 +778,7 @@ namespace Vocal {
         /*
          * Notifies the user that a download has completed successfully
          */
-        public void on_successful_download(string episode_title, string parent_podcast_name) {
+        public void on_successful_download(string episode_title, string podcast_name) {
 
             batch_download_count--;
             try {
@@ -752,7 +788,8 @@ namespace Vocal {
 #if HAVE_LIBNOTIFY
 
             if(!batch_notification_needed) {
-                string message = _("'%s' from '%s' has finished downloading.").printf(episode_title.replace("%27", "'"), parent_podcast_name.replace("%27","'"));
+                string message = _("'%s' from '%s' has finished downloading.")
+                   .printf(episode_title.replace("%27", "'"), podcast_name.replace("%27","'"));
                 var notification = new Notify.Notification(_("Episode Download Complete"), message, null);
                 if(!controller.window.focus_visible)
                     notification.show();
@@ -773,7 +810,7 @@ namespace Vocal {
 
                 foreach(Podcast podcast in podcasts) {
                     if(!found) {
-                        if(parent_podcast_name == podcast.name) {
+                        if (podcast_name == podcast.name) {
                             foreach(Episode episode in podcast.episodes) {
                                 if(episode_title == episode.title) {
                                     downloaded_episode = episode;
@@ -814,6 +851,29 @@ namespace Vocal {
             }
 
             return 0;
+        }
+
+        /*
+         * Returns the Sqlite user_version pragma used for checking current db schema version.
+         * https://www.sqlite.org/pragma.html#pragma_user_version
+         */
+        private int get_db_version () {
+            if (db == null) {
+                prepare_database ();
+            }
+
+            int version = 0;
+            int ec = db.exec ("PRAGMA user_version", (n_cols, values, col_names) => {
+                    version = values[0].to_int ();
+                    return 0;
+                }, null);
+
+            if (ec != Sqlite.OK) {
+                error ("Unable to determine database schema version! (%d) %s.",
+                       db.errcode (), db.errmsg ());
+            }
+
+            return version;
         }
 
 
@@ -859,29 +919,33 @@ namespace Vocal {
 	        stmt.reset();
 
 
-	        // Repeat the process with the episodes
+            // Repeat the process with the episodes
 
-	        foreach(Podcast podcast in podcasts) {
+            foreach (Podcast podcast in podcasts) {
 
-	            prepared_query_str = "SELECT * FROM Episode WHERE parent_podcast_name = '%s' ORDER BY rowid ASC".printf(podcast.name);
-	            ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-	            if (ec != Sqlite.OK) {
-		            stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
-		            return;
-	            }
+                prepared_query_str = """SELECT e.*, p.name as parent_podcast_name
+                       FROM Episode e
+                       LEFT JOIN Podcast p on e.parent_feed_uri = p.feed_uri
+                       WHERE parent_feed_uri = '%s'
+                       ORDER BY e.rowid ASC""".printf(podcast.feed_uri);
+                ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
+                if (ec != Sqlite.OK) {
+                    stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
+                    return;
+                }
 
-	            while (stmt.step () == Sqlite.ROW) {
+                while (stmt.step () == Sqlite.ROW) {
                     Episode episode = episode_from_row(stmt);
                     episode.parent = podcast;
 
-		            podcast.episodes.add(episode);
-	            }
+                    podcast.episodes.add (episode);
+                }
 
-	            stmt.reset();
+                stmt.reset ();
             }
 
-            recount_unplayed();
-            set_new_badge();
+            recount_unplayed ();
+            set_new_badge ();
         }
 
         public ArrayList<Podcast> find_matching_podcasts(string term) {
@@ -955,14 +1019,14 @@ namespace Vocal {
             int ec;
 
             // Delete the podcast's episodes from the database
-	        query = "DELETE FROM Episode WHERE parent_podcast_name = '%s';".printf(podcast.name.replace("'", "%27"));
+            query = "DELETE FROM Episode WHERE parent_feed_uri = '%s';".printf(podcast.feed_uri);
 
 
-	        ec = db.exec (query, null, out errmsg);
-	        if (ec != Sqlite.OK) {
-		        stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
-		        return;
-	        }
+            ec = db.exec (query, null, out errmsg);
+            if (ec != Sqlite.OK) {
+                stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
+                return;
+            }
 
             // Delete the podcast from the database
             query = "DELETE FROM Podcast WHERE name = '%s';".printf(podcast.name.replace("'", "%27"));
@@ -1016,6 +1080,9 @@ namespace Vocal {
                 }
                 else if(col_name == "description") {
                     episode.description = val;
+                }
+                else if(col_name == "parent_feed_uri") {
+                    episode.parent_feed_uri = val;
                 }
                 else if (col_name == "uri") {
                     episode.uri = val;
@@ -1201,21 +1268,22 @@ namespace Vocal {
             prepare_database ();
 
             string query = """
-              CREATE TABLE Podcast (
-                id                  INT,
-                name                TEXT    PRIMARY KEY     NOT NULL,
-                feed_uri            TEXT                    NOT NULL,
+              BEGIN TRANSACTION;
+
+              CREATE TABLE IF NOT EXISTS Podcast (
+                name                TEXT                    NOT NULL,
+                feed_uri            TEXT    PRIMARY KEY     NOT NULL,
                 album_art_url       TEXT,
                 album_art_local_uri TEXT,
                 description         TEXT                    NOT NULL,
                 content_type        TEXT,
                 license             TEXT
               );
+              CREATE INDEX podcast_name ON Podcast (name);
 
-              CREATE TABLE Episode (
-                title               TEXT    PRIMARY KEY     NOT NULL,
-                parent_podcast_name TEXT                    NOT NULL,
-                parent_podcast_id   INT,
+              CREATE TABLE IF NOT EXISTS Episode (
+                title               TEXT                    NOT NULL,
+                parent_feed_uri     TEXT                    NOT NULL,
                 uri                 TEXT                    NOT NULL,
                 local_uri           TEXT,
                 release_date        TEXT,
@@ -1224,6 +1292,13 @@ namespace Vocal {
                 download_status     TEXT,
                 play_status         TEXT
               );
+             CREATE UNIQUE INDEX episode_uri_unique ON Episode (uri, parent_feed_uri);
+             CREATE INDEX episode_podcast_uri ON Episode (parent_feed_uri);
+             CREATE INDEX episode_name ON Episode (title);
+
+             PRAGMA user_version = 1;
+
+             END TRANSACTION;
             """;
 
             int ec = db.exec (query, null);
@@ -1303,7 +1378,7 @@ namespace Vocal {
         public bool write_episode_to_database(Episode episode) {
 
             string query = "INSERT OR REPLACE INTO Episode " +
-                           " (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status, latest_position) " +
+                           " (title, parent_feed_uri, uri, local_uri, description, release_date, download_status, play_status, latest_position) " +
                            " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9);";
 
             Sqlite.Statement stmt;
@@ -1318,14 +1393,13 @@ namespace Vocal {
              * but is done to remain consitent with existing db entries since the title
              * and podcast name are currently used as key fields. */
             string title = episode.title.replace("'", "%27");
-            string parent_podcast_name = episode.parent.name.replace("'", "%27");
 
             // convert enums to text representations.
             string played_text = (episode.status == EpisodeStatus.PLAYED) ? "played" : "unplayed";
             string download_text = (episode.current_download_status == DownloadStatus.DOWNLOADED) ? "downloaded" : "not_downloaded";
 
             stmt.bind_text (1, title);
-            stmt.bind_text (2, parent_podcast_name);
+            stmt.bind_text (2, episode.parent_feed_uri);
             stmt.bind_text (3, episode.uri);
             stmt.bind_text (4, episode.local_uri);
             stmt.bind_text (5, episode.description);

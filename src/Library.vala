@@ -902,47 +902,41 @@ namespace Vocal {
 
             Sqlite.Statement stmt;
 
-	        string prepared_query_str = "SELECT * FROM Podcast ORDER BY name";
-	        int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-	        if (ec != Sqlite.OK) {
-		        warning("%d: %s\n", db.errcode (), db.errmsg ());
-		        return;
-	        }
-
-	        // Use the prepared statement:
-
-	        while (stmt.step () == Sqlite.ROW) {
-	            Podcast current = podcast_from_row(stmt);
-		        podcasts.add(current);
-	        }
-
-	        stmt.reset();
-
-
-            // Repeat the process with the episodes
-
-            foreach (Podcast podcast in podcasts) {
-
-                prepared_query_str = """SELECT e.*, p.name as parent_podcast_name
-                       FROM Episode e
-                       LEFT JOIN Podcast p on e.parent_feed_uri = p.feed_uri
-                       WHERE parent_feed_uri = '%s'
-                       ORDER BY e.rowid ASC""".printf(podcast.feed_uri);
-                ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-                if (ec != Sqlite.OK) {
-                    stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
-                    return;
-                }
-
-                while (stmt.step () == Sqlite.ROW) {
-                    Episode episode = episode_from_row(stmt);
-                    episode.parent = podcast;
-
-                    podcast.episodes.add (episode);
-                }
-
-                stmt.reset ();
+            string prepared_query_str = """
+                      SELECT p.*, e.*, p.description as podcast_description
+                      FROM Podcast p
+                      LEFT JOIN Episode e on p.feed_uri = e.parent_feed_uri
+                      ORDER BY p.name, p.feed_uri, e.rowid;
+            """;
+            int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
+            if (ec != Sqlite.OK) {
+                warning("%d: %s\n", db.errcode (), db.errmsg ());
+                return;
             }
+
+            // Use the prepared statement:
+
+            Podcast current_podcast = new Podcast ();
+            current_podcast.feed_uri = null;
+
+            while (stmt.step () == Sqlite.ROW) {
+
+                Podcast p = podcast_from_row(stmt);
+
+                if (current_podcast.feed_uri != p.feed_uri) {
+                    if (current_podcast.feed_uri != null) {
+                        podcasts.add (p);
+                    }
+
+                    current_podcast = p;
+                }
+
+                Episode e = episode_from_row (stmt);
+                e.parent = current_podcast;
+                current_podcast.episodes.add (e);
+            }
+
+            stmt.reset();
 
             recount_unplayed ();
             set_new_badge ();
@@ -1143,7 +1137,11 @@ namespace Vocal {
                 else if (col_name == "album_art_local_uri") {
                     podcast.local_art_uri = val;
                 }
-                else if(col_name == "description") {
+                // if we're loading the podcast & episode data together, there is a
+                // potential conflict in 'description' columns, so only use 'description'
+                // if the more specific 'podcast_description' is not available.
+                else if (col_name == "description" && podcast.description == "" ||
+                         col_name == "podcast_description") {
                     podcast.description = val;
                 }
                 else if (col_name == "content_type") {

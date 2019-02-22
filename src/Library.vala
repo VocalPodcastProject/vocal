@@ -979,7 +979,13 @@ namespace Vocal {
 
             Sqlite.Statement stmt;
 
-            string prepared_query_str = "SELECT * FROM Episode WHERE title LIKE ? ORDER BY title";
+            string prepared_query_str = """
+                     SELECT e.*, p.name as parent_podcast_name
+                     FROM Episode e
+                     LEFT JOIN Podcast p on e.parent_feed_uri = p.feed_uri
+                     WHERE title LIKE ?
+                     ORDER BY title;
+            """;
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
             ec = stmt.bind_text(1, "%" + term + "%", -1, null);
             if (ec != Sqlite.OK) {

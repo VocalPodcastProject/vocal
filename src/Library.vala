@@ -173,18 +173,20 @@ namespace Vocal {
                              description        TEXT,
                              latest_position    TEXT,
                              download_status    TEXT,
-                             play_status        TEXT
+                             play_status        TEXT,
+                             datetime_released  INTEGER
                       );
 
                       INSERT INTO Episode_V1
                         SELECT e.title, p.feed_uri, e.uri, e.local_uri, e.release_date, e.description,
-                                 e.latest_position, e.download_status, e.play_status
+                                 e.latest_position, e.download_status, e.play_status, 0
                               FROM Episode e LEFT JOIN Podcast p ON e.parent_podcast_name = p.name;
                       DROP TABLE Episode; ALTER TABLE Episode_V1 RENAME TO Episode;
 
                       CREATE UNIQUE INDEX episode_uri_unique ON Episode (uri, parent_feed_uri);
                       CREATE INDEX episode_podcast_uri ON Episode (parent_feed_uri);
                       CREATE INDEX episode_name ON Episode (title);
+                      CREATE INDEX episode_released ON Episode (datetime_released);
 
                      PRAGMA user_version = 1;
 
@@ -1097,8 +1099,15 @@ namespace Vocal {
                 }
                 else if (col_name == "release_date") {
                     episode.date_released = val;
-                    episode.set_datetime_from_pubdate();
+                    if (episode.datetime_released == null) {
+                        episode.set_datetime_from_pubdate();
+                    }
+                } else if (col_name == "datetime_released") {
+                    if (int64.parse (val) > 0) {
+                        episode.datetime_released = new GLib.DateTime.from_unix_utc (int64.parse (val));
+                    }
                 }
+
                 else if(col_name == "download_status") {
                     if(val == "downloaded") {
                         episode.current_download_status = DownloadStatus.DOWNLOADED;
@@ -1298,11 +1307,13 @@ namespace Vocal {
                 description         TEXT,
                 latest_position     TEXT,
                 download_status     TEXT,
-                play_status         TEXT
+                play_status         TEXT,
+                datetime_released   INTEGER
               );
              CREATE UNIQUE INDEX episode_uri_unique ON Episode (uri, parent_feed_uri);
              CREATE INDEX episode_podcast_uri ON Episode (parent_feed_uri);
              CREATE INDEX episode_name ON Episode (title);
+             CREATE INDEX episode_released ON Episode (datetime_released);
 
              PRAGMA user_version = 1;
 
@@ -1386,8 +1397,8 @@ namespace Vocal {
         public bool write_episode_to_database(Episode episode) {
 
             string query = "INSERT OR REPLACE INTO Episode " +
-                           " (title, parent_feed_uri, uri, local_uri, description, release_date, download_status, play_status, latest_position) " +
-                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9);";
+                           " (title, parent_feed_uri, uri, local_uri, description, release_date, download_status, play_status, latest_position, datetime_released) " +
+                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10);";
 
             Sqlite.Statement stmt;
             int ec = db.prepare_v2 (query, query.length, out stmt);
@@ -1415,7 +1426,9 @@ namespace Vocal {
             stmt.bind_text (7, download_text);
             stmt.bind_text (8, played_text);
             stmt.bind_text (9, episode.last_played_position.to_string ());
+            stmt.bind_int64 (10, episode.datetime_released.to_unix ());
 
+            //info ("writing episode %s", title);
             ec = stmt.step ();
 
             if (ec != Sqlite.DONE) {

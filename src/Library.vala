@@ -925,7 +925,7 @@ namespace Vocal {
 
                 if (current_podcast.feed_uri != p.feed_uri) {
                     if (current_podcast.feed_uri != null) {
-                        podcasts.add (p);
+                        podcasts.add (current_podcast);
                     }
 
                     current_podcast = p;
@@ -934,6 +934,10 @@ namespace Vocal {
                 Episode e = episode_from_row (stmt);
                 e.parent = current_podcast;
                 current_podcast.episodes.add (e);
+            }
+
+            if (current_podcast.feed_uri != null) {
+                podcasts.add (current_podcast);
             }
 
             stmt.reset();

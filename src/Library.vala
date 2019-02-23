@@ -894,7 +894,7 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Podcast WHERE name LIKE ? ORDER BY name";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text(1, term, -1, null);
+            ec = stmt.bind_text(1, "%" + term + "%", -1, null);
             if (ec != Sqlite.OK) {
                 warning("%d: %s\n", db.errcode (), db.errmsg ());
                 return matches;

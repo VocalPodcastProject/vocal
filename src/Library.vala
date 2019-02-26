@@ -1103,8 +1103,9 @@ namespace Vocal {
                         episode.set_datetime_from_pubdate();
                     }
                 } else if (col_name == "datetime_released") {
-                    if (int64.parse (val) > 0) {
-                        episode.datetime_released = new GLib.DateTime.from_unix_utc (int64.parse (val));
+                    var released = new GLib.DateTime.from_unix_utc (int64.parse (val));
+                    if (released != null) {
+                        episode.datetime_released = released;
                     }
                 }
 

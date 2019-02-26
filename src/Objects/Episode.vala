@@ -103,7 +103,7 @@ namespace Vocal {
             status = EpisodeStatus.UNPLAYED;
             current_download_status = DownloadStatus.NOT_DOWNLOADED;
             last_played_position = 0;
-
+            datetime_released = new DateTime.from_unix_utc (0);
         }
 
         /*

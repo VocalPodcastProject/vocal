@@ -1100,12 +1100,16 @@ namespace Vocal {
                 else if (col_name == "release_date") {
                     episode.date_released = val;
                     if (episode.datetime_released == null) {
-                        episode.set_datetime_from_pubdate();
+                        episode.set_datetime_from_pubdate ();
                     }
                 } else if (col_name == "datetime_released") {
-                    var released = new GLib.DateTime.from_unix_utc (int64.parse (val));
-                    if (released != null) {
-                        episode.datetime_released = released;
+                    if (int64.parse (val) > 0) {
+                        var released = new GLib.DateTime.from_unix_utc (int64.parse (val));
+                        if (released != null) {
+                            episode.datetime_released = released;
+                        }
+                    } else if (episode.date_released.strip ().len () > 0) {
+                        episode.set_datetime_from_pubdate ();
                     }
                 }
 

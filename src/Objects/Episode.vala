@@ -112,11 +112,17 @@ namespace Vocal {
          */
         public void set_datetime_from_pubdate() {
 
-            if(date_released != null) {
+            if (date_released != null) {
                 GLib.Time tm = GLib.Time ();
                 tm.strptime (date_released, "%a, %d %b %Y %H:%M:%S %Z");
                 datetime_released = new DateTime.local(1900 + tm.year, 1 + tm.month, tm.day, tm.hour, tm.minute, tm.second);
+
+                // ensure datetime_released was not set to null, if so default to unix epoch
+                if (datetime_released == null) {
+                    datetime_released = new DateTime.from_unix_utc(0);
+                }
             }
+
         }
 
     }

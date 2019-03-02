@@ -36,6 +36,7 @@ namespace Vocal {
 		public DateTime         datetime_released;       // the datetime corresponding the when the episode was released
 
 		public string parent_feed_uri { get; set; default=""; }  // The uri of the parent podcast
+		public string guid            { get; set; default=""; }  // Episode guid (rss>item>guid / atom>entry>id)
 
 		/*
 		 * Gets the playback uri based on whether the file is local or remote
@@ -103,7 +104,7 @@ namespace Vocal {
             status = EpisodeStatus.UNPLAYED;
             current_download_status = DownloadStatus.NOT_DOWNLOADED;
             last_played_position = 0;
-            datetime_released = new DateTime.from_unix_utc (0);
+            datetime_released = new DateTime.from_unix_local (0);
         }
 
         /*
@@ -119,10 +120,27 @@ namespace Vocal {
 
                 // ensure datetime_released was not set to null, if so default to unix epoch
                 if (datetime_released == null) {
-                    datetime_released = new DateTime.from_unix_utc(0);
+                    datetime_released = new DateTime.from_unix_local (0);
                 }
             }
 
+        }
+
+
+        /*
+         * This method will generate the "local uid" for this episode (not guid).
+         *
+         * As part of the database v1 update, the primary key for the Episode object
+         * was changed to use the parent uri and the episode guid. As no guid data
+         * was available for existing entries a "local uid" was automatically
+         * generated using the podcast feed uri, the episode uri and the episode
+         * title (The title was the earlier key field for an episode).
+         */
+        public string get_local_uid () {
+            return "vocal-%s-%s-%s".printf (this.parent_feed_uri.strip (),
+                                            this.uri.strip (),
+                                            this.title.strip ())
+                .replace (" ", "-");
         }
 
     }

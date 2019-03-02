@@ -202,6 +202,10 @@ namespace Vocal {
                             i++;
                             episode.description = queue[i];
                         }
+                        else if (next_item_in_queue == "guid") {
+                            i++;
+                            episode.description = queue[i];
+                        }
                     }
                     
                     
@@ -577,6 +581,10 @@ namespace Vocal {
                                 i++;
                                 episode.description = queue[i];
                             }
+                            else if (next_item_in_queue == "guid") {
+                                i++;
+                                episode.guid = queue[i];
+                            }
                         }
                         
                         episode.parent = podcast;
@@ -641,6 +649,9 @@ namespace Vocal {
                         break;
                     case "content":
                         entry.description= iterEntry->get_content ();
+                        break;
+                    case "id":
+                        entry.guid = iterEntry->get_content ();
                         break;
                     case "updated":
                         GLib.Time tm = GLib.Time ();

@@ -237,18 +237,20 @@ namespace Vocal {
             try {
                 // Don't use the default coverart_path getter, we want to make sure we are using the remote URI
                 GLib.File remote_art = GLib.File.new_for_uri(podcast.remote_art_uri);
-                if(remote_art.query_exists()) {
-                    // Set the path of the new file and create another object for the local file
-                    string art_path = podcast_path + """/""" + remote_art.get_basename().replace("%", "_");
-                    GLib.File local_art = GLib.File.new_for_path(art_path);
+                
+                // Set the path of the new file and create another object for the local file
+                string art_path = podcast_path + "/" + remote_art.get_basename().replace("%", "_");
+                GLib.File local_art = GLib.File.new_for_path(art_path);
 
-                    // If the local album art doesn't exist
-                    if(!local_art.query_exists()) {
-                        // Cache the art
-                        remote_art.copy(local_art, FileCopyFlags.NONE);
-                        // Mark the local path on the podcast
-                        podcast.local_art_uri = """file://""" + art_path;
-                    }
+                // If the local album art doesn't exist
+                if(!local_art.query_exists()) {
+                    // Cache the art
+                    remote_art.copy(local_art, FileCopyFlags.NONE);
+                    // Mark the local path on the podcast
+                    podcast.local_art_uri = "file://" + art_path;
+                } else {
+                    // it already exists so don't download again.
+                    podcast.local_art_uri = "file://" + art_path;
                 }
             } catch(Error e) {
                 error("Unable to save a local copy of the album art. %s", e.message);
@@ -302,6 +304,7 @@ namespace Vocal {
 
             FeedParser feed_parser = new FeedParser();
             Podcast new_podcast = feed_parser.get_podcast_from_file(uri);
+
             if(new_podcast == null) {
                 warning("Failed to parse %s", uri);
                 podcasts_being_added.remove (path);
@@ -343,8 +346,10 @@ namespace Vocal {
                 podcasts_being_added.append (path);
 
                 FeedParser parser = new FeedParser();
+
                 try {
                     Podcast new_podcast = parser.get_podcast_from_file(path);
+                    
                     if(new_podcast == null) {
                         info("New podcast found to be null. %s", path);
                         successful = false;

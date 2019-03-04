@@ -17,11 +17,6 @@
   END LICENSE
 ***/
 
-using Xml;
-using Gee;
-using GLib;
-using Vocal;
-
 namespace Vocal {
 
     errordomain VocalUpdateError {
@@ -227,7 +222,7 @@ namespace Vocal {
             string description = "";
             
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Parser.parse_file (path);
+            Xml.Doc* doc = Xml.Parser.parse_file (path);
             
             // Make sure that it didn't return a null reference
             if (doc == null) {
@@ -296,10 +291,10 @@ namespace Vocal {
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
             Xml.Doc* doc;
-            if(path.contains("http")) {
+            if(SoupClient.valid_http_uri(path)) {
                 try {
-                    doc = XmlUtils.parse_string((string) soup_client.send_message(HttpMethod.GET, path));
-                } catch (PublishingError e) {
+                    doc = XmlUtils.parse_string(soup_client.request_as_string(HttpMethod.GET, path));
+                } catch (GLib.Error e) {
                     warning("Failed to get podcast. %s", e.message);
                     return null;
                 }
@@ -309,7 +304,7 @@ namespace Vocal {
             
             // Make sure that it didn't return a null reference
             if (doc == null) {
-                warning ("Error opening file %s", path);
+                warning ("Error parsing xml file %s", path);
                 return null;
             }
 
@@ -342,7 +337,7 @@ namespace Vocal {
             }
             
             if(podcast.coverart_uri == null || podcast.coverart_uri.length < 1) {
-                podcast.coverart_uri = """resource:///com/github/needle-and-thread/vocal/banner.png""";
+                podcast.coverart_uri = "resource:///com/github/needle-and-thread/vocal/banner.png";
             }
             
             if(podcast.feed_uri == null || podcast.feed_uri.length < 1) {
@@ -359,13 +354,13 @@ namespace Vocal {
          * Parses an OPML file and returns an array listing each feed discovered within
          */
         public string[] parse_feeds_from_OPML(string path) throws VocalLibraryError{
-            ArrayList<string> feeds = new ArrayList<string>();
+            var feeds = new Gee.ArrayList<string>();
             
             queue.clear();
 
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Parser.parse_file (path);
+            Xml.Doc* doc = Xml.Parser.parse_file (path);
             
             // Make sure that it didn't return a null reference
             if (doc == null) {
@@ -413,7 +408,7 @@ namespace Vocal {
             for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
             
                 // Spaces between tags are also nodes, discard them
-                if (iter->type != ElementType.ELEMENT_NODE) {
+                if (iter->type != Xml.ElementType.ELEMENT_NODE) {
                     continue;
                 }
 
@@ -470,8 +465,8 @@ namespace Vocal {
             // Call the Xml.Parser to parse the file, which returns an unowned reference
             Xml.Doc* doc;
             
-            if(path.contains("http")) {
-                doc = XmlUtils.parse_string((string) soup_client.send_message(HttpMethod.GET, path));
+            if(SoupClient.valid_http_uri(path)) {
+                doc = XmlUtils.parse_string(soup_client.request_as_string(HttpMethod.GET, path));
             } else {
                 doc = Xml.Parser.parse_file (path);
                 

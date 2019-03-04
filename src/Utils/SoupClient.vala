@@ -7,6 +7,17 @@ public class SoupClient {
         soup_session.user_agent = Constants.USER_AGENT;
     }
 
+    public string request_as_string(HttpMethod method, string url) throws Error {
+        var data_stream = new DataInputStream(request(method, url));
+        var builder = new StringBuilder ();
+
+        for (string line = data_stream.read_line_utf8(); line != null; line = data_stream.read_line_utf8()) {
+            builder.append(line);
+        }
+
+        return builder.str;
+    }
+
     public InputStream request (HttpMethod method, string url) throws Error {
         if (!valid_http_uri(url)) {
             throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
@@ -21,23 +32,6 @@ public class SoupClient {
         return stream;
     }
 
-    public uint8[] send_message (HttpMethod method, string url) throws Error {
-        if (!valid_http_uri(url)) {
-            throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
-        }
-
-        var message = new Soup.Message (method.to_string (), url);
-        soup_session.send_message (message);
-        check_response_headers(message);
-
-        // All valid communication involves body data in the response
-        if (message.response_body.data == null || message.response_body.data.length == 0) {
-            throw new PublishingError.MALFORMED_RESPONSE ("No response data from %s", message.get_uri().to_string (false));
-        }
-
-        return message.response_body.data;
-    }
-
     public static bool valid_http_uri(string url) {
         return url.index_of("http://") == 0 || url.index_of("https://") == 0;
     }
@@ -47,7 +41,7 @@ public class SoupClient {
 
         try {
             SoupClient soup_client = new SoupClient();
-            soup_client.send_message(HttpMethod.GET, uri);
+            soup_client.request_as_string(HttpMethod.GET, uri);
         } catch(Error e) {
             warning(e.message);
             return false;

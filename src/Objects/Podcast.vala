@@ -38,17 +38,15 @@ namespace Vocal {
          */
         public string coverart_uri {
 
-            //the album art is saved locally, return that path. Otherwise, return main album art URI
-            get {
-                if(local_art_uri != null && local_art_uri != "") {
-                    GLib.File local_art = GLib.File.new_for_path(local_art_uri);
-                    if(local_art.query_exists()) {
-                        return local_art_uri;
-                    }
-                } else if(remote_art_uri != null) {
-                    GLib.File remote_art = GLib.File.new_for_uri(remote_art_uri);
-                    if(remote_art.query_exists()) {
-                        return remote_art_uri;
+            // If the album art is saved locally, return that path. Otherwise, return main album art URI.
+            owned get {
+                string[] uris = { local_art_uri, remote_art_uri };
+                foreach (string uri in uris) {
+                    if (uri != null && uri != "") {
+                        GLib.File art = GLib.File.new_for_uri (uri);
+                        if (art.query_exists ()) {
+                            return uri;
+                        }
                     }
                 }
                 // In rare instances where album art is not available at all, provide a "missing art" image to use
@@ -63,7 +61,7 @@ namespace Vocal {
                 if(proto == "http" || proto == "https") {
                     remote_art_uri = value.replace("%27", "'");
                 } else {
-                    local_art_uri = """file://""" + value.replace("%27", "'");
+                    local_art_uri = "file://" + value.replace("%27", "'");
                 }
             }
         }

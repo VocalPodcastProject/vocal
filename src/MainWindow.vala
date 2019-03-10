@@ -193,6 +193,8 @@ namespace Vocal {
             var screen = Gdk.Screen.get_default ();
             var style_context = this.get_style_context ();
             
+            // No matter what, make sure primary CSS provider is added
+            style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             this.set_application (controller.app);
 

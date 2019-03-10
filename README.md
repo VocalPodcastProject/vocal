@@ -33,6 +33,8 @@ We're working with a number of distributions to make sure it's as simple as poss
 ### Code
 We love collaborating with others and gladly welcome code contributions. Pull requests are much appreciated. Please feel free to jump in and help with any confirmed issues (make sure you leave a comment or assign yourself so we know it's being worked on). If you have a new feature in mind that you would like to work on, we recommend opening an issue first and making sure the feature gets approved just so you don't spend your time implementing something that wouldn't get accepted into the project.
 
+Vocal adheres to the [elementary code style](https://elementary.io/docs/code/reference). Please be sure to review it before writing code. If you have any questions, please ask.
+
 The Vocal project is hosted on GitHub: https://github.com/needle-and-thread/vocal
 
 ### Bugs and Feature Requests  

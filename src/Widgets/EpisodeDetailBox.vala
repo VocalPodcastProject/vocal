@@ -22,15 +22,13 @@ namespace Vocal {
     public class EpisodeDetailBox : Gtk.Box {
 
 		// Fired when the streaming/play button gets clicked
-        public signal void streaming_button_clicked(int index, int box_index);
+        public signal void streaming_button_clicked ();
 
         private bool unplayed;
         private bool played;
         private bool now_playing;
 
         public Episode episode;
-        public int     index;
-        public int     box_index;
         public int 	   top_box_width;
 
         private Gtk.Box     top_box;
@@ -46,14 +44,10 @@ namespace Vocal {
         private Gtk.Label description_label;
 
 		/*
-		 * Creates a new episode detail box given an episode, and index, a box_index (corresponding
-		 * index number for this box in the list in the side pane), and whether Vocal is running
-		 * in elementary (determines the icons).
+		 * Creates a new episode detail box given an episode.
 		 */
-        public EpisodeDetailBox(Episode episode, int index, int box_index, bool on_elementary, bool? new_episodes_view = false) {
+        public EpisodeDetailBox (Episode episode, Controller controller, bool new_episodes_view = false) {
             this.episode = episode;
-            this.index = index;
-            this.box_index = box_index;
             this.top_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
             pack_start(top_box, false, false, 0);
 
@@ -97,7 +91,7 @@ namespace Vocal {
 
             // Determine whether or not the episode has been downloaded
             if(episode.current_download_status != DownloadStatus.DOWNLOADED) {
-                if(on_elementary)
+                if(controller.on_elementary)
                     location_image = "browser-download-symbolic";
                 else
                     location_image = "document-save-symbolic";
@@ -133,8 +127,8 @@ namespace Vocal {
                 streaming_button.tooltip_text = _("Stream Episode");
 
             // Set up to fire a signal when clicked
-            streaming_button.clicked.connect(() => {
-                streaming_button_clicked(index, box_index);
+            streaming_button.clicked.connect ( () => {
+                streaming_button_clicked ();
             });
 
             streaming_box.pack_start(streaming_button, false, false, 0);

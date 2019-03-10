@@ -76,6 +76,7 @@ namespace Vocal {
         private bool batch_notification_needed = false;
 
         public Gee.ArrayList<Episode> queue = new Gee.ArrayList<Episode>();
+        private GLib.List<string> podcasts_being_added = new GLib.List<string>();
 
         private Controller controller;
 
@@ -236,18 +237,20 @@ namespace Vocal {
             try {
                 // Don't use the default coverart_path getter, we want to make sure we are using the remote URI
                 GLib.File remote_art = GLib.File.new_for_uri(podcast.remote_art_uri);
-                if(remote_art.query_exists()) {
-                    // Set the path of the new file and create another object for the local file
-                    string art_path = podcast_path + """/""" + remote_art.get_basename().replace("%", "_");
-                    GLib.File local_art = GLib.File.new_for_path(art_path);
+                
+                // Set the path of the new file and create another object for the local file
+                string art_path = podcast_path + "/" + remote_art.get_basename().replace("%", "_");
+                GLib.File local_art = GLib.File.new_for_path(art_path);
 
-                    // If the local album art doesn't exist
-                    if(!local_art.query_exists()) {
-                        // Cache the art
-                        remote_art.copy(local_art, FileCopyFlags.NONE);
-                        // Mark the local path on the podcast
-                        podcast.local_art_uri = """file://""" + art_path;
-                    }
+                // If the local album art doesn't exist
+                if(!local_art.query_exists()) {
+                    // Cache the art
+                    remote_art.copy(local_art, FileCopyFlags.NONE);
+                    // Mark the local path on the podcast
+                    podcast.local_art_uri = "file://" + art_path;
+                } else {
+                    // it already exists so don't download again.
+                    podcast.local_art_uri = "file://" + art_path;
                 }
             } catch(Error e) {
                 error("Unable to save a local copy of the album art. %s", e.message);
@@ -274,21 +277,41 @@ namespace Vocal {
 		 * Adds a new podcast to the library from a given file path by parsing the file's contents
 		 */
         public bool add_podcast_from_file(string path) {
+        
+            foreach (string s in podcasts_being_added) {
+                if (s == path) {
+                    info ("Podcast %s already being added.", path);
+                    return false;
+                }
+            }
+            
+            foreach (Podcast p in podcasts) {
+                if (p.feed_uri == path) {
+                    info ("Podcast %s already in library. If you wish to re-add, remove the original first.", p.name);
+                    return false;
+                }
+            }
+            
             string uri = path;
             
             // Discover the real URI (avoid redirects)
             if(path.contains("http")) {
                 uri = Utils.get_real_uri(path);
             }
+            
             info("Adding podcast from: %s", uri);
+            podcasts_being_added.append (path);
 
             FeedParser feed_parser = new FeedParser();
             Podcast new_podcast = feed_parser.get_podcast_from_file(uri);
+
             if(new_podcast == null) {
                 warning("Failed to parse %s", uri);
+                podcasts_being_added.remove (path);
                 return false;
             } else {
                 add_podcast(new_podcast);
+                podcasts_being_added.remove (path);
                 return true;
             }
         }
@@ -298,16 +321,35 @@ namespace Vocal {
          * Adds a new podcast from a file, asynchronously
          */
         public async bool async_add_podcast_from_file(string path) {
+        
+            foreach (string s in podcasts_being_added) {
+                if (s == path) {
+                    info ("Podcast %s already being added.", path);
+                    return false;
+                }
+            }
+            
+            foreach (Podcast p in podcasts) {
+                if (p.feed_uri == path) {
+                    info ("Podcast %s already in library. If you wish to re-add, remove the original first.", p.name);
+                    return false;
+                }
+            }
+            
             bool successful = true;
 
             SourceFunc callback = async_add_podcast_from_file.callback;
 
             ThreadFunc<void*> run = () => {
+            
                 info("Adding podcast from file: %s", path);
+                podcasts_being_added.append (path);
 
                 FeedParser parser = new FeedParser();
+
                 try {
                     Podcast new_podcast = parser.get_podcast_from_file(path);
+                    
                     if(new_podcast == null) {
                         info("New podcast found to be null. %s", path);
                         successful = false;
@@ -319,6 +361,8 @@ namespace Vocal {
                     error("Failed to add podcast: %s", e.message);
                     successful = false;
                 }
+                
+                podcasts_being_added.remove (path);
 
                 Idle.add((owned) callback);
                 return null;
@@ -855,7 +899,7 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Podcast WHERE name LIKE ? ORDER BY name";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text(1, term, -1, null);
+            ec = stmt.bind_text(1, "%" + term + "%", -1, null);
             if (ec != Sqlite.OK) {
                 warning("%d: %s\n", db.errcode (), db.errmsg ());
                 return matches;

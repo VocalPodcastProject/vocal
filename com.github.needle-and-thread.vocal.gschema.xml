@@ -105,7 +105,31 @@
 				When enabled, Vocal will show an extra label beneath the cover art in the library with the name of the podcast.
 			</description>
 		</key>
+
+		<key name="dark-mode-enabled" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should use the dark theme instead of the light theme.</summary>
+			<description>
+				When enabled, Vocal will use the dark version of the GTK theme and modify the headerbar color if on elementary OS.
+			</description>
+		</key>
+    
+		<key name="archive-access-key" type="s">
+			<default>""</default>
+			<summary>Your archive.org accounts S3 access key</summary>
+			<description>
+				The S3 access key from an archive.org account (https://archive.org/account/s3.php)
+			</description>
+		</key>
 		
+		<key name="archive-secret-key" type="s">
+			<default>""</default>
+			<summary>Your archive.org accounts S3 secret key</summary>
+			<description>
+				The S3 secret key from an archive.org account (https://archive.org/account/s3.php)
+			</description>
+		</key>
+
 		<key name="newest-episodes-first" type="b">
 			<default>true</default>
 			<summary>Whether to show the newest episodes highest up in the list, or at the bottom</summary>
@@ -114,6 +138,5 @@
 				will be at the top.
 			</description>
 		</key>
-		
 	</schema>
 </schemalist>

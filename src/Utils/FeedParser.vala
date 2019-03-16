@@ -17,11 +17,6 @@
   END LICENSE
 ***/
 
-using Xml;
-using Gee;
-using GLib;
-using Vocal;
-
 namespace Vocal {
 
     errordomain VocalUpdateError {
@@ -226,7 +221,7 @@ namespace Vocal {
             string description = "";
             
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Parser.parse_file (path);
+            Xml.Doc* doc = Xml.Parser.parse_file (path);
             
             // Make sure that it didn't return a null reference
             if (doc == null) {
@@ -295,10 +290,10 @@ namespace Vocal {
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
             Xml.Doc* doc;
-            if(path.contains("http")) {
+            if(SoupClient.valid_http_uri(path)) {
                 try {
-                    doc = XmlUtils.parse_string((string) soup_client.send_message(HttpMethod.GET, path));
-                } catch (PublishingError e) {
+                    doc = XmlUtils.parse_string(soup_client.request_as_string(HttpMethod.GET, path));
+                } catch (GLib.Error e) {
                     warning("Failed to get podcast. %s", e.message);
                     return null;
                 }
@@ -308,7 +303,7 @@ namespace Vocal {
             
             // Make sure that it didn't return a null reference
             if (doc == null) {
-                warning ("Error opening file %s", path);
+                warning ("Error parsing xml file %s", path);
                 return null;
             }
 
@@ -327,14 +322,21 @@ namespace Vocal {
             parse_node(root);
             
             // Create the podcast object and set it as parent to child episodes
-            Podcast podcast = create_podcast_from_queue();
+            Podcast podcast = null;
+
+            if (root->name == "feed") {
+                podcast = create_podcast_from_queue_atom(root);
+            } else {
+                podcast = create_podcast_from_queue();
+            }
+
             foreach(Episode child in podcast.episodes) {
                 child.parent = podcast;
                 
             }
             
             if(podcast.coverart_uri == null || podcast.coverart_uri.length < 1) {
-                podcast.coverart_uri = """resource:///com/github/needle-and-thread/vocal/banner.png""";
+                podcast.coverart_uri = "resource:///com/github/needle-and-thread/vocal/banner.png";
             }
             
             if(podcast.feed_uri == null || podcast.feed_uri.length < 1) {
@@ -351,13 +353,13 @@ namespace Vocal {
          * Parses an OPML file and returns an array listing each feed discovered within
          */
         public string[] parse_feeds_from_OPML(string path) throws VocalLibraryError{
-            ArrayList<string> feeds = new ArrayList<string>();
+            var feeds = new Gee.ArrayList<string>();
             
             queue.clear();
 
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Parser.parse_file (path);
+            Xml.Doc* doc = Xml.Parser.parse_file (path);
             
             // Make sure that it didn't return a null reference
             if (doc == null) {
@@ -405,7 +407,7 @@ namespace Vocal {
             for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
             
                 // Spaces between tags are also nodes, discard them
-                if (iter->type != ElementType.ELEMENT_NODE) {
+                if (iter->type != Xml.ElementType.ELEMENT_NODE) {
                     continue;
                 }
 
@@ -462,8 +464,8 @@ namespace Vocal {
             // Call the Xml.Parser to parse the file, which returns an unowned reference
             Xml.Doc* doc;
             
-            if(path.contains("http")) {
-                doc = XmlUtils.parse_string((string) soup_client.send_message(HttpMethod.GET, path));
+            if(SoupClient.valid_http_uri(path)) {
+                doc = XmlUtils.parse_string(soup_client.request_as_string(HttpMethod.GET, path));
             } else {
                 doc = Xml.Parser.parse_file (path);
                 
@@ -488,99 +490,105 @@ namespace Vocal {
             // Parse the root node, which in turn will cause all nodes and properties to be parsed
             parse_node(root);
 
-            int i = 0;
-            
-            while ( i < queue.size && !previous_found) {
-            
-                if (queue[i] == "item") {
-                    
-                    // Create a new episode
-                    Episode episode = new Episode();
-                    string next_item_in_queue = null;
-                                        
-                    while (next_item_in_queue != "item" && i < queue.size - 1) {
-                        i++;
-                        next_item_in_queue = queue[i];
-                        if(next_item_in_queue == "title") {
+            if (root->name == "feed") {
+                new_episodes = create_podcast_from_queue_atom_new_episodes(root,podcast,previous_newest_episode);
+            } else {
+                int i = 0;
+
+                while ( i < queue.size && !previous_found) {
+
+                    if (queue[i] == "item") {
+
+                        // Create a new episode
+                        Episode episode = new Episode();
+                        string next_item_in_queue = null;
+                        bool found_summary = false;
+
+
+                        while (next_item_in_queue != "item" && i < queue.size - 1) {
                             i++;
-                            episode.title = queue[i];
-                        }
-                        else if(next_item_in_queue == "enclosure") {
-                            bool uri_found = false;
-                            bool type_found = false;
-                            
-                            // Because different podcasts enclose information differently,
-                            // we must individually search for both the uri and the type
-                            while(uri_found != true || type_found != true) {
-                                // Look at next item
+                            next_item_in_queue = queue[i];
+                            if(next_item_in_queue == "title") {
                                 i++;
-                                
-                                if(queue[i] == "url") {
-                                    
+                                episode.title = queue[i];
+                            }
+                            else if(next_item_in_queue == "enclosure") {
+                                bool uri_found = false;
+                                bool type_found = false;
+
+                                // Because different podcasts enclose information differently,
+                                // we must individually search for both the uri and the type
+                                while(uri_found != true || type_found != true) {
+                                    // Look at next item
                                     i++;
-                                    episode.uri = queue[i];
-                                    uri_found = true;
-                                    
+
+                                    if(queue[i] == "url") {
+
+                                        i++;
+                                        episode.uri = queue[i];
+                                        uri_found = true;
+
+                                    }
+                                    else if(queue[i] == "type") {
+                                        i++;
+
+                                        string typestring = queue[i].slice(0, 5);
+                                        if(podcast.content_type == MediaType.UNKNOWN) {
+                                            if(typestring == "audio") {
+                                                podcast.content_type = MediaType.AUDIO;
+                                            }
+                                            else if (typestring == "video") {
+                                                podcast.content_type = MediaType.VIDEO;
+                                            }
+                                            else {
+                                                podcast.content_type = MediaType.UNKNOWN;
+                                            }
+
+                                        }
+
+                                        type_found = true;
+                                    }
                                 }
-                                else if(queue[i] == "type") {
+
+                            }
+                            else if(next_item_in_queue == "pubDate") {
+                                i++;
+
+                                episode.date_released = queue[i];
+                                episode.set_datetime_from_pubdate();
+
+                            }
+                            else if(next_item_in_queue == "summary") {
+                                // Save the summary as description if we haven't found a description yet.
+                                // Subsequent descriptions will overwrite this.
+                                if (episode.description.char_count() == 0) {
                                     i++;
-
-					                string typestring = queue[i].slice(0, 5);
-					                if(podcast.content_type == MediaType.UNKNOWN) {
-						                if(typestring == "audio") {
-							                podcast.content_type = MediaType.AUDIO;
-						                }
-						                else if (typestring == "video") {
-							                podcast.content_type = MediaType.VIDEO;
-						                }
-						                else {
-						                    podcast.content_type = MediaType.UNKNOWN;
-						                }
-						
-					                }
-					                
-					                type_found = true;
-				                }
-				            }
-                            
-                        }
-                        else if(next_item_in_queue == "pubDate") {
-                            i++;
-                            
-                            episode.date_released = queue[i];
-                            episode.set_datetime_from_pubdate();
-
-                        }
-                        else if(next_item_in_queue == "summary") {
-                            // Save the summary as description if we haven't found a description yet.
-                            // Subsequent descriptions will overwrite this.
-                            if (episode.description.char_count() == 0) {
+                                    episode.description = queue[i];
+                                }
+                            }
+                            else if(next_item_in_queue == "description") {
                                 i++;
                                 episode.description = queue[i];
                             }
                         }
-                        else if(next_item_in_queue == "description") {
-                            i++;
-                            episode.description = queue[i];
-                        }
-                    }
-                    
-                    episode.parent = podcast;
-                    
-                    if(previous_newest_episode != null) {
-                        if(episode.title == previous_newest_episode.title.replace("%27", "'")) {
-                            previous_found = true;
+
+                        episode.parent = podcast;
+
+                        if(previous_newest_episode != null) {
+                            if(episode.title == previous_newest_episode.title.replace("%27", "'")) {
+                                previous_found = true;
+                            } else {
+                                new_episodes.add(episode);
+                            }
                         } else {
                             new_episodes.add(episode);
                         }
-                    } else {
-                        new_episodes.add(episode);
                     }
-                }
-                
-                // Otherwise, simply increment and keep going
-                else {
-                    i++;
+
+                    // Otherwise, simply increment and keep going
+                    else {
+                        i++;
+                    }
                 }
             }
 
@@ -599,5 +607,127 @@ namespace Vocal {
             
             return episodes_added;
         }
+    }
+
+    /*
+     * This method collects the episodes from atom xml file.
+     */
+    private Gee.ArrayList<Episode> create_podcast_from_queue_atom_new_episodes( Xml.Node* node,Podcast podcast,Episode? previous_newest_episode) {
+
+        bool previous_found = false;
+        Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode>(); //array of new episodes
+        Gee.ArrayList<Episode> episodes = new Gee.ArrayList<Episode>(); // array of episodes from xml
+
+        /* Create the new podcast object */
+        for (Xml.Node* iter = node->children; iter != null ; iter = iter->next) {
+            if (iter->name != "entry") {
+                continue;
+            }
+
+            /* Creating a Episode with values from <entry> tag. */
+            Episode entry = new Episode();
+
+            for (Xml.Node* iterEntry = iter->children; iterEntry != null; iterEntry = iterEntry->next) {
+                switch (iterEntry->name) {
+                    case "title":
+                        entry.title= iterEntry->get_content ();
+                        break;
+                    case "content":
+                        entry.description= iterEntry->get_content ();
+                        break;
+                    case "updated":
+                        GLib.Time tm = GLib.Time ();
+                        tm.strptime ( iterEntry->get_content (), "%Y-%m-%dT%H:%M:%S%Z");
+                        entry.date_released=tm.format("%a, %d %b %Y %H:%M:%S %Z");
+                        entry.set_datetime_from_pubdate();
+                        break;
+                    case "link":
+                        for (Xml.Attr* propEntry = iterEntry->properties; propEntry != null; propEntry = propEntry->next) {
+                            string attr_name = propEntry->name;
+                            if (attr_name == "href") {
+                                entry.uri=propEntry->children->content;
+                            } else if (attr_name == "type" && podcast!= null) {
+                                podcast.content_type = MediaType.UNKNOWN;
+
+                                if (propEntry->children->content.contains("audio/")) {
+                                    podcast.content_type = MediaType.AUDIO;
+                                } else if (propEntry->children->content.contains("video/")) {
+                                    podcast.content_type = MediaType.VIDEO;
+                                }
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            entry.parent=podcast;
+            episodes.add(entry);
+        }
+
+        for (int i=episodes.size;i>0 && !previous_found;i--) {
+            Episode entry=episodes[i-1];
+
+            if (previous_newest_episode != null) {
+                if (entry.title == previous_newest_episode.title.replace("%27", "'")) {
+                    previous_found = true;
+                } else {
+                    new_episodes.add(entry);
+                }
+            } else {
+                new_episodes.add(entry);
+            }
+        }
+
+        return new_episodes;
+    }
+
+    /*
+     * This method, using XML structure of a atom file, populates attributes
+     * for a podcasts and its entries.
+     */
+    private Podcast create_podcast_from_queue_atom( Xml.Node* node) {
+
+        Podcast podcast = new Podcast();
+
+        for (Xml.Node* iter = node->children; iter != null; iter = iter->next) {
+            /* Assigning podcast properties... */
+            switch (iter->name) {
+                case "title":
+                    podcast.name= iter->get_content ();
+                    break;
+                case "subtitle":
+                    podcast.description= iter->get_content ();
+                    break;
+                case "logo":
+                    podcast.remote_art_uri= iter->get_content ();
+                    break;
+                case "rights":
+                    if (iter->get_content ().index_of("cc-") == 0) {
+                        podcast.license = License.CC;
+                    } else {
+                        podcast.license = License.UNKNOWN;
+                    }
+                    break;
+                case "link":
+                    for (Xml.Attr* prop = iter->properties; prop != null; prop = prop->next) {
+                        if (prop->name == "href") {
+                            podcast.feed_uri=prop->children->content;
+                        }
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        Gee.ArrayList<Episode> episodes = create_podcast_from_queue_atom_new_episodes(node,podcast,null);
+
+        foreach (Episode episode in episodes) {
+            podcast.episodes.add(episode);
+        }
+
+        return podcast;
     }
 }

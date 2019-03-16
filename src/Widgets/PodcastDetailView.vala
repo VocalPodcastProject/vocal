@@ -158,8 +158,11 @@ namespace Vocal {
             edit.button_press_event.connect((e) => {
                 var edit_menu = new Gtk.Menu();
                 var change_cover_art_item = new Gtk.MenuItem.with_label(_("Select different cover art"));
+                var creative_commons_override_button = new Gtk.MenuItem.with_label (_("Set podcast license to Creative Commons"));
                 change_cover_art_item.activate.connect(on_change_album_art);
+                creative_commons_override_button.activate.connect (on_creative_commons_override);
                 edit_menu.add(change_cover_art_item);
+                edit_menu.add (creative_commons_override_button);
                 edit_menu.attach_to_widget(edit, null);
                 edit_menu.show_all();
                 edit_menu.popup(null, null, null, e.button, e.time);
@@ -263,6 +266,46 @@ namespace Vocal {
             shownotes.download_button.clicked.connect(() => { download_episode_requested_internal(); });
             shownotes.mark_as_played_button.clicked.connect(() => { mark_episode_as_played_requested_internal(); });
             shownotes.mark_as_new_button.clicked.connect(() => { mark_episode_as_new_requested_internal(); });
+            shownotes.internet_archive_upload_requested.connect (() => { 
+                var settings = VocalSettings.get_default_instance ();
+                if (settings.archive_access_key.length < 1 || settings.archive_secret_key.length < 1) {
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, _("Before you can upload to the Internet Archive you must add your archive.org account's API keys. Visit https://archive.org/account/s3.php to see your keys, then paste them in the settings."));
+                    
+                    var image = new Gtk.Image.from_icon_name("dialog-warning", Gtk.IconSize.DIALOG);
+                    msg.image = image;
+                    msg.image.show_all();
+
+                    msg.response.connect ((response_id) => {
+			            msg.destroy();
+		            });
+		            msg.show ();
+                } else if (current_episode.current_download_status == DownloadStatus.DOWNLOADED) {
+                
+                    var internet_archive_dialog = new InternetArchiveUploadDialog (controller.window, current_episode);
+                    internet_archive_dialog.show_all ();
+                    
+                } else {
+                
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _("You must download this episode first before uploading to the Internet Archive. Would you like to download this episode?"));
+                    
+                    var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
+                    msg.image = image;
+                    msg.image.show_all();
+
+			        msg.response.connect ((response_id) => {
+			            switch (response_id) {
+				            case Gtk.ResponseType.YES:
+                                download_episode_requested(current_episode);
+					            break;
+				            case Gtk.ResponseType.NO:
+					            break;
+			            }
+
+			            msg.destroy();
+		            });
+		            msg.show ();
+	            }
+            });
 
             shownotes.copy_shareable_link.connect(on_copy_shareable_link);
             shownotes.send_tweet.connect(on_tweet);
@@ -611,6 +654,13 @@ namespace Vocal {
                 shownotes.show_download_button();
             }
 
+            // Check to see if the episode can be uploaded to the archive or not
+            if(current_episode.parent.license == License.CC) {
+                shownotes.show_internet_archive_button ();
+            } else {
+                shownotes.hide_internet_archive_button ();
+            }
+
             // Check the playback status
             if(current_episode.status == EpisodeStatus.PLAYED) {
                 shownotes.show_mark_as_new_button();
@@ -747,6 +797,34 @@ namespace Vocal {
                 
                 new_cover_art_set(this.podcast, file_name);
             }
+        }
+
+        /*
+         * Overrides the autodetected creative commons setting to unlock Internet Archive features
+         */
+        private void on_creative_commons_override () {
+            Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO,
+                     _("Vocal did not detect that this podcast is licensed as Creative Commons. Changing this will unlock Internet Archive integration for this podcast. Please make sure this change is correct before proceeding. Do you wish to make this change?"));
+            var image = new Gtk.Image.from_icon_name("dialog-question", Gtk.IconSize.DIALOG);
+            msg.image = image;
+            msg.image.show_all();
+
+		    msg.response.connect ((response_id) => {
+		        switch (response_id) {
+			        case Gtk.ResponseType.YES:
+			            podcast.license = License.CC;
+			            controller.library.write_podcast_to_database (podcast);
+			            cc_image.no_show_all = false;
+                        cc_image.show ();
+				        break;
+			        case Gtk.ResponseType.NO:
+				        break;
+		        }
+
+		        msg.destroy();
+            });
+
+	        msg.show ();
         }
 
         /*

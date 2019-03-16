@@ -50,7 +50,7 @@ namespace Vocal {
                 CoverArt coverart = new CoverArt(podcast.coverart_uri.replace("%27", "'"), podcast, true);
                 coverart.get_style_context ().add_class (controller.on_elementary ? "card" : "coverart");
                 coverart.halign = Gtk.Align.START;
-                
+
                 int currently_unplayed = 0;
                 foreach(Episode e in podcast.episodes) {
                     if (e.status == EpisodeStatus.UNPLAYED) {
@@ -136,7 +136,7 @@ namespace Vocal {
         public void update_cover_art(Podcast podcast, string path) {
             foreach(CoverArt coverart in all_art) {
                 if(coverart.podcast == podcast) {
-                    // TODO: This doesn't work. We update the CoverArt in all_art, but we don't update the widget in the flowbox. 
+                    // TODO: This doesn't work. We update the CoverArt in all_art, but we don't update the widget in the flowbox.
                     // So this change isn't seen until vocal is restarted.
                     try {
                         InputStream input_stream = GLib.File.new_for_path(path).read();

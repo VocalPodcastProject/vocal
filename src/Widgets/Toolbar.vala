@@ -40,6 +40,7 @@ namespace Vocal {
 		public signal void downloads_selected();
         public signal void check_for_updates_selected();
         public signal void about_selected ();
+        public signal void theme_toggled ();
 
         public Gtk.Menu menu;
         public Gtk.MenuButton app_menu;
@@ -166,6 +167,25 @@ namespace Vocal {
             });
 
             export_item = new Gtk.MenuItem.with_label(_("Export Subscriptions…"));
+            
+            var dark_mode_item = new Gtk.MenuItem ();
+            
+            if (settings.dark_mode_enabled) {
+                dark_mode_item.label = _("Use Light Theme");
+            } else {
+                dark_mode_item.label = _("Use Dark Theme");
+            }
+            
+            dark_mode_item.activate.connect (() => {
+                if (settings.dark_mode_enabled) {
+                    settings.dark_mode_enabled = false;
+                    dark_mode_item.label = _("Use Dark Theme");
+                } else {
+                    settings.dark_mode_enabled = true;
+                    dark_mode_item.label = _("Use Light Theme");
+                }
+                theme_toggled ();
+            });
 
             // Set refresh and export insensitive if there isn't a library to export
             if(first_run) {
@@ -181,6 +201,7 @@ namespace Vocal {
             menu.add(import_item);
             menu.add(export_item);
             menu.add(new Gtk.SeparatorMenuItem());
+            menu.add (dark_mode_item);
 
 
             var preferences_item = new Gtk.MenuItem.with_label(_("Preferences"));

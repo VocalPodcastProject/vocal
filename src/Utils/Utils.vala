@@ -370,5 +370,89 @@ const string CLOSE = """
 
         return str;
     }
+    
+    public static async bool upload_to_internet_archive (string local_uri, string title, string podcast, string description) {
+    
+        info ("Uploading to internet archive");
+        string container = Uri.escape_string (podcast.replace (" ", "-").down ());
+        if (container[container.len() - 1] == '-') {
+            container = container.substring(0, container.len() - 1);
+        }
+        string episode = Uri.escape_string (title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of (".")));
+        info (container);
+        info (episode);
+        var session = new Soup.Session ();
+        var message = new Soup.Message ("PUT","http://s3.us.archive.org/%s/%s".printf (container, episode));
+            
+        SourceFunc callback = upload_to_internet_archive.callback;
+            
+        ThreadFunc<void*> run = () => {
+            uint8[] file_contents;
+            GLib.FileUtils.get_data (local_uri, out file_contents);
+            string mime_type = get_mime_type_for_file (local_uri);
+            message.set_request (mime_type, Soup.MemoryUse.STATIC, file_contents);
+            var settings = VocalSettings.get_default_instance ();
+            string accesskey = settings.archive_access_key;
+            string secretkey = settings.archive_secret_key;
+            message.request_headers.append ("x-archive-auto-make-bucket", "1");
+            message.request_headers.append ("x-archive-meta-title", podcast);
+            message.request_headers.append ("x-archive-meta-description", description);
+            message.request_headers.append ("authorization", "LOW %s:%s".printf(accesskey, secretkey));
+            session.send_message (message);
+            Idle.add((owned) callback);
+            return null;
+        };
+        Thread.create<void*>(run, false);
+
+        yield;
+        
+        info("archive.org request status code: %u", message.status_code);
+        info ( (string) message.response_body.data);
+        if (message.status_code == 200) {
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+    
+    public static string get_mime_type_for_file (string file_uri) {
+    
+        string extension = file_uri.down ().substring (file_uri.last_index_of ("."));
+        
+        // If all else fails, assume MP3
+        string mime = "audio/mpeg3";
+        switch (extension) {
+            case ".mp3":
+                mime = "audio/mpeg";
+                break;
+            case ".mp4":
+                mime = "video/mp4";
+                break;
+            case ".mpeg":
+                mime = "video/mpeg";
+                break;
+            case ".aac":
+                mime = "audio/aac";
+                break;
+            case ".weba":
+                mime = "audio/webm";
+                break;
+            case ".webm":
+                mime = "video/webm";
+                break;
+            case ".oga":
+                mime = "audio/ogg";
+                break;
+            case ".ogv":
+                mime = "video/ogg";
+                break;
+            case ".mov":
+                mime = "video/quicktime";
+                break;
+        }
+        
+        return mime;
+    }
 
 }

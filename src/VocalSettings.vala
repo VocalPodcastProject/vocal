@@ -25,6 +25,7 @@ public class VocalSettings : Granite.Services.Settings {
     public bool autoclean_library { get; set; }
     public bool continue_running_after_close { get; set; }
     public bool show_name_label { get; set; }
+    public bool dark_mode_enabled { get; set; }
     public bool newest_episodes_first { get; set; }
     
     public int update_interval { get; set; }
@@ -37,6 +38,8 @@ public class VocalSettings : Granite.Services.Settings {
     public string library_location { get; set; }
     public string last_played_media { get; set; }
     public string itunes_store_country { get; set; }
+    public string archive_access_key { get; set; }
+    public string archive_secret_key { get; set; }
     
     private VocalSettings() {
         base("com.github.needle-and-thread.vocal");

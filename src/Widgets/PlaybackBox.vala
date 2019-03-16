@@ -48,7 +48,7 @@ namespace Vocal {
 
             this.progress_bar = new Gtk.ProgressBar();
             
-            scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 1, 1000);
+            scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 2, 0.1);
             scale.set_value(0.0);
             scale.hexpand = true;
             scale.draw_value = false;

@@ -42,9 +42,9 @@ namespace Vocal {
         public PodcastView podcast_view;
         public PodcastDetailView details;
         private ImportView import_view;
-        
+
         private Gtk.Stack notebook;
-        
+
 
         /* Secondary widgets */
         public SettingsDialog settings_dialog;
@@ -69,9 +69,9 @@ namespace Vocal {
             this.controller = controller;
             title = _("Vocal");
 
-            const string ELEMENTARY_STYLESHEET = """
+            const string HEADERBAR_STYLESHEET = "@define-color colorPrimary #af81d6;";
 
-                @define-color colorPrimary #af81d6;
+            const string PRIMARY_STYLESHEET = """
 
                 .album-artwork {
                     border-color: shade (mix (rgb (255, 255, 255), #fff, 0.5), 0.9);
@@ -161,20 +161,25 @@ namespace Vocal {
 
                 """;
 
-            info ("Loading CSS provider.");
+            info ("Loading CSS providers.");
             var css_provider = new Gtk.CssProvider ();
-            try {
-                css_provider.load_from_buffer (ELEMENTARY_STYLESHEET.data);
-            } catch (Error e) {
-                warning("Failed to load stylesheet. %s", e.message);
-            }
+            css_provider.load_from_buffer (PRIMARY_STYLESHEET.data);
+
+            var headerbar_css_provider = new Gtk.CssProvider ();
+            headerbar_css_provider.load_from_buffer (HEADERBAR_STYLESHEET.data);
+
             var screen = Gdk.Screen.get_default ();
-            Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            var style_context = this.get_style_context ();
+
+            // No matter what, make sure primary CSS provider is added
+            style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             this.set_application (controller.app);
 
-            if (!controller.on_elementary) {
+            if (controller.settings.dark_mode_enabled) {
                 Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
+            } else {
+                style_context.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             }
 
             // Set window properties
@@ -225,7 +230,7 @@ namespace Vocal {
                         
             podcast_view = new PodcastView (controller);
 		    
-            info ("Creating podcast detail view."); 
+            info ("Creating podcast detail view.");
             details = new PodcastDetailView (controller);
             details.play_episode_requested.connect(play_different_track);
             details.download_episode_requested.connect(download_episode);
@@ -288,6 +293,16 @@ namespace Vocal {
 
             toolbar.about_selected.connect (() => {
                 controller.app.show_about (this);
+            });
+
+            toolbar.theme_toggled.connect (() => {
+                if (controller.settings.dark_mode_enabled) {
+                    Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
+                    style_context.remove_provider_for_screen(screen, headerbar_css_provider);
+                } else {
+                    Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", false);
+                    style_context.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+                }
             });
 
             toolbar.preferences_selected.connect (() => {
@@ -424,13 +439,11 @@ namespace Vocal {
             
             info("Populating new episodes view");
             new_episodes_view.populate_episodes_list ();
-            
 
             // If the app is supposed to open hidden, don't present the window. Instead, hide it
             if(!controller.open_hidden && !controller.is_closing) {
                 show_all();
             }
-                
         }
 
         /*
@@ -1044,7 +1057,7 @@ namespace Vocal {
             if(fullscreened) {
                 on_fullscreen_request();
             }
-                
+
             // It's possible this was triggered by the directory on a first run, so check
             // the new episodes button
             if (!controller.library.empty ()) {
@@ -1084,7 +1097,7 @@ namespace Vocal {
                     show_details(coverart.podcast);
                 } else {
                     warning("No CoverArt found for Podcast %s", podcast.name);
-                }                
+                }
             }
          }
 
@@ -1104,7 +1117,7 @@ namespace Vocal {
                     details.select_episode(episode);
                 } else {
                     warning("No CoverArt found for Podcast %s, Episode %s", podcast.name, episode.title);
-                } 
+                }
             }
          }
 

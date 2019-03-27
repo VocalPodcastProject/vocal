@@ -297,7 +297,7 @@ namespace Vocal {
             // Create a welcome screen and add it to the notebook (no matter if first run or not)
             welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
             welcome.append(controller.on_elementary ? "preferences-desktop-online-accounts" : "applications-internet", _("Browse Podcasts"),
-                 _("Browse through podcasts and choose some to add to your controller.library."));
+                 _("Browse through podcasts and choose some to add to your library."));
             welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
             welcome.append("document-open", _("Import Subscriptions"),
                     _("If you have exported feeds from another podcast manager, import them here."));

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-10 10:33-0400\n"
+"POT-Creation-Date: 2019-03-27 06:18-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -92,8 +92,7 @@ msgid "Browse Podcasts"
 msgstr ""
 
 #: ../src/MainWindow.vala:300
-msgid ""
-"Browse through podcasts and choose some to add to your controller.library."
+msgid "Browse through podcasts and choose some to add to your library."
 msgstr ""
 
 #: ../src/MainWindow.vala:301

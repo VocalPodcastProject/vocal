@@ -47,6 +47,7 @@
       <li>Smart library management</li>
       <li>Playback position saving</li>
       <li>Library importing and exporting</li>
+      <li>Internet Archive integration</li>
       <li>... and much more!</li>
     </ul>
   </description>
@@ -89,6 +90,34 @@
 
 
   <releases>
+    <release version = "2.4" timestamp="1554910001">
+      <description>
+        <p>This release is packed to the gills with new features and stability enhancements!
+            A first for any podcast app, you can now submit Creative Commons licensed podcast
+            episodes to the Internet Archive directly from within Vocal. Many other requested
+            changes and quality of life improvments can also be found, such as chronological feeds
+            and a new theme switcher. The full changelog is as follows:
+        </p>
+        <ul>
+            <li>You can now switch between 'light' and 'dark' modes using the option in the gear menu
+            </li>
+            <li>Built-in Internet Archive episode uploads (for Creative Commons licensed feeds)
+            </li>
+            <li>Better search results
+            </li>
+            <li>Scrolling while hovering over the seekbar now seeks through the current episode
+            </li>
+            <li>Support for Atom podcast feeds
+            </li>
+            <li>Dramatically improved episode browsing (can now list both reverse-chronological or chronological - your choice)
+            </li>
+            <li>New and updated translations throughout many languages
+            </li>
+            <li>Lots of stability and performance enhancements under the hood
+            </li>
+        </ul>
+      </description>
+    </release>
     <release version = "2.3" timestamp="1541346569">
       <description>
         <p>Vocal's first release for elementary OS Juno!

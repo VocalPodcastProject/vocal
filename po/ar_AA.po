@@ -3,7 +3,7 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2015
+# Mahmoud Abdelsalam <mahmoud.abodalal@gmail.com>, 2017
 msgid ""
 msgstr ""
 "Project-Id-Version: Vocal\n"
@@ -11,33 +11,33 @@ msgstr ""
 "POT-Creation-Date: 2019-03-27 06:18-0400\n"
 "PO-Revision-Date: 2019-04-07 14:37+0000\n"
 "Last-Translator: Nathan Dyer <nathandyer@fastmail.com>\n"
-"Language-Team: Bosnian (http://www.transifex.com/needle-and-thread/vocal/language/bs/)\n"
+"Language-Team: Arabic (Unitag) (http://www.transifex.com/needle-and-thread/vocal/language/ar_AA/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: bs\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: ar_AA\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
 
 #: ../src/Controller.vala:403 ../src/Controller.vala:407
 msgid "Pause"
-msgstr "Pauziraj"
+msgstr "إيقاف"
 
 #: ../src/Controller.vala:430 ../src/Controller.vala:434
 #: ../src/Widgets/EpisodeDetailBox.vala:125
 #: ../src/Widgets/EpisodeDetailBox.vala:318 ../src/Widgets/Toolbar.vala:225
 #: ../src/Widgets/VideoControls.vala:40
 msgid "Play"
-msgstr "Pokreni"
+msgstr "تشغيل"
 
 #: ../src/Controller.vala:496
 msgid "Adding new podcast: <b>"
-msgstr "Dodavanje novog podcasta: <b>"
+msgstr "إضافة بودكاست جديد: <b>"
 
 #: ../src/Controller.vala:555
 msgid ""
 "Please make sure you selected the correct feed and that it is still "
 "available."
-msgstr ""
+msgstr "تأكد من اختيار التغذية الصحيحة وأنها ما زالت متاحة."
 
 #: ../src/Controller.vala:557
 msgid ""
@@ -47,27 +47,27 @@ msgstr ""
 
 #: ../src/Controller.vala:562
 msgid "Error Adding Podcast"
-msgstr "Pogreška pri dodavanju podkasta"
+msgstr "خطأ في إضافة البودكاست"
 
 #: ../src/Controller.vala:604
 msgid "Fresh content has been added to your library."
-msgstr "Novi sadržaj dodat u vašu biblioteku."
+msgstr "تم إضافة محتوى جديد لمكتبتك."
 
 #: ../src/Library.vala:760
 msgid "'%s' from '%s' has finished downloading."
-msgstr ""
+msgstr "'%s' من '%s' انتهى تحميله."
 
 #: ../src/Library.vala:761
 msgid "Episode Download Complete"
-msgstr ""
+msgstr "اكتمل تحميل الحلقة"
 
 #: ../src/Library.vala:766
 msgid "Downloads Complete"
-msgstr ""
+msgstr "اكتملت التحميلات"
 
 #: ../src/Library.vala:766
 msgid "New episodes have been downloaded."
-msgstr ""
+msgstr "تم تحميل الحلقات الجديدة."
 
 #: ../src/MainWindow.vala:92
 msgid "Vocal"
@@ -77,19 +77,19 @@ msgstr ""
 #: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
 #: ../src/Widgets/SearchResultsView.vala:68
 msgid "Return to Library"
-msgstr ""
+msgstr "العودة للمكتبة"
 
 #: ../src/MainWindow.vala:298
 msgid "Welcome to Vocal"
-msgstr "Dobrodošli u Vokal"
+msgstr "مرحبًا في Vocal"
 
 #: ../src/MainWindow.vala:298
 msgid "Build Your Library By Adding Podcasts"
-msgstr "Napravi svoju biblioteku dodavanjem podkasta"
+msgstr "أنشأ مكتبتك بإضافة بودكاست"
 
 #: ../src/MainWindow.vala:299
 msgid "Browse Podcasts"
-msgstr ""
+msgstr "استعراض البودكاست"
 
 #: ../src/MainWindow.vala:300
 msgid "Browse through podcasts and choose some to add to your library."
@@ -97,46 +97,46 @@ msgstr ""
 
 #: ../src/MainWindow.vala:301
 msgid "Add a New Feed"
-msgstr "Dodaj novi izvor"
+msgstr "إضافة مصدر جديد"
 
 #: ../src/MainWindow.vala:301
 msgid "Provide the web address of a podcast feed."
-msgstr "Unesite adresu podkast izvora."
+msgstr ""
 
 #: ../src/MainWindow.vala:302
 msgid "Import Subscriptions"
-msgstr "Uvezite pretplate"
+msgstr "استيراد الاشتراكات"
 
 #: ../src/MainWindow.vala:303
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
-msgstr "Ako ste izveli izvore na drugom podkast menadžeru, uvezite ih ovdje."
+msgstr ""
 
 #: ../src/MainWindow.vala:356
 msgid "Good Stuff is On Its Way"
-msgstr "Dobre stvari su na putu"
+msgstr ""
 
 #: ../src/MainWindow.vala:357
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
-msgstr "Uvoz nekoliko podkasta može potrajati. Vaša biblioteka će biti spremna ubrzo."
+msgstr ""
 
 #: ../src/MainWindow.vala:369
 msgid "Welcome"
-msgstr ""
+msgstr "مرحبًا"
 
 #: ../src/MainWindow.vala:370
 msgid "Importing"
-msgstr ""
+msgstr "استيراد"
 
 #: ../src/MainWindow.vala:371
 msgid "All Podcasts"
-msgstr "Svi Podkasti"
+msgstr "جميع البوكاست"
 
 #: ../src/MainWindow.vala:372 ../src/Widgets/DirectoryArt.vala:69
 msgid "Details"
-msgstr ""
+msgstr "تفاصيل"
 
 #: ../src/MainWindow.vala:373 ../src/Widgets/NewEpisodesView.vala:49
 #: ../src/Widgets/Toolbar.vala:104
@@ -145,59 +145,59 @@ msgstr ""
 
 #: ../src/MainWindow.vala:374
 msgid "Video"
-msgstr "Video"
+msgstr "الفيديو"
 
 #: ../src/MainWindow.vala:391
 msgid "Browse Podcast Directory"
-msgstr ""
+msgstr "استعراض مسار البودكاست"
 
 #: ../src/MainWindow.vala:392
 msgid "Search Results"
-msgstr ""
+msgstr "نتائج البحث"
 
 #: ../src/MainWindow.vala:856 ../src/MainWindow.vala:895
 #: ../src/Widgets/PodcastView.vala:778
 msgid "Cancel"
-msgstr "Otkaži"
+msgstr "إلغاء"
 
 #: ../src/MainWindow.vala:857
 msgid "Save"
-msgstr "Spremi"
+msgstr "حفظ"
 
 #: ../src/MainWindow.vala:860 ../src/MainWindow.vala:899
 #: ../src/Widgets/PodcastView.vala:782
 msgid "All files"
-msgstr "Svi fajlovi"
+msgstr "كل الملفات"
 
 #: ../src/MainWindow.vala:864
 msgid "OPML and XML files"
-msgstr "OPML i XML fajlovi"
+msgstr "ملفات OPML و XML"
 
 #: ../src/MainWindow.vala:892
 msgid "Select Subscription File"
-msgstr "Izaberi fajl sa pretplatama"
+msgstr "اختيار ملف الاشتراكات"
 
 #: ../src/MainWindow.vala:896 ../src/Widgets/PodcastView.vala:779
 msgid "Open"
-msgstr "Otvori"
+msgstr "فتح"
 
 #: ../src/MainWindow.vala:903
 msgid "OPML files"
-msgstr "OPML fajlovi"
+msgstr "ملفات OPML"
 
 #: ../src/MainWindow.vala:956
 msgid "Error Importing from File"
-msgstr "Pogreška pri uvoženju fajla"
+msgstr "خطأ في الاستيراد من ملف"
 
 #: ../src/MainWindow.vala:1074
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
-msgstr "Dodatni plugini su potrebni za reprodukciju medija.  Želite li da ih Vokal instalira za vas?"
+msgstr ""
 
 #: ../src/MainWindow.vala:1224
 msgid "Are you sure you want to mark all episodes from '%s' as played?"
-msgstr ""
+msgstr "هل أنت واثق بأنك تريد تمييز كل الحلقات من '%s' as كتمّ تشغيلها؟"
 
 #: ../src/MainWindow.vala:1437
 msgid "Are you sure you want to remove '%s' from your controller.library?"
@@ -205,124 +205,130 @@ msgstr ""
 
 #: ../src/MainWindow.vala:1441
 msgid "No"
-msgstr ""
+msgstr "لا"
 
 #: ../src/MainWindow.vala:1442
 msgid "Yes"
-msgstr ""
+msgstr "نعم"
 
 #: ../src/MainWindow.vala:1765
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to"
 " be canceled. Are you sure you want to exit?"
-msgstr "Vokal trenutno preuzima epizode. Izlaz će prekinuti preuzimanje. Jeste li sigurni da želite izaći?"
+msgstr "Vocal يحمّل حلقات حاليّا. الإغلاق سوف يلغي هذه التحميلات.\nهل أنت متأكد من الإغلاق؟"
 
 #: ../src/Utils/FeedParser.vala:367
 msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr "Izabrani fajl ne sadrži pretplate na podkast."
+msgstr "الملف المختار لا يبدو أنه يحتوي على اشتراكات بودكاست."
 
 #: ../src/Utils/FeedParser.vala:378
 msgid "Selected file seems to be empty."
-msgstr "Izabrani fajl je prazan."
+msgstr "يبدو بأن الملف المختار فارغ."
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
-msgstr "Launchpad Contributions:\n  Din https://launchpad.net/~din-ferizovic"
+msgstr ""
 
 #: ../src/Widgets/AddFeedDialog.vala:42
 msgid "Add New Podcast"
-msgstr "Dodaj novi podkast"
+msgstr "إضافة بودكاست جديد"
 
 #: ../src/Widgets/AddFeedDialog.vala:53
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr "<b>Dodavanje novog podkasta u biblioteku</b>"
+msgstr "<b>إضافة تغذية بودكاست جديد للمكتبة</b>"
 
 #: ../src/Widgets/AddFeedDialog.vala:58
 msgid "Podcast feed web address"
-msgstr "Web adresa izvora podkasta"
+msgstr "عنوان الويب لتغذية البودكاست"
 
 #: ../src/Widgets/CloudLoginDialog.vala:44
 msgid "Login to gPodder.net"
-msgstr ""
+msgstr "ولوج إلى gPodder.net"
 
 #: ../src/Widgets/CloudLoginDialog.vala:53
 msgid "Username"
-msgstr ""
+msgstr "اسم المستخدم"
 
 #: ../src/Widgets/CloudLoginDialog.vala:55
 msgid "Password"
-msgstr ""
+msgstr "كلمة المرور"
 
 #: ../src/Widgets/CloudLoginDialog.vala:69
 msgid "Login"
-msgstr ""
+msgstr "دخول"
 
 #: ../src/Widgets/CloudLoginDialog.vala:70
 msgid "Register for gPodder.net"
-msgstr ""
+msgstr "تسجيل في gPodder.net"
 
 #: ../src/Widgets/DirectoryArt.vala:88 ../src/Widgets/SearchResultBox.vala:134
 msgid "No summary available."
-msgstr ""
+msgstr "لا يوجد ملخص."
 
 #: ../src/Widgets/DirectoryArt.vala:100
 msgid "Subscribe"
-msgstr ""
+msgstr "اشتراك"
 
 #: ../src/Widgets/DirectoryView.vala:51
 msgid "iTunes Top 100 Podcasts"
-msgstr ""
+msgstr "أعلى 100 بودكاست في iTunes"
 
 #: ../src/Widgets/DirectoryView.vala:62
 msgid "Go Back"
-msgstr ""
+msgstr "العودة"
 
 #: ../src/Widgets/DirectoryView.vala:72
 msgid "Done"
-msgstr ""
+msgstr "تم"
 
 #: ../src/Widgets/DirectoryView.vala:104
 msgid "Loading iTunes Store"
-msgstr ""
+msgstr "تحميل متجر iTunes"
 
 #: ../src/Widgets/DownloadDetailBox.vala:111
 msgid "Cancel Download"
-msgstr "Prekini preuzimanje"
+msgstr "إلغاء التحميل"
 
 #: ../src/Widgets/DownloadDetailBox.vala:187
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "دقيقة"
+msgstr[1] "دقيقة"
+msgstr[2] "دقيقتان"
+msgstr[3] "دقائق"
+msgstr[4] "دقيقة"
+msgstr[5] "دقائق"
 
 #: ../src/Widgets/DownloadDetailBox.vala:191
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "ثانية"
+msgstr[1] "ثانية"
+msgstr[2] "ثانيان"
+msgstr[3] "ثواني"
+msgstr[4] "ثانية"
+msgstr[5] "ثواني"
 
 #: ../src/Widgets/DownloadsPopover.vala:51
 msgid "No Active Downloads"
-msgstr ""
+msgstr "لا توجد تحميلات نشطة"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:80
 msgid "This episode is currently being played"
-msgstr "Ova epizoda se trenutno reproducira"
+msgstr "يتم تشغيل هذه الحلقة حاليًا"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:127
 #: ../src/Widgets/EpisodeDetailBox.vala:321
 msgid "Stream Episode"
-msgstr "Reprodukuj epizodu"
+msgstr "بث الحلقة"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:143
 msgid "Download Episode"
-msgstr "Preuzmi epizodu"
+msgstr "تحميل الحلقة"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:191
 msgid "No description available."
-msgstr ""
+msgstr "لا يوجد وصف."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:32
 msgid "Upload to Internet Archive"
@@ -413,15 +419,15 @@ msgstr ""
 
 #: ../src/Widgets/PodcastView.vala:142 ../src/Widgets/Sidepane.vala:98
 msgid "Download all episodes"
-msgstr "Preuzmi sve epizode"
+msgstr "تحميل جميع الحلقات"
 
 #: ../src/Widgets/PodcastView.vala:147
 msgid "Mark All Played"
-msgstr ""
+msgstr "تمييز الكل كتمّ تشغيلهم"
 
 #: ../src/Widgets/PodcastView.vala:161
 msgid "Edit podcast details"
-msgstr ""
+msgstr "تعديل تفاصيل البودكاست"
 
 #: ../src/Widgets/PodcastView.vala:164
 msgid "Select different cover art"
@@ -433,7 +439,7 @@ msgstr ""
 
 #: ../src/Widgets/PodcastView.vala:176
 msgid "Unsubscribe"
-msgstr ""
+msgstr "إلغاء الاشتراك"
 
 #: ../src/Widgets/PodcastView.vala:270
 msgid ""
@@ -454,33 +460,33 @@ msgstr ""
 
 #: ../src/Widgets/PodcastView.vala:426 ../src/Widgets/Sidepane.vala:248
 msgid "Mark selected episodes as played"
-msgstr "Označi odabrane epizode kao slušane"
+msgstr "تمييز الحلقات المحددة كتمّ تشغيلها"
 
 #: ../src/Widgets/PodcastView.vala:441
 msgid "Mark selected episodes as new"
-msgstr ""
+msgstr "تمييز الحلقات المحددة كجديدة"
 
 #: ../src/Widgets/PodcastView.vala:455 ../src/Widgets/Sidepane.vala:310
 msgid "Delete local files for selected episodes"
-msgstr "Obriši lokalne fajlove za odabrane epizode"
+msgstr "حذف الملفات المحلية للحلقات المحددة"
 
 #: ../src/Widgets/PodcastView.vala:458 ../src/Widgets/Sidepane.vala:314
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr "Jeste li sigurni da želite obrisati preuzete fajlove za odabrane epizode?"
+msgstr "هل أنت واثق من حذف الملفات المحمّلة للحلقات المحددة؟"
 
 #: ../src/Widgets/PodcastView.vala:504
 msgid "Mark as played"
-msgstr ""
+msgstr "تمييز كتمّ تشغيله"
 
 #: ../src/Widgets/PodcastView.vala:512
 msgid "Mark as new"
-msgstr ""
+msgstr "تمييز كجديد"
 
 #: ../src/Widgets/PodcastView.vala:520 ../src/Widgets/Sidepane.vala:408
 msgid "Delete Local File"
-msgstr "Obriši lokalni fajl"
+msgstr "حذف الملف المحلي"
 
 #: ../src/Widgets/PodcastView.vala:524
 msgid "Are you sure you want to delete the downloaded episode '%s'?"
@@ -488,19 +494,19 @@ msgstr ""
 
 #: ../src/Widgets/PodcastView.vala:648
 msgid "No show notes available."
-msgstr ""
+msgstr "لا توجد ملاحظات متاحة."
 
 #: ../src/Widgets/PodcastView.vala:738 ../src/Widgets/Sidepane.vala:624
 msgid "No episodes available."
-msgstr "Nema dostupnih epizoda"
+msgstr "لا توجد حلقات متاحة."
 
 #: ../src/Widgets/PodcastView.vala:775
 msgid "Select Album Art"
-msgstr ""
+msgstr "اختيار صورة للألبوم"
 
 #: ../src/Widgets/PodcastView.vala:786
 msgid "Image Files"
-msgstr ""
+msgstr "ملفات صور"
 
 #: ../src/Widgets/PodcastView.vala:816
 msgid ""
@@ -512,11 +518,11 @@ msgstr ""
 
 #: ../src/Widgets/PodcastView.vala:844
 msgid "%d unplayed episodes"
-msgstr ""
+msgstr "%d حلقات لم يتم تشغيلها"
 
 #: ../src/Widgets/PodcastView.vala:874
 msgid "I'm listening to %s from %s"
-msgstr ""
+msgstr "أنا أستمع إلى %s من %s"
 
 #: ../src/Widgets/QueuePopover.vala:37
 msgid "No episodes in queue"
@@ -524,27 +530,27 @@ msgstr ""
 
 #: ../src/Widgets/QueueRow.vala:71
 msgid "Remove episode from queue"
-msgstr ""
+msgstr "حذف الحلقة من الصف"
 
 #: ../src/Widgets/SearchResultBox.vala:125
 msgid "Summary"
-msgstr ""
+msgstr "الملخص"
 
 #: ../src/Widgets/SearchResultBox.vala:159
 msgid "Subscribe to podcast"
-msgstr ""
+msgstr "اشتراك في البودكاست"
 
 #: ../src/Widgets/SearchResultsView.vala:86
 msgid "Episodes from Your Library"
-msgstr ""
+msgstr "حلقات من مكتبتك"
 
 #: ../src/Widgets/SearchResultsView.vala:87
 msgid "Podcasts from Your Library"
-msgstr ""
+msgstr "بودكاست من مكتبتك"
 
 #: ../src/Widgets/SearchResultsView.vala:88
 msgid "iTunes Podcast Results"
-msgstr ""
+msgstr "نتائج بودكاست iTunes"
 
 #: ../src/Widgets/SearchResultsView.vala:117
 msgid "Search Results for <i>%s</i>"
@@ -552,23 +558,23 @@ msgstr ""
 
 #: ../src/Widgets/SearchResultsView.vala:153
 msgid "No matching episodes found in your library."
-msgstr ""
+msgstr "لا توجد حلقات مطابقة في مكتبتك."
 
 #: ../src/Widgets/SearchResultsView.vala:154
 msgid "No matching podcasts found in your library."
-msgstr ""
+msgstr "لا يوجد بودكاست مطابق في مكتبتك."
 
 #: ../src/Widgets/SettingsDialog.vala:59 ../src/Widgets/Toolbar.vala:172
 msgid "Preferences"
-msgstr "Postavke"
+msgstr "تفضيلات"
 
 #: ../src/Widgets/SettingsDialog.vala:75
 msgid "Automatically download new episodes:"
-msgstr "Automatsko preuzimanje novih epizoda"
+msgstr "تحميل تلقائي للحلقات الجديد:"
 
 #: ../src/Widgets/SettingsDialog.vala:93
 msgid "Keep my library clean:"
-msgstr ""
+msgstr "إبقاء مكتبتي مرتّبة:"
 
 #: ../src/Widgets/SettingsDialog.vala:111
 msgid "Show podcast names below cover art:"
@@ -576,11 +582,11 @@ msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:138
 msgid "Seconds to skip back:"
-msgstr "Premotaj unazad:"
+msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:156
 msgid "Seconds to skip forward:"
-msgstr "Premotaj unaprijed:"
+msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:199
 msgid "Show iTunes Store results from:"
@@ -596,91 +602,91 @@ msgstr ""
 
 #: ../src/Widgets/SettingsDialog.vala:263
 msgid "Close"
-msgstr "Zatvori"
+msgstr "إغلاق"
 
 #: ../src/Widgets/Shownotes.vala:70
 msgid "Mark this episode as played"
-msgstr ""
+msgstr "تمييز هذه الحلقة كتمّ تشغيلها"
 
 #: ../src/Widgets/Shownotes.vala:75
 msgid "Mark this episode as new"
-msgstr ""
+msgstr "تمييز هذه الحلقة كجديدة"
 
 #: ../src/Widgets/Shownotes.vala:80
 msgid "Download episode"
-msgstr ""
+msgstr "تحميل الحلقة"
 
 #: ../src/Widgets/Shownotes.vala:85
 msgid "Share this episode"
-msgstr ""
+msgstr "مشاركة هذه الحلقة"
 
 #: ../src/Widgets/Shownotes.vala:88
 msgid "Copy shareable link"
-msgstr ""
+msgstr "نسخ رابط المشاركة"
 
 #: ../src/Widgets/Shownotes.vala:89
 msgid "Send a Tweet…"
-msgstr ""
+msgstr "إرسال تغريدة..."
 
 #: ../src/Widgets/Shownotes.vala:90
 msgid "Copy the direct episode link"
-msgstr ""
+msgstr "نسخ رابط الحلقة المباشر"
 
 #: ../src/Widgets/Shownotes.vala:139
 msgid "Add this episode to the up next list"
-msgstr ""
+msgstr "إضافة هذه الحلقة إلى قائمة التشغيل التالية"
 
 #: ../src/Widgets/Shownotes.vala:147
 msgid "<b>Summary</b>"
-msgstr ""
+msgstr "<b>الملخص</b>"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
-msgstr "Markiraj sve epizode kao poslušane"
+msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:106
 msgid "Hide episodes that have already been played"
-msgstr "Sakrij preslušane epizode"
+msgstr "إخفاء الحلقات السابق تشغيلها"
 
 #: ../src/Widgets/Sidepane.vala:126
 msgid "Remove podcast from library"
-msgstr "Ukloni podkast iz biblioteke"
+msgstr "حذف البودكاست من المكتبة"
 
 #: ../src/Widgets/Sidepane.vala:137
 msgid "More options"
-msgstr "Dodatne opcije"
+msgstr "خيارات أكثر"
 
 #: ../src/Widgets/Sidepane.vala:191
 msgid "Hide the episode side pane"
-msgstr "Sakrij okno sa strane"
+msgstr "إخفاء الحلقة من اللوحة الجانبية"
 
 #: ../src/Widgets/Sidepane.vala:278
 msgid "Mark selected episodes as unplayed"
-msgstr "Označi odabrane epizode kao nepreslušane"
+msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:369
 msgid "Mark as Played"
-msgstr "Označi kao preslušano"
+msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:388
 msgid "Mark as Unplayed"
-msgstr "Označi kao nepreslušano"
+msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:615
 msgid "No new episodes."
-msgstr "Nema novih epizoda"
+msgstr "لا توجد حلقات جديد."
 
 #: ../src/Widgets/Sidepane.vala:668
 msgid "%d episodes, %d unplayed"
-msgstr "%d epizoda, %d nepreslušano"
+msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:670
 msgid "%d episodes"
-msgstr "%d epizoda"
+msgstr ""
 
 #: ../src/Widgets/Toolbar.vala:83
 msgid "View show notes"
-msgstr "Pogledaj opis epizode"
+msgstr "عرض ملاحظات البرنامج"
 
 #: ../src/Widgets/Toolbar.vala:93
 msgid "Coming up next"
@@ -688,19 +694,19 @@ msgstr ""
 
 #: ../src/Widgets/Toolbar.vala:119
 msgid "Check for Updates"
-msgstr ""
+msgstr "التحقق من التحديثات"
 
 #: ../src/Widgets/Toolbar.vala:124
 msgid "Add Podcast Feed…"
-msgstr ""
+msgstr "إضافة تغذية بودكاست..."
 
 #: ../src/Widgets/Toolbar.vala:129
 msgid "Import Subcriptions…"
-msgstr ""
+msgstr "استيراد الاشتراكات..."
 
 #: ../src/Widgets/Toolbar.vala:134
 msgid "Export Subscriptions…"
-msgstr "Izvezite pretplate"
+msgstr "تصدير الاشتراكات..."
 
 #: ../src/Widgets/Toolbar.vala:139 ../src/Widgets/Toolbar.vala:150
 msgid "Use Light Theme"
@@ -712,40 +718,40 @@ msgstr ""
 
 #: ../src/Widgets/Toolbar.vala:179
 msgid "Report a Problem…"
-msgstr ""
+msgstr "تبليغ عن مشكلة..."
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "Donate…"
-msgstr "Donacija"
+msgstr "تبرّع..."
 
 #: ../src/Widgets/Toolbar.vala:195
 msgid "About"
-msgstr ""
+msgstr "عن"
 
 #: ../src/Widgets/Toolbar.vala:236 ../src/Widgets/Toolbar.vala:251
 msgid "Fast forward %d seconds"
-msgstr "Preskoči %d sekundi"
+msgstr ""
 
 #: ../src/Widgets/Toolbar.vala:244 ../src/Widgets/Toolbar.vala:252
 msgid "Rewind %d seconds"
-msgstr "Vrati %d sekundi"
+msgstr ""
 
 #: ../src/Widgets/Toolbar.vala:257
 msgid "Check for new episodes"
-msgstr "Provjeri dostupnost novih epizoda"
+msgstr "تحقق من الحلقات الجديدة"
 
 #: ../src/Widgets/Toolbar.vala:266
 msgid "Search your library or online"
-msgstr ""
+msgstr "البحث في مكتبتك أو عبر الانترنت"
 
 #: ../src/Widgets/Toolbar.vala:276
 msgid "View the top podcasts in the iTunes Store"
-msgstr ""
+msgstr "عرض أعلى البودكاست في متجر iTunes"
 
 #: ../src/Widgets/Toolbar.vala:311
 msgid "Downloads"
-msgstr "Preuzimanja"
+msgstr "التحميلات"
 
 #: ../src/Widgets/VideoControls.vala:60
 msgid "Exit Fullscreen"
-msgstr "Izađi iz punog ekrana"
+msgstr "الخروج من ملء الشاشة"

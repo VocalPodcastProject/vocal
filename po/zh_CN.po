@@ -1,356 +1,749 @@
-# Chinese (Simplified) translation for vocal
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the vocal package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# colindemian <colindemian@outlook.com>, 2016-2017
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Yhilan Ko <yhilan.ko@gmail.com>, 2017
 msgid ""
 msgstr ""
-"Project-Id-Version: vocal\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-25 02:41+0000\n"
-"Last-Translator: colindemian <dengmengpc@gmail.com>\n"
-"Language-Team: Chinese (Simplified) <zh_CN@li.org>\n"
+"Project-Id-Version: Vocal\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-27 06:18-0400\n"
+"PO-Revision-Date: 2019-04-07 14:37+0000\n"
+"Last-Translator: Nathan Dyer <nathandyer@fastmail.com>\n"
+"Language-Team: Chinese (China) (http://www.transifex.com/needle-and-thread/vocal/language/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-26 05:47+0000\n"
-"X-Generator: Launchpad (build 17430)\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 
-#: ../src/Utils/FeedParser.vala:288
-msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr "所选文件似乎不包含播客订阅。"
-
-#: ../src/Utils/FeedParser.vala:299
-msgid "Selected file seems to be empty."
-msgstr "所选文件似乎是空白的。"
-
-#: ../src/Library.vala:152
-msgid "Unable to add podcast"
-msgstr "无法添加播客"
-
-#: ../src/Vocal.vala:59
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Nathan Dyer https://launchpad.net/~nathandyer\n"
-"  colindemian https://launchpad.net/~dengmengpc"
-
-#: ../src/MainWindow.vala:194
-msgid "View show notes"
-msgstr "查看节目注记"
-
-#: ../src/MainWindow.vala:237
-msgid "Return to library view"
-msgstr "返回库视图"
-
-#: ../src/MainWindow.vala:489
-msgid "Welcome to Vocal"
-msgstr "欢迎来到 Vocal"
-
-#: ../src/MainWindow.vala:489
-msgid "Build Your Library By Adding Podcasts"
-msgstr "添加播客以建立您的库"
-
-#: ../src/MainWindow.vala:490
-msgid "Add a New Feed"
-msgstr "添加新订阅源"
-
-#: ../src/MainWindow.vala:490
-msgid "Provide the web address of a podcast feed."
-msgstr "键入播客源的网络地址。"
-
-#: ../src/MainWindow.vala:493
-msgid "Import Subscriptions"
-msgstr "导入订阅"
-
-#: ../src/MainWindow.vala:494
-msgid ""
-"If you have exported feeds from another podcast manager, import them here."
-msgstr "如果您已有其他播客管理器导出的订阅源，将他们导入到这里。"
-
-#: ../src/MainWindow.vala:495
-msgid "Check Out the Vocal Starter Pack…"
-msgstr "查看 Vocal 新手包..."
-
-#: ../src/MainWindow.vala:495
-msgid ""
-"New to podcasting? Check out our starter pack. Select individual podcasts, "
-"or download the entire pack."
-msgstr "对播客不太熟悉？来看看我们的新手包吧。可单选每个播客，或下载所有内容。"
-
-#: ../src/MainWindow.vala:526
-msgid "Export Subscriptions…"
-msgstr "导出订阅..."
-
-#: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
-msgid "Preferences"
-msgstr "首选项"
-
-#: ../src/MainWindow.vala:546
-msgid "Check Out The Vocal Starter Pack…"
-msgstr "查看 Vocal 新手包..."
-
-#: ../src/MainWindow.vala:554
-msgid "Donate…"
-msgstr "捐助..."
-
-#: ../src/MainWindow.vala:574
-msgid "Add new podcasts to the library"
-msgstr "向库中添加新播客"
-
-#: ../src/MainWindow.vala:580
-msgid "Add Podcast Feed"
-msgstr "添加播客源"
-
-#: ../src/MainWindow.vala:588
-msgid "Import Subscriptions…"
-msgstr "导入订阅..."
-
-#: ../src/MainWindow.vala:671
-msgid "All Podcasts"
-msgstr "所有播客"
-
-#: ../src/MainWindow.vala:672
-msgid "Audio"
-msgstr "音频"
-
-#: ../src/MainWindow.vala:673
-msgid "Video"
-msgstr "视频"
-
-#: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
-#: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
-#: ../src/Widgets/EpisodeDetailBox.vala:115
-#: ../src/Widgets/EpisodeDetailBox.vala:315
-msgid "Play"
-msgstr "播放"
-
-#: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
-msgid "Fast forward %d seconds"
-msgstr "快进%d秒"
-
-#: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
-msgid "Rewind %d seconds"
-msgstr "快退%d秒"
-
-#: ../src/MainWindow.vala:709
-msgid "Check for new episodes"
-msgstr "检查剧集更新"
-
-#: ../src/MainWindow.vala:737
-msgid "Downloads"
-msgstr "下载列表"
-
-#: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
+#: ../src/Controller.vala:403 ../src/Controller.vala:407
 msgid "Pause"
 msgstr "暂停"
 
-#: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
-#: ../src/Widgets/AddFeedDialog.vala:64
-msgid "Cancel"
-msgstr "取消"
+#: ../src/Controller.vala:430 ../src/Controller.vala:434
+#: ../src/Widgets/EpisodeDetailBox.vala:125
+#: ../src/Widgets/EpisodeDetailBox.vala:318 ../src/Widgets/Toolbar.vala:225
+#: ../src/Widgets/VideoControls.vala:40
+msgid "Play"
+msgstr "播放"
 
-#: ../src/MainWindow.vala:1328
-msgid "Save"
-msgstr "保存"
-
-#: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
-msgid "All files"
-msgstr "所有文件"
-
-#: ../src/MainWindow.vala:1335
-msgid "OPML and XML files"
-msgstr "OPML和XML文件"
-
-#: ../src/MainWindow.vala:1362
-msgid "Select Subscription File"
-msgstr "选择订阅文件"
-
-#: ../src/MainWindow.vala:1366
-msgid "Open"
-msgstr "打开"
-
-#: ../src/MainWindow.vala:1373
-msgid "OPML files"
-msgstr "OPML文件"
-
-#: ../src/MainWindow.vala:1448
-msgid "Error Importing from File"
-msgstr "从文件导入出错"
-
-#: ../src/MainWindow.vala:1449
-msgid ""
-"Please check that you selected the correct file and that you are connected "
-"to the network."
-msgstr "请确认您选择的文件无误且已接入互联网。"
-
-#: ../src/MainWindow.vala:1483
-msgid ""
-"Additional plugins are needed to play media. Would you like for Vocal to "
-"install them for you?"
-msgstr "播放媒体需要附加的插件。需要Vocal为您安装吗？"
-
-#: ../src/MainWindow.vala:1540
+#: ../src/Controller.vala:496
 msgid "Adding new podcast: <b>"
 msgstr "正在添加新播客： <b>"
 
-#: ../src/MainWindow.vala:1604
+#: ../src/Controller.vala:555
+msgid ""
+"Please make sure you selected the correct feed and that it is still "
+"available."
+msgstr ""
+
+#: ../src/Controller.vala:557
+msgid ""
+"There seems to be a problem with your internet connection. Make sure you are"
+" online and then try again."
+msgstr ""
+
+#: ../src/Controller.vala:562
 msgid "Error Adding Podcast"
 msgstr "添加播客失败"
 
-#: ../src/MainWindow.vala:1605
+#: ../src/Controller.vala:604
+msgid "Fresh content has been added to your library."
+msgstr "新内容已添加到您的媒体库中。"
+
+#: ../src/Library.vala:760
+msgid "'%s' from '%s' has finished downloading."
+msgstr ""
+
+#: ../src/Library.vala:761
+msgid "Episode Download Complete"
+msgstr ""
+
+#: ../src/Library.vala:766
+msgid "Downloads Complete"
+msgstr ""
+
+#: ../src/Library.vala:766
+msgid "New episodes have been downloaded."
+msgstr ""
+
+#: ../src/MainWindow.vala:92
+msgid "Vocal"
+msgstr ""
+
+#: ../src/MainWindow.vala:264 ../src/MainWindow.vala:267
+#: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
+#: ../src/Widgets/SearchResultsView.vala:68
+msgid "Return to Library"
+msgstr "回到媒体库"
+
+#: ../src/MainWindow.vala:298
+msgid "Welcome to Vocal"
+msgstr "欢迎使用 Vocal"
+
+#: ../src/MainWindow.vala:298
+msgid "Build Your Library By Adding Podcasts"
+msgstr "添加播客、建立您的媒体库"
+
+#: ../src/MainWindow.vala:299
+msgid "Browse Podcasts"
+msgstr "浏览播客"
+
+#: ../src/MainWindow.vala:300
+msgid "Browse through podcasts and choose some to add to your library."
+msgstr ""
+
+#: ../src/MainWindow.vala:301
+msgid "Add a New Feed"
+msgstr "添加新订阅源"
+
+#: ../src/MainWindow.vala:301
+msgid "Provide the web address of a podcast feed."
+msgstr "输入播客源的网络地址。"
+
+#: ../src/MainWindow.vala:302
+msgid "Import Subscriptions"
+msgstr "导入订阅"
+
+#: ../src/MainWindow.vala:303
 msgid ""
-"Please check that the feed is correct and that you have a network connection."
-msgstr "请检查播客源的正确性并确认您已接入互联网，"
+"If you have exported feeds from another podcast manager, import them here."
+msgstr "如果您有其他播客管理器导出的订阅源，将他们导入到这里。"
 
-#: ../src/MainWindow.vala:1720
+#: ../src/MainWindow.vala:356
 msgid "Good Stuff is On Its Way"
-msgstr "正在准备精彩内容"
+msgstr "精彩内容即将呈现"
 
-#: ../src/MainWindow.vala:1721
+#: ../src/MainWindow.vala:357
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
-msgstr "如果同时导入的播客较多可能要多花几分钟的时间。您的库很快就会准备好的。"
+msgstr "如果同时导入的播客较多，耗时可能会变长，请耐心等待。"
 
-#: ../src/MainWindow.vala:2163
-msgid "Fresh content has been added to your library."
-msgstr "新内容已添加到您的库中。"
+#: ../src/MainWindow.vala:369
+msgid "Welcome"
+msgstr "欢迎"
 
-#: ../src/MainWindow.vala:2274
+#: ../src/MainWindow.vala:370
+msgid "Importing"
+msgstr "导入中"
+
+#: ../src/MainWindow.vala:371
+msgid "All Podcasts"
+msgstr "所有播客"
+
+#: ../src/MainWindow.vala:372 ../src/Widgets/DirectoryArt.vala:69
+msgid "Details"
+msgstr "详情"
+
+#: ../src/MainWindow.vala:373 ../src/Widgets/NewEpisodesView.vala:49
+#: ../src/Widgets/Toolbar.vala:104
+msgid "New Episodes"
+msgstr ""
+
+#: ../src/MainWindow.vala:374
+msgid "Video"
+msgstr "视频"
+
+#: ../src/MainWindow.vala:391
+msgid "Browse Podcast Directory"
+msgstr "直接浏览"
+
+#: ../src/MainWindow.vala:392
+msgid "Search Results"
+msgstr "搜索结果"
+
+#: ../src/MainWindow.vala:856 ../src/MainWindow.vala:895
+#: ../src/Widgets/PodcastView.vala:778
+msgid "Cancel"
+msgstr "取消"
+
+#: ../src/MainWindow.vala:857
+msgid "Save"
+msgstr "保存"
+
+#: ../src/MainWindow.vala:860 ../src/MainWindow.vala:899
+#: ../src/Widgets/PodcastView.vala:782
+msgid "All files"
+msgstr "所有文件"
+
+#: ../src/MainWindow.vala:864
+msgid "OPML and XML files"
+msgstr "OPML和 XML 文件"
+
+#: ../src/MainWindow.vala:892
+msgid "Select Subscription File"
+msgstr "选择文件"
+
+#: ../src/MainWindow.vala:896 ../src/Widgets/PodcastView.vala:779
+msgid "Open"
+msgstr "打开"
+
+#: ../src/MainWindow.vala:903
+msgid "OPML files"
+msgstr "OPML 文件"
+
+#: ../src/MainWindow.vala:956
+msgid "Error Importing from File"
+msgstr "导入出错"
+
+#: ../src/MainWindow.vala:1074
 msgid ""
-"Vocal is currently downloading episodes. Exiting will cause the downloads to "
-"be canceled. Are you sure you want to exit?"
-msgstr "Vocal当前正在下载剧集。此时退出会取消下载。您确定要退出吗？"
+"Additional plugins are needed to play media. Would you like for Vocal to "
+"install them for you?"
+msgstr "播放媒体需要额外的插件，现在安装吗？"
 
-#: ../src/Widgets/DownloadDetailBox.vala:107
-msgid "Cancel Download"
-msgstr "取消下载"
+#: ../src/MainWindow.vala:1224
+msgid "Are you sure you want to mark all episodes from '%s' as played?"
+msgstr "确定要将 '%s' 中的所有剧集标记为已播放吗？"
 
-#: ../src/Widgets/VideoControls.vala:59
-msgid "Exit Fullscreen"
-msgstr "退出全屏"
+#: ../src/MainWindow.vala:1437
+msgid "Are you sure you want to remove '%s' from your controller.library?"
+msgstr ""
 
-#: ../src/Widgets/DownloadsPopover.vala:50
-msgid "No active downloads."
-msgstr "没有正在下载的项目。"
+#: ../src/MainWindow.vala:1441
+msgid "No"
+msgstr "取消"
 
-#: ../src/Widgets/AddFeedDialog.vala:43
+#: ../src/MainWindow.vala:1442
+msgid "Yes"
+msgstr "是的"
+
+#: ../src/MainWindow.vala:1765
+msgid ""
+"Vocal is currently downloading episodes. Exiting will cause the downloads to"
+" be canceled. Are you sure you want to exit?"
+msgstr "Vocal 当前有下载任务，此时退出会取消任务，您确定要退出吗？"
+
+#: ../src/Utils/FeedParser.vala:367
+msgid "Selected file doesn't appear to contain podcast subscriptions."
+msgstr "所选文件似乎不包含播客订阅。"
+
+#: ../src/Utils/FeedParser.vala:378
+msgid "Selected file seems to be empty."
+msgstr "所选文件似乎是空白的。"
+
+#: ../src/Vocal.vala:59
+msgid "translator-credits"
+msgstr "Launchpad 贡献者：\n  Nathan Dyer https://launchpad.net/~nathandyer\n  colindemian https://launchpad.net/~colindemian"
+
+#: ../src/Widgets/AddFeedDialog.vala:42
 msgid "Add New Podcast"
 msgstr "添加新播客"
 
-#: ../src/Widgets/AddFeedDialog.vala:54
+#: ../src/Widgets/AddFeedDialog.vala:53
 msgid "<b>Add a new podcast feed to the library</b>"
 msgstr "<b>向库中添加一个新的播客源</b>"
 
-#: ../src/Widgets/AddFeedDialog.vala:59
+#: ../src/Widgets/AddFeedDialog.vala:58
 msgid "Podcast feed web address"
 msgstr "播客源网络地址"
 
-#: ../src/Widgets/PlaybackBox.vala:39
-msgid "<b>Select an episode to start playing...</b>"
-msgstr "<b>任选一集节目开始播放...</b>"
+#: ../src/Widgets/CloudLoginDialog.vala:44
+msgid "Login to gPodder.net"
+msgstr "登录 gPodder.net 账号"
 
-#: ../src/Widgets/SettingsDialog.vala:64
-msgid "Automatically download new episodes:"
-msgstr "自动下载最新的剧集："
+#: ../src/Widgets/CloudLoginDialog.vala:53
+msgid "Username"
+msgstr "用户名"
 
-#: ../src/Widgets/SettingsDialog.vala:85
-msgid "Automatically delete played files:"
-msgstr "自动删除已播放文件："
+#: ../src/Widgets/CloudLoginDialog.vala:55
+msgid "Password"
+msgstr "密码"
 
-#: ../src/Widgets/SettingsDialog.vala:115
-msgid "Seconds to skip back:"
-msgstr "快退秒数："
+#: ../src/Widgets/CloudLoginDialog.vala:69
+msgid "Login"
+msgstr "登录"
 
-#: ../src/Widgets/SettingsDialog.vala:136
-msgid "Seconds to skip forward:"
-msgstr "快进秒数："
+#: ../src/Widgets/CloudLoginDialog.vala:70
+msgid "Register for gPodder.net"
+msgstr "注册 gPodder.net 账号"
 
-#: ../src/Widgets/SettingsDialog.vala:153
-msgid "Close"
-msgstr "关闭"
+#: ../src/Widgets/DirectoryArt.vala:88 ../src/Widgets/SearchResultBox.vala:134
+msgid "No summary available."
+msgstr "时长不可用"
 
-#: ../src/Widgets/EpisodeDetailBox.vala:86
+#: ../src/Widgets/DirectoryArt.vala:100
+msgid "Subscribe"
+msgstr "订阅"
+
+#: ../src/Widgets/DirectoryView.vala:51
+msgid "iTunes Top 100 Podcasts"
+msgstr "iTunes 播客 Top 100"
+
+#: ../src/Widgets/DirectoryView.vala:62
+msgid "Go Back"
+msgstr "返回"
+
+#: ../src/Widgets/DirectoryView.vala:72
+msgid "Done"
+msgstr "完成"
+
+#: ../src/Widgets/DirectoryView.vala:104
+msgid "Loading iTunes Store"
+msgstr "iTunes 商店载入中"
+
+#: ../src/Widgets/DownloadDetailBox.vala:111
+msgid "Cancel Download"
+msgstr "取消下载"
+
+#: ../src/Widgets/DownloadDetailBox.vala:187
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "分"
+
+#: ../src/Widgets/DownloadDetailBox.vala:191
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "秒"
+
+#: ../src/Widgets/DownloadsPopover.vala:51
+msgid "No Active Downloads"
+msgstr ""
+
+#: ../src/Widgets/EpisodeDetailBox.vala:80
 msgid "This episode is currently being played"
-msgstr "此剧集当前已在播放"
+msgstr "此集当前已在播放"
 
-#: ../src/Widgets/EpisodeDetailBox.vala:117
-#: ../src/Widgets/EpisodeDetailBox.vala:318
+#: ../src/Widgets/EpisodeDetailBox.vala:127
+#: ../src/Widgets/EpisodeDetailBox.vala:321
 msgid "Stream Episode"
 msgstr "在线播放剧集"
 
-#: ../src/Widgets/EpisodeDetailBox.vala:133
+#: ../src/Widgets/EpisodeDetailBox.vala:143
 msgid "Download Episode"
 msgstr "下载剧集"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:191
+msgid "No description available."
+msgstr "无介绍可用。"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:32
+msgid "Upload to Internet Archive"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:57
+msgid "Please verify that the information below is correct before continuing."
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:63
+msgid "Episode Title"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:69
+msgid "Podcast Name"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:75
+msgid "Podcast Description"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:89
+msgid "Next…"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:97
+msgid ""
+"Legal warning: uploading copyrighted materials to the Internet Archvie is "
+"illegal. Please make sure you are uploading a copylefted (Creative Commons) "
+"episode that you are legally entitled to redistribute."
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:102
+#: ../src/Widgets/Shownotes.vala:108
+msgid "Upload to the Internet Archive"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:108
+msgid "Uploading episode…"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:111
+msgid ""
+"Thanks for contributing to the Internet Archive and the Podcast Archival "
+"Project"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:131
+msgid "Finish"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:154
+msgid "Upload Complete"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:168
+msgid "Upload Failed"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:170
+msgid ""
+"Be sure to check your network connection and API keys, then try again later."
+msgstr ""
+
+#: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
+msgid "Your Podcasts"
+msgstr ""
+
+#: ../src/Widgets/NewEpisodesView.vala:58
+msgid "Add all new episodes to the queue"
+msgstr ""
+
+#: ../src/Widgets/PlaybackBox.vala:43
+msgid "<b>Select an episode to start playing…</b>"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
+msgid "Show newer episodes at the top of the list"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:111 ../src/Widgets/PodcastView.vala:118
+msgid "Show older episodes at the top of the list"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:130
+msgid "Add New Episodes to Queue"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:142 ../src/Widgets/Sidepane.vala:98
+msgid "Download all episodes"
+msgstr "下载所有剧集"
+
+#: ../src/Widgets/PodcastView.vala:147
+msgid "Mark All Played"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:161
+msgid "Edit podcast details"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:164
+msgid "Select different cover art"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:165
+msgid "Set podcast license to Creative Commons"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:176
+msgid "Unsubscribe"
+msgstr "退订"
+
+#: ../src/Widgets/PodcastView.vala:270
+msgid ""
+"Before you can upload to the Internet Archive you must add your archive.org "
+"account's API keys. Visit https://archive.org/account/s3.php to see your "
+"keys, then paste them in the settings."
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:287
+msgid ""
+"You must download this episode first before uploading to the Internet "
+"Archive. Would you like to download this episode?"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:416
+msgid "Add selected episodes to queue"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:426 ../src/Widgets/Sidepane.vala:248
+msgid "Mark selected episodes as played"
+msgstr "标记选中项为已播放"
+
+#: ../src/Widgets/PodcastView.vala:441
+msgid "Mark selected episodes as new"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:455 ../src/Widgets/Sidepane.vala:310
+msgid "Delete local files for selected episodes"
+msgstr "删除选中项的本地文件"
+
+#: ../src/Widgets/PodcastView.vala:458 ../src/Widgets/Sidepane.vala:314
+msgid ""
+"Are you sure you want to delete the downloaded files for the selected "
+"episodes?"
+msgstr "您确定要删选中项已下载的文件吗？"
+
+#: ../src/Widgets/PodcastView.vala:504
+msgid "Mark as played"
+msgstr "标记为已播放"
+
+#: ../src/Widgets/PodcastView.vala:512
+msgid "Mark as new"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:520 ../src/Widgets/Sidepane.vala:408
+msgid "Delete Local File"
+msgstr "删除本地文件"
+
+#: ../src/Widgets/PodcastView.vala:524
+msgid "Are you sure you want to delete the downloaded episode '%s'?"
+msgstr "您确定要删除已下载的剧集 '%s' 吗？"
+
+#: ../src/Widgets/PodcastView.vala:648
+msgid "No show notes available."
+msgstr "无注记可用。"
+
+#: ../src/Widgets/PodcastView.vala:738 ../src/Widgets/Sidepane.vala:624
+msgid "No episodes available."
+msgstr "无可播剧集。"
+
+#: ../src/Widgets/PodcastView.vala:775
+msgid "Select Album Art"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:786
+msgid "Image Files"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:816
+msgid ""
+"Vocal did not detect that this podcast is licensed as Creative Commons. "
+"Changing this will unlock Internet Archive integration for this podcast. "
+"Please make sure this change is correct before proceeding. Do you wish to "
+"make this change?"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:844
+msgid "%d unplayed episodes"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:874
+msgid "I'm listening to %s from %s"
+msgstr ""
+
+#: ../src/Widgets/QueuePopover.vala:37
+msgid "No episodes in queue"
+msgstr ""
+
+#: ../src/Widgets/QueueRow.vala:71
+msgid "Remove episode from queue"
+msgstr "从队列删除"
+
+#: ../src/Widgets/SearchResultBox.vala:125
+msgid "Summary"
+msgstr "时长"
+
+#: ../src/Widgets/SearchResultBox.vala:159
+msgid "Subscribe to podcast"
+msgstr "订阅播客"
+
+#: ../src/Widgets/SearchResultsView.vala:86
+msgid "Episodes from Your Library"
+msgstr "您库中的剧集"
+
+#: ../src/Widgets/SearchResultsView.vala:87
+msgid "Podcasts from Your Library"
+msgstr "您库中的播客"
+
+#: ../src/Widgets/SearchResultsView.vala:88
+msgid "iTunes Podcast Results"
+msgstr "iTunes 播客结果"
+
+#: ../src/Widgets/SearchResultsView.vala:117
+msgid "Search Results for <i>%s</i>"
+msgstr "<i>%s</i> 的搜索结果"
+
+#: ../src/Widgets/SearchResultsView.vala:153
+msgid "No matching episodes found in your library."
+msgstr ""
+
+#: ../src/Widgets/SearchResultsView.vala:154
+msgid "No matching podcasts found in your library."
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:59 ../src/Widgets/Toolbar.vala:172
+msgid "Preferences"
+msgstr "首选项"
+
+#: ../src/Widgets/SettingsDialog.vala:75
+msgid "Automatically download new episodes:"
+msgstr "自动下载最新的剧集："
+
+#: ../src/Widgets/SettingsDialog.vala:93
+msgid "Keep my library clean:"
+msgstr "保持媒体库条理有序："
+
+#: ../src/Widgets/SettingsDialog.vala:111
+msgid "Show podcast names below cover art:"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:138
+msgid "Seconds to skip back:"
+msgstr "快退秒数："
+
+#: ../src/Widgets/SettingsDialog.vala:156
+msgid "Seconds to skip forward:"
+msgstr "快进秒数："
+
+#: ../src/Widgets/SettingsDialog.vala:199
+msgid "Show iTunes Store results from:"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:239
+msgid "Archive.org S3 Access Key"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:248
+msgid "Archive.org S3 Secret Key"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:263
+msgid "Close"
+msgstr "关闭"
+
+#: ../src/Widgets/Shownotes.vala:70
+msgid "Mark this episode as played"
+msgstr "标记此集为已播放"
+
+#: ../src/Widgets/Shownotes.vala:75
+msgid "Mark this episode as new"
+msgstr ""
+
+#: ../src/Widgets/Shownotes.vala:80
+msgid "Download episode"
+msgstr "下载剧集"
+
+#: ../src/Widgets/Shownotes.vala:85
+msgid "Share this episode"
+msgstr "分享此集"
+
+#: ../src/Widgets/Shownotes.vala:88
+msgid "Copy shareable link"
+msgstr ""
+
+#: ../src/Widgets/Shownotes.vala:89
+msgid "Send a Tweet…"
+msgstr "发推特短信"
+
+#: ../src/Widgets/Shownotes.vala:90
+msgid "Copy the direct episode link"
+msgstr ""
+
+#: ../src/Widgets/Shownotes.vala:139
+msgid "Add this episode to the up next list"
+msgstr ""
+
+#: ../src/Widgets/Shownotes.vala:147
+msgid "<b>Summary</b>"
+msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
 msgstr "将所有剧集标记为已播放"
 
-#: ../src/Widgets/Sidepane.vala:101
-msgid "Download all episodes"
-msgstr "下载所有剧集"
-
-#: ../src/Widgets/Sidepane.vala:109
+#: ../src/Widgets/Sidepane.vala:106
 msgid "Hide episodes that have already been played"
 msgstr "隐藏已播剧集"
 
-#: ../src/Widgets/Sidepane.vala:129
+#: ../src/Widgets/Sidepane.vala:126
 msgid "Remove podcast from library"
 msgstr "从库中删除播客"
 
-#: ../src/Widgets/Sidepane.vala:140
+#: ../src/Widgets/Sidepane.vala:137
 msgid "More options"
 msgstr "更多选项"
 
-#: ../src/Widgets/Sidepane.vala:194
+#: ../src/Widgets/Sidepane.vala:191
 msgid "Hide the episode side pane"
 msgstr "隐藏剧集侧边栏"
 
-#: ../src/Widgets/Sidepane.vala:251
-msgid "Mark selected episodes as played"
-msgstr "标记选中项为已播放"
-
-#: ../src/Widgets/Sidepane.vala:281
+#: ../src/Widgets/Sidepane.vala:278
 msgid "Mark selected episodes as unplayed"
 msgstr "标记选中项为未播放"
 
-#: ../src/Widgets/Sidepane.vala:313
-msgid "Delete local files for selected episodes"
-msgstr "删除选中项的本地文件"
-
-#: ../src/Widgets/Sidepane.vala:317
-msgid ""
-"Are you sure you want to delete the downloaded files for the selected "
-"episodes?"
-msgstr "您确定要删除选中项已下载的文件吗？"
-
-#: ../src/Widgets/Sidepane.vala:372
+#: ../src/Widgets/Sidepane.vala:369
 msgid "Mark as Played"
 msgstr "标记为已播放"
 
-#: ../src/Widgets/Sidepane.vala:391
+#: ../src/Widgets/Sidepane.vala:388
 msgid "Mark as Unplayed"
 msgstr "标记为未播放"
 
-#: ../src/Widgets/Sidepane.vala:411
-msgid "Delete Local File"
-msgstr "删除本地文件"
-
-#: ../src/Widgets/Sidepane.vala:618
+#: ../src/Widgets/Sidepane.vala:615
 msgid "No new episodes."
 msgstr "无新剧集。"
 
-#: ../src/Widgets/Sidepane.vala:627
-msgid "No episodes available."
-msgstr "无可播剧集。"
-
-#: ../src/Widgets/Sidepane.vala:671
+#: ../src/Widgets/Sidepane.vala:668
 msgid "%d episodes, %d unplayed"
 msgstr "共 %d 集， %d 集尚未播放"
 
-#: ../src/Widgets/Sidepane.vala:673
+#: ../src/Widgets/Sidepane.vala:670
 msgid "%d episodes"
 msgstr "%d 集"
+
+#: ../src/Widgets/Toolbar.vala:83
+msgid "View show notes"
+msgstr "查看节目注记"
+
+#: ../src/Widgets/Toolbar.vala:93
+msgid "Coming up next"
+msgstr "下个节目"
+
+#: ../src/Widgets/Toolbar.vala:119
+msgid "Check for Updates"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:124
+msgid "Add Podcast Feed…"
+msgstr "添加播客源..."
+
+#: ../src/Widgets/Toolbar.vala:129
+msgid "Import Subcriptions…"
+msgstr "导入订阅..."
+
+#: ../src/Widgets/Toolbar.vala:134
+msgid "Export Subscriptions…"
+msgstr "导出订阅..."
+
+#: ../src/Widgets/Toolbar.vala:139 ../src/Widgets/Toolbar.vala:150
+msgid "Use Light Theme"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:141 ../src/Widgets/Toolbar.vala:147
+msgid "Use Dark Theme"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:179
+msgid "Report a Problem…"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:187
+msgid "Donate…"
+msgstr "捐助..."
+
+#: ../src/Widgets/Toolbar.vala:195
+msgid "About"
+msgstr "关于"
+
+#: ../src/Widgets/Toolbar.vala:236 ../src/Widgets/Toolbar.vala:251
+msgid "Fast forward %d seconds"
+msgstr "快进 %d 秒"
+
+#: ../src/Widgets/Toolbar.vala:244 ../src/Widgets/Toolbar.vala:252
+msgid "Rewind %d seconds"
+msgstr "快退 %d 秒"
+
+#: ../src/Widgets/Toolbar.vala:257
+msgid "Check for new episodes"
+msgstr "检查剧集更新"
+
+#: ../src/Widgets/Toolbar.vala:266
+msgid "Search your library or online"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:276
+msgid "View the top podcasts in the iTunes Store"
+msgstr "浏览 iTunes 商店热门播客"
+
+#: ../src/Widgets/Toolbar.vala:311
+msgid "Downloads"
+msgstr "下载列表"
+
+#: ../src/Widgets/VideoControls.vala:60
+msgid "Exit Fullscreen"
+msgstr "退出全屏"

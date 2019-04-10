@@ -366,7 +366,7 @@ const string CLOSE = """
     public static async bool upload_to_internet_archive (string local_uri, string title, string podcast, string description) {
     
         info ("Uploading to internet archive");
-        string container = Uri.escape_string (podcast.replace (" ", "-").down ());
+        string container = Uri.escape_string (podcast.replace (" ", "-").replace("%3A", "").down ());
         if (container[container.len() - 1] == '-') {
             container = container.substring(0, container.len() - 1);
         }

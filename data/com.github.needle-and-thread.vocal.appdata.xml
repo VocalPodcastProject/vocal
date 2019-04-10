@@ -10,12 +10,12 @@
   
   <screenshots>
     <screenshot type="default">
-      <caption>Library View</caption>
-      <image width="1148" height="843">https://github.com/needle-and-thread/vocal/raw/master/screenshot1.png</image>
+      <caption>Library View with Light Theme</caption>
+      <image width="1148" height="775">https://github.com/needle-and-thread/vocal/raw/master/screenshot1.png</image>
     </screenshot>
     <screenshot type="default">
-      <caption>Podcast View</caption>
-      <image width="1148" height="843">https://github.com/needle-and-thread/vocal/raw/master/screenshot2.png</image>
+      <caption>Library View with Dark Theme</caption>
+      <image width="1148" height="775">https://github.com/needle-and-thread/vocal/raw/master/screenshot2.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>iTunes Top 100 Podcasts</caption>
@@ -28,6 +28,10 @@
     <screenshot type="default">
       <caption>New Episode View</caption>
       <image width="1148" height="843">https://github.com/needle-and-thread/vocal/raw/master/screenshot5.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Podcast View</caption>
+      <image width="1148" height="887">https://github.com/needle-and-thread/vocal/raw/master/screenshot6.png</image>
     </screenshot>
   </screenshots>
 
@@ -90,7 +94,7 @@
 
 
   <releases>
-    <release version = "2.4" timestamp="1554910001">
+    <release version = "2.4" timestamp="1554918082">
       <description>
         <p>This release is packed to the gills with new features and stability enhancements!
             A first for any podcast app, you can now submit Creative Commons licensed podcast

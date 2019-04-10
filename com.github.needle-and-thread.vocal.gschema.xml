@@ -107,7 +107,7 @@
 		</key>
 
 		<key name="dark-mode-enabled" type="b">
-			<default>true</default>
+			<default>false</default>
 			<summary>Whether or not Vocal should use the dark theme instead of the light theme.</summary>
 			<description>
 				When enabled, Vocal will use the dark version of the GTK theme and modify the headerbar color if on elementary OS.

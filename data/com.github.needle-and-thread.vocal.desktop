@@ -3,7 +3,8 @@ Type=Application
 Name=Vocal
 Comment=Subscribe, download, and listen to podcasts
 GenericName=Podcast Manager
-Exec=com.github.needle-and-thread.vocal
+MimeType=application/atom+xml;application/rss+xml;
+Exec=com.github.needle-and-thread.vocal %U
 Icon=com.github.needle-and-thread.vocal
 Terminal=false
 Categories=AudioVideo;Audio;Video;
@@ -11,6 +12,8 @@ X-PulseAudio-Properties=media.role=music
 Actions=AboutDialog;
 
 Name[en_US]=Vocal
+
+X-WebFeed-Type=application/ogg;application/x-extension-m4a;application/x-extension-mp4;application/x-flac;application/x-ogg;audio/3gpp;audio/aac;audio/ac3;audio/AMR;audio/AMR-WB;audio/basic;audio/flac;audio/midi;audio/mp2;audio/mp4;audio/mpeg;audio/ogg;audio/vnd.rn-realaudio;audio/x-aiff;audio/x-ape;audio/x-flac;audio/x-gsm;audio/x-it;audio/x-m4a;audio/x-matroska;audio/x-mod;audio/x-mp3;audio/x-mpeg;audio/x-mpegurl;audio/x-ms-asf;audio/x-ms-asx;audio/x-ms-wax;audio/x-ms-wma;audio/x-musepack;audio/x-opus+ogg;audio/x-pn-aiff;audio/x-pn-au;audio/x-pn-realaudio;audio/x-pn-realaudio-plugin;audio/x-pn-wav;audio/x-pn-windows-acm;audio/x-realaudio;audio/x-real-audio;audio/x-sbc;audio/x-scpls;audio/x-speex;audio/x-tta;audio/x-vorbis;audio/x-vorbis+ogg;audio/x-wav;audio/x-wavpack;audio/x-xm;audio/x-s3m;application/x-musepack;application/musepack;application/x-ape;application/x-id3;application/x-vorbis+ogg;video/quicktime;video/x-quicktime;application/x-quicktimeplayer;application/smil;application/vnd.rn-realmedia;video/vnd.rn-realvideo;application/asx;video/x-ms-asf-plugin;video/x-msvideo;video/msvideo;application/x-mplayer2;application/x-ms-wmv;video/x-ms-asf;video/x-ms-wm;video/x-ms-wmv;video/x-ms-wmp;video/x-ms-wvx;application/x-drm-v2;video/mpeg;video/x-mpeg;video/x-mpeg2;video/mp4;video/3gpp;video/fli;video/x-fli;video/x-flv;video/vnd.vivo;application/x-nsv-vp3-mp3;video/x-matroska;video/matroska;video/x-mng;video/webm;video/x-webm;video/mp2t;video/vnd.mpegurl;video/x-ogm+ogg;
 
 [Desktop Action AboutDialog]
 Exec=com.github.needle-and-thread.vocal --about

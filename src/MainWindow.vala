@@ -212,7 +212,6 @@ namespace Vocal {
             // Create a welcome screen and add it to the notebook (no matter if first run or not)
             info ("Creating welcome screen.");
             welcome = new WelcomeView(controller);
-
             
             info ("Creating new episodes view.");
             new_episodes_view = new NewEpisodesView (controller);

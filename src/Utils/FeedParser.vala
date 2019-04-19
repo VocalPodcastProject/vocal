@@ -329,6 +329,11 @@ namespace Vocal {
             } else {
                 podcast = create_podcast_from_queue();
             }
+            
+            if (podcast.name.length < 1) {
+                warning ("Something went wrong during podcast parsing. Abort.");
+                return null;
+            }
 
             foreach(Episode child in podcast.episodes) {
                 child.parent = podcast;

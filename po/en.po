@@ -3,7 +3,6 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2015
 msgid ""
 msgstr ""
 "Project-Id-Version: Vocal\n"
@@ -11,137 +10,137 @@ msgstr ""
 "POT-Creation-Date: 2019-03-27 06:18-0400\n"
 "PO-Revision-Date: 2019-04-07 14:37+0000\n"
 "Last-Translator: Nathan Dyer <nathandyer@fastmail.com>\n"
-"Language-Team: Bosnian (http://www.transifex.com/needle-and-thread/vocal/language/bs/)\n"
+"Language-Team: English (http://www.transifex.com/needle-and-thread/vocal/language/en/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: bs\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/Controller.vala:403 ../src/Controller.vala:407
 msgid "Pause"
-msgstr "Pauziraj"
+msgstr "Pause"
 
 #: ../src/Controller.vala:430 ../src/Controller.vala:434
 #: ../src/Widgets/EpisodeDetailBox.vala:125
 #: ../src/Widgets/EpisodeDetailBox.vala:318 ../src/Widgets/Toolbar.vala:225
 #: ../src/Widgets/VideoControls.vala:40
 msgid "Play"
-msgstr "Pokreni"
+msgstr "Play"
 
 #: ../src/Controller.vala:496
 msgid "Adding new podcast: <b>"
-msgstr "Dodavanje novog podcasta: <b>"
+msgstr "Adding new podcast: <b>"
 
 #: ../src/Controller.vala:555
 msgid ""
 "Please make sure you selected the correct feed and that it is still "
 "available."
-msgstr ""
+msgstr "Please make sure you selected the correct feed and that it is still available."
 
 #: ../src/Controller.vala:557
 msgid ""
 "There seems to be a problem with your internet connection. Make sure you are"
 " online and then try again."
-msgstr ""
+msgstr "There seems to be a problem with your internet connection. Make sure you are online and then try again."
 
 #: ../src/Controller.vala:562
 msgid "Error Adding Podcast"
-msgstr "Pogreška pri dodavanju podkasta"
+msgstr "Error Adding Podcast"
 
 #: ../src/Controller.vala:604
 msgid "Fresh content has been added to your library."
-msgstr "Novi sadržaj dodat u vašu biblioteku."
+msgstr "Fresh content has been added to your library."
 
 #: ../src/Library.vala:760
 msgid "'%s' from '%s' has finished downloading."
-msgstr ""
+msgstr "'%s' from '%s' has finished downloading."
 
 #: ../src/Library.vala:761
 msgid "Episode Download Complete"
-msgstr ""
+msgstr "Episode Download Complete"
 
 #: ../src/Library.vala:766
 msgid "Downloads Complete"
-msgstr ""
+msgstr "Downloads Complete"
 
 #: ../src/Library.vala:766
 msgid "New episodes have been downloaded."
-msgstr ""
+msgstr "New episodes have been downloaded."
 
 #: ../src/MainWindow.vala:92
 msgid "Vocal"
-msgstr ""
+msgstr "Vocal"
 
 #: ../src/MainWindow.vala:264 ../src/MainWindow.vala:267
 #: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
 #: ../src/Widgets/SearchResultsView.vala:68
 msgid "Return to Library"
-msgstr ""
+msgstr "Return to Library"
 
 #: ../src/MainWindow.vala:298
 msgid "Welcome to Vocal"
-msgstr "Dobrodošli u Vokal"
+msgstr "Welcome to Vocal"
 
 #: ../src/MainWindow.vala:298
 msgid "Build Your Library By Adding Podcasts"
-msgstr "Napravi svoju biblioteku dodavanjem podkasta"
+msgstr "Build Your Library By Adding Podcasts"
 
 #: ../src/MainWindow.vala:299
 msgid "Browse Podcasts"
-msgstr ""
+msgstr "Browse Podcasts"
 
 #: ../src/MainWindow.vala:300
 msgid "Browse through podcasts and choose some to add to your library."
-msgstr ""
+msgstr "Browse through podcasts and choose some to add to your library."
 
 #: ../src/MainWindow.vala:301
 msgid "Add a New Feed"
-msgstr "Dodaj novi izvor"
+msgstr "Add a New Feed"
 
 #: ../src/MainWindow.vala:301
 msgid "Provide the web address of a podcast feed."
-msgstr "Unesite adresu podkast izvora."
+msgstr "Provide the web address of a podcast feed."
 
 #: ../src/MainWindow.vala:302
 msgid "Import Subscriptions"
-msgstr "Uvezite pretplate"
+msgstr "Import Subscriptions"
 
 #: ../src/MainWindow.vala:303
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
-msgstr "Ako ste izveli izvore na drugom podkast menadžeru, uvezite ih ovdje."
+msgstr "If you have exported feeds from another podcast manager, import them here."
 
 #: ../src/MainWindow.vala:356
 msgid "Good Stuff is On Its Way"
-msgstr "Dobre stvari su na putu"
+msgstr "Good Stuff is On Its Way"
 
 #: ../src/MainWindow.vala:357
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
-msgstr "Uvoz nekoliko podkasta može potrajati. Vaša biblioteka će biti spremna ubrzo."
+msgstr "If you are importing several podcasts it can take a few minutes. Your library will be ready shortly."
 
 #: ../src/MainWindow.vala:369
 msgid "Welcome"
-msgstr ""
+msgstr "Welcome"
 
 #: ../src/MainWindow.vala:370
 msgid "Importing"
-msgstr ""
+msgstr "Importing"
 
 #: ../src/MainWindow.vala:371
 msgid "All Podcasts"
-msgstr "Svi Podkasti"
+msgstr "All Podcasts"
 
 #: ../src/MainWindow.vala:372 ../src/Widgets/DirectoryArt.vala:69
 msgid "Details"
-msgstr ""
+msgstr "Details"
 
 #: ../src/MainWindow.vala:373 ../src/Widgets/NewEpisodesView.vala:49
 #: ../src/Widgets/Toolbar.vala:104
 msgid "New Episodes"
-msgstr ""
+msgstr "New Episodes"
 
 #: ../src/MainWindow.vala:374
 msgid "Video"
@@ -149,358 +148,356 @@ msgstr "Video"
 
 #: ../src/MainWindow.vala:391
 msgid "Browse Podcast Directory"
-msgstr ""
+msgstr "Browse Podcast Directory"
 
 #: ../src/MainWindow.vala:392
 msgid "Search Results"
-msgstr ""
+msgstr "Search Results"
 
 #: ../src/MainWindow.vala:856 ../src/MainWindow.vala:895
 #: ../src/Widgets/PodcastView.vala:778
 msgid "Cancel"
-msgstr "Otkaži"
+msgstr "Cancel"
 
 #: ../src/MainWindow.vala:857
 msgid "Save"
-msgstr "Spremi"
+msgstr "Save"
 
 #: ../src/MainWindow.vala:860 ../src/MainWindow.vala:899
 #: ../src/Widgets/PodcastView.vala:782
 msgid "All files"
-msgstr "Svi fajlovi"
+msgstr "All files"
 
 #: ../src/MainWindow.vala:864
 msgid "OPML and XML files"
-msgstr "OPML i XML fajlovi"
+msgstr "OPML and XML files"
 
 #: ../src/MainWindow.vala:892
 msgid "Select Subscription File"
-msgstr "Izaberi fajl sa pretplatama"
+msgstr "Select Subscription File"
 
 #: ../src/MainWindow.vala:896 ../src/Widgets/PodcastView.vala:779
 msgid "Open"
-msgstr "Otvori"
+msgstr "Open"
 
 #: ../src/MainWindow.vala:903
 msgid "OPML files"
-msgstr "OPML fajlovi"
+msgstr "OPML files"
 
 #: ../src/MainWindow.vala:956
 msgid "Error Importing from File"
-msgstr "Pogreška pri uvoženju fajla"
+msgstr "Error Importing from File"
 
 #: ../src/MainWindow.vala:1074
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
-msgstr "Dodatni plugini su potrebni za reprodukciju medija.  Želite li da ih Vokal instalira za vas?"
+msgstr "Additional plugins are needed to play media. Would you like for Vocal to install them for you?"
 
 #: ../src/MainWindow.vala:1224
 msgid "Are you sure you want to mark all episodes from '%s' as played?"
-msgstr ""
+msgstr "Are you sure you want to mark all episodes from '%s' as played?"
 
 #: ../src/MainWindow.vala:1437
 msgid "Are you sure you want to remove '%s' from your controller.library?"
-msgstr ""
+msgstr "Are you sure you want to remove '%s' from your controller.library?"
 
 #: ../src/MainWindow.vala:1441
 msgid "No"
-msgstr ""
+msgstr "No"
 
 #: ../src/MainWindow.vala:1442
 msgid "Yes"
-msgstr ""
+msgstr "Yes"
 
 #: ../src/MainWindow.vala:1765
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to"
 " be canceled. Are you sure you want to exit?"
-msgstr "Vokal trenutno preuzima epizode. Izlaz će prekinuti preuzimanje. Jeste li sigurni da želite izaći?"
+msgstr "Vocal is currently downloading episodes. Exiting will cause the downloads to be canceled. Are you sure you want to exit?"
 
 #: ../src/Utils/FeedParser.vala:367
 msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr "Izabrani fajl ne sadrži pretplate na podkast."
+msgstr "Selected file doesn't appear to contain podcast subscriptions."
 
 #: ../src/Utils/FeedParser.vala:378
 msgid "Selected file seems to be empty."
-msgstr "Izabrani fajl je prazan."
+msgstr "Selected file seems to be empty."
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
-msgstr "Launchpad Contributions:\n  Din https://launchpad.net/~din-ferizovic"
+msgstr "translator-credits"
 
 #: ../src/Widgets/AddFeedDialog.vala:42
 msgid "Add New Podcast"
-msgstr "Dodaj novi podkast"
+msgstr "Add New Podcast"
 
 #: ../src/Widgets/AddFeedDialog.vala:53
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr "<b>Dodavanje novog podkasta u biblioteku</b>"
+msgstr "<b>Add a new podcast feed to the library</b>"
 
 #: ../src/Widgets/AddFeedDialog.vala:58
 msgid "Podcast feed web address"
-msgstr "Web adresa izvora podkasta"
+msgstr "Podcast feed web address"
 
 #: ../src/Widgets/CloudLoginDialog.vala:44
 msgid "Login to gPodder.net"
-msgstr ""
+msgstr "Login to gPodder.net"
 
 #: ../src/Widgets/CloudLoginDialog.vala:53
 msgid "Username"
-msgstr ""
+msgstr "Username"
 
 #: ../src/Widgets/CloudLoginDialog.vala:55
 msgid "Password"
-msgstr ""
+msgstr "Password"
 
 #: ../src/Widgets/CloudLoginDialog.vala:69
 msgid "Login"
-msgstr ""
+msgstr "Login"
 
 #: ../src/Widgets/CloudLoginDialog.vala:70
 msgid "Register for gPodder.net"
-msgstr ""
+msgstr "Register for gPodder.net"
 
 #: ../src/Widgets/DirectoryArt.vala:88 ../src/Widgets/SearchResultBox.vala:134
 msgid "No summary available."
-msgstr ""
+msgstr "No summary available."
 
 #: ../src/Widgets/DirectoryArt.vala:100
 msgid "Subscribe"
-msgstr ""
+msgstr "Subscribe"
 
 #: ../src/Widgets/DirectoryView.vala:51
 msgid "iTunes Top 100 Podcasts"
-msgstr ""
+msgstr "iTunes Top 100 Podcasts"
 
 #: ../src/Widgets/DirectoryView.vala:62
 msgid "Go Back"
-msgstr ""
+msgstr "Go Back"
 
 #: ../src/Widgets/DirectoryView.vala:72
 msgid "Done"
-msgstr ""
+msgstr "Done"
 
 #: ../src/Widgets/DirectoryView.vala:104
 msgid "Loading iTunes Store"
-msgstr ""
+msgstr "Loading iTunes Store"
 
 #: ../src/Widgets/DownloadDetailBox.vala:111
 msgid "Cancel Download"
-msgstr "Prekini preuzimanje"
+msgstr "Cancel Download"
 
 #: ../src/Widgets/DownloadDetailBox.vala:187
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "minute"
+msgstr[1] "minutes"
 
 #: ../src/Widgets/DownloadDetailBox.vala:191
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "second"
+msgstr[1] "seconds"
 
 #: ../src/Widgets/DownloadsPopover.vala:51
 msgid "No Active Downloads"
-msgstr ""
+msgstr "No Active Downloads"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:80
 msgid "This episode is currently being played"
-msgstr "Ova epizoda se trenutno reproducira"
+msgstr "This episode is currently being played"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:127
 #: ../src/Widgets/EpisodeDetailBox.vala:321
 msgid "Stream Episode"
-msgstr "Reprodukuj epizodu"
+msgstr "Stream Episode"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:143
 msgid "Download Episode"
-msgstr "Preuzmi epizodu"
+msgstr "Download Episode"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:191
 msgid "No description available."
-msgstr ""
+msgstr "No description available."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:32
 msgid "Upload to Internet Archive"
-msgstr ""
+msgstr "Upload to Internet Archive"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:57
 msgid "Please verify that the information below is correct before continuing."
-msgstr ""
+msgstr "Please verify that the information below is correct before continuing."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:63
 msgid "Episode Title"
-msgstr ""
+msgstr "Episode Title"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:69
 msgid "Podcast Name"
-msgstr ""
+msgstr "Podcast Name"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:75
 msgid "Podcast Description"
-msgstr ""
+msgstr "Podcast Description"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:89
 msgid "Next…"
-msgstr ""
+msgstr "Next…"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:97
 msgid ""
 "Legal warning: uploading copyrighted materials to the Internet Archvie is "
 "illegal. Please make sure you are uploading a copylefted (Creative Commons) "
 "episode that you are legally entitled to redistribute."
-msgstr ""
+msgstr "Legal warning: uploading copyrighted materials to the Internet Archvie is illegal. Please make sure you are uploading a copylefted (Creative Commons) episode that you are legally entitled to redistribute."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:102
 #: ../src/Widgets/Shownotes.vala:108
 msgid "Upload to the Internet Archive"
-msgstr ""
+msgstr "Upload to the Internet Archive"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:108
 msgid "Uploading episode…"
-msgstr ""
+msgstr "Uploading episode…"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:111
 msgid ""
 "Thanks for contributing to the Internet Archive and the Podcast Archival "
 "Project"
-msgstr ""
+msgstr "Thanks for contributing to the Internet Archive and the Podcast Archival Project"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:131
 msgid "Finish"
-msgstr ""
+msgstr "Finish"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:154
 msgid "Upload Complete"
-msgstr ""
+msgstr "Upload Complete"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:168
 msgid "Upload Failed"
-msgstr ""
+msgstr "Upload Failed"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:170
 msgid ""
 "Be sure to check your network connection and API keys, then try again later."
-msgstr ""
+msgstr "Be sure to check your network connection and API keys, then try again later."
 
 #: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
 msgid "Your Podcasts"
-msgstr ""
+msgstr "Your Podcasts"
 
 #: ../src/Widgets/NewEpisodesView.vala:58
 msgid "Add all new episodes to the queue"
-msgstr ""
+msgstr "Add all new episodes to the queue"
 
 #: ../src/Widgets/PlaybackBox.vala:43
 msgid "<b>Select an episode to start playing…</b>"
-msgstr ""
+msgstr "<b>Select an episode to start playing…</b>"
 
 #: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
 msgid "Show newer episodes at the top of the list"
-msgstr ""
+msgstr "Show newer episodes at the top of the list"
 
 #: ../src/Widgets/PodcastView.vala:111 ../src/Widgets/PodcastView.vala:118
 msgid "Show older episodes at the top of the list"
-msgstr ""
+msgstr "Show older episodes at the top of the list"
 
 #: ../src/Widgets/PodcastView.vala:130
 msgid "Add New Episodes to Queue"
-msgstr ""
+msgstr "Add New Episodes to Queue"
 
 #: ../src/Widgets/PodcastView.vala:142 ../src/Widgets/Sidepane.vala:98
 msgid "Download all episodes"
-msgstr "Preuzmi sve epizode"
+msgstr "Download all episodes"
 
 #: ../src/Widgets/PodcastView.vala:147
 msgid "Mark All Played"
-msgstr ""
+msgstr "Mark All Played"
 
 #: ../src/Widgets/PodcastView.vala:161
 msgid "Edit podcast details"
-msgstr ""
+msgstr "Edit podcast details"
 
 #: ../src/Widgets/PodcastView.vala:164
 msgid "Select different cover art"
-msgstr ""
+msgstr "Select different cover art"
 
 #: ../src/Widgets/PodcastView.vala:165
 msgid "Set podcast license to Creative Commons"
-msgstr ""
+msgstr "Set podcast license to Creative Commons"
 
 #: ../src/Widgets/PodcastView.vala:176
 msgid "Unsubscribe"
-msgstr ""
+msgstr "Unsubscribe"
 
 #: ../src/Widgets/PodcastView.vala:270
 msgid ""
 "Before you can upload to the Internet Archive you must add your archive.org "
 "account's API keys. Visit https://archive.org/account/s3.php to see your "
 "keys, then paste them in the settings."
-msgstr ""
+msgstr "Before you can upload to the Internet Archive you must add your archive.org account's API keys. Visit https://archive.org/account/s3.php to see your keys, then paste them in the settings."
 
 #: ../src/Widgets/PodcastView.vala:287
 msgid ""
 "You must download this episode first before uploading to the Internet "
 "Archive. Would you like to download this episode?"
-msgstr ""
+msgstr "You must download this episode first before uploading to the Internet Archive. Would you like to download this episode?"
 
 #: ../src/Widgets/PodcastView.vala:416
 msgid "Add selected episodes to queue"
-msgstr ""
+msgstr "Add selected episodes to queue"
 
 #: ../src/Widgets/PodcastView.vala:426 ../src/Widgets/Sidepane.vala:248
 msgid "Mark selected episodes as played"
-msgstr "Označi odabrane epizode kao slušane"
+msgstr "Mark selected episodes as played"
 
 #: ../src/Widgets/PodcastView.vala:441
 msgid "Mark selected episodes as new"
-msgstr ""
+msgstr "Mark selected episodes as new"
 
 #: ../src/Widgets/PodcastView.vala:455 ../src/Widgets/Sidepane.vala:310
 msgid "Delete local files for selected episodes"
-msgstr "Obriši lokalne fajlove za odabrane epizode"
+msgstr "Delete local files for selected episodes"
 
 #: ../src/Widgets/PodcastView.vala:458 ../src/Widgets/Sidepane.vala:314
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr "Jeste li sigurni da želite obrisati preuzete fajlove za odabrane epizode?"
+msgstr "Are you sure you want to delete the downloaded files for the selected episodes?"
 
 #: ../src/Widgets/PodcastView.vala:504
 msgid "Mark as played"
-msgstr ""
+msgstr "Mark as played"
 
 #: ../src/Widgets/PodcastView.vala:512
 msgid "Mark as new"
-msgstr ""
+msgstr "Mark as new"
 
 #: ../src/Widgets/PodcastView.vala:520 ../src/Widgets/Sidepane.vala:408
 msgid "Delete Local File"
-msgstr "Obriši lokalni fajl"
+msgstr "Delete Local File"
 
 #: ../src/Widgets/PodcastView.vala:524
 msgid "Are you sure you want to delete the downloaded episode '%s'?"
-msgstr ""
+msgstr "Are you sure you want to delete the downloaded episode '%s'?"
 
 #: ../src/Widgets/PodcastView.vala:648
 msgid "No show notes available."
-msgstr ""
+msgstr "No show notes available."
 
 #: ../src/Widgets/PodcastView.vala:738 ../src/Widgets/Sidepane.vala:624
 msgid "No episodes available."
-msgstr "Nema dostupnih epizoda"
+msgstr "No episodes available."
 
 #: ../src/Widgets/PodcastView.vala:775
 msgid "Select Album Art"
-msgstr ""
+msgstr "Select Album Art"
 
 #: ../src/Widgets/PodcastView.vala:786
 msgid "Image Files"
-msgstr ""
+msgstr "Image Files"
 
 #: ../src/Widgets/PodcastView.vala:816
 msgid ""
@@ -508,244 +505,244 @@ msgid ""
 "Changing this will unlock Internet Archive integration for this podcast. "
 "Please make sure this change is correct before proceeding. Do you wish to "
 "make this change?"
-msgstr ""
+msgstr "Vocal did not detect that this podcast is licensed as Creative Commons. Changing this will unlock Internet Archive integration for this podcast. Please make sure this change is correct before proceeding. Do you wish to make this change?"
 
 #: ../src/Widgets/PodcastView.vala:844
 msgid "%d unplayed episodes"
-msgstr ""
+msgstr "%d unplayed episodes"
 
 #: ../src/Widgets/PodcastView.vala:874
 msgid "I'm listening to %s from %s"
-msgstr ""
+msgstr "I'm listening to %s from %s"
 
 #: ../src/Widgets/QueuePopover.vala:37
 msgid "No episodes in queue"
-msgstr ""
+msgstr "No episodes in queue"
 
 #: ../src/Widgets/QueueRow.vala:71
 msgid "Remove episode from queue"
-msgstr ""
+msgstr "Remove episode from queue"
 
 #: ../src/Widgets/SearchResultBox.vala:125
 msgid "Summary"
-msgstr ""
+msgstr "Summary"
 
 #: ../src/Widgets/SearchResultBox.vala:159
 msgid "Subscribe to podcast"
-msgstr ""
+msgstr "Subscribe to podcast"
 
 #: ../src/Widgets/SearchResultsView.vala:86
 msgid "Episodes from Your Library"
-msgstr ""
+msgstr "Episodes from Your Library"
 
 #: ../src/Widgets/SearchResultsView.vala:87
 msgid "Podcasts from Your Library"
-msgstr ""
+msgstr "Podcasts from Your Library"
 
 #: ../src/Widgets/SearchResultsView.vala:88
 msgid "iTunes Podcast Results"
-msgstr ""
+msgstr "iTunes Podcast Results"
 
 #: ../src/Widgets/SearchResultsView.vala:117
 msgid "Search Results for <i>%s</i>"
-msgstr ""
+msgstr "Search Results for <i>%s</i>"
 
 #: ../src/Widgets/SearchResultsView.vala:153
 msgid "No matching episodes found in your library."
-msgstr ""
+msgstr "No matching episodes found in your library."
 
 #: ../src/Widgets/SearchResultsView.vala:154
 msgid "No matching podcasts found in your library."
-msgstr ""
+msgstr "No matching podcasts found in your library."
 
 #: ../src/Widgets/SettingsDialog.vala:59 ../src/Widgets/Toolbar.vala:172
 msgid "Preferences"
-msgstr "Postavke"
+msgstr "Preferences"
 
 #: ../src/Widgets/SettingsDialog.vala:75
 msgid "Automatically download new episodes:"
-msgstr "Automatsko preuzimanje novih epizoda"
+msgstr "Automatically download new episodes:"
 
 #: ../src/Widgets/SettingsDialog.vala:93
 msgid "Keep my library clean:"
-msgstr ""
+msgstr "Keep my library clean:"
 
 #: ../src/Widgets/SettingsDialog.vala:111
 msgid "Show podcast names below cover art:"
-msgstr ""
+msgstr "Show podcast names below cover art:"
 
 #: ../src/Widgets/SettingsDialog.vala:138
 msgid "Seconds to skip back:"
-msgstr "Premotaj unazad:"
+msgstr "Seconds to skip back:"
 
 #: ../src/Widgets/SettingsDialog.vala:156
 msgid "Seconds to skip forward:"
-msgstr "Premotaj unaprijed:"
+msgstr "Seconds to skip forward:"
 
 #: ../src/Widgets/SettingsDialog.vala:199
 msgid "Show iTunes Store results from:"
-msgstr ""
+msgstr "Show iTunes Store results from:"
 
 #: ../src/Widgets/SettingsDialog.vala:239
 msgid "Archive.org S3 Access Key"
-msgstr ""
+msgstr "Archive.org S3 Access Key"
 
 #: ../src/Widgets/SettingsDialog.vala:248
 msgid "Archive.org S3 Secret Key"
-msgstr ""
+msgstr "Archive.org S3 Secret Key"
 
 #: ../src/Widgets/SettingsDialog.vala:263
 msgid "Close"
-msgstr "Zatvori"
+msgstr "Close"
 
 #: ../src/Widgets/Shownotes.vala:70
 msgid "Mark this episode as played"
-msgstr ""
+msgstr "Mark this episode as played"
 
 #: ../src/Widgets/Shownotes.vala:75
 msgid "Mark this episode as new"
-msgstr ""
+msgstr "Mark this episode as new"
 
 #: ../src/Widgets/Shownotes.vala:80
 msgid "Download episode"
-msgstr ""
+msgstr "Download episode"
 
 #: ../src/Widgets/Shownotes.vala:85
 msgid "Share this episode"
-msgstr ""
+msgstr "Share this episode"
 
 #: ../src/Widgets/Shownotes.vala:88
 msgid "Copy shareable link"
-msgstr ""
+msgstr "Copy shareable link"
 
 #: ../src/Widgets/Shownotes.vala:89
 msgid "Send a Tweet…"
-msgstr ""
+msgstr "Send a Tweet…"
 
 #: ../src/Widgets/Shownotes.vala:90
 msgid "Copy the direct episode link"
-msgstr ""
+msgstr "Copy the direct episode link"
 
 #: ../src/Widgets/Shownotes.vala:139
 msgid "Add this episode to the up next list"
-msgstr ""
+msgstr "Add this episode to the up next list"
 
 #: ../src/Widgets/Shownotes.vala:147
 msgid "<b>Summary</b>"
-msgstr ""
+msgstr "<b>Summary</b>"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
-msgstr "Markiraj sve epizode kao poslušane"
+msgstr "Mark all episodes as played"
 
 #: ../src/Widgets/Sidepane.vala:106
 msgid "Hide episodes that have already been played"
-msgstr "Sakrij preslušane epizode"
+msgstr "Hide episodes that have already been played"
 
 #: ../src/Widgets/Sidepane.vala:126
 msgid "Remove podcast from library"
-msgstr "Ukloni podkast iz biblioteke"
+msgstr "Remove podcast from library"
 
 #: ../src/Widgets/Sidepane.vala:137
 msgid "More options"
-msgstr "Dodatne opcije"
+msgstr "More options"
 
 #: ../src/Widgets/Sidepane.vala:191
 msgid "Hide the episode side pane"
-msgstr "Sakrij okno sa strane"
+msgstr "Hide the episode side pane"
 
 #: ../src/Widgets/Sidepane.vala:278
 msgid "Mark selected episodes as unplayed"
-msgstr "Označi odabrane epizode kao nepreslušane"
+msgstr "Mark selected episodes as unplayed"
 
 #: ../src/Widgets/Sidepane.vala:369
 msgid "Mark as Played"
-msgstr "Označi kao preslušano"
+msgstr "Mark as Played"
 
 #: ../src/Widgets/Sidepane.vala:388
 msgid "Mark as Unplayed"
-msgstr "Označi kao nepreslušano"
+msgstr "Mark as Unplayed"
 
 #: ../src/Widgets/Sidepane.vala:615
 msgid "No new episodes."
-msgstr "Nema novih epizoda"
+msgstr "No new episodes."
 
 #: ../src/Widgets/Sidepane.vala:668
 msgid "%d episodes, %d unplayed"
-msgstr "%d epizoda, %d nepreslušano"
+msgstr "%d episodes, %d unplayed"
 
 #: ../src/Widgets/Sidepane.vala:670
 msgid "%d episodes"
-msgstr "%d epizoda"
+msgstr "%d episodes"
 
 #: ../src/Widgets/Toolbar.vala:83
 msgid "View show notes"
-msgstr "Pogledaj opis epizode"
+msgstr "View show notes"
 
 #: ../src/Widgets/Toolbar.vala:93
 msgid "Coming up next"
-msgstr ""
+msgstr "Coming up next"
 
 #: ../src/Widgets/Toolbar.vala:119
 msgid "Check for Updates"
-msgstr ""
+msgstr "Check for Updates"
 
 #: ../src/Widgets/Toolbar.vala:124
 msgid "Add Podcast Feed…"
-msgstr ""
+msgstr "Add Podcast Feed…"
 
 #: ../src/Widgets/Toolbar.vala:129
 msgid "Import Subcriptions…"
-msgstr ""
+msgstr "Import Subcriptions…"
 
 #: ../src/Widgets/Toolbar.vala:134
 msgid "Export Subscriptions…"
-msgstr "Izvezite pretplate"
+msgstr "Export Subscriptions…"
 
 #: ../src/Widgets/Toolbar.vala:139 ../src/Widgets/Toolbar.vala:150
 msgid "Use Light Theme"
-msgstr ""
+msgstr "Use Light Theme"
 
 #: ../src/Widgets/Toolbar.vala:141 ../src/Widgets/Toolbar.vala:147
 msgid "Use Dark Theme"
-msgstr ""
+msgstr "Use Dark Theme"
 
 #: ../src/Widgets/Toolbar.vala:179
 msgid "Report a Problem…"
-msgstr ""
+msgstr "Report a Problem…"
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "Donate…"
-msgstr "Donacija"
+msgstr "Donate…"
 
 #: ../src/Widgets/Toolbar.vala:195
 msgid "About"
-msgstr ""
+msgstr "About"
 
 #: ../src/Widgets/Toolbar.vala:236 ../src/Widgets/Toolbar.vala:251
 msgid "Fast forward %d seconds"
-msgstr "Preskoči %d sekundi"
+msgstr "Fast forward %d seconds"
 
 #: ../src/Widgets/Toolbar.vala:244 ../src/Widgets/Toolbar.vala:252
 msgid "Rewind %d seconds"
-msgstr "Vrati %d sekundi"
+msgstr "Rewind %d seconds"
 
 #: ../src/Widgets/Toolbar.vala:257
 msgid "Check for new episodes"
-msgstr "Provjeri dostupnost novih epizoda"
+msgstr "Check for new episodes"
 
 #: ../src/Widgets/Toolbar.vala:266
 msgid "Search your library or online"
-msgstr ""
+msgstr "Search your library or online"
 
 #: ../src/Widgets/Toolbar.vala:276
 msgid "View the top podcasts in the iTunes Store"
-msgstr ""
+msgstr "View the top podcasts in the iTunes Store"
 
 #: ../src/Widgets/Toolbar.vala:311
 msgid "Downloads"
-msgstr "Preuzimanja"
+msgstr "Downloads"
 
 #: ../src/Widgets/VideoControls.vala:60
 msgid "Exit Fullscreen"
-msgstr "Izađi iz punog ekrana"
+msgstr "Exit Fullscreen"

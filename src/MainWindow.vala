@@ -163,23 +163,26 @@ namespace Vocal {
 
             info ("Loading CSS providers.");
             var css_provider = new Gtk.CssProvider ();
-            css_provider.load_from_buffer (PRIMARY_STYLESHEET.data);
-
             var headerbar_css_provider = new Gtk.CssProvider ();
-            headerbar_css_provider.load_from_buffer (HEADERBAR_STYLESHEET.data);
+
+            try {
+                css_provider.load_from_buffer (PRIMARY_STYLESHEET.data);            
+                headerbar_css_provider.load_from_buffer (HEADERBAR_STYLESHEET.data);
+            } catch(Error e) {
+                warning(e.message);
+            }
 
             var screen = Gdk.Screen.get_default ();
-            var style_context = this.get_style_context ();
 
             // No matter what, make sure primary CSS provider is added
-            style_context.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+            Gtk.StyleContext.add_provider_for_screen(screen, css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
 
             this.set_application (controller.app);
 
             if (controller.settings.dark_mode_enabled) {
                 Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
             } else {
-                style_context.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+                Gtk.StyleContext.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             }
 
             // Set window properties
@@ -297,10 +300,10 @@ namespace Vocal {
             toolbar.theme_toggled.connect (() => {
                 if (controller.settings.dark_mode_enabled) {
                     Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
-                    style_context.remove_provider_for_screen(screen, headerbar_css_provider);
+                    Gtk.StyleContext.remove_provider_for_screen(screen, headerbar_css_provider);
                 } else {
                     Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", false);
-                    style_context.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
+                    Gtk.StyleContext.add_provider_for_screen(screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
                 }
             });
 
@@ -455,7 +458,7 @@ namespace Vocal {
 
             ThreadFunc<void*> run = () => {
 
-            	populate_views ();
+                populate_views ();
 
                 Idle.add((owned) callback);
                 return null;

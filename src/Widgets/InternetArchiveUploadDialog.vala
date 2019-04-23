@@ -142,39 +142,43 @@ namespace Vocal {
                 notebook.next_page ();
                 var loop = new MainLoop();
                 
-                Utils.upload_to_internet_archive (episode.local_uri, episode_title_entry.text, podcast_name_entry.text, podcast_description_entry.buffer.text, (obj, res) => {
-                    bool success = Utils.upload_to_internet_archive.end(res);
-                    if (success) {
-                        spinner.active = false;
-                        spinner.set_no_show_all (true);
-                        spinner.hide();
-                        
-                        upload_complete_image.set_no_show_all (false);
-                        upload_complete_image.show ();
-                        uploading_message.set_text (_("Upload Complete"));
-                        
-                        thanks_message.set_no_show_all (false);
-                        thanks_message.show ();
-                        
-                        finish.set_no_show_all (false);
-                        finish.show ();
-                    } else {
-                        spinner.active = false;
-                        spinner.set_no_show_all (true);
-                        spinner.hide();
-                        
-                        upload_complete_image.set_no_show_all (false);
-                        upload_complete_image.show ();
-                        uploading_message.set_text (_("Upload Failed"));
-                        
-                        thanks_message.set_text (_("Be sure to check your network connection and API keys, then try again later."));
-                        upload_complete_image.set_from_icon_name ("face-confused-symbolic", Gtk.IconSize.DIALOG);
-                        
-                        thanks_message.set_no_show_all (false);
-                        thanks_message.show ();
-                        
-                        finish.set_no_show_all (false);
-                        finish.show ();
+                Utils.upload_to_internet_archive.begin(episode.local_uri, episode_title_entry.text, podcast_name_entry.text, podcast_description_entry.buffer.text, (obj, res) => {
+                    try {
+                        bool success = Utils.upload_to_internet_archive.end(res);
+                        if (success) {
+                            spinner.active = false;
+                            spinner.set_no_show_all (true);
+                            spinner.hide();
+                            
+                            upload_complete_image.set_no_show_all (false);
+                            upload_complete_image.show ();
+                            uploading_message.set_text (_("Upload Complete"));
+                            
+                            thanks_message.set_no_show_all (false);
+                            thanks_message.show ();
+                            
+                            finish.set_no_show_all (false);
+                            finish.show ();
+                        } else {
+                            spinner.active = false;
+                            spinner.set_no_show_all (true);
+                            spinner.hide();
+                            
+                            upload_complete_image.set_no_show_all (false);
+                            upload_complete_image.show ();
+                            uploading_message.set_text (_("Upload Failed"));
+                            
+                            thanks_message.set_text (_("Be sure to check your network connection and API keys, then try again later."));
+                            upload_complete_image.set_from_icon_name ("face-confused-symbolic", Gtk.IconSize.DIALOG);
+                            
+                            thanks_message.set_no_show_all (false);
+                            thanks_message.show ();
+                            
+                            finish.set_no_show_all (false);
+                            finish.show ();
+                        }
+                    } catch(ThreadError e) {
+                        warning(e.message);
                     }
                     loop.quit ();
                 });

@@ -371,12 +371,12 @@ const string CLOSE = """
         return str;
     }
     
-    public static async bool upload_to_internet_archive (string local_uri, string title, string podcast, string description) {
+    public static async bool upload_to_internet_archive (string local_uri, string title, string podcast, string description) throws ThreadError {
     
         info ("Uploading to internet archive");
         string container = Uri.escape_string (podcast.replace (" ", "-").replace(":", "").down ());
-        if (container[container.len() - 1] == '-') {
-            container = container.substring(0, container.len() - 1);
+        if (container[container.length - 1] == '-') {
+            container = container.substring(0, container.length - 1);
         }
         string episode = Uri.escape_string (title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of (".")));
         info (container);
@@ -388,7 +388,11 @@ const string CLOSE = """
             
         ThreadFunc<void*> run = () => {
             uint8[] file_contents;
-            GLib.FileUtils.get_data (local_uri, out file_contents);
+            try {
+                GLib.FileUtils.get_data (local_uri, out file_contents);
+            } catch(Error e) {
+                warning(e.message);
+            }
             string mime_type = get_mime_type_for_file (local_uri);
             message.set_request (mime_type, Soup.MemoryUse.STATIC, file_contents);
             var settings = VocalSettings.get_default_instance ();

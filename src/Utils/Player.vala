@@ -58,14 +58,14 @@ namespace Vocal {
         /*
          *  Returns the total duration of the currently playing media
          */
-        public double get_duration () {
+        public new double get_duration () {
             return this.duration;
         }
 
         /*
          * Returns the current position of the media
          */
-        public double get_position () {
+        public new double get_position () {
             return this.progress;
         }
 

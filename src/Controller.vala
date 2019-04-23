@@ -494,7 +494,7 @@ namespace Vocal {
             var loop = new MainLoop();
             bool success = false;
 
-            library.async_add_podcast_from_file(feed, (obj, res) => {
+            library.async_add_podcast_from_file.begin(feed, (obj, res) => {
                 success = library.async_add_podcast_from_file.end(res);
                 currently_importing = false;
                 if(player.playing) {

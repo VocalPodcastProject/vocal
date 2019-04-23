@@ -6,6 +6,6 @@ namespace Constants {
     public const string VERSION = "2.4.0";
     public const string VERSION_INFO = "Release";
     public const string CACHE_DIR = "~/.cache/vocal";
-    public const string VOCAL_MISSING_RESOURCE = "/com/github/needle-and-thread/vocal/missing.png";
     public const string USER_AGENT = "vocal/2.4.0";
+    public const string VOCAL_MISSING_RESOURCE = "/com/github/needle-and-thread/vocal/missing.png";
 }

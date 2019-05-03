@@ -1,0 +1,164 @@
+name: vocal
+base: core18 
+version: git
+summary: Vocal
+description: |
+  A powerful, beautiful, and simple podcast client for the modern free desktop.
+
+grade: stable
+confinement: strict
+
+architectures:
+  - build-on: amd64
+
+apps:
+  vocal:
+    command: desktop-launch $SNAP/usr/bin/com.github.needle-and-thread.vocal
+    plugs:
+      - desktop
+      - desktop-legacy
+      - opengl
+      - home
+      - removable-media
+      - network
+      - pulseaudio
+      - gsettings
+      - x11
+    slots:
+      - dbus-vocal
+      - mpris
+    desktop: usr/share/applications/com.github.needle-and-thread.vocal.desktop
+    environment:
+      GSETTINGS_SCHEMA_DIR: $SNAP/share/glib-2.0/schemas
+      LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libunity:$LD_LIBRARY_PATH
+
+plugs:
+  gnome-3-28-1804:
+    interface: content
+    target: $SNAP/gnome-platform
+    default-provider: gnome-3-28-1804
+  gtk-3-themes:
+    interface: content
+    target: $SNAP/data-dir/themes
+    default-provider: gtk-common-themes
+  icon-themes:
+    interface: content
+    target: $SNAP/data-dir/icons
+    default-provider: gtk-common-themes
+  sound-themes:
+    interface: content
+    target: $SNAP/data-dir/sounds
+    default-provider: gtk-common-themes
+
+slots:
+  dbus-vocal:
+    interface: dbus
+    bus: session
+    name: com.github.needle-and-thread.vocal
+
+parts:
+  vocal:
+    after: [granite, desktop-gnome-platform]
+    plugin: cmake
+    configflags: ["-DCMAKE_INSTALL_PREFIX=/usr"]
+    source: .
+    override-build: |
+      snapcraftctl build
+      sed -i 's|Exec=com.github.needle-and-thread.vocal|Exec=vocal|' ${SNAPCRAFT_PART_INSTALL}/usr/share/applications/com.github.needle-and-thread.vocal.desktop
+      sed -i 's|Icon=com.github.needle-and-thread.vocal|Icon=${SNAP}/usr/share/icons/hicolor/128x128/apps/com.github.needle-and-thread.vocal.svg|' ${SNAPCRAFT_PART_INSTALL}/usr/share/applications/com.github.needle-and-thread.vocal.desktop
+    build-packages:
+      - libclutter-1.0-dev
+      - libclutter-gst-3.0-dev
+      - libclutter-gtk-1.0-dev
+      - libevdev-dev
+      - libgee-0.8-dev
+      - libglib2.0-dev
+      - libgranite-dev
+      - libgstreamer1.0-dev
+      - libgstreamer-plugins-base1.0-dev
+      - libgtk-3-dev
+      - libgtksourceview-3.0-dev
+      - libgudev-1.0-dev
+      - libjson-glib-dev
+      - libnotify-dev
+      - libsoup2.4-dev
+      - libsqlite3-dev
+      - libunity-dev
+      - libwebkit2gtk-4.0-dev
+      - libxml2-dev
+      - valac
+    stage-packages:
+      - gstreamer1.0-libav
+      - gstreamer1.0-clutter-3.0
+      - libgstreamer1.0-0
+      - libgstreamer-plugins-base1.0-0
+      - libgstreamer-plugins-good1.0-0
+      - libgstreamer-plugins-bad1.0-0
+      - libclutter-1.0-0
+      - libclutter-gst-3.0-0
+      - libclutter-gtk-1.0-0
+      - libdatrie1
+      - libdbus-1-3
+      - libepoxy0
+      - libexpat1
+      - libffi6
+      - libgcrypt20
+      - libgee-0.8-2
+      - libgpg-error0
+      - libgraphite2-3
+      - libharfbuzz0b
+      - liblz4-1
+      - liblzma5
+      - libmount1
+      - libnotify4
+      - libpcre3
+      - libpixman-1-0
+      - libpng16-16
+      - libpulse0
+      - libsoup2.4-1
+      - libthai0
+      - libunity9
+      - libunity-protocol-private0
+      - libwayland-client0
+      - libwayland-cursor0
+      - libwayland-egl1-mesa
+      - libwebkit2gtk-4.0-37
+      - libx11-6
+      - libxau6
+      - libxcb1
+      - libxcb-render0
+      - libxcb-shm0
+      - libxcomposite1
+      - libxcursor1
+      - libxdamage1
+      - libxdmcp6
+      - libxext6
+      - libxfixes3
+      - libxi6
+      - libxinerama1
+      - libxkbcommon0
+      - libxrender1
+      - zlib1g
+  granite: # should switch to 5.2.3 later which uses meson
+    plugin: cmake
+    source: https://github.com/elementary/granite/archive/5.2.2.tar.gz
+    source-type: tar
+    configflags: [-DCMAKE_BUILD_TYPE=Release, -DCMAKE_INSTALL_PREFIX=/usr, -DCMAKE_INSTALL_LIBDIR=/usr/lib]
+    build-packages:
+        - build-essential
+        - libgee-0.8-dev
+        - libgirepository1.0-dev
+        - libgtk-3-dev
+        - cmake
+        - gobject-introspection
+  desktop-gnome-platform:
+    source: https://github.com/ubuntu/snapcraft-desktop-helpers.git
+    source-subdir: gtk
+    plugin: make
+    make-parameters: ["FLAVOR=gtk3"]
+    build-packages:
+      - build-essential
+      - libgtk-3-dev
+    override-build: |
+      snapcraftctl build
+      mkdir -pv $SNAPCRAFT_PART_INSTALL/gnome-platform

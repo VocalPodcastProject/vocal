@@ -20,6 +20,7 @@ apps:
       - opengl
       - home
       - removable-media
+      - mount-observe
       - network
       - pulseaudio
       - gsettings
@@ -29,6 +30,7 @@ apps:
       - mpris
     desktop: usr/share/applications/com.github.needle-and-thread.vocal.desktop
     environment:
+      HOME: $SNAP_USER_COMMON
       GSETTINGS_SCHEMA_DIR: $SNAP/share/glib-2.0/schemas
       LD_LIBRARY_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libunity:$LD_LIBRARY_PATH
       GST_PLUGIN_PATH: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/gstreamer-1.0

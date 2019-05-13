@@ -94,6 +94,13 @@
 
 
   <releases>
+    <release version = "2.4.1" timestamp="1557775222">
+      <description>
+        <p>This is a small point release that includes a fix for the progress bar, which in version 2.4.0
+            had an issue where only the left half of the progress bar could be used for seeking.
+        </p>
+      </description>
+    </release>
     <release version = "2.4" timestamp="1554918082">
       <description>
         <p>This release is packed to the gills with new features and stability enhancements!

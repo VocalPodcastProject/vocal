@@ -387,7 +387,7 @@ namespace Vocal {
 	    
 	    public string DesktopEntry { 
 	        owned get {
-	            return "com.github.needle-and-thread.vocal";
+	            return "com.github.needleandthread.vocal";
 	        } 
 	    }
 	    

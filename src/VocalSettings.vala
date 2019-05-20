@@ -42,7 +42,7 @@ public class VocalSettings : Granite.Services.Settings {
     public string archive_secret_key { get; set; }
     
     private VocalSettings() {
-        base("com.github.needle-and-thread.vocal");
+        base("com.github.needleandthread.vocal");
     }
 
     public static VocalSettings get_default_instance() {

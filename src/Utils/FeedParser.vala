@@ -342,7 +342,7 @@ namespace Vocal {
             }
             
             if(podcast.coverart_uri == null || podcast.coverart_uri.length < 1) {
-                podcast.coverart_uri = "resource:///com/github/needle-and-thread/vocal/banner.png";
+                podcast.coverart_uri = "resource:///com/github/needleandthread/vocal/banner.png";
             }
             
             if(podcast.feed_uri == null || podcast.feed_uri.length < 1) {

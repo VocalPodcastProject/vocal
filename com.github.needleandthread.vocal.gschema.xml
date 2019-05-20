@@ -1,5 +1,5 @@
 <schemalist>
-	<schema id="com.github.needle-and-thread.vocal" path="/com/github/needle-and-thread/vocal/" gettext-domain="com.github.needle-and-thread.vocal">
+	<schema id="com.github.needleandthread.vocal" path="/com/github/needleandthread/vocal/" gettext-domain="com.github.needleandthread.vocal">
 		
 		<key name="auto-download" type="b">
 			<default>true</default>

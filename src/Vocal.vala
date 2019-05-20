@@ -43,9 +43,9 @@ namespace Vocal {
             build_version_info = Constants.VERSION_INFO;
 
             app_years = "2015-2019";
-            app_icon = "com.github.needle-and-thread.vocal";
-            app_launcher = "com.github.needle-and-thread.vocal.desktop";
-            application_id = "com.github.needle-and-thread.vocal";
+            app_icon = "com.github.needleandthread.vocal";
+            app_launcher = "com.github.needleandthread.vocal.desktop";
+            application_id = "com.github.needleandthread.vocal";
 
             main_url = "https://vocalproject.net";
             bug_url = "https://github.com/needle-and-thread/vocal/issues";

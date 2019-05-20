@@ -7,7 +7,7 @@ add_translations_catalog (${GETTEXT_PACKAGE}
     ../src/Widgets
     ../data
     DESKTOP_FILES
-        ../data/com.github.needle-and-thread.vocal.desktop
+        ../data/com.github.needleandthread.vocal.desktop
     APPDATA_FILES
-        ../data/com.github.needle-and-thread.vocal.appdata.xml
+        ../data/com.github.needleandthread.vocal.appdata.xml
 )

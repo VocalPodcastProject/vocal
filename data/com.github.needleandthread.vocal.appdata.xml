@@ -94,6 +94,12 @@
 
 
   <releases>
+    <release version = "2.4.2" timestamp="1558375090">
+      <description>
+        <p>This point release changes all the application IDs to com.needleandthread.vocal
+            to fix some issues with dbus and flatpaks.
+      </description>
+    </release>
     <release version = "2.4.1" timestamp="1557775222">
       <description>
         <p>This is a small point release that includes a fix for the progress bar, which in version 2.4.0

@@ -24,6 +24,9 @@ namespace Vocal {
     public class SettingsDialog : Gtk.Dialog{
 
         public signal void      show_name_label_toggled();
+        
+        private Gtk.Label       keep_playing_in_background_label;
+        private Gtk.Switch      keep_playing_in_background_switch;
     
         private Gtk.Label       autodownload_new_label;
         private Gtk.Switch      autodownload_new;
@@ -70,6 +73,23 @@ namespace Vocal {
             content_box.homogeneous = false;
             content_box.margin = 12;
             content_box.spacing = 6;
+            
+            // Keep playing in background option
+            keep_playing_in_background_label = new Gtk.Label (_("Keep playing podcasts when the window is closed:"));
+            keep_playing_in_background_label.justify = Gtk.Justification.LEFT;
+            keep_playing_in_background_label.set_property ("xalign", 0);
+            
+            keep_playing_in_background_switch = new Gtk.Switch ();
+            keep_playing_in_background_switch.set_active (settings.keep_playing_in_background);
+            keep_playing_in_background_switch.notify["active"].connect (() => {
+                settings.keep_playing_in_background = keep_playing_in_background_switch.active;
+		    });
+            
+            var keep_playing_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            keep_playing_box.spacing = 5;
+            keep_playing_box.pack_start (keep_playing_in_background_label, true, true, 0);
+            keep_playing_box.pack_start (keep_playing_in_background_switch, false, false, 0);
+            content_box.add (keep_playing_box);
             
             // Autodownload option
             autodownload_new_label = new Gtk.Label(_("Automatically download new episodes:"));

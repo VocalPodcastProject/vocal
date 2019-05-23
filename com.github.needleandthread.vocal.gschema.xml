@@ -138,5 +138,15 @@
 				will be at the top.
 			</description>
 		</key>
+		
+		<key name="keep-playing-in-background" type="b">
+			<default>true</default>
+			<summary>Whether or not to keep Vocal playing in the background</summary>
+			<description>
+				When set to true, Vocal will keep running and playing in the background when the
+				close button is pressed. When set to false, Vocal will exit the program when
+				close is pressed.
+			</description>
+		</key>
 	</schema>
 </schemalist>

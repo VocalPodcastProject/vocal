@@ -1755,8 +1755,8 @@ namespace Vocal {
                     controller.library.set_episode_playback_position(controller.player.current_episode);
             }
 
-            // If an episode is currently playing, hide the window
-            if(controller.player.playing) {
+            // If an episode is currently playing and Vocal is set to keep playing in the background, hide the window
+            if(controller.player.playing && controller.settings.keep_playing_in_background) {
                 this.hide();
                 return true;
             } else if(downloads != null && downloads.downloads.size > 0) {

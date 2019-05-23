@@ -27,6 +27,7 @@ public class VocalSettings : Granite.Services.Settings {
     public bool show_name_label { get; set; }
     public bool dark_mode_enabled { get; set; }
     public bool newest_episodes_first { get; set; }
+    public bool keep_playing_in_background { get; set; }
     
     public int update_interval { get; set; }
     public int window_width { get; set; }

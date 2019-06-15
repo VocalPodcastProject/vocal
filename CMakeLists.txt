@@ -135,6 +135,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/QueuePopover.vala
     src/Widgets/QueueRow.vala
     src/Widgets/SearchResultBox.vala
+    src/Widgets/SyncDialog.vala
     src/Utils/Player.vala
     src/Utils/FeedParser.vala
     src/Utils/Utils.vala
@@ -142,6 +143,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Utils/iTunesProvider.vala
     src/Utils/SoupClient.vala
     src/Utils/XmlUtils.vala
+    src/Utils/gpodderClient.vala
     src/Services/ImageCache.vala
 PACKAGES
     ${DEPS_PACKAGES}

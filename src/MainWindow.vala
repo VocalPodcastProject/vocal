@@ -56,6 +56,7 @@ namespace Vocal {
         private Gtk.Revealer return_revealer;
         private Gtk.Button return_to_library;
         private Gtk.Box search_results_box;
+        private SyncDialog sync_dialog;
 
         /* Icon views and related variables */
 
@@ -82,6 +83,7 @@ namespace Vocal {
         private bool mouse_primary_down = false;
         public bool fullscreened = false;
         private Gtk.Box parent_box = null;
+        private gpodderClient gpodder_client;
 
 		/*
 		 * Constructor for the main window. Creates the window and gets everything going.
@@ -391,6 +393,13 @@ namespace Vocal {
             notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
             notebook.add_titled(search_results_scrolled, "search", _("Search Results"));
             
+            gpodder_client = new gpodderClient (controller.library);
+            
+            sync_dialog = new SyncDialog (controller.settings, this);
+            sync_dialog.login_requested.connect ( (username, password) => {
+                gpodder_client.login (username, password);
+            });
+            
             info("Creating toolbar.");
 
             // Create the toolbar
@@ -453,6 +462,10 @@ namespace Vocal {
             toolbar.export_selected.connect (export_podcasts);
             toolbar.downloads_selected.connect (show_downloads_popover);
             toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
+            
+            toolbar.sync_dialog_selected.connect ( () => {
+                sync_dialog.show_all ();
+            });
             
             toolbar.volume_button.clicked.connect(() => {
                 var popover = new Gtk.Popover (toolbar.volume_button);

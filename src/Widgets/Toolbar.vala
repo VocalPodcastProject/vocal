@@ -26,6 +26,7 @@ namespace Vocal {
 		public signal void add_podcast_selected();
 		public signal void import_podcasts_selected();
 		public signal void export_selected();
+		public signal void sync_dialog_selected ();
 		public signal void shownotes_selected();
 		public signal void playlist_selected();
 		public signal void preferences_selected();
@@ -152,6 +153,17 @@ namespace Vocal {
                 }
                 theme_toggled ();
             });
+            
+            var sync_dialog_item = new Gtk.MenuItem.with_label (_("Library Synchronization"));
+            
+            // Set refresh and export insensitive if there isn't a library to export
+            if (first_run) {
+                //refresh_item.sensitive = false;
+                sync_dialog_item.sensitive = false;
+            }
+            sync_dialog_item.activate.connect(() => {
+            	sync_dialog_selected ();
+        	});
 
             // Set refresh and export insensitive if there isn't a library to export
             if(first_run) {
@@ -166,9 +178,9 @@ namespace Vocal {
             menu.add(add_feed_item);
             menu.add(import_item);
             menu.add(export_item);
+            menu.add (sync_dialog_item);
             menu.add(new Gtk.SeparatorMenuItem());
             menu.add (dark_mode_item);
-
 
             var preferences_item = new Gtk.MenuItem.with_label(_("Preferences"));
             preferences_item.activate.connect(() => {

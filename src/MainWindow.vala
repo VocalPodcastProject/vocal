@@ -56,6 +56,7 @@ namespace Vocal {
         private Gtk.Revealer return_revealer;
         private Gtk.Button return_to_library;
         private Gtk.Box search_results_box;
+        private Gtk.InfoBar infobar;
 
         /* Icon views and related variables */
 
@@ -532,7 +533,22 @@ namespace Vocal {
 
             info ("Adding notebook to window.");
             current_widget = notebook;
-            this.add (notebook);
+            
+            var main_content_container = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            infobar = new Gtk.InfoBar();
+            main_content_container.pack_start (infobar, false, false, 0);
+            main_content_container.pack_start (notebook, true, true, 0);
+            this.add (main_content_container);
+            
+            hide_infobar ();
+            
+            controller.update_status_changed.connect ( (currently_updating) => {
+                if (currently_updating) {
+                    show_infobar (_("Checking for new episodes…"), MessageType.INFO);
+                } else {
+                    hide_infobar ();
+                }
+            });
 
             // Create the search box
             search_results_view = new SearchResultsView(controller.library);
@@ -1797,6 +1813,35 @@ namespace Vocal {
             if(!maximized && !fullscreened && current_widget == video_widget) {
                 on_fullscreen_request();
             }
+        }
+        
+        private void show_infobar (string message, MessageType type) {
+            infobar.set_no_show_all (false);
+            infobar.show_all ();
+   
+            infobar.set_message_type (type);
+            
+            var content_area = infobar.get_content_area ();
+            var old_children = content_area.get_children ();
+            foreach (Widget w in old_children) {
+                content_area.remove (w);
+            }
+            var message_label = new Gtk.Label (message);
+            message_label.margin_left = 12;
+            content_area.add (message_label);
+            
+            infobar.revealed = true;
+            infobar.show_all ();
+        }
+        
+        private void hide_infobar () {
+            infobar.revealed = false;
+            hiding_timer = GLib.Timeout.add (500, () => {
+                infobar.set_no_show_all (true);
+                infobar.hide ();
+                
+                return false;
+            });
         }
     }
 }

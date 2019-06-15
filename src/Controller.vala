@@ -40,6 +40,7 @@ namespace Vocal {
 
         public signal void track_changed(string episode_title, string podcast_name, string artwork_uri, uint64 duration);
         public signal void playback_status_changed(string status);
+        public signal void update_status_changed (bool currently_updating);
 
     
         /* Runtime flags */
@@ -577,6 +578,7 @@ namespace Vocal {
                 info("Checking for updates.");
 
                 checking_for_updates = true;
+                update_status_changed (true);
 
                 // Create an arraylist to store new episodes
                 Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode>();
@@ -596,6 +598,7 @@ namespace Vocal {
                 minutes_elapsed_in_period = 0;
 
                 checking_for_updates = false;
+                update_status_changed (false);
 
                 // Send a notification if there are new episodes
                 if(new_episodes.size > 0 && !settings.auto_download)

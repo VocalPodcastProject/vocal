@@ -28,6 +28,7 @@ public class VocalSettings : Granite.Services.Settings {
     public bool dark_mode_enabled { get; set; }
     public bool newest_episodes_first { get; set; }
     public bool keep_playing_in_background { get; set; }
+    public bool gpodder_sync_episode_status { get; set; }
     
     public int update_interval { get; set; }
     public int window_width { get; set; }
@@ -41,6 +42,7 @@ public class VocalSettings : Granite.Services.Settings {
     public string itunes_store_country { get; set; }
     public string archive_access_key { get; set; }
     public string archive_secret_key { get; set; }
+    public string gpodder_device_name { get; set; }
     
     private VocalSettings() {
         base("com.github.needleandthread.vocal");

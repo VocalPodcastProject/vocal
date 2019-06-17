@@ -148,5 +148,26 @@
 				close is pressed.
 			</description>
 		</key>
+		
+		<key name="gpodder-device-name" type="s">
+			<default>"vocal"</default>
+			<summary>The name of the device for gpodder.net</summary>
+			<description>
+				The name of the device that gets displayed on gpodder.net. Typically,
+				it is set to some combination of "vocal" and the hardware device name.
+				That said, you can get as creative as you want.
+			</description>
+		</key>
+		
+		<key name="gpodder-sync-episode-status" type="b">
+			<default>true</default>
+			<summary>Whether or not to keep episode status in sync with the cloud</summary>
+			<description>
+				When set to true, Vocal will automatically sync all the episode statuses with
+				gpodder.net, including whether or not an episode has been listened to, as well as 
+				playback progress.
+			</description>
+		</key>
+		
 	</schema>
 </schemalist>

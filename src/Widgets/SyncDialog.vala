@@ -26,7 +26,7 @@ namespace Vocal {
         public signal void login_requested (string username, string password);     
         
         private Gtk.Box content_box;
-        private VocalSettings settings;
+        private Controller controller;
         
         private Gtk.Label gpodder_username_label;
         private Gtk.Entry gpodder_username_entry;
@@ -36,17 +36,17 @@ namespace Vocal {
         
         private Gtk.Button login_button;
         
-        public SyncDialog (VocalSettings settings, Gtk.Window parent) {
+        public SyncDialog (Controller controller) {
             
             title = _("gpodder.net Synchronization");
-            this.settings = settings; 
+            this.controller = controller;
             
             (get_header_bar () as Gtk.HeaderBar).show_close_button = false;
             get_header_bar ().get_style_context ().remove_class ("header-bar");
 
             this.modal = true;
             this.resizable = false;
-            this.set_transient_for(parent);
+            this.set_transient_for(controller.window);
             content_box = get_content_area () as Gtk.Box;
             content_box.homogeneous = false;
             content_box.margin = 12;
@@ -71,6 +71,8 @@ namespace Vocal {
             
             login_button = new Gtk.Button.with_label (_("Login"));
             login_button.clicked.connect ( () => {
+                //TODO: fix saving logic. This is just a POC
+                controller.password_manager.store_password_async ("gpodder.net-password", gpodder_password_entry.text);
                 login_requested (gpodder_username_entry.text, gpodder_password_entry.text);
             });
             content_box.pack_start (login_button, true, true, 12);

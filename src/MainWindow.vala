@@ -395,7 +395,7 @@ namespace Vocal {
             
             gpodder_client = new gpodderClient (controller.library);
             
-            sync_dialog = new SyncDialog (controller.settings, this);
+            sync_dialog = new SyncDialog (controller);
             sync_dialog.login_requested.connect ( (username, password) => {
                 gpodder_client.login (username, password);
             });

@@ -35,6 +35,7 @@ namespace Vocal {
         public Library library = null;
         public Player player;
         public iTunesProvider itunes = null;
+        public PasswordManager password_manager = PasswordManager.get_default_instance ();
         
         /* Signals */
 

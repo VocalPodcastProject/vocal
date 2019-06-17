@@ -55,6 +55,7 @@ set (DEPS_PACKAGES
     gtk+-3.0
     granite
     libxml-2.0
+    libsecret-1
     gstreamer-1.0
     gstreamer-pbutils-1.0
     libsoup-2.4
@@ -63,7 +64,7 @@ set (DEPS_PACKAGES
 )
 
 find_package(PkgConfig)
-pkg_check_modules(DEPS REQUIRED libxml-2.0 granite gtk+-3.0 gstreamer-1.0 gstreamer-pbutils-1.0 gthread-2.0 sqlite3 clutter-gtk-1.0 clutter-gst-3.0 gdk-x11-3.0 libsoup-2.4 json-glib-1.0 webkit2gtk-4.0 gee-0.8)
+pkg_check_modules(DEPS REQUIRED libxml-2.0 granite gtk+-3.0 gstreamer-1.0 gstreamer-pbutils-1.0 gthread-2.0 sqlite3 clutter-gtk-1.0 clutter-gst-3.0 gdk-x11-3.0 libsoup-2.4 json-glib-1.0 webkit2gtk-4.0 gee-0.8 libsecret-1)
 
 #
 # Libunity
@@ -144,6 +145,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Utils/SoupClient.vala
     src/Utils/XmlUtils.vala
     src/Utils/gpodderClient.vala
+    src/Utils/PasswordManager.vala
     src/Services/ImageCache.vala
 PACKAGES
     ${DEPS_PACKAGES}

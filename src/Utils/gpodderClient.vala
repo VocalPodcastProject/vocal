@@ -20,27 +20,24 @@
 namespace Vocal {
 
     public class gpodderClient {
-
-        private string device_id;
-        public string username;
-        public string password;
-
-        private Library library;
     
-        public gpodderClient (Library library) {
+        private static gpodderClient _default_instance = null;
+
+        private Controller controller;
+        
+        public static gpodderClient get_default_instance(Controller controller) {
+            if(_default_instance == null)
+                _default_instance = new gpodderClient (controller);
+
+            return _default_instance;
+        }
+    
+        private gpodderClient (Controller controller) {
             
-            // TODO: get device or hostname dynamically
-            string hostname = "myhostname";
-            
-            device_id = "vocal-" + hostname;
-            
-            this.library = library;
+            this.controller = controller;
         }
         
         public bool login (string username, string password) {
-    
-            this.username = username;
-            this.password = password;
             
             var session = new Soup.Session ();
             session.user_agent = "vocal";
@@ -62,6 +59,8 @@ namespace Vocal {
             session.send_message (message);
 
             if (message.status_code == 200) {
+                controller.password_manager.store_password_async ("gpodder.net-password", password);
+                controller.settings.gpodder_username = username;
                 return true;
             } else {
                 return false;
@@ -78,11 +77,15 @@ namespace Vocal {
 			        if (retrying == true) {
 				        warning ("Invalid user name or password.\n");
 			        }
-			        auth.authenticate (username, password);
+			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
+			        var password="pass";
+			        if (password != null){
+			            auth.authenticate (controller.settings.gpodder_username, password);
+		            }
 			        counter++;
 		        }
 	        }); 
-	        string endpoint = "https://gpodder.net/api/2/devices/%s/%s.json".printf (username, device_id);
+	        string endpoint = "https://gpodder.net/api/2/devices/%s/%s.json".printf (controller.settings.gpodder_username, controller.settings.gpodder_device_name);
 	        info (endpoint);
             var message = new Soup.Message ("PUT", endpoint);
             
@@ -107,7 +110,7 @@ namespace Vocal {
         public bool upload_subscriptions () {
         
             string subs = "";
-            foreach (Podcast p in library.podcasts) {
+            foreach (Podcast p in controller.library.podcasts) {
                 subs += p.feed_uri + "\n";
             }
             
@@ -120,12 +123,16 @@ namespace Vocal {
 			        if (retrying == true) {
 				        warning ("Invalid user name or password.\n");
 			        }
-			        auth.authenticate (username, password);
+			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
+			        var password="pass";
+			        if (password != null) {
+			            auth.authenticate (controller.settings.gpodder_username, password);
+		            }
 			        counter++;
 		        }
 	        }); 
 	        
-	        string endpoint = "https://gpodder.net/subscriptions/%s/%s.txt".printf (username, device_id);
+	        string endpoint = "https://gpodder.net/subscriptions/%s/%s.txt".printf (controller.settings.gpodder_username, controller.settings.gpodder_device_name);
             var message = new Soup.Message ("PUT", endpoint);
             
             message.set_request ("text/plain", Soup.MemoryUse.STATIC, subs.data);
@@ -135,6 +142,66 @@ namespace Vocal {
                 return true;
             } else {
                 return false;
+            }
+        }
+        
+        public GLib.List<string> get_device_list () {
+            List<string> list = new List<string> ();
+            
+            var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
+			        var password="pass";
+			        if (password != null) {
+			            auth.authenticate (controller.settings.gpodder_username, password);
+		            }
+			        counter++;
+		        }
+	        }); 
+	        
+	        string endpoint = "https://gpodder.net/api/2/devices/%s.json".printf (controller.settings.gpodder_username);
+            var message = new Soup.Message ("GET", endpoint);
+            session.send_message (message);           
+            
+            //TODO: parse message response and append items to the list
+            
+            return list;
+        }
+        
+        public string get_subscriptions_list () {
+            var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
+			        var password="pass";
+			        if (password != null) {
+			            auth.authenticate (controller.settings.gpodder_username, password);
+		            }
+			        counter++;
+		        }
+	        }); 
+	        
+	        string endpoint = "https://gpodder.net/subscriptions/%s.opml".printf (controller.settings.gpodder_username);
+            var message = new Soup.Message ("GET", endpoint);
+            session.send_message (message);           
+            
+            if (message.status_code == 200) {
+                return (string)message.response_body.data;
+            } else {
+                return "";
             }
         }
     }

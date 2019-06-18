@@ -36,6 +36,7 @@ namespace Vocal {
         public Player player;
         public iTunesProvider itunes = null;
         public PasswordManager password_manager = PasswordManager.get_default_instance ();
+        public gpodderClient gpodder_client;
         
         /* Signals */
 
@@ -92,6 +93,9 @@ namespace Vocal {
 
             library = new Library (this);
             library.run_database_update_check ();
+            
+            info ("Initiating the gpodder API");
+            gpodder_client = gpodderClient.get_default_instance (this);
             
             
             // IMPORTANT NOTE: the player, library, and iTunes provider MUST exist before the MainWindow is created

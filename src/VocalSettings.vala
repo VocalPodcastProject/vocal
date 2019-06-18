@@ -43,6 +43,7 @@ public class VocalSettings : Granite.Services.Settings {
     public string archive_access_key { get; set; }
     public string archive_secret_key { get; set; }
     public string gpodder_device_name { get; set; }
+    public string gpodder_username { get; set; }
     
     private VocalSettings() {
         base("com.github.needleandthread.vocal");

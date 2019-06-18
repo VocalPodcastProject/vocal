@@ -83,7 +83,6 @@ namespace Vocal {
         private bool mouse_primary_down = false;
         public bool fullscreened = false;
         private Gtk.Box parent_box = null;
-        private gpodderClient gpodder_client;
 
 		/*
 		 * Constructor for the main window. Creates the window and gets everything going.
@@ -393,12 +392,7 @@ namespace Vocal {
             notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
             notebook.add_titled(search_results_scrolled, "search", _("Search Results"));
             
-            gpodder_client = new gpodderClient (controller.library);
-            
             sync_dialog = new SyncDialog (controller);
-            sync_dialog.login_requested.connect ( (username, password) => {
-                gpodder_client.login (username, password);
-            });
             
             info("Creating toolbar.");
 

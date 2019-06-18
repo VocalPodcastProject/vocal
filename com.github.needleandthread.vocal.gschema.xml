@@ -159,6 +159,15 @@
 			</description>
 		</key>
 		
+		<key name="gpodder-username" type="s">
+			<default>""</default>
+			<summary>The username of the last successfully logged-in gpodder.net user</summary>
+			<description>
+				Contains the username of the last gpodder.net user account to successfully
+				login to the service.
+			</description>
+		</key>
+		
 		<key name="gpodder-sync-episode-status" type="b">
 			<default>true</default>
 			<summary>Whether or not to keep episode status in sync with the cloud</summary>

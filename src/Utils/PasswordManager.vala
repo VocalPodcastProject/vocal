@@ -65,6 +65,7 @@ public class PasswordManager {
 
 		if (password == null) {
 			info ("Unable to fetch password in libsecret keyring for %s", key_name);
+			return null;
 		}
 
 		return password;

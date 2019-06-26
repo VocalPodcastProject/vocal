@@ -365,7 +365,14 @@ namespace Vocal {
 
         
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Xml.Parser.parse_file (path);
+            Xml.Doc* doc;
+            
+            // If bracket character is in the path, assume it's the raw data, not a path
+            if (path.contains("<")) {
+                doc = Xml.Parser.parse_memory (path, path.length);
+            } else {
+                doc = Xml.Parser.parse_file (path);
+            }
             
             // Make sure that it didn't return a null reference
             if (doc == null) {

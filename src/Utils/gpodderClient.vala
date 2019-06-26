@@ -53,7 +53,6 @@ namespace Vocal {
 		        }
 	        }); 
 	        string endpoint = "https://gpodder.net/api/2/auth/%s/login.json".printf (username);
-	        info (endpoint);
             var message = new Soup.Message ("POST", endpoint);
                 
             session.send_message (message);
@@ -77,16 +76,20 @@ namespace Vocal {
 			        if (retrying == true) {
 				        warning ("Invalid user name or password.\n");
 			        }
-			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
-			        var password="pass";
-			        if (password != null){
-			            auth.authenticate (controller.settings.gpodder_username, password);
-		            }
-			        counter++;
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
 		        }
 	        }); 
 	        string endpoint = "https://gpodder.net/api/2/devices/%s/%s.json".printf (controller.settings.gpodder_username, controller.settings.gpodder_device_name);
-	        info (endpoint);
+
             var message = new Soup.Message ("PUT", endpoint);
             
             string jsonbody = 
@@ -123,12 +126,16 @@ namespace Vocal {
 			        if (retrying == true) {
 				        warning ("Invalid user name or password.\n");
 			        }
-			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
-			        var password="pass";
-			        if (password != null) {
-			            auth.authenticate (controller.settings.gpodder_username, password);
-		            }
-			        counter++;
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
 		        }
 	        }); 
 	        
@@ -157,12 +164,16 @@ namespace Vocal {
 			        if (retrying == true) {
 				        warning ("Invalid user name or password.\n");
 			        }
-			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
-			        var password="pass";
-			        if (password != null) {
-			            auth.authenticate (controller.settings.gpodder_username, password);
-		            }
-			        counter++;
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
 		        }
 	        }); 
 	        
@@ -185,18 +196,22 @@ namespace Vocal {
 			        if (retrying == true) {
 				        warning ("Invalid user name or password.\n");
 			        }
-			        //string? password = controller.password_manager.get_password_async ("gpodder.net-password");
-			        var password="pass";
-			        if (password != null) {
-			            auth.authenticate (controller.settings.gpodder_username, password);
-		            }
-			        counter++;
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
 		        }
 	        }); 
 	        
 	        string endpoint = "https://gpodder.net/subscriptions/%s.opml".printf (controller.settings.gpodder_username);
             var message = new Soup.Message ("GET", endpoint);
-            session.send_message (message);           
+            session.send_message (message);
             
             if (message.status_code == 200) {
                 return (string)message.response_body.data;

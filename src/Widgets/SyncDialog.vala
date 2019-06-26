@@ -133,8 +133,11 @@ namespace Vocal {
             var complete_setup_button = new Gtk.Button.with_label (_("Complete Setup"));
             
             complete_setup_button.clicked.connect ( () => {
-                // if (controller.gpodderclient.update_device_data ()) {
+                // if (controller.gpodder_client.update_device_data ()) {
                 notebook.set_visible_child (overview_box);
+                controller.gpodder_client.upload_subscriptions ();
+                string cloud_subs_opml = controller.gpodder_client.get_subscriptions_list ();
+                controller.library.add_from_OPML (cloud_subs_opml);
                 // }
             });
             

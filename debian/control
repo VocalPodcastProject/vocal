@@ -1,4 +1,4 @@
-Source: com.github.needleandthread.vocal
+Source: com.github.needle-and-thread.vocal
 Section: sound
 Priority: optional
 Maintainer: Nathan Dyer <mail@nathandyer.me>
@@ -21,7 +21,7 @@ Build-Depends: cmake (>= 2.8),
                libwebkit2gtk-4.0-dev
 Standards-Version: 3.9.3
 
-Package: com.github.needleandthread.vocal
+Package: com.github.needle-and-thread.vocal
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Vocal

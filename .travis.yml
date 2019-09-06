@@ -25,4 +25,4 @@ script:
     --name-domain com.github.needleandthread.vocal
     --name-human Vocal
 
-  - docker run -v $(pwd)/src:/var/opt/vala-lint elementary/docker:vala-lint
+  - docker run -v $(pwd)/src:/app valalang/lint

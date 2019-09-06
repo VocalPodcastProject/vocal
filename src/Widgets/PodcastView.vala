@@ -137,7 +137,10 @@ namespace Vocal {
                 }
             });
 
-            var download_all = new Gtk.Button.from_icon_name (Utils.check_elementary () ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);
+            var download_all = new Gtk.Button.from_icon_name (
+                Utils.check_elementary () ? "browser-download-symbolic" : "document-save-symbolic",
+                Gtk.IconSize.MENU
+            );
             download_all.margin = 6;
             download_all.tooltip_text = _ ("Download all episodes");
             download_all.clicked.connect (() => {
@@ -157,12 +160,17 @@ namespace Vocal {
             toolbar.pack_end (download_all, false, false, 0);
             this.pack_start (toolbar, false, true, 0);
 
-            var edit = new Gtk.Button.from_icon_name (Utils.check_elementary () ? "edit-symbolic" : "document-properties-symbolic",Gtk.IconSize.MENU);
+            var edit = new Gtk.Button.from_icon_name (
+                Utils.check_elementary () ? "edit-symbolic" : "document-properties-symbolic",
+                Gtk.IconSize.MENU
+            );
             edit.tooltip_text = _ ("Edit podcast details");
             edit.button_press_event.connect ((e) => {
                 var edit_menu = new Gtk.Menu ();
                 var change_cover_art_item = new Gtk.MenuItem.with_label (_ ("Select different cover art"));
-                var creative_commons_override_button = new Gtk.MenuItem.with_label (_ ("Set podcast license to Creative Commons"));
+                var creative_commons_override_button = new Gtk.MenuItem.with_label (
+                    _ ("Set podcast license to Creative Commons")
+                );
                 change_cover_art_item.activate.connect (on_change_album_art);
                 creative_commons_override_button.activate.connect (on_creative_commons_override);
                 edit_menu.add (change_cover_art_item);
@@ -267,7 +275,13 @@ namespace Vocal {
             shownotes.internet_archive_upload_requested.connect (() => {
                 var settings = VocalSettings.get_default_instance ();
                 if (settings.archive_access_key.length < 1 || settings.archive_secret_key.length < 1) {
-                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.OK, _ ("Before you can upload to the Internet Archive you must add your archive.org account's API keys. Visit https://archive.org/account/s3.php to see your keys, then paste them in the settings."));
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                        controller.window,
+                        Gtk.DialogFlags.MODAL,
+                        Gtk.MessageType.WARNING,
+                        Gtk.ButtonsType.OK,
+                        _ ("Before you can upload to the Internet Archive you must add your archive.org account's API keys. Visit https://archive.org/account/s3.php to see your keys, then paste them in the settings.")  // vala-lint=line-length
+                    );
 
                     var image = new Gtk.Image.from_icon_name ("dialog-warning", Gtk.IconSize.DIALOG);
                     msg.image = image;
@@ -284,7 +298,13 @@ namespace Vocal {
 
                 } else {
 
-                    Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _ ("You must download this episode first before uploading to the Internet Archive. Would you like to download this episode?"));
+                    Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                        controller.window,
+                        Gtk.DialogFlags.MODAL,
+                        Gtk.MessageType.WARNING,
+                        Gtk.ButtonsType.YES_NO,
+                        _ ("You must download this episode first before uploading to the Internet Archive. Would you like to download this episode?")  // vala-lint=line-length
+                    );
 
                     var image = new Gtk.Image.from_icon_name ("dialog-question", Gtk.IconSize.DIALOG);
                     msg.image = image;
@@ -454,8 +474,13 @@ namespace Vocal {
 
                     var delete_menuitem = new Gtk.MenuItem.with_label (_ ("Delete local files for selected episodes"));
                     delete_menuitem.activate.connect (() => {
-                        Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                             _ ("Are you sure you want to delete the downloaded files for the selected episodes?"));
+                        Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                            controller.window,
+                            Gtk.DialogFlags.MODAL,
+                            Gtk.MessageType.WARNING,
+                            Gtk.ButtonsType.NONE,
+                            _ ("Are you sure you want to delete the downloaded files for the selected episodes?")
+                        );
 
                         msg.add_button ("_No", Gtk.ResponseType.CANCEL);
                         Gtk.Button delete_button = (Gtk.Button) msg.add_button ("_Yes", Gtk.ResponseType.YES);
@@ -520,9 +545,15 @@ namespace Vocal {
                         var delete_menuitem = new Gtk.MenuItem.with_label (_ ("Delete Local File"));
 
                         delete_menuitem.activate.connect (() => {
-                            Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                                 _ ("Are you sure you want to delete the downloaded episode '%s'?").printf (current_episode.title.replace ("%27", "'")));
-
+                            Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                                controller.window,
+                                Gtk.DialogFlags.MODAL,
+                                Gtk.MessageType.WARNING,
+                                Gtk.ButtonsType.NONE,
+                                _ ("Are you sure you want to delete the downloaded episode '%s'?").printf (
+                                     current_episode.title.replace ("%27", "'")
+                                )
+                            );
 
                             msg.add_button ("_No", Gtk.ResponseType.CANCEL);
                             Gtk.Button delete_button = (Gtk.Button) msg.add_button ("_Yes", Gtk.ResponseType.YES);
@@ -588,7 +619,7 @@ namespace Vocal {
             }
 
             name_label.set_text (podcast.name.replace ("%27", "'"));
-            description_label.set_text (podcast.description.replace ("""\n""",""));
+            description_label.set_text (podcast.description.replace ("""\n""", ""));
 
             reset_episode_list ();
             populate_episodes ();
@@ -645,7 +676,7 @@ namespace Vocal {
             }
 
             shownotes.episode = current_episode;
-            shownotes.set_html (current_episode.description != " (null)" ? Utils.html_to_markup (current_episode.description) : _ ("No show notes available."));
+            shownotes.set_html (current_episode.description != " (null)" ? Utils.html_to_markup (current_episode.description) : _ ("No show notes available."));  // vala-lint=line-length
             shownotes.set_title (current_episode.title);
             shownotes.set_date (current_episode.datetime_released);
 
@@ -812,8 +843,13 @@ namespace Vocal {
          * Overrides the autodetected creative commons setting to unlock Internet Archive features
          */
         private void on_creative_commons_override () {
-            Gtk.MessageDialog msg = new Gtk.MessageDialog (controller.window, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO,
-                     _ ("Vocal did not detect that this podcast is licensed as Creative Commons. Changing this will unlock Internet Archive integration for this podcast. Please make sure this change is correct before proceeding. Do you wish to make this change?"));
+            Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                controller.window,
+                Gtk.DialogFlags.MODAL,
+                Gtk.MessageType.WARNING,
+                Gtk.ButtonsType.YES_NO,
+                _ ("Vocal did not detect that this podcast is licensed as Creative Commons. Changing this will unlock Internet Archive integration for this podcast. Please make sure this change is correct before proceeding. Do you wish to make this change?")  // vala-lint=line-length
+            );
             var image = new Gtk.Image.from_icon_name ("dialog-question", Gtk.IconSize.DIALOG);
             msg.image = image;
             msg.image.show_all ();
@@ -866,13 +902,21 @@ namespace Vocal {
             Gdk.Display display = controller.window.get_display ();
             Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
             string uri = current_episode.uri;
-            clipboard.set_text (uri,uri.length);
+            clipboard.set_text (uri, uri.length);
         }
 
         private void on_tweet () {
             string uri = Utils.get_shareable_link_for_episode (current_episode);
-            string message_text = GLib.Uri.escape_string (_ ("I'm listening to %s from %s").printf (current_episode.title,current_episode.parent.name));
-            string new_tweet_uri = "https://twitter.com/intent/tweet?text=%s&url=%s".printf (message_text, GLib.Uri.escape_string (uri));
+            string message_text = GLib.Uri.escape_string (
+                _ ("I'm listening to %s from %s").printf (
+                    current_episode.title,
+                    current_episode.parent.name
+                )
+            );
+            string new_tweet_uri = "https://twitter.com/intent/tweet?text=%s&url=%s".printf (
+                message_text,
+                GLib.Uri.escape_string (uri)
+            );
             Gtk.show_uri (null, new_tweet_uri, 0);
         }
 
@@ -880,7 +924,7 @@ namespace Vocal {
             Gdk.Display display = controller.window.get_display ();
             Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
             string uri = Utils.get_shareable_link_for_episode (current_episode);
-            clipboard.set_text (uri,uri.length);
+            clipboard.set_text (uri, uri.length);
         }
     }
 }

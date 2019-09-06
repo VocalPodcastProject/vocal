@@ -123,7 +123,7 @@ namespace Vocal {
 
                 flowbox = new Gtk.FlowBox ();
 
-                // TODO: not actually asyncronous.
+                // TODO: not actually asyncronous.  vala-lint=note
                 info ("Getting top podcasts asynchronously?.");
                 var entries = itunes.get_top_podcasts (100);
                 info ("Top 100 podcasts loaded.");
@@ -135,7 +135,13 @@ namespace Vocal {
                 }
 
                 foreach (DirectoryEntry entry in entries) {
-                    DirectoryArt directory_art = new DirectoryArt (entry.itunesUrl, "%d. %s".printf (i, entry.title), entry.artist, entry.summary, entry.artworkUrl170);
+                    DirectoryArt directory_art = new DirectoryArt (
+                        entry.itunesUrl,
+                        "%d. %s".printf (i, entry.title),
+                        entry.artist,
+                        entry.summary,
+                        entry.artworkUrl170
+                    );
                     directory_art.expand = false;
                     directory_art.subscribe_button_clicked.connect ((url) => {
                         first_run_continue_button.sensitive = true;

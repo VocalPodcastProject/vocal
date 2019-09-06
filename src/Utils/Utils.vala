@@ -19,8 +19,8 @@
 
 [DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
 public interface GnomeMediaKeys : GLib.Object {
-    public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws GLib.IOError;
-    public abstract void ReleaseMediaPlayerKeys (string application) throws GLib.IOError;
+    public abstract void GrabMediaPlayerKeys (string application, uint32 time) throws GLib.IOError;  // vala-lint=line-length, naming-convention
+    public abstract void ReleaseMediaPlayerKeys (string application) throws GLib.IOError;  // vala-lint=line-length, naming-convention
     public signal void MediaPlayerKeyPressed (string application, string key);
 }
 
@@ -118,8 +118,12 @@ public class Utils {
         while (nextOpenBracketIndex >= 0) {
             nextOpenBracketIndex = markup.index_of ("<", 0);
             nextCloseBracketIndex = markup.index_of (">", nextOpenBracketIndex) + 1;
-            if (nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
-                    && nextCloseBracketIndex >= 0 && nextOpenBracketIndex <= markup.length && nextCloseBracketIndex <= markup.length) {
+            if (
+                nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
+                && nextCloseBracketIndex >= 0
+                && nextOpenBracketIndex <= markup.length
+                && nextCloseBracketIndex <= markup.length
+            ) {
                 markup = markup.splice (nextOpenBracketIndex, nextCloseBracketIndex);
                 nextOpenBracketIndex = 0;
                 nextCloseBracketIndex = 0;
@@ -309,7 +313,7 @@ public class Utils {
     }
 
     public static string get_shareable_link_for_episode (Vocal.Episode e) {
-        string output = "http://needleandthread.co/apps/vocal/simpleshare.html?podcastName=%s&artUri=%s&episodeTitle=%s&mediaUri=%s";
+        string output = "http://needleandthread.co/apps/vocal/simpleshare.html?podcastName=%s&artUri=%s&episodeTitle=%s&mediaUri=%s";  // vala-lint=line-length
         string podcastName = GLib.Uri.escape_string (e.parent.name);
         string albumArt = e.parent.remote_art_uri;
         string episodeTitle = GLib.Uri.escape_string (e.title);
@@ -361,14 +365,21 @@ const string CLOSE = """
         return str;
     }
 
-    public static async bool upload_to_internet_archive (string local_uri, string title, string podcast, string description) {
+    public static async bool upload_to_internet_archive (
+        string local_uri,
+        string title,
+        string podcast,
+        string description
+    ) {
 
         info ("Uploading to internet archive");
         string container = Uri.escape_string (podcast.replace (" ", "-").replace (":", "").down ());
         if (container[container.len () - 1] == '-') {
             container = container.substring (0, container.len () - 1);
         }
-        string episode = Uri.escape_string (title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of (".")));
+        string episode = Uri.escape_string (
+            title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of ("."))
+        );
         info (container);
         info (episode);
         var session = new Soup.Session ();

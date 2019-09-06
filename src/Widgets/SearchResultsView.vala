@@ -56,7 +56,8 @@ namespace Vocal {
         private Gtk.Revealer cloud_results_revealer;
 
         /*
-         * Constructor for the full search results view. Shows all matches from the local library and across the iTunes ecosystem
+         * Constructor for the full search results view.
+         * Shows all matches from the local library and across the iTunes ecosystem.
          */
         public SearchResultsView (Library library) {
 

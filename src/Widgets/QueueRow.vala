@@ -21,11 +21,11 @@
 namespace Vocal {
 
     public class QueueListRow : Gtk.ListBoxRow {
-        private const Gtk.TargetEntry targetEntries[] = {
+        private const Gtk.TargetEntry targetEntries[] = {  // vala-lint=naming-convention
            { "GTK_LIST_BOX_ROW", Gtk.TargetFlags.SAME_APP, 0 }
         };
 
-        public signal void update_queue (int oldPos, int newPos);
+        public signal void update_queue (int oldPos, int newPos);  // vala-lint=naming-convention
         public signal void move_up (Episode e);
         public signal void move_down (Episode e);
         public signal void remove_episode (Episode e);
@@ -63,10 +63,18 @@ namespace Vocal {
                 box.pack_start (image, false, false, 0);
             } catch (Error e) {}
 
-            Gtk.Label title_label = new Gtk.Label (Utils.truncate_string (episode.title.replace ("%27", "'"), 35) + "...");
+            Gtk.Label title_label = new Gtk.Label (
+                Utils.truncate_string (
+                    episode.title.replace ("%27", "'"),
+                    35
+                ) + "..."  // vala-lint=ellipsis
+            );
             box.pack_start (title_label, false, false, 0);
 
-            Gtk.Button remove_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            Gtk.Button remove_button = new Gtk.Button.from_icon_name (
+                "process-stop-symbolic",
+                Gtk.IconSize.SMALL_TOOLBAR
+            );
             remove_button.get_style_context ().add_class ("flat");
             remove_button.set_tooltip_text (_ ("Remove episode from queue"));
 
@@ -94,13 +102,19 @@ namespace Vocal {
           Gtk.drag_set_icon_surface (context, surface);
         }
 
-        private void on_drag_data_get (Gtk.Widget widget, Gdk.DragContext context, Gtk.SelectionData selection_data, uint target_type, uint time) {
-          uchar[] data = new uchar[ (sizeof (QueueListRow))];
-          ((Gtk.Widget[])data)[0] = widget;
+        private void on_drag_data_get (
+            Gtk.Widget widget,
+            Gdk.DragContext context,
+            Gtk.SelectionData selection_data,
+            uint target_type,
+            uint time
+        ) {
+            uchar[] data = new uchar[(sizeof (QueueListRow))];
+            ((Gtk.Widget[])data)[0] = widget;
 
-          selection_data.set (
-              Gdk.Atom.intern_static_string ("GTK_LIST_BOX_ROW"), 32, data
-          );
+            selection_data.set (
+                Gdk.Atom.intern_static_string ("GTK_LIST_BOX_ROW"), 32, data
+            );
         }
     }
 }

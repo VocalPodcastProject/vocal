@@ -21,11 +21,15 @@ namespace Vocal {
 
     public class VideoControls : Gtk.Revealer {
 
-        public signal void play_toggled ();                    // Fired when the play button gets clicked
-        public signal void unfullscreen ();                    // Fired when the unfullscreen button gets clicked
-        public signal void progress_bar_scale_changed ();    // Fired when the progress bar scale changes (user seeks position)
+        // Fired when the play button gets clicked
+        public signal void play_toggled ();
+        // Fired when the unfullscreen button gets clicked
+        public signal void unfullscreen ();
+        // Fired when the progress bar scale changes (user seeks position)
+        public signal void progress_bar_scale_changed ();
 
-        public double progress_bar_fill;                    // The value currently set in the progress bar
+        // The value currently set in the progress bar
+        public double progress_bar_fill;
 
         public Gtk.Button play_button;
         private Gtk.Button unfullscreen_button;
@@ -70,9 +74,14 @@ namespace Vocal {
         /*
          * Sets the progress
          */
-        public void set_progress (double percentage, int mins_remaining, int secs_remaining, int mins_elapsed, int secs_elapsed) {
+        public void set_progress (
+            double percentage,
+            int mins_remaining,
+            int secs_remaining,
+            int mins_elapsed,
+            int secs_elapsed
+        ) {
             playback_box.set_progress (percentage, mins_remaining, secs_remaining, mins_elapsed, secs_elapsed);
-
         }
 
         /*

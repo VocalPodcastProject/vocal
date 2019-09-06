@@ -59,11 +59,19 @@ public class SoupClient {
 
             case Soup.Status.CANT_RESOLVE:
             case Soup.Status.CANT_RESOLVE_PROXY:
-                throw new PublishingError.NO_ANSWER ("Unable to resolve %s (error code %u)", message.get_uri ().to_string (false), message.status_code);
+                throw new PublishingError.NO_ANSWER (
+                    "Unable to resolve %s (error code %u)",
+                    message.get_uri ().to_string (false),
+                    message.status_code
+                );
 
             case Soup.Status.CANT_CONNECT:
             case Soup.Status.CANT_CONNECT_PROXY:
-                throw new PublishingError.NO_ANSWER ("Unable to connect to %s (error code %u)", message.get_uri ().to_string (false), message.status_code);
+                throw new PublishingError.NO_ANSWER (
+                    "Unable to connect to %s (error code %u)",
+                    message.get_uri ().to_string (false),
+                    message.status_code
+                );
 
             default:
                 // status codes below 100 are used by Soup, 100 and above are defined HTTP codes
@@ -71,7 +79,11 @@ public class SoupClient {
                     throw new PublishingError.NO_ANSWER ("Service %s returned HTTP status code %u %s",
                     message.get_uri ().to_string (false), message.status_code, message.reason_phrase);
                 } else {
-                    throw new PublishingError.NO_ANSWER ("Failure communicating with %s (error code %u)", message.get_uri ().to_string (false), message.status_code);
+                    throw new PublishingError.NO_ANSWER (
+                        "Failure communicating with %s (error code %u)",
+                        message.get_uri ().to_string (false),
+                        message.status_code
+                    );
                 }
         }
 

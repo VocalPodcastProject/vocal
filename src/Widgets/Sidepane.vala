@@ -67,7 +67,7 @@ namespace Vocal {
          * Constructor for a Sidepane given a parent window and pocast
          */
         public Sidepane (MainWindow parent, Podcast podcast, bool? on_elementary = Utils.check_elementary ()) {
-            assert (podcast!= null);
+            assert (podcast != null);
             this.podcast = podcast;
             this.parent = parent;
             this.settings = new VocalSettings ();
@@ -93,7 +93,10 @@ namespace Vocal {
             toolbar.insert (mark_as_played, 0);
 
             Gtk.Image download_image;
-            download_image = new Gtk.Image.from_icon_name (check_elementary () ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.MENU);
+            download_image = new Gtk.Image.from_icon_name (
+                check_elementary () ? "browser-download-symbolic" : "document-save-symbolic",
+                Gtk.IconSize.MENU
+            );
             Gtk.ToolButton download_all = new Gtk.ToolButton (download_image, null);
             download_all.tooltip_text = _ ("Download all episodes");
             download_all.clicked.connect (() => {
@@ -137,7 +140,7 @@ namespace Vocal {
             menu.tooltip_text = _ ("More options");
 
             menu.clicked.connect (() => {
-                more_menu.popup (null, null, null, 1,Gdk.CURRENT_TIME );
+                more_menu.popup (null, null, null, 1, Gdk.CURRENT_TIME );
             });
 
 
@@ -261,7 +264,7 @@ namespace Vocal {
 
                             // Set all the boxes to hide the played image
                             foreach (int i in indexes) {
-                                int floor = podcast.episodes.size - limit -1;
+                                int floor = podcast.episodes.size - limit - 1;
                                 int num;
 
                                 (floor >= 0) ? num = i - floor : num = i;
@@ -290,7 +293,7 @@ namespace Vocal {
 
                         // Set all the boxes to show the played image
                         foreach (int i in indexes) {
-                            int floor = podcast.episodes.size - limit -1;
+                            int floor = podcast.episodes.size - limit - 1;
                             int num;
 
                             (floor >= 0) ? num = i - floor : num = i;
@@ -310,8 +313,13 @@ namespace Vocal {
                     var delete_menuitem = new Gtk.MenuItem.with_label (_ ("Delete local files for selected episodes"));
                     delete_menuitem.activate.connect (() => {
 
-                        Gtk.MessageDialog msg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                             _ ("Are you sure you want to delete the downloaded files for the selected episodes?"));
+                        Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                            parent,
+                            Gtk.DialogFlags.MODAL,
+                            Gtk.MessageType.WARNING,
+                            Gtk.ButtonsType.NONE,
+                            _ ("Are you sure you want to delete the downloaded files for the selected episodes?")
+                        );
 
 
                         msg.add_button ("_No", Gtk.ResponseType.CANCEL);
@@ -372,7 +380,7 @@ namespace Vocal {
                             set_unplayed_text ();
 
                             // Remove the unplayed image from the episode's box
-                            int floor = podcast.episodes.size - limit -1;
+                            int floor = podcast.episodes.size - limit - 1;
                             int num;
 
                             (floor >= 0) ? num = current_episode_index - floor : num = current_episode_index;
@@ -391,7 +399,7 @@ namespace Vocal {
                             set_unplayed_text ();
 
                             // Remove the unplayed image from the episode's box
-                            int floor = podcast.episodes.size - limit -1;
+                            int floor = podcast.episodes.size - limit - 1;
                             int num;
 
                             (floor >= 0) ? num = current_episode_index - floor : num = current_episode_index;
@@ -408,8 +416,15 @@ namespace Vocal {
                         var delete_menuitem = new Gtk.MenuItem.with_label (_ ("Delete Local File"));
 
                         delete_menuitem.activate.connect (() => {
-                            Gtk.MessageDialog msg = new Gtk.MessageDialog (parent, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.NONE,
-                                 "Are you sure you want to delete the downloaded episode '%s'?".printf (podcast.episodes[current_episode_index].title.replace ("%27", "'")));
+                            Gtk.MessageDialog msg = new Gtk.MessageDialog (
+                                parent,
+                                Gtk.DialogFlags.MODAL,
+                                Gtk.MessageType.WARNING,
+                                Gtk.ButtonsType.NONE,
+                                "Are you sure you want to delete the downloaded episode '%s'?".printf (
+                                    podcast.episodes[current_episode_index].title.replace ("%27", "'")
+                                )
+                            );
 
 
                             msg.add_button ("_No", Gtk.ResponseType.CANCEL);
@@ -564,7 +579,12 @@ namespace Vocal {
 
                 while (count >= 0 && ((podcast.episodes.size - 1) - count) >= 0) {
                     Episode current_episode = podcast.episodes[ (podcast.episodes.size - 1) - count];
-                    EpisodeDetailBox current_episode_box = new EpisodeDetailBox (current_episode, ((podcast.episodes.size - 1) - count), boxes.size, parent.on_elementary);
+                    EpisodeDetailBox current_episode_box = new EpisodeDetailBox (
+                        current_episode,
+                        ((podcast.episodes.size - 1) - count),
+                        boxes.size,
+                        parent.on_elementary
+                    );
                     current_episode_box.streaming_button_clicked.connect (on_streaming_button_clicked);
                     if (current_episode_box.top_box_width > this.largest_box_size) {
                         this.largest_box_size = current_episode_box.top_box_width;

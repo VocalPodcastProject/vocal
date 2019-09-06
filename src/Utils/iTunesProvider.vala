@@ -19,7 +19,7 @@
 
 namespace Vocal {
 
-    public class iTunesProvider {
+    public class iTunesProvider {  // vala-lint=naming-convention
 
         private SoupClient soup_client = null;
 
@@ -75,7 +75,10 @@ namespace Vocal {
 
             var settings = VocalSettings.get_default_instance ();
 
-            var uri = "https://itunes.apple.com/%s/rss/toppodcasts/limit=%d/json".printf (settings.itunes_store_country, limit);
+            var uri = "https://itunes.apple.com/%s/rss/toppodcasts/limit=%d/json".printf (
+                settings.itunes_store_country,
+                limit
+            );
 
             GLib.List<DirectoryEntry> entries = new GLib.List<DirectoryEntry> ();
 
@@ -157,7 +160,10 @@ namespace Vocal {
          */
         public Gee.ArrayList<DirectoryEntry>? search_by_term (string term, int? limit = 25) {
 
-            var uri = "https://itunes.apple.com/search?term=%s&entity=podcast&limit=%d".printf (term.replace (" ", "+"), limit);
+            var uri = "https://itunes.apple.com/search?term=%s&entity=podcast&limit=%d".printf (
+                term.replace (" ", "+"),
+                limit
+            );
 
             Gee.ArrayList<DirectoryEntry> entries = new Gee.ArrayList<DirectoryEntry> ();
 

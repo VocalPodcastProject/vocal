@@ -54,7 +54,9 @@ namespace Vocal {
             notebook.append_page (confirm_page);
             notebook.append_page (uploading_page);
 
-            var verify_label = new Gtk.Label (_ ("Please verify that the information below is correct before continuing."));
+            var verify_label = new Gtk.Label (
+                _ ("Please verify that the information below is correct before continuing.")
+            );
             verify_label.wrap = true;
             verify_label.max_width_chars = 50;
             verify_label.get_style_context ().add_class ("h3");
@@ -94,7 +96,9 @@ namespace Vocal {
                 notebook.next_page ();
             });
 
-            var warning_label = new Gtk.Label (_ ("Legal warning: uploading copyrighted materials to the Internet Archvie is illegal. Please make sure you are uploading a copylefted (Creative Commons) episode that you are legally entitled to redistribute."));
+            var warning_label = new Gtk.Label (
+                _ ("Legal warning: uploading copyrighted materials to the Internet Archvie is illegal. Please make sure you are uploading a copylefted (Creative Commons) episode that you are legally entitled to redistribute.")  // vala-lint=line-length
+            );
             warning_label.wrap = true;
             warning_label.max_width_chars = 50;
             warning_label.get_style_context ().add_class ("h4");
@@ -108,7 +112,9 @@ namespace Vocal {
             var uploading_message = new Gtk.Label (_ ("Uploading episode…"));
             uploading_message.get_style_context ().add_class ("h2");
 
-            var thanks_message = new Gtk.Label (_ ("Thanks for contributing to the Internet Archive and the Podcast Archival Project"));
+            var thanks_message = new Gtk.Label (
+                _ ("Thanks for contributing to the Internet Archive and the Podcast Archival Project")
+            );
             thanks_message.wrap = true;
             thanks_message.justify = Gtk.Justification.CENTER;
             thanks_message.max_width_chars = 50;
@@ -142,7 +148,7 @@ namespace Vocal {
                 notebook.next_page ();
                 var loop = new MainLoop ();
 
-                Utils.upload_to_internet_archive (episode.local_uri, episode_title_entry.text, podcast_name_entry.text, podcast_description_entry.buffer.text, (obj, res) => {
+                Utils.upload_to_internet_archive (episode.local_uri, episode_title_entry.text, podcast_name_entry.text, podcast_description_entry.buffer.text, (obj, res) => {  // vala-lint=line-length
                     bool success = Utils.upload_to_internet_archive.end (res);
                     if (success) {
                         spinner.active = false;
@@ -167,7 +173,9 @@ namespace Vocal {
                         upload_complete_image.show ();
                         uploading_message.set_text (_ ("Upload Failed"));
 
-                        thanks_message.set_text (_ ("Be sure to check your network connection and API keys, then try again later."));
+                        thanks_message.set_text (
+                            _ ("Be sure to check your network connection and API keys, then try again later.")
+                        );
                         upload_complete_image.set_from_icon_name ("face-confused-symbolic", Gtk.IconSize.DIALOG);
 
                         thanks_message.set_no_show_all (false);

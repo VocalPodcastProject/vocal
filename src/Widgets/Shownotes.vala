@@ -64,7 +64,10 @@ using Granite;
             controls_box.get_style_context ().add_class ("podcast-view-toolbar");
             controls_box.height_request = 30;
 
-            mark_as_played_button = new Gtk.Button.from_icon_name ("object-select-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            mark_as_played_button = new Gtk.Button.from_icon_name (
+                "object-select-symbolic",
+                Gtk.IconSize.SMALL_TOOLBAR
+            );
             mark_as_played_button.has_tooltip = true;
             mark_as_played_button.relief = Gtk.ReliefStyle.NONE;
             mark_as_played_button.tooltip_text = _ ("Mark this episode as played");
@@ -74,12 +77,18 @@ using Granite;
             mark_as_new_button.relief = Gtk.ReliefStyle.NONE;
             mark_as_new_button.tooltip_text = _ ("Mark this episode as new");
 
-            download_button = new Gtk.Button.from_icon_name (Utils.check_elementary () ? "browser-download-symbolic" : "document-save-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            download_button = new Gtk.Button.from_icon_name (
+                Utils.check_elementary () ? "browser-download-symbolic" : "document-save-symbolic",
+                Gtk.IconSize.SMALL_TOOLBAR
+            );
             download_button.has_tooltip = true;
             download_button.relief = Gtk.ReliefStyle.NONE;
             download_button.tooltip_text = _ ("Download episode");
 
-            share_button = new Gtk.Button.from_icon_name (Utils.check_elementary () ? "send-to-symbolic" : "emblem-shared-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            share_button = new Gtk.Button.from_icon_name (
+                Utils.check_elementary () ? "send-to-symbolic" : "emblem-shared-symbolic",
+                Gtk.IconSize.SMALL_TOOLBAR
+            );
             share_button.has_tooltip = true;
             share_button.relief = Gtk.ReliefStyle.NONE;
             share_button.tooltip_text = _ ("Share this episode");
@@ -103,7 +112,10 @@ using Granite;
                 return true;
             });
 
-            internet_archive_button = new Gtk.Button.from_icon_name ("document-send-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            internet_archive_button = new Gtk.Button.from_icon_name (
+                "document-send-symbolic",
+                Gtk.IconSize.SMALL_TOOLBAR
+            );
             internet_archive_button.relief = Gtk.ReliefStyle.NONE;
             internet_archive_button.tooltip_text = _ ("Upload to the Internet Archive");
             internet_archive_button.button_press_event.connect ((e) => {

@@ -102,7 +102,15 @@ namespace Vocal {
          * Sets the information for the current episode
          */
         public void set_info_title (string episode, string podcast_name) {
-            this.info_label.set_text ("<b>" + GLib.Markup.escape_text (episode) + "</b>" + " from " + "<b><i>" + GLib.Markup.escape_text (podcast_name) + "</i></b>");
+            this.info_label.set_text (
+                "<b>"
+                + GLib.Markup.escape_text (episode)
+                + "</b>"
+                + " from "
+                + "<b><i>"
+                + GLib.Markup.escape_text (podcast_name)
+                + "</i></b>"
+            );
             this.info_label.set_use_markup (true);
         }
 
@@ -151,7 +159,13 @@ namespace Vocal {
         /*
          * Sets the progress information for the current stream to be displayed
          */
-        public void set_progress (double progress, int mins_remaining, int secs_remaining, int mins_elapsed, int secs_elapsed) {
+        public void set_progress (
+            double progress,
+            int mins_remaining,
+            int secs_remaining,
+            int mins_elapsed,
+            int secs_elapsed
+        ) {
 
             scale.set_value (progress);
 

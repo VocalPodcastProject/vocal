@@ -309,41 +309,41 @@ namespace Vocal {
             }
         }
 
-        public signal void Seeked (int64 Position);
+        public signal void Seeked (int64 Position);  // vala-lint=naming-convention
 
-        public void Next () {
+        public void Next () {  // vala-lint=naming-convention
             next ();
         }
 
-        public void Previous () {
+        public void Previous () {  // vala-lint=naming-convention
             previous ();
         }
 
-        public void Pause () {
+        public void Pause () {  // vala-lint=naming-convention
             pause ();
         }
 
-        public void PlayPause () {
+        public void PlayPause () {  // vala-lint=naming-convention
             play_pause ();
         }
 
-        public void Stop () {
+        public void Stop () {  // vala-lint=naming-convention
             pause ();
         }
 
-        public void Play () {
+        public void Play () {  // vala-lint=naming-convention
             play ();
         }
 
-        public void Seek (int64 Offset) {
+        public void Seek (int64 Offset) {  // vala-lint=naming-convention
 
         }
 
-        public void SetPosition (string dobj, int64 Position) {
+        public void SetPosition (string dobj, int64 Position) {  // vala-lint=naming-convention
             Seeked (Position);
         }
 
-        public void OpenUri (string Uri) {
+        public void OpenUri (string Uri) {  // vala-lint=naming-convention
 
         }
 
@@ -466,11 +466,11 @@ namespace Vocal {
             }
         }
 
-        public void Quit () {
+        public void Quit () {  // vala-lint=naming-convention
             quit_requested ();
         }
 
-        public void Raise () {
+        public void Raise () {  // vala-lint=naming-convention
             raise_requiested ();
         }
     }

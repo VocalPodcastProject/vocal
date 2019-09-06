@@ -149,7 +149,7 @@ namespace Vocal {
             // Set up the title and details labels
             var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
             label_box.margin = 0;
-            title_label = new Gtk.Label ("<b>%s</b>".printf (GLib.Markup.escape_text (episode.title.replace ("%27", "'").replace ("&amp;", "&"))));
+            title_label = new Gtk.Label ("<b>%s</b>".printf (GLib.Markup.escape_text (episode.title.replace ("%27", "'").replace ("&amp;", "&"))));  // vala-lint=line-length
             title_label.set_use_markup (true);
             title_label.halign = Gtk.Align.START;
             title_label.set_property ("xalign", 0);

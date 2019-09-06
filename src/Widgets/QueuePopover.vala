@@ -19,7 +19,7 @@
 
 namespace Vocal {
     public class QueuePopover : Gtk.Popover {
-        public signal void update_queue (int oldPos, int newPos);
+        public signal void update_queue (int oldPos, int newPos);  // vala-lint=naming-convention
         public signal void move_up (Episode e);
         public signal void move_down (Episode e);
         public signal void remove_episode (Episode e);
@@ -107,12 +107,12 @@ namespace Vocal {
   }
 
     class QueueList : Gtk.ListBox {
-        public signal void update_queue (int oldPos, int newPos);
+        public signal void update_queue (int oldPos, int newPos);  // vala-lint=naming-convention
         public signal void remove_episode (Episode e);
 
         public Gee.ArrayList<QueueListRow> rows;
 
-        private const Gtk.TargetEntry targetEntries[] = {
+        private const Gtk.TargetEntry targetEntries[] = {  // vala-lint=naming-convention
           { "GTK_LIST_BOX_ROW", Gtk.TargetFlags.SAME_APP, 0 }
     };
 
@@ -189,27 +189,34 @@ namespace Vocal {
       return should_scroll;
     }
 
-    private void on_drag_data_received (Gdk.DragContext context, int x, int y, Gtk.SelectionData selection_data, uint target_type, uint time) {
-      QueueListRow target;
-      Gtk.Widget row;
-      QueueListRow source;
-      int newPos;
-      int oldPos;
+    private void on_drag_data_received (
+        Gdk.DragContext context,
+        int x,
+        int y,
+        Gtk.SelectionData selection_data,
+        uint target_type,
+        uint time
+    ) {
+        QueueListRow target;
+        Gtk.Widget row;
+        QueueListRow source;
+        int newPos;
+        int oldPos;
 
-      target = (QueueListRow) get_row_at_y (y);
+        target = (QueueListRow) get_row_at_y (y);
 
-      newPos = target.get_index ();
-      row = ((Gtk.Widget[]) selection_data.get_data ())[0];
-      source = (QueueListRow) row.get_ancestor (typeof (QueueListRow));
-      oldPos = source.get_index ();
+        newPos = target.get_index ();
+        row = ((Gtk.Widget[]) selection_data.get_data ())[0];
+        source = (QueueListRow) row.get_ancestor (typeof (QueueListRow));
+        oldPos = source.get_index ();
 
-      if (source == target) {
-        return;
-      }
+        if (source == target) {
+            return;
+        }
 
-      remove (source);
-      insert (source, newPos);
-      update_queue (oldPos, newPos);
+        remove (source);
+        insert (source, newPos);
+        update_queue (oldPos, newPos);
     }
     }
 }

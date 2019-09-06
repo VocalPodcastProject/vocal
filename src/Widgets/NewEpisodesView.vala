@@ -26,7 +26,7 @@ namespace Vocal {
 
         private Controller controller;
         private ListBox new_episodes_listbox;
-        GLib.ListStore episodeListModel = new GLib.ListStore ( typeof (Episode) );
+        GLib.ListStore episodeListModel = new GLib.ListStore ( typeof (Episode) );  // vala-lint=naming-convention
         public signal void go_back ();
         public signal void play_episode_requested (Episode episode);
         public signal void add_all_new_to_queue (GLib.List<Episode> episodes);

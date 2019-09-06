@@ -80,7 +80,7 @@ namespace Vocal {
             // Create a label to display the number of new episodes
             count_label = new Gtk.Label ("");
             count_label.use_markup = true;
-            count_label.set_alignment (1,0);
+            count_label.set_alignment (1, 0);
             count_label.get_style_context ().add_class ("coverart-overlay");
             count_label.halign = Gtk.Align.END;
             count_label.valign = Gtk.Align.START;
@@ -134,7 +134,13 @@ namespace Vocal {
                 int new_width = COVER_SIZE;
                 int offset = (new_height - new_width) / 2;
 
-                cover_image = new Gdk.Pixbuf.subpixbuf (cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR), 0, offset, COVER_SIZE, COVER_SIZE);
+                cover_image = new Gdk.Pixbuf.subpixbuf (
+                    cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR),
+                    0,
+                    offset,
+                    COVER_SIZE,
+                    COVER_SIZE
+                );
 
             } else if (cover_image.height < cover_image.width) {
 
@@ -142,7 +148,13 @@ namespace Vocal {
                 int new_width = COVER_SIZE * cover_image.width / cover_image.height;
                 int offset = (new_width - new_height) / 2;
 
-                cover_image = new Gdk.Pixbuf.subpixbuf (cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR), offset, 0, COVER_SIZE, COVER_SIZE);
+                cover_image = new Gdk.Pixbuf.subpixbuf (
+                    cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR),
+                    offset,
+                    0,
+                    COVER_SIZE,
+                    COVER_SIZE
+                );
             }
 
             return cover_image;

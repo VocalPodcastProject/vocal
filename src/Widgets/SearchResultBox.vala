@@ -41,7 +41,12 @@ namespace Vocal {
          * Constructor for a box that contains a search result. SRs can be for a library episode, a library podcast, or
          * content on the iTunes Store
          */
-        public SearchResultBox (Podcast? podcast, Episode? episode, string? details = null, string? subscribe_url = null) {
+        public SearchResultBox (
+            Podcast? podcast,
+            Episode? episode,
+            string? details = null,
+            string? subscribe_url = null
+        ) {
 
             this.episode = episode;
             this.podcast = podcast;
@@ -62,7 +67,12 @@ namespace Vocal {
 
             // Do we only have a podcast?
             if (episode == null) {
-                var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/needleandthread/vocal/missing.png", 32, 32, true);
+                var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale (
+                    "/com/github/needleandthread/vocal/missing.png",
+                    32,
+                    32,
+                    true
+                );
                 var image = new Gtk.Image.from_pixbuf (missing_pixbuf);
                 image.margin = 0;
                 image.expand = false;
@@ -82,7 +92,7 @@ namespace Vocal {
                 label.set_property ("xalign", 0);
                 label.ellipsize = Pango.EllipsizeMode.END;
                 label.max_width_chars = 30;
-                content_box.pack_start (label,true, true, 0);
+                content_box.pack_start (label, true, true, 0);
 
             // If not, then we have an episode, which requires more info to be displayed
             } else {
@@ -119,7 +129,10 @@ namespace Vocal {
 
             // Show a details button
             if (details != null) {
-                var details_button = new Gtk.Button.from_icon_name (Utils.check_elementary () ? "help-info-symbolic" : "system-help-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+                var details_button = new Gtk.Button.from_icon_name (
+                    Utils.check_elementary () ? "help-info-symbolic" : "system-help-symbolic",
+                    Gtk.IconSize.SMALL_TOOLBAR
+                );
                 details_button.relief = Gtk.ReliefStyle.NONE;
                 summary_label = new Gtk.Label ("");
                 details_button.tooltip_text = _ ("Summary");
@@ -159,7 +172,10 @@ namespace Vocal {
                 subscribe_button.tooltip_text = _ ("Subscribe to podcast");
 
                 subscribe_button.clicked.connect (() => {
-                    var working_image = new Gtk.Image.from_icon_name ("process-working-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+                    var working_image = new Gtk.Image.from_icon_name (
+                        "process-working-symbolic",
+                        Gtk.IconSize.SMALL_TOOLBAR
+                    );
                     subscribe_button.image = working_image;
                     subscribe_to_podcast (subscribe_url);
                 });

@@ -59,7 +59,7 @@ namespace Vocal {
                     found_podcast_title = true;
                     i++;
                 }
-                else if (current == "new-feed-url"&& found_podcast_link == false) {
+                else if (current == "new-feed-url" && found_podcast_link == false) {
 
                     i++;
                     podcast.feed_uri = queue[i];
@@ -75,10 +75,10 @@ namespace Vocal {
 
                     // There are six fields, but we can't assume any order
                     for (int n = 0; n < 6; n++) {
-                        if (queue[i+n] == "application/rss+xml") {
+                        if (queue[i + n] == "application/rss+xml") {
                             store_ref = true;
                         }
-                        if (queue[i+n] == "href") {
+                        if (queue[i + n] == "href") {
                             href = queue[i + n + 1];
                         }
                     }
@@ -358,7 +358,7 @@ namespace Vocal {
         /*
          * Parses an OPML file and returns an array listing each feed discovered within
          */
-        public string[] parse_feeds_from_OPML (string path) throws VocalLibraryError {
+        public string[] parse_feeds_from_OPML (string path) throws VocalLibraryError {  // vala-lint=naming-convention
             var feeds = new Gee.ArrayList<string> ();
 
             queue.clear ();
@@ -368,7 +368,9 @@ namespace Vocal {
 
             // Make sure that it didn't return a null reference
             if (doc == null) {
-                throw new VocalLibraryError.IMPORT_ERROR (_ ("Selected file doesn't appear to contain podcast subscriptions."));
+                throw new VocalLibraryError.IMPORT_ERROR (
+                    _ ("Selected file doesn't appear to contain podcast subscriptions.")
+                );
             }
 
             // Get the root node
@@ -476,7 +478,9 @@ namespace Vocal {
 
                 // Make sure that it didn't return a null reference
                 if (doc == null) {
-                    throw new VocalUpdateError.NETWORK_ERROR ("Error opening file %s. Parser returned null.".printf (path));
+                    throw new VocalUpdateError.NETWORK_ERROR (
+                        "Error opening file %s. Parser returned null.".printf (path)
+                    );
                 }
             }
 
@@ -496,7 +500,7 @@ namespace Vocal {
             parse_node (root);
 
             if (root->name == "feed") {
-                new_episodes = create_podcast_from_queue_atom_new_episodes (root,podcast,previous_newest_episode);
+                new_episodes = create_podcast_from_queue_atom_new_episodes (root, podcast, previous_newest_episode);
             } else {
                 int i = 0;
 
@@ -617,7 +621,11 @@ namespace Vocal {
     /*
      * This method collects the episodes from atom xml file.
      */
-    private Gee.ArrayList<Episode> create_podcast_from_queue_atom_new_episodes ( Xml.Node* node,Podcast podcast,Episode? previous_newest_episode) {
+    private Gee.ArrayList<Episode> create_podcast_from_queue_atom_new_episodes (
+        Xml.Node* node,
+        Podcast podcast,
+        Episode? previous_newest_episode
+    ) {
 
         bool previous_found = false;
         Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode> (); //array of new episodes
@@ -647,11 +655,11 @@ namespace Vocal {
                         entry.set_datetime_from_pubdate ();
                         break;
                     case "link":
-                        for (Xml.Attr* propEntry = iterEntry->properties; propEntry != null; propEntry = propEntry->next) {
+                        for (Xml.Attr* propEntry = iterEntry->properties; propEntry != null; propEntry = propEntry->next) {  // vala-lint=line-length
                             string attr_name = propEntry->name;
                             if (attr_name == "href") {
                                 entry.uri=propEntry->children->content;
-                            } else if (attr_name == "type" && podcast!= null) {
+                            } else if (attr_name == "type" && podcast != null) {
                                 podcast.content_type = MediaType.UNKNOWN;
 
                                 if (propEntry->children->content.contains ("audio/")) {
@@ -671,8 +679,8 @@ namespace Vocal {
             episodes.add (entry);
         }
 
-        for (int i=episodes.size;i>0 && !previous_found;i--) {
-            Episode entry=episodes[i-1];
+        for (int i=episodes.size; i > 0 && !previous_found; i--) {
+            Episode entry=episodes[i - 1];
 
             if (previous_newest_episode != null) {
                 if (entry.title == previous_newest_episode.title.replace ("%27", "'")) {
@@ -727,7 +735,7 @@ namespace Vocal {
             }
         }
 
-        Gee.ArrayList<Episode> episodes = create_podcast_from_queue_atom_new_episodes (node,podcast,null);
+        Gee.ArrayList<Episode> episodes = create_podcast_from_queue_atom_new_episodes (node, podcast, null);
 
         foreach (Episode episode in episodes) {
             podcast.episodes.add (episode);

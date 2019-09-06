@@ -37,7 +37,14 @@ namespace Vocal {
         private Gtk.Label summary_label;
         private Gtk.Box button_box;
 
-        public DirectoryArt (string url, string title, string? artist, string? summary, string artworkUrl170, bool? in_library = false) {
+        public DirectoryArt (  // vala-lint=naming-convention
+            string url,
+            string title,
+            string? artist,
+            string? summary,
+            string artworkUrl170,  // vala-lint=naming-convention
+            bool? in_library = false
+        ) {
 
             this.set_orientation (Gtk.Orientation.VERTICAL);
 
@@ -64,7 +71,10 @@ namespace Vocal {
             artist_label.set_property ("xalign", 0);
             label_box.pack_start (artist_label, false, false, 5);
 
-            var details_button = new Gtk.Button.from_icon_name (Utils.check_elementary () ? "help-info-symbolic" : "dialog-information-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            var details_button = new Gtk.Button.from_icon_name (
+                Utils.check_elementary () ? "help-info-symbolic" : "dialog-information-symbolic",
+                Gtk.IconSize.SMALL_TOOLBAR
+            );
             details_button.valign = Gtk.Align.START;
             details_button.tooltip_text = _ ("Details");
             if (Utils.check_elementary ())
@@ -123,7 +133,12 @@ namespace Vocal {
             var bigartwork = artworkUrl170.replace ("170", "600");
 
             // Load the album artwork
-            var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale ("/com/github/needleandthread/vocal/missing.png", 200, 200, true);
+            var missing_pixbuf = new Gdk.Pixbuf.from_resource_at_scale (
+                "/com/github/needleandthread/vocal/missing.png",
+                200,
+                200,
+                true
+            );
             var image = new Gtk.Image.from_pixbuf (missing_pixbuf);
             image.margin = 0;
             image.expand = false;

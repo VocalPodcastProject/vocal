@@ -667,13 +667,9 @@ namespace Vocal {
                 return;
             }
 
-            ListBoxRow new_row = listbox.get_selected_row ();
-            if (controller.settings.newest_episodes_first) {
-                current_episode = boxes[new_row.get_index ()].episode;
-            } else {
-                int new_index = boxes.size - new_row.get_index () - 1;
-                current_episode = boxes[new_index].episode;
-            }
+            ListBoxRow new_row = listbox.get_selected_row();
+
+            current_episode = boxes[new_row.get_index()].episode;
 
             shownotes.episode = current_episode;
             shownotes.set_html (current_episode.description != " (null)" ? Utils.html_to_markup (current_episode.description) : _ ("No show notes available."));  // vala-lint=line-length
@@ -743,27 +739,24 @@ namespace Vocal {
                 foreach (Episode current_episode in podcast.episodes) {
 
                     EpisodeDetailBox current_episode_box = new EpisodeDetailBox (current_episode, controller, false);
-                    boxes.add (current_episode_box);
 
+                    if(controller.settings.newest_episodes_first) {
+                        boxes.add(current_episode_box);
+                    } else {
+                        boxes.insert(0, current_episode_box);
+                    }
+                    
                     // Determine whether or not the episode has been played
                     if (current_episode.status == EpisodeStatus.UNPLAYED) {
                         unplayed_count++;
                     }
                 }
 
-                if (controller.settings.newest_episodes_first) {
-                    foreach (EpisodeDetailBox box in boxes) {
-                        listbox.add (box);
-                        box.show_all ();
-                    }
-                } else {
-                    foreach (EpisodeDetailBox box in boxes) {
-                        listbox.prepend (box);
-                        box.show_all ();
-                    }
+                foreach (EpisodeDetailBox box in boxes) {
+                    listbox.add (box);
+                    box.show_all ();
                 }
-
-
+                
             } else {
                 // Otherwise, simply create a new label to tell user that the feed is empty
                 var empty_label = new Gtk.Label (_ ("No episodes available."));

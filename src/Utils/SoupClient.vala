@@ -14,35 +14,34 @@ public class SoupClient {
         check_response_headers (message);
 
         return (string) message.response_body.data;
-
     }
 
     public InputStream request (HttpMethod method, string url) throws Error {
-        if (!valid_http_uri(url)) {
-            throw new PublishingError.PROTOCOL_ERROR("%s is not a valid URI. Should be http or https", url);
+        if (!valid_http_uri (url)) {
+            throw new PublishingError.PROTOCOL_ERROR ("%s is not a valid URI. Should be http or https", url);
         }
 
         var message = new Soup.Message (method.to_string (), url);
 
         InputStream stream = soup_session.send (message);
 
-        check_response_headers(message);
+        check_response_headers (message);
 
         return stream;
     }
 
-    public static bool valid_http_uri(string url) {
-        return url.index_of("http://") == 0 || url.index_of("https://") == 0;
+    public static bool valid_http_uri (string url) {
+        return url.index_of ("http://") == 0 || url.index_of ("https://") == 0;
     }
 
-    public static bool check_connection() {
+    public static bool check_connection () {
         var uri = "http://www.needleandthread.co";
 
         try {
-            SoupClient soup_client = new SoupClient();
-            soup_client.request_as_string(HttpMethod.GET, uri);
-        } catch(Error e) {
-            warning(e.message);
+            SoupClient soup_client = new SoupClient ();
+            soup_client.request_as_string (HttpMethod.GET, uri);
+        } catch (Error e) {
+            warning (e.message);
             return false;
         }
 
@@ -58,19 +57,31 @@ public class SoupClient {
 
             case Soup.Status.CANT_RESOLVE:
             case Soup.Status.CANT_RESOLVE_PROXY:
-                throw new PublishingError.NO_ANSWER ("Unable to resolve %s (error code %u)", message.get_uri().to_string (false), message.status_code);
+                throw new PublishingError.NO_ANSWER (
+                    "Unable to resolve %s (error code %u)",
+                    message.get_uri ().to_string (false),
+                    message.status_code
+                );
 
             case Soup.Status.CANT_CONNECT:
             case Soup.Status.CANT_CONNECT_PROXY:
-                throw new PublishingError.NO_ANSWER ("Unable to connect to %s (error code %u)", message.get_uri().to_string (false), message.status_code);
+                throw new PublishingError.NO_ANSWER (
+                    "Unable to connect to %s (error code %u)",
+                    message.get_uri ().to_string (false),
+                    message.status_code
+                );
 
             default:
                 // status codes below 100 are used by Soup, 100 and above are defined HTTP codes
                 if (message.status_code >= 100) {
                     throw new PublishingError.NO_ANSWER ("Service %s returned HTTP status code %u %s",
-                    message.get_uri().to_string (false), message.status_code, message.reason_phrase);
+                    message.get_uri ().to_string (false), message.status_code, message.reason_phrase);
                 } else {
-                    throw new PublishingError.NO_ANSWER ("Failure communicating with %s (error code %u)", message.get_uri().to_string (false), message.status_code);
+                    throw new PublishingError.NO_ANSWER (
+                        "Failure communicating with %s (error code %u)",
+                        message.get_uri ().to_string (false),
+                        message.status_code
+                    );
                 }
         }
 

@@ -28,27 +28,27 @@ public class VocalSettings : Granite.Services.Settings {
     public bool dark_mode_enabled { get; set; }
     public bool newest_episodes_first { get; set; }
     public bool keep_playing_in_background { get; set; }
-    
+
     public int update_interval { get; set; }
     public int window_width { get; set; }
     public int window_height { get; set; }
     public int sidebar_width {get; set; }
     public int fast_forward_seconds { get; set; }
     public int rewind_seconds { get; set;}
-    
+
     public string library_location { get; set; }
     public string last_played_media { get; set; }
     public string itunes_store_country { get; set; }
     public string archive_access_key { get; set; }
     public string archive_secret_key { get; set; }
     
-    private VocalSettings() {
-        base("com.github.needleandthread.vocal");
+    private VocalSettings () {
+        base ("com.github.needleandthread.vocal");
     }
 
-    public static VocalSettings get_default_instance() {
-        if(_default_instance == null)
-            _default_instance = new VocalSettings();
+    public static VocalSettings get_default_instance () {
+        if (_default_instance == null)
+            _default_instance = new VocalSettings ();
 
         return _default_instance;
     }

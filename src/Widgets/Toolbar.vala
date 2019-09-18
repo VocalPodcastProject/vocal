@@ -97,8 +97,6 @@ namespace Vocal {
             volume_button = new Gtk.Button.from_icon_name ("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             volume_button.relief = Gtk.ReliefStyle.NONE;
 
-            volume_button = new Gtk.Button.from_icon_name ("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-
             playlist_button = new Gtk.Button.from_icon_name ("media-playlist-consecutive-symbolic");
             playlist_button.tooltip_text = _ ("Coming up next");
             playlist_button.clicked.connect (() => {

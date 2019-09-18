@@ -8,14 +8,13 @@ public class SoupClient {
     }
 
     public string request_as_string(HttpMethod method, string url) throws Error {
-        var data_stream = new DataInputStream(request(method, url));
-        var builder = new StringBuilder ();
+        var message = new Soup.Message (method.to_string (), url);
 
-        for (string line = data_stream.read_line_utf8(); line != null; line = data_stream.read_line_utf8()) {
-            builder.append(line);
-        }
+        soup_session.send_message (message);
+        check_response_headers (message);
 
-        return builder.str;
+        return (string) message.response_body.data;
+
     }
 
     public InputStream request (HttpMethod method, string url) throws Error {

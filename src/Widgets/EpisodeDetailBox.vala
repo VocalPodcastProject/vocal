@@ -223,8 +223,10 @@ namespace Vocal {
          * Removes the download button from the box
          */
         public void hide_download_button () {
-            download_button.set_no_show_all (true);
-            download_button.hide ();
+            if (download_button != null) {
+                download_button.set_no_show_all (true);
+                download_button.hide ();
+            }
             show_all ();
         }
 

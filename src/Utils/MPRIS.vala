@@ -213,7 +213,7 @@ namespace Vocal {
                                   "/org/mpris/MediaPlayer2",
                                   "org.freedesktop.DBus.Properties",
                                   "PropertiesChanged",
-                                  new Variant (" (sa{sv}as)",
+                                  new Variant ("(sa{sv}as)",
                                              INTERFACE_NAME,
                                              builder,
                                              invalidated_builder)

@@ -23,6 +23,7 @@ Thanks for helping make Vocal even better!
 -->
 
 ## Prerequisites
+<!--Tip for new contributors: place an x in the open bracket-->
 - [ ] I have searched the Issues list for open and closed issues and believe this is a unique, currently unreported bug.
 
 ## Describe the bug
@@ -51,7 +52,9 @@ Please share as many of the following details as possible:
 * **Desktop environment**:
 
 Please check the applicable option below:
-<--Place an x in the open brackets for the correct option-->
+
+<!--Tip for new contributors: place an x in the open bracket beside of the correct option-->
+
 - [ ] I'm using the latest version from git that I've manually compiled
 - [ ] I'm using the latest version of the Flatpak, downloaded from Flathub.org
 - [ ] I'm using the latest version available from AppCenter

@@ -25,6 +25,7 @@ Thanks for helping make Vocal even better!
 -->
 
 ## Prerequisites
+<!--Tip for new contributors: place an x in the open bracket-->
 - [ ] I have searched the Issues list for open and closed issues and believe this is a unique, newly-requested feature.
 
 ## Feature

@@ -51,7 +51,7 @@ Please share as many of the following details as possible:
 * **Desktop environment**:
 
 Please check the applicable option below:
--->
+<--Place an x in the open brackets for the correct option-->
 - [ ] I'm using the latest version from git that I've manually compiled
 - [ ] I'm using the latest version of the Flatpak, downloaded from Flathub.org
 - [ ] I'm using the latest version available from AppCenter

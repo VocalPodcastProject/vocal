@@ -22,5 +22,7 @@ install:
 
 script:
   - houston ci
-    --name-domain com.github.needle-and-thread.vocal
+    --name-domain com.github.needleandthread.vocal
     --name-human Vocal
+
+  - docker run -v $(pwd)/src:/app valalang/lint

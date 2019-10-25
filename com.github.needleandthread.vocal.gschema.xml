@@ -1,5 +1,5 @@
 <schemalist>
-	<schema id="com.github.needle-and-thread.vocal" path="/com/github/needle-and-thread/vocal/" gettext-domain="com.github.needle-and-thread.vocal">
+	<schema id="com.github.needleandthread.vocal" path="/com/github/needleandthread/vocal/" gettext-domain="com.github.needleandthread.vocal">
 		
 		<key name="auto-download" type="b">
 			<default>true</default>
@@ -105,7 +105,15 @@
 				When enabled, Vocal will show an extra label beneath the cover art in the library with the name of the podcast.
 			</description>
 		</key>
-		
+
+		<key name="dark-mode-enabled" type="b">
+			<default>false</default>
+			<summary>Whether or not Vocal should use the dark theme instead of the light theme.</summary>
+			<description>
+				When enabled, Vocal will use the dark version of the GTK theme and modify the headerbar color if on elementary OS.
+			</description>
+		</key>
+    
 		<key name="archive-access-key" type="s">
 			<default>""</default>
 			<summary>Your archive.org accounts S3 access key</summary>
@@ -128,6 +136,16 @@
 			<description>
 				When set to true, Vocal will show the newest episodes at the top of episode lists. When false, the oldest
 				will be at the top.
+			</description>
+		</key>
+		
+		<key name="keep-playing-in-background" type="b">
+			<default>true</default>
+			<summary>Whether or not to keep Vocal playing in the background</summary>
+			<description>
+				When set to true, Vocal will keep running and playing in the background when the
+				close button is pressed. When set to false, Vocal will exit the program when
+				close is pressed.
 			</description>
 		</key>
 	</schema>

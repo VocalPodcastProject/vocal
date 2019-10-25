@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gresources>
-  <gresource prefix="/com/github/needle-and-thread/vocal">
+  <gresource prefix="/com/github/needleandthread/vocal">
     <file compressed="true" alias="missing.png">../icons/assets/vocal-missing.png</file>
     <file compressed="true" alias="creativecommons-light.png">../icons/assets/creativecommons-light.png</file>
     <file compressed="true" alias="creativecommons-dark.png">../icons/assets/creativecommons-dark.png</file>   

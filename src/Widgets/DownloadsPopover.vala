@@ -27,93 +27,93 @@ namespace Vocal {
     public class DownloadsPopover : Gtk.Popover {
 
 
-        public signal void 	all_downloads_complete();		// signal that gets fired when all downloads are finished
+        public signal void all_downloads_complete ();   // signal that gets fired when all downloads are finished
 
-        private Gtk.ListBox listbox;						// displays the download details boxes
-        private Gtk.Label 	downloads_complete;				// a label that gets shown when all downloads are finished
+        private Gtk.ListBox listbox;                    // displays the download details boxes
+        private Gtk.Label downloads_complete;           // a label that gets shown when all downloads are finished
 
-        public ArrayList<DownloadDetailBox> downloads;		// stores the download detail boxes
+        public ArrayList<DownloadDetailBox> downloads;  // stores the download detail boxes
 
         /*
          * Constructor for a downloads popover that is relative to a provided parent
          */
-        public DownloadsPopover(Gtk.Widget parent) {
-            this.set_relative_to(parent);
-            this.listbox = new Gtk.ListBox();
+        public DownloadsPopover (Gtk.Widget parent) {
+            this.set_relative_to (parent);
+            this.listbox = new Gtk.ListBox ();
             listbox.selection_mode = SelectionMode.NONE;
             this.width_request = 425;
 
-            downloads = new ArrayList<DownloadDetailBox>();
-            var scroll = new Gtk.ScrolledWindow(null, null);
+            downloads = new ArrayList<DownloadDetailBox> ();
+            var scroll = new Gtk.ScrolledWindow (null, null);
             scroll.hscrollbar_policy = Gtk.PolicyType.NEVER;
             scroll.min_content_height = 200;
 
-            downloads_complete = new Gtk.Label(_("No Active Downloads"));
-            downloads_complete.get_style_context ().add_class("h3");
+            downloads_complete = new Gtk.Label (_ ("No Active Downloads"));
+            downloads_complete.get_style_context ().add_class ("h3");
             downloads_complete.sensitive = false;
             downloads_complete.margin = 12;
-            listbox.prepend(downloads_complete);
+            listbox.prepend (downloads_complete);
 
-            this.add(scroll);
-            scroll.add(listbox);
+            this.add (scroll);
+            scroll.add (listbox);
         }
 
         /*
          * Adds a download to the popover
          */
-        public void add_download(DownloadDetailBox details) {
+        public void add_download (DownloadDetailBox details) {
 
-            if(downloads.size < 1) {
-                hide_downloads_complete();
+            if (downloads.size < 1) {
+                hide_downloads_complete ();
             }
 
-            details.ready_for_removal.connect(remove_details_box);
-            details.cancel_requested.connect(() => {
-                remove_details_box(details);
+            details.ready_for_removal.connect (remove_details_box);
+            details.cancel_requested.connect (() => {
+                remove_details_box (details);
             });
 
             // Add the new download to the queue and listbox
-            downloads.add(details);
-            listbox.prepend(details);
-            details.parent.get_style_context().add_class("download-detail-box");
-            listbox.show_all();
+            downloads.add (details);
+            listbox.prepend (details);
+            details.parent.get_style_context ().add_class ("download-detail-box");
+            listbox.show_all ();
         }
 
 
         /*
-		 * Hides the downloads complete label
-		 */
-        private void hide_downloads_complete() {
-            downloads_complete.set_no_show_all(true);
-            downloads_complete.hide();
-            downloads_complete.show_all();
+         * Hides the downloads complete label
+         */
+        private void hide_downloads_complete () {
+            downloads_complete.set_no_show_all (true);
+            downloads_complete.hide ();
+            downloads_complete.show_all ();
         }
 
 
         /*
          * Removes a download from the popover
          */
-        private void remove_details_box(DownloadDetailBox box) {
-            box.parent.get_style_context().remove_class("download-detail-box");
-            downloads.remove(box);
-            box.destroy();
+        private void remove_details_box (DownloadDetailBox box) {
+            box.parent.get_style_context ().remove_class ("download-detail-box");
+            downloads.remove (box);
+            box.destroy ();
 
-            if(downloads.size < 1) {
-                show_downloads_complete();
+            if (downloads.size < 1) {
+                show_downloads_complete ();
 
                 // If the popover is not currently showing, send a signal to hide the menuitem
-                if(this.visible != true)
-                  all_downloads_complete();
+                if (this.visible != true)
+                  all_downloads_complete ();
             }
         }
 
 
-		/*
-		 * Shows the downloads complete label
-		 */
-        private void show_downloads_complete() {
-            downloads_complete.set_no_show_all(false);
-            downloads_complete.show_all();
+        /*
+         * Shows the downloads complete label
+         */
+        private void show_downloads_complete () {
+            downloads_complete.set_no_show_all (false);
+            downloads_complete.show_all ();
         }
     }
 }

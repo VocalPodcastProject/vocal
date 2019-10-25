@@ -1,358 +1,754 @@
-# Ukrainian translation for vocal
-# Copyright (c) 2014 Rosetta Contributors and Canonical Ltd 2014
-# This file is distributed under the same license as the vocal package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
-#
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Paul S <paul.smbg@gmail.com>, 2019
 msgid ""
 msgstr ""
-"Project-Id-Version: vocal\n"
-"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
-"POT-Creation-Date: 2015-04-04 22:25-0400\n"
-"PO-Revision-Date: 2015-04-06 16:59+0000\n"
-"Last-Translator: Nathan Dyer <Unknown>\n"
-"Language-Team: Ukrainian <uk@li.org>\n"
+"Project-Id-Version: Vocal\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-27 06:18-0400\n"
+"PO-Revision-Date: 2019-04-07 14:37+0000\n"
+"Last-Translator: Paul S <paul.smbg@gmail.com>\n"
+"Language-Team: Ukrainian (http://www.transifex.com/needle-and-thread/vocal/language/uk/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2015-04-07 05:31+0000\n"
-"X-Generator: Launchpad (build 17413)\n"
+"Language: uk\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 
-#: ../src/Utils/FeedParser.vala:288
-msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr "Обраний файл не містить підписку на подкаст."
+#: ../src/Controller.vala:403 ../src/Controller.vala:407
+msgid "Pause"
+msgstr "Пауза"
 
-#: ../src/Utils/FeedParser.vala:299
-msgid "Selected file seems to be empty."
-msgstr "Обраний файл порожен."
+#: ../src/Controller.vala:430 ../src/Controller.vala:434
+#: ../src/Widgets/EpisodeDetailBox.vala:125
+#: ../src/Widgets/EpisodeDetailBox.vala:318 ../src/Widgets/Toolbar.vala:225
+#: ../src/Widgets/VideoControls.vala:40
+msgid "Play"
+msgstr "Відтворення"
 
-#: ../src/Library.vala:152
-msgid "Unable to add podcast"
-msgstr ""
+#: ../src/Controller.vala:496
+msgid "Adding new podcast: <b>"
+msgstr "Додавання нових подкастів: <b>"
 
-#: ../src/Vocal.vala:59
-msgid "translator-credits"
-msgstr ""
-"Launchpad Contributions:\n"
-"  Alexander Vasilyev https://launchpad.net/~mizabrik\n"
-"  Nathan Dyer https://launchpad.net/~nathandyer"
+#: ../src/Controller.vala:555
+msgid ""
+"Please make sure you selected the correct feed and that it is still "
+"available."
+msgstr "Переконайтеся, що вибрано правильний канал і що він доступний."
 
-#: ../src/MainWindow.vala:194
-msgid "View show notes"
-msgstr ""
+#: ../src/Controller.vala:557
+msgid ""
+"There seems to be a problem with your internet connection. Make sure you are"
+" online and then try again."
+msgstr "Схоже, існує проблема з підключенням до інтернету. Переконайтеся, що ви онлайн, а потім повторіть спробу."
 
-#: ../src/MainWindow.vala:237
-msgid "Return to library view"
-msgstr ""
+#: ../src/Controller.vala:562
+msgid "Error Adding Podcast"
+msgstr "Помилка додавання подкасту"
 
-#: ../src/MainWindow.vala:489
+#: ../src/Controller.vala:604
+msgid "Fresh content has been added to your library."
+msgstr "Свіжий вміст додано до вашої бібліотеки."
+
+#: ../src/Library.vala:760
+msgid "'%s' from '%s' has finished downloading."
+msgstr "'%s' з '%s' завантажилися."
+
+#: ../src/Library.vala:761
+msgid "Episode Download Complete"
+msgstr "Завантаження епізоду завершено"
+
+#: ../src/Library.vala:766
+msgid "Downloads Complete"
+msgstr "Завантаження завершено"
+
+#: ../src/Library.vala:766
+msgid "New episodes have been downloaded."
+msgstr "Завантажено нові епізоди."
+
+#: ../src/MainWindow.vala:92
+msgid "Vocal"
+msgstr "Vocal"
+
+#: ../src/MainWindow.vala:264 ../src/MainWindow.vala:267
+#: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
+#: ../src/Widgets/SearchResultsView.vala:68
+msgid "Return to Library"
+msgstr "Повернутися до бібліотеки"
+
+#: ../src/MainWindow.vala:298
 msgid "Welcome to Vocal"
 msgstr "Ласкаво просимо у Vocal"
 
-#: ../src/MainWindow.vala:489
+#: ../src/MainWindow.vala:298
 msgid "Build Your Library By Adding Podcasts"
 msgstr "Створіть бібліотеку, додавши подкаст"
 
-#: ../src/MainWindow.vala:490
-msgid "Add a New Feed"
-msgstr "Додати"
+#: ../src/MainWindow.vala:299
+msgid "Browse Podcasts"
+msgstr "Переглянути подкасти"
 
-#: ../src/MainWindow.vala:490
+#: ../src/MainWindow.vala:300
+msgid "Browse through podcasts and choose some to add to your library."
+msgstr "Перегляньте доступні подкасти та додайте їх до вашої бібліотеки."
+
+#: ../src/MainWindow.vala:301
+msgid "Add a New Feed"
+msgstr "Додати новий канал"
+
+#: ../src/MainWindow.vala:301
 msgid "Provide the web address of a podcast feed."
 msgstr "Вкажіть веб-адрессу подкасту."
 
-#: ../src/MainWindow.vala:493
+#: ../src/MainWindow.vala:302
 msgid "Import Subscriptions"
 msgstr "Імпортувати підписки."
 
-#: ../src/MainWindow.vala:494
+#: ../src/MainWindow.vala:303
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
-msgstr ""
-"Якщо ви экспортували підписки з іншого менеджера подкастов, імпортуйте їх "
-"тут."
+msgstr "Якщо ви експортували підписки з іншого менеджера подкастів, імпортуйте їх тут."
 
-#: ../src/MainWindow.vala:495
-msgid "Check Out the Vocal Starter Pack…"
-msgstr ""
-
-#: ../src/MainWindow.vala:495
-msgid ""
-"New to podcasting? Check out our starter pack. Select individual podcasts, "
-"or download the entire pack."
-msgstr ""
-
-#: ../src/MainWindow.vala:526
-msgid "Export Subscriptions…"
-msgstr "Экспортувати підписки…"
-
-#: ../src/MainWindow.vala:538 ../src/Widgets/SettingsDialog.vala:50
-msgid "Preferences"
-msgstr "Налаштування"
-
-#: ../src/MainWindow.vala:546
-msgid "Check Out The Vocal Starter Pack…"
-msgstr ""
-
-#: ../src/MainWindow.vala:554
-msgid "Donate…"
-msgstr ""
-
-#: ../src/MainWindow.vala:574
-msgid "Add new podcasts to the library"
-msgstr ""
-
-#: ../src/MainWindow.vala:580
-msgid "Add Podcast Feed"
-msgstr ""
-
-#: ../src/MainWindow.vala:588
-msgid "Import Subscriptions…"
-msgstr ""
-
-#: ../src/MainWindow.vala:671
-msgid "All Podcasts"
-msgstr ""
-
-#: ../src/MainWindow.vala:672
-msgid "Audio"
-msgstr ""
-
-#: ../src/MainWindow.vala:673
-msgid "Video"
-msgstr ""
-
-#: ../src/MainWindow.vala:687 ../src/MainWindow.vala:1164
-#: ../src/MainWindow.vala:1168 ../src/Widgets/VideoControls.vala:40
-#: ../src/Widgets/EpisodeDetailBox.vala:115
-#: ../src/Widgets/EpisodeDetailBox.vala:315
-msgid "Play"
-msgstr ""
-
-#: ../src/MainWindow.vala:693 ../src/MainWindow.vala:703
-msgid "Fast forward %d seconds"
-msgstr ""
-
-#: ../src/MainWindow.vala:699 ../src/MainWindow.vala:704
-msgid "Rewind %d seconds"
-msgstr ""
-
-#: ../src/MainWindow.vala:709
-msgid "Check for new episodes"
-msgstr ""
-
-#: ../src/MainWindow.vala:737
-msgid "Downloads"
-msgstr ""
-
-#: ../src/MainWindow.vala:1202 ../src/MainWindow.vala:1206
-msgid "Pause"
-msgstr ""
-
-#: ../src/MainWindow.vala:1327 ../src/MainWindow.vala:1365
-#: ../src/Widgets/AddFeedDialog.vala:64
-msgid "Cancel"
-msgstr ""
-
-#: ../src/MainWindow.vala:1328
-msgid "Save"
-msgstr ""
-
-#: ../src/MainWindow.vala:1331 ../src/MainWindow.vala:1369
-msgid "All files"
-msgstr ""
-
-#: ../src/MainWindow.vala:1335
-msgid "OPML and XML files"
-msgstr ""
-
-#: ../src/MainWindow.vala:1362
-msgid "Select Subscription File"
-msgstr ""
-
-#: ../src/MainWindow.vala:1366
-msgid "Open"
-msgstr ""
-
-#: ../src/MainWindow.vala:1373
-msgid "OPML files"
-msgstr ""
-
-#: ../src/MainWindow.vala:1448
-msgid "Error Importing from File"
-msgstr ""
-
-#: ../src/MainWindow.vala:1449
-msgid ""
-"Please check that you selected the correct file and that you are connected "
-"to the network."
-msgstr ""
-
-#: ../src/MainWindow.vala:1483
-msgid ""
-"Additional plugins are needed to play media. Would you like for Vocal to "
-"install them for you?"
-msgstr ""
-
-#: ../src/MainWindow.vala:1540
-msgid "Adding new podcast: <b>"
-msgstr ""
-
-#: ../src/MainWindow.vala:1604
-msgid "Error Adding Podcast"
-msgstr ""
-
-#: ../src/MainWindow.vala:1605
-msgid ""
-"Please check that the feed is correct and that you have a network connection."
-msgstr ""
-
-#: ../src/MainWindow.vala:1720
+#: ../src/MainWindow.vala:356
 msgid "Good Stuff is On Its Way"
 msgstr ""
 
-#: ../src/MainWindow.vala:1721
+#: ../src/MainWindow.vala:357
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
-msgstr ""
+msgstr "Якщо ви імпортуєте декілька подкастів, це може зайняти кілька хвилин. Ваша бібліотека незабаром буде готова."
 
-#: ../src/MainWindow.vala:2163
-msgid "Fresh content has been added to your library."
-msgstr ""
+#: ../src/MainWindow.vala:369
+msgid "Welcome"
+msgstr "Ласкаво просимо"
 
-#: ../src/MainWindow.vala:2274
+#: ../src/MainWindow.vala:370
+msgid "Importing"
+msgstr "Імпорт"
+
+#: ../src/MainWindow.vala:371
+msgid "All Podcasts"
+msgstr "Всі подкасти"
+
+#: ../src/MainWindow.vala:372 ../src/Widgets/DirectoryArt.vala:69
+msgid "Details"
+msgstr "Подробиці"
+
+#: ../src/MainWindow.vala:373 ../src/Widgets/NewEpisodesView.vala:49
+#: ../src/Widgets/Toolbar.vala:104
+msgid "New Episodes"
+msgstr "Нові епізоди"
+
+#: ../src/MainWindow.vala:374
+msgid "Video"
+msgstr "Відео"
+
+#: ../src/MainWindow.vala:391
+msgid "Browse Podcast Directory"
+msgstr "Огляд каталогу подкастів"
+
+#: ../src/MainWindow.vala:392
+msgid "Search Results"
+msgstr "Результати пошуку"
+
+#: ../src/MainWindow.vala:856 ../src/MainWindow.vala:895
+#: ../src/Widgets/PodcastView.vala:778
+msgid "Cancel"
+msgstr "Скасувати"
+
+#: ../src/MainWindow.vala:857
+msgid "Save"
+msgstr "Зберегти"
+
+#: ../src/MainWindow.vala:860 ../src/MainWindow.vala:899
+#: ../src/Widgets/PodcastView.vala:782
+msgid "All files"
+msgstr "Всі файли"
+
+#: ../src/MainWindow.vala:864
+msgid "OPML and XML files"
+msgstr "Файли OPML і XML"
+
+#: ../src/MainWindow.vala:892
+msgid "Select Subscription File"
+msgstr "Вибрати файл підписки"
+
+#: ../src/MainWindow.vala:896 ../src/Widgets/PodcastView.vala:779
+msgid "Open"
+msgstr "Відкрити"
+
+#: ../src/MainWindow.vala:903
+msgid "OPML files"
+msgstr "Файли OPML"
+
+#: ../src/MainWindow.vala:956
+msgid "Error Importing from File"
+msgstr "Помилка імпортування з файлу"
+
+#: ../src/MainWindow.vala:1074
 msgid ""
-"Vocal is currently downloading episodes. Exiting will cause the downloads to "
-"be canceled. Are you sure you want to exit?"
-msgstr ""
+"Additional plugins are needed to play media. Would you like for Vocal to "
+"install them for you?"
+msgstr "Для відтворення носіїв потрібні додаткові плагіни. Хочете, щоб Vocal встановив їх для вас?"
 
-#: ../src/Widgets/DownloadDetailBox.vala:107
-msgid "Cancel Download"
-msgstr ""
+#: ../src/MainWindow.vala:1224
+msgid "Are you sure you want to mark all episodes from '%s' as played?"
+msgstr "Ви впевнені, що хочете позначити всі епізоди з '%s' як відтворені?"
 
-#: ../src/Widgets/VideoControls.vala:59
-msgid "Exit Fullscreen"
-msgstr ""
+#: ../src/MainWindow.vala:1437
+msgid "Are you sure you want to remove '%s' from your controller.library?"
+msgstr "Ви дійсно бажаєте видалити '%s' з вашої бібліотеки?"
 
-#: ../src/Widgets/DownloadsPopover.vala:50
-msgid "No active downloads."
-msgstr ""
+#: ../src/MainWindow.vala:1441
+msgid "No"
+msgstr "Ні"
 
-#: ../src/Widgets/AddFeedDialog.vala:43
+#: ../src/MainWindow.vala:1442
+msgid "Yes"
+msgstr "Так"
+
+#: ../src/MainWindow.vala:1765
+msgid ""
+"Vocal is currently downloading episodes. Exiting will cause the downloads to"
+" be canceled. Are you sure you want to exit?"
+msgstr "Вокал зараз завантажує епізоди. Завершення призведе до скасування завантажень. Ви впевнені що хочете вийти?"
+
+#: ../src/Utils/FeedParser.vala:367
+msgid "Selected file doesn't appear to contain podcast subscriptions."
+msgstr "Обраний файл не містить підписку на подкаст."
+
+#: ../src/Utils/FeedParser.vala:378
+msgid "Selected file seems to be empty."
+msgstr "Обраний файл порожній."
+
+#: ../src/Vocal.vala:59
+msgid "translator-credits"
+msgstr "Перекладачі"
+
+#: ../src/Widgets/AddFeedDialog.vala:42
 msgid "Add New Podcast"
-msgstr ""
+msgstr "Додати новий подкаст"
 
-#: ../src/Widgets/AddFeedDialog.vala:54
+#: ../src/Widgets/AddFeedDialog.vala:53
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr ""
+msgstr "<b>Додати новий канал подкастів до бібліотеки</b>"
 
-#: ../src/Widgets/AddFeedDialog.vala:59
+#: ../src/Widgets/AddFeedDialog.vala:58
 msgid "Podcast feed web address"
-msgstr ""
+msgstr "Веб-адреса каналу подкастів"
 
-#: ../src/Widgets/PlaybackBox.vala:39
-msgid "<b>Select an episode to start playing...</b>"
-msgstr ""
+#: ../src/Widgets/CloudLoginDialog.vala:44
+msgid "Login to gPodder.net"
+msgstr "Увійдіти до gPodder.net"
 
-#: ../src/Widgets/SettingsDialog.vala:64
-msgid "Automatically download new episodes:"
-msgstr ""
+#: ../src/Widgets/CloudLoginDialog.vala:53
+msgid "Username"
+msgstr "Користувач"
 
-#: ../src/Widgets/SettingsDialog.vala:85
-msgid "Automatically delete played files:"
-msgstr ""
+#: ../src/Widgets/CloudLoginDialog.vala:55
+msgid "Password"
+msgstr "Пароль"
 
-#: ../src/Widgets/SettingsDialog.vala:115
-msgid "Seconds to skip back:"
-msgstr ""
+#: ../src/Widgets/CloudLoginDialog.vala:69
+msgid "Login"
+msgstr "Логін"
 
-#: ../src/Widgets/SettingsDialog.vala:136
-msgid "Seconds to skip forward:"
-msgstr ""
+#: ../src/Widgets/CloudLoginDialog.vala:70
+msgid "Register for gPodder.net"
+msgstr "Зареєструватись на gPodder.net"
 
-#: ../src/Widgets/SettingsDialog.vala:153
-msgid "Close"
-msgstr ""
+#: ../src/Widgets/DirectoryArt.vala:88 ../src/Widgets/SearchResultBox.vala:134
+msgid "No summary available."
+msgstr "Немає підсумку"
 
-#: ../src/Widgets/EpisodeDetailBox.vala:86
+#: ../src/Widgets/DirectoryArt.vala:100
+msgid "Subscribe"
+msgstr "Підписатись"
+
+#: ../src/Widgets/DirectoryView.vala:51
+msgid "iTunes Top 100 Podcasts"
+msgstr "Топ 100 подкастів iTunes"
+
+#: ../src/Widgets/DirectoryView.vala:62
+msgid "Go Back"
+msgstr "Повернутись"
+
+#: ../src/Widgets/DirectoryView.vala:72
+msgid "Done"
+msgstr "Виконано"
+
+#: ../src/Widgets/DirectoryView.vala:104
+msgid "Loading iTunes Store"
+msgstr "Завантаження крамниці iTunes"
+
+#: ../src/Widgets/DownloadDetailBox.vala:111
+msgid "Cancel Download"
+msgstr "Скасувати завантаження"
+
+#: ../src/Widgets/DownloadDetailBox.vala:187
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "хвилина"
+msgstr[1] "хвилини"
+msgstr[2] "хвилин"
+msgstr[3] "хвилин"
+
+#: ../src/Widgets/DownloadDetailBox.vala:191
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "секунда"
+msgstr[1] "секунди"
+msgstr[2] "секунд"
+msgstr[3] "секунд"
+
+#: ../src/Widgets/DownloadsPopover.vala:51
+msgid "No Active Downloads"
+msgstr "Немає активних завантажень"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:80
 msgid "This episode is currently being played"
-msgstr ""
+msgstr "Цей епізод наразі відтворюється"
 
-#: ../src/Widgets/EpisodeDetailBox.vala:117
-#: ../src/Widgets/EpisodeDetailBox.vala:318
+#: ../src/Widgets/EpisodeDetailBox.vala:127
+#: ../src/Widgets/EpisodeDetailBox.vala:321
 msgid "Stream Episode"
-msgstr ""
+msgstr "Потокове відтворення епізоду"
 
-#: ../src/Widgets/EpisodeDetailBox.vala:133
+#: ../src/Widgets/EpisodeDetailBox.vala:143
 msgid "Download Episode"
-msgstr ""
+msgstr "Завантажити епізод"
 
-#: ../src/Widgets/Sidepane.vala:89
-msgid "Mark all episodes as played"
-msgstr ""
+#: ../src/Widgets/EpisodeDetailBox.vala:191
+msgid "No description available."
+msgstr "Немає опису."
 
-#: ../src/Widgets/Sidepane.vala:101
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:32
+msgid "Upload to Internet Archive"
+msgstr "Завантажити в Інтернет-архів"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:57
+msgid "Please verify that the information below is correct before continuing."
+msgstr "Перед продовженням перевірте правильність наведеної нижче інформації."
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:63
+msgid "Episode Title"
+msgstr "Назва епізоду"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:69
+msgid "Podcast Name"
+msgstr "Назва подкасту"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:75
+msgid "Podcast Description"
+msgstr "Опис подкасту"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:89
+msgid "Next…"
+msgstr "Далі…"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:97
+msgid ""
+"Legal warning: uploading copyrighted materials to the Internet Archvie is "
+"illegal. Please make sure you are uploading a copylefted (Creative Commons) "
+"episode that you are legally entitled to redistribute."
+msgstr "Юридичне попередження: завантаження матеріалів, захищених авторським правом, до Інтернет-архіву є незаконним. Переконайтеся, що ви завантажуєте копілефт епізод (Creative Commons), який ви маєте право законно розповсюджувати."
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:102
+#: ../src/Widgets/Shownotes.vala:108
+msgid "Upload to the Internet Archive"
+msgstr "Завантаження до Інтернет-архіву"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:108
+msgid "Uploading episode…"
+msgstr "Завантаження епізоду…"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:111
+msgid ""
+"Thanks for contributing to the Internet Archive and the Podcast Archival "
+"Project"
+msgstr "Дякуємо за участь у Інтернет-архіві та проекті архівування подкастів"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:131
+msgid "Finish"
+msgstr "Завершити"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:154
+msgid "Upload Complete"
+msgstr "Завантаження завершено"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:168
+msgid "Upload Failed"
+msgstr "Помилка завантаження"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:170
+msgid ""
+"Be sure to check your network connection and API keys, then try again later."
+msgstr "Перевірте підключення до мережі та ключі API, а потім спробуйте знову."
+
+#: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
+msgid "Your Podcasts"
+msgstr "Ваші подкасти"
+
+#: ../src/Widgets/NewEpisodesView.vala:58
+msgid "Add all new episodes to the queue"
+msgstr "Додати до черги всі нові епізоди"
+
+#: ../src/Widgets/PlaybackBox.vala:43
+msgid "<b>Select an episode to start playing…</b>"
+msgstr "<b>Виберіть епізод, щоб почати відтворення…</b>"
+
+#: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
+msgid "Show newer episodes at the top of the list"
+msgstr "Показати нові епізоди у верхній частині списку"
+
+#: ../src/Widgets/PodcastView.vala:111 ../src/Widgets/PodcastView.vala:118
+msgid "Show older episodes at the top of the list"
+msgstr "Показати старші епізоди у верхній частині списку"
+
+#: ../src/Widgets/PodcastView.vala:130
+msgid "Add New Episodes to Queue"
+msgstr "Додати нові епізоди до черги"
+
+#: ../src/Widgets/PodcastView.vala:142 ../src/Widgets/Sidepane.vala:98
 msgid "Download all episodes"
-msgstr ""
+msgstr "Завантажити всі епізоди"
 
-#: ../src/Widgets/Sidepane.vala:109
-msgid "Hide episodes that have already been played"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:147
+msgid "Mark All Played"
+msgstr "Позначити всі як відтворені"
 
-#: ../src/Widgets/Sidepane.vala:129
-msgid "Remove podcast from library"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:161
+msgid "Edit podcast details"
+msgstr "Редагувати подробиці подкасту"
 
-#: ../src/Widgets/Sidepane.vala:140
-msgid "More options"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:164
+msgid "Select different cover art"
+msgstr "Вибрати іншу обкладинку"
 
-#: ../src/Widgets/Sidepane.vala:194
-msgid "Hide the episode side pane"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:165
+msgid "Set podcast license to Creative Commons"
+msgstr "Встановіть ліцензію Creative Commons на подкаст"
 
-#: ../src/Widgets/Sidepane.vala:251
+#: ../src/Widgets/PodcastView.vala:176
+msgid "Unsubscribe"
+msgstr "Скасувати підписку"
+
+#: ../src/Widgets/PodcastView.vala:270
+msgid ""
+"Before you can upload to the Internet Archive you must add your archive.org "
+"account's API keys. Visit https://archive.org/account/s3.php to see your "
+"keys, then paste them in the settings."
+msgstr "Перш ніж завантажувати в Інтернет-архів, необхідно додати ключі API вашого акаунта. Відвідайте https://archive.org/account/s3.php, щоб побачити ключі, а потім вставте їх у налаштуваннях."
+
+#: ../src/Widgets/PodcastView.vala:287
+msgid ""
+"You must download this episode first before uploading to the Internet "
+"Archive. Would you like to download this episode?"
+msgstr "Ви спочатку повинні завантажити цей епізод на свій комп'ютер перед завантаженням в Інтернет-архів. Хочете завантажити цей епізод?"
+
+#: ../src/Widgets/PodcastView.vala:416
+msgid "Add selected episodes to queue"
+msgstr "Додати вибрані епізоди до черги"
+
+#: ../src/Widgets/PodcastView.vala:426 ../src/Widgets/Sidepane.vala:248
 msgid "Mark selected episodes as played"
-msgstr ""
+msgstr "Позначити вибрані епізоди як відтворені"
 
-#: ../src/Widgets/Sidepane.vala:281
-msgid "Mark selected episodes as unplayed"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:441
+msgid "Mark selected episodes as new"
+msgstr "Позначити вибрані епізоди як нові"
 
-#: ../src/Widgets/Sidepane.vala:313
+#: ../src/Widgets/PodcastView.vala:455 ../src/Widgets/Sidepane.vala:310
 msgid "Delete local files for selected episodes"
-msgstr ""
+msgstr "Видалити локальні файли для вибраних епізодів"
 
-#: ../src/Widgets/Sidepane.vala:317
+#: ../src/Widgets/PodcastView.vala:458 ../src/Widgets/Sidepane.vala:314
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr ""
+msgstr "Ви дійсно бажаєте видалити завантажені файли для вибраних епізодів?"
 
-#: ../src/Widgets/Sidepane.vala:372
-msgid "Mark as Played"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:504
+msgid "Mark as played"
+msgstr "Позначити як відтворено"
 
-#: ../src/Widgets/Sidepane.vala:391
-msgid "Mark as Unplayed"
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:512
+msgid "Mark as new"
+msgstr "Позначити як нове"
 
-#: ../src/Widgets/Sidepane.vala:411
+#: ../src/Widgets/PodcastView.vala:520 ../src/Widgets/Sidepane.vala:408
 msgid "Delete Local File"
-msgstr ""
+msgstr "Видалити локальний файл"
 
-#: ../src/Widgets/Sidepane.vala:618
-msgid "No new episodes."
-msgstr ""
+#: ../src/Widgets/PodcastView.vala:524
+msgid "Are you sure you want to delete the downloaded episode '%s'?"
+msgstr "Дійсно видалити завантажений епізод '%s'?"
 
-#: ../src/Widgets/Sidepane.vala:627
+#: ../src/Widgets/PodcastView.vala:648
+msgid "No show notes available."
+msgstr "Немає доступних нотаток."
+
+#: ../src/Widgets/PodcastView.vala:738 ../src/Widgets/Sidepane.vala:624
 msgid "No episodes available."
-msgstr ""
+msgstr "Немає доступних епізодів."
 
-#: ../src/Widgets/Sidepane.vala:671
+#: ../src/Widgets/PodcastView.vala:775
+msgid "Select Album Art"
+msgstr "Вибрати обкладинку"
+
+#: ../src/Widgets/PodcastView.vala:786
+msgid "Image Files"
+msgstr "Файли зображень"
+
+#: ../src/Widgets/PodcastView.vala:816
+msgid ""
+"Vocal did not detect that this podcast is licensed as Creative Commons. "
+"Changing this will unlock Internet Archive integration for this podcast. "
+"Please make sure this change is correct before proceeding. Do you wish to "
+"make this change?"
+msgstr "Vocal не виявив, що цей подкаст ліцензований як Creative Commons. Зміна статусу можна розблокувати інтеграцію Internet Archive для цього подкасту. Переконайтеся, що ця зміна правильна, перш ніж продовжити. Ви хочете внести цю зміну?"
+
+#: ../src/Widgets/PodcastView.vala:844
+msgid "%d unplayed episodes"
+msgstr "%d невідтворених епізодів"
+
+#: ../src/Widgets/PodcastView.vala:874
+msgid "I'm listening to %s from %s"
+msgstr "Я слухаю %s з %s"
+
+#: ../src/Widgets/QueuePopover.vala:37
+msgid "No episodes in queue"
+msgstr "У черзі немає епізодів"
+
+#: ../src/Widgets/QueueRow.vala:71
+msgid "Remove episode from queue"
+msgstr "Видалити епізод із черги"
+
+#: ../src/Widgets/SearchResultBox.vala:125
+msgid "Summary"
+msgstr "Підсумок"
+
+#: ../src/Widgets/SearchResultBox.vala:159
+msgid "Subscribe to podcast"
+msgstr "Підписатися на подкаст"
+
+#: ../src/Widgets/SearchResultsView.vala:86
+msgid "Episodes from Your Library"
+msgstr "Епізоди з вашої бібліотеки"
+
+#: ../src/Widgets/SearchResultsView.vala:87
+msgid "Podcasts from Your Library"
+msgstr "Подкасти з вашої бібліотеки"
+
+#: ../src/Widgets/SearchResultsView.vala:88
+msgid "iTunes Podcast Results"
+msgstr "Результати подкасту iTunes"
+
+#: ../src/Widgets/SearchResultsView.vala:117
+msgid "Search Results for <i>%s</i>"
+msgstr "Результати пошуку для <i>%s</i>"
+
+#: ../src/Widgets/SearchResultsView.vala:153
+msgid "No matching episodes found in your library."
+msgstr "У бібліотеці не знайдено відповідних епізодів."
+
+#: ../src/Widgets/SearchResultsView.vala:154
+msgid "No matching podcasts found in your library."
+msgstr "У бібліотеці не знайдено відповідних подкастів."
+
+#: ../src/Widgets/SettingsDialog.vala:59 ../src/Widgets/Toolbar.vala:172
+msgid "Preferences"
+msgstr "Налаштування"
+
+#: ../src/Widgets/SettingsDialog.vala:75
+msgid "Automatically download new episodes:"
+msgstr "Автоматично завантажувати нові епізоди:"
+
+#: ../src/Widgets/SettingsDialog.vala:93
+msgid "Keep my library clean:"
+msgstr "Тримати мою бібліотеку в чистоті:"
+
+#: ../src/Widgets/SettingsDialog.vala:111
+msgid "Show podcast names below cover art:"
+msgstr "Показати назви подкастів під обкладинкою:"
+
+#: ../src/Widgets/SettingsDialog.vala:138
+msgid "Seconds to skip back:"
+msgstr "Кількість секунд, відмотаних назад:"
+
+#: ../src/Widgets/SettingsDialog.vala:156
+msgid "Seconds to skip forward:"
+msgstr "Кількість секунд, перемотаних вперед"
+
+#: ../src/Widgets/SettingsDialog.vala:199
+msgid "Show iTunes Store results from:"
+msgstr "Показати результати крамниці iTunes з:"
+
+#: ../src/Widgets/SettingsDialog.vala:239
+msgid "Archive.org S3 Access Key"
+msgstr "Ключ доступу до Archive.org S3"
+
+#: ../src/Widgets/SettingsDialog.vala:248
+msgid "Archive.org S3 Secret Key"
+msgstr "Секретний ключ до Archive.org S3"
+
+#: ../src/Widgets/SettingsDialog.vala:263
+msgid "Close"
+msgstr "Закрити"
+
+#: ../src/Widgets/Shownotes.vala:70
+msgid "Mark this episode as played"
+msgstr "Позначте цей епізод як відтворений"
+
+#: ../src/Widgets/Shownotes.vala:75
+msgid "Mark this episode as new"
+msgstr "Позначте цей епізод як новий"
+
+#: ../src/Widgets/Shownotes.vala:80
+msgid "Download episode"
+msgstr "Завантажити епізод"
+
+#: ../src/Widgets/Shownotes.vala:85
+msgid "Share this episode"
+msgstr "Поділіться цим епізодом"
+
+#: ../src/Widgets/Shownotes.vala:88
+msgid "Copy shareable link"
+msgstr "Скопіювати посилання"
+
+#: ../src/Widgets/Shownotes.vala:89
+msgid "Send a Tweet…"
+msgstr "Надіслати твіт…"
+
+#: ../src/Widgets/Shownotes.vala:90
+msgid "Copy the direct episode link"
+msgstr "Скопіювати пряме посилання на епізод"
+
+#: ../src/Widgets/Shownotes.vala:139
+msgid "Add this episode to the up next list"
+msgstr "Додати цей епізод до наступного списку"
+
+#: ../src/Widgets/Shownotes.vala:147
+msgid "<b>Summary</b>"
+msgstr "<b>Підсумок</b>"
+
+#: ../src/Widgets/Sidepane.vala:89
+msgid "Mark all episodes as played"
+msgstr "Позначте всі епізоди як відтворені"
+
+#: ../src/Widgets/Sidepane.vala:106
+msgid "Hide episodes that have already been played"
+msgstr "Приховати вже відтворені епізоди"
+
+#: ../src/Widgets/Sidepane.vala:126
+msgid "Remove podcast from library"
+msgstr "Видалити подкаст з бібліотеки"
+
+#: ../src/Widgets/Sidepane.vala:137
+msgid "More options"
+msgstr "Більше варіантів"
+
+#: ../src/Widgets/Sidepane.vala:191
+msgid "Hide the episode side pane"
+msgstr "Приховати бічну панель епізоду"
+
+#: ../src/Widgets/Sidepane.vala:278
+msgid "Mark selected episodes as unplayed"
+msgstr "Позначити вибрані епізоди як не відтворені"
+
+#: ../src/Widgets/Sidepane.vala:369
+msgid "Mark as Played"
+msgstr "Позначити як відтворені"
+
+#: ../src/Widgets/Sidepane.vala:388
+msgid "Mark as Unplayed"
+msgstr "Позначити як не відтворені"
+
+#: ../src/Widgets/Sidepane.vala:615
+msgid "No new episodes."
+msgstr "Немає нових епізодів."
+
+#: ../src/Widgets/Sidepane.vala:668
 msgid "%d episodes, %d unplayed"
-msgstr ""
+msgstr "%d епізодів, %d невідтворених"
 
-#: ../src/Widgets/Sidepane.vala:673
+#: ../src/Widgets/Sidepane.vala:670
 msgid "%d episodes"
-msgstr ""
+msgstr "%d епізодів"
+
+#: ../src/Widgets/Toolbar.vala:83
+msgid "View show notes"
+msgstr "Переглянути нотатки"
+
+#: ../src/Widgets/Toolbar.vala:93
+msgid "Coming up next"
+msgstr "Наступне"
+
+#: ../src/Widgets/Toolbar.vala:119
+msgid "Check for Updates"
+msgstr "Перевірити наявність оновлень"
+
+#: ../src/Widgets/Toolbar.vala:124
+msgid "Add Podcast Feed…"
+msgstr "Додати канал подкастів…"
+
+#: ../src/Widgets/Toolbar.vala:129
+msgid "Import Subcriptions…"
+msgstr "Імпортувати підписки…"
+
+#: ../src/Widgets/Toolbar.vala:134
+msgid "Export Subscriptions…"
+msgstr "Експортувати підписки…"
+
+#: ../src/Widgets/Toolbar.vala:139 ../src/Widgets/Toolbar.vala:150
+msgid "Use Light Theme"
+msgstr "Використовувати світлу тему"
+
+#: ../src/Widgets/Toolbar.vala:141 ../src/Widgets/Toolbar.vala:147
+msgid "Use Dark Theme"
+msgstr "Використовувати темну тему"
+
+#: ../src/Widgets/Toolbar.vala:179
+msgid "Report a Problem…"
+msgstr "Повідомити про проблему…"
+
+#: ../src/Widgets/Toolbar.vala:187
+msgid "Donate…"
+msgstr "Пожертвувати…"
+
+#: ../src/Widgets/Toolbar.vala:195
+msgid "About"
+msgstr "Про"
+
+#: ../src/Widgets/Toolbar.vala:236 ../src/Widgets/Toolbar.vala:251
+msgid "Fast forward %d seconds"
+msgstr "Перемотати %d секунд"
+
+#: ../src/Widgets/Toolbar.vala:244 ../src/Widgets/Toolbar.vala:252
+msgid "Rewind %d seconds"
+msgstr "Відмотати %d секунд"
+
+#: ../src/Widgets/Toolbar.vala:257
+msgid "Check for new episodes"
+msgstr "Перевірити наявність нових епізодів"
+
+#: ../src/Widgets/Toolbar.vala:266
+msgid "Search your library or online"
+msgstr "Шукати в бібліотеці чи в інтернеті"
+
+#: ../src/Widgets/Toolbar.vala:276
+msgid "View the top podcasts in the iTunes Store"
+msgstr "Переглянути найпопулярніші подкасти в крамниці iTunes"
+
+#: ../src/Widgets/Toolbar.vala:311
+msgid "Downloads"
+msgstr "Завантаження"
+
+#: ../src/Widgets/VideoControls.vala:60
+msgid "Exit Fullscreen"
+msgstr "Вийти з повноекранного режиму"

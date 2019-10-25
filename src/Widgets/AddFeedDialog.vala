@@ -21,79 +21,81 @@ using Gtk;
 
 namespace Vocal {
 
-    
-    public class AddFeedDialog : Gtk.Dialog {
-    
-        public	Gtk.Entry 	entry;			
-        public	Gtk.Button 	add_feed_button;
 
-	      private bool		on_elementary;
-    
-        public AddFeedDialog(Window parent, bool? using_elementary = true) {
-	          this.on_elementary = using_elementary;
-            set_default_response(Gtk.ResponseType.OK);
-            set_size_request(500, 150);
-            set_modal(true);
-            set_transient_for(parent);
-            set_attached_to(parent);
-            set_resizable(false);
-            setup();
-            get_action_area().margin = 7;
-            this.title = _("Add New Podcast");
+    public class AddFeedDialog : Gtk.Dialog {
+
+        public Gtk.Entry entry;
+        public Gtk.Button add_feed_button;
+
+        private bool on_elementary;
+
+        public AddFeedDialog (Window parent, bool? using_elementary = true) {
+            this.on_elementary = using_elementary;
+            set_default_response (Gtk.ResponseType.OK);
+            set_size_request (500, 150);
+            set_modal (true);
+            set_transient_for (parent);
+            set_attached_to (parent);
+            set_resizable (false);
+            setup ();
+            get_action_area ().margin = 7;
+            this.title = _ ("Add New Podcast");
         }
-            
+
         /*
          * Sets up the properties of the dialog
          */
-        private void setup() {
-            var content_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+        private void setup () {
+            var content_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             content_box.margin_right = 12;
             content_box.margin_left = 12;
-            
-            var add_label = new Gtk.Label(_("<b>Add a new podcast feed to the library</b>"));
+
+            var add_label = new Gtk.Label (_ ("<b>Add a new podcast feed to the library</b>"));
             add_label.use_markup = true;
-            add_label.set_property("xalign", 0);
-            
-            entry = new Gtk.Entry();
-            entry.placeholder_text = _("Podcast feed web address");
+            add_label.set_property ("xalign", 0);
+
+            entry = new Gtk.Entry ();
+            entry.placeholder_text = _ ("Podcast feed web address");
             entry.activates_default = false;
             entry.margin = 12;
-            entry.changed.connect(on_entry_changed);
-            
+            entry.changed.connect (on_entry_changed);
+
             Gtk.Image add_img;
-      	    if(on_elementary)
-      	        add_img = new Gtk.Image.from_icon_name ("list-add-symbolic", Gtk.IconSize.DIALOG);
-      	    else
-      		      add_img = new Gtk.Image.from_icon_name ("list-add", Gtk.IconSize.DIALOG);
+            if (on_elementary) {
+                add_img = new Gtk.Image.from_icon_name ("list-add-symbolic", Gtk.IconSize.DIALOG);
+            }
+            else {
+                add_img = new Gtk.Image.from_icon_name ("list-add", Gtk.IconSize.DIALOG);
+            }
             add_img.margin_right = 12;
-            
-            content_box.add(add_img);
-            content_box.add(add_label);
-            
+
+            content_box.add (add_img);
+            content_box.add (add_label);
+
             // Add items to box
             add_button ("_Cancel", Gtk.ResponseType.CANCEL);
-            add_feed_button = (Gtk.Button)add_button("_Add Podcast", Gtk.ResponseType.OK);
-            add_feed_button.get_style_context().add_class("suggested-action");
+            add_feed_button = (Gtk.Button)add_button ("_Add Podcast", Gtk.ResponseType.OK);
+            add_feed_button.get_style_context ().add_class ("suggested-action");
             add_feed_button.sensitive = false;
-            
-            // Set up the text entry activate signal to "click" the add button
-            entry.activate.connect(() => {
-                if(add_feed_button.sensitive)
-                    add_feed_button.clicked();
-            });
-            
-            
-            this.get_content_area().add(content_box);
-            this.get_content_area().add(entry);
 
-        }  
-        
+            // Set up the text entry activate signal to "click" the add button
+            entry.activate.connect (() => {
+                if (add_feed_button.sensitive) {
+                    add_feed_button.clicked ();
+                }
+            });
+
+
+            this.get_content_area ().add (content_box);
+            this.get_content_area ().add (entry);
+
+        }
+
         /*
          * Set the button's sensitivity based on whether or not there is any input
          */
-        private void on_entry_changed()
-        {
-            if(entry.text.length > 0) {
+        private void on_entry_changed () {
+            if (entry.text.length > 0) {
                 add_feed_button.sensitive = true;
             } else {
                 add_feed_button.sensitive = false;

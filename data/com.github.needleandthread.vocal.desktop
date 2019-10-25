@@ -3,8 +3,8 @@ Type=Application
 Name=Vocal
 Comment=Subscribe, download, and listen to podcasts
 GenericName=Podcast Manager
-Exec=com.github.needle-and-thread.vocal
-Icon=com.github.needle-and-thread.vocal
+Exec=com.github.needleandthread.vocal
+Icon=com.github.needleandthread.vocal
 Terminal=false
 Categories=AudioVideo;Audio;Video;
 X-PulseAudio-Properties=media.role=music
@@ -13,5 +13,5 @@ Actions=AboutDialog;
 Name[en_US]=Vocal
 
 [Desktop Action AboutDialog]
-Exec=com.github.needle-and-thread.vocal --about
+Exec=com.github.needleandthread.vocal --about
 Name=About Vocal

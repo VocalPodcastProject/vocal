@@ -45,21 +45,22 @@ namespace Vocal {
 		 * Sets the playback uri (and corresponding fields) based on whether it's
 		 * local or remote
 		 */
+
         public string playback_uri {
 
             get {
 
                 GLib.File local;
 
-                if(local_uri != null) {
+                if (local_uri != null) {
 
-                    if(local_uri.contains("file://"))
-                        local = GLib.File.new_for_uri(local_uri);
+                    if (local_uri.contains ("file://"))
+                        local = GLib.File.new_for_uri (local_uri);
                     else
-                        local = GLib.File.new_for_uri("file://" + local_uri);
-                    if(local.query_exists()) {
+                        local = GLib.File.new_for_uri ("file://" + local_uri);
+                    if (local.query_exists ()) {
 
-                        if(local_uri.contains("file://"))
+                        if (local_uri.contains ("file://"))
                             return local_uri;
                         else {
                             local_uri = "file://" + local_uri;
@@ -80,11 +81,11 @@ namespace Vocal {
 
             // If the URI begins with "file://" set local uri, otherwise set the remote uri
             set {
-                string[] split = value.split(":");
-                if(split[0] == "http" || split[0] == "HTTP") {
+                string[] split = value.split (":");
+                if (split[0] == "http" || split[0] == "HTTP") {
                     uri = value;
                 } else {
-                    if(!value.contains("file://")) {
+                    if (!value.contains ("file://")) {
                         local_uri = """file://""" + value;
                     }
                     else {
@@ -98,7 +99,7 @@ namespace Vocal {
          * Default constructor for an empty episode. Fields are public members and can
          * be accessed and set directly when necessary by other classes.
          */
-        public Episode() {
+        public Episode () {
             parent = null;
             local_uri = null;
             status = EpisodeStatus.UNPLAYED;
@@ -111,11 +112,12 @@ namespace Vocal {
          * Sets the local datetime based on the standardized "pubdate" as listed
          * in the feed.
          */
-        public void set_datetime_from_pubdate() {
+        public void set_datetime_from_pubdate () {
 
             if (date_released != null) {
                 GLib.Time tm = GLib.Time ();
                 tm.strptime (date_released, "%a, %d %b %Y %H:%M:%S %Z");
+
                 datetime_released = new DateTime.local(1900 + tm.year, 1 + tm.month, tm.day, tm.hour, tm.minute, tm.second);
 
                 // ensure datetime_released was not set to null, if so default to unix epoch

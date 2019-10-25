@@ -178,5 +178,14 @@
 			</description>
 		</key>
 		
+		<key name="gpodder-last-successful-sync-timestamp" type="s">
+			<default>""</default>
+			<summary>The UNIX timestamp of the last successful episode sync</summary>
+			<description>
+				The UNIX timestamp of the last time Vocal successfully contacted the
+				gpodder.net service and received an update of episode actions.
+			</description>
+		</key>
+		
 	</schema>
 </schemalist>

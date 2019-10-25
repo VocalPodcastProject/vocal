@@ -302,6 +302,7 @@ namespace Vocal {
             welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
             welcome.append("document-open", _("Import Subscriptions"),
                     _("If you have exported feeds from another podcast manager, import them here."));
+            welcome.append("emblem-synchronizing-symbolic", _("Sync With gpodder"), _("Login to your gpodder.net account and synchronize your library."));
             welcome.activated.connect(on_welcome);
             
             info ("Creating new episodes view.");
@@ -392,8 +393,6 @@ namespace Vocal {
             notebook.add_titled(directory_scrolled, "directory", _("Browse Podcast Directory"));
             notebook.add_titled(search_results_scrolled, "search", _("Search Results"));
             
-            sync_dialog = new SyncDialog (controller);
-            
             info("Creating toolbar.");
 
             // Create the toolbar
@@ -458,6 +457,9 @@ namespace Vocal {
             toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
             
             toolbar.sync_dialog_selected.connect ( () => {
+            	if (sync_dialog == null) {
+            		sync_dialog = new SyncDialog(controller);
+            	}
                 sync_dialog.show_all ();
             });
             
@@ -1736,7 +1738,13 @@ namespace Vocal {
                 // The import podcasts method will handle any errors
                 import_podcasts();
 
-            } 
+			// gpodder.net
+            } else if (index == 3) {
+            	if (sync_dialog == null) {
+            		sync_dialog = new SyncDialog (controller);
+            	}
+            	sync_dialog.show_all ();
+            }
         }
 
 

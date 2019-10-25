@@ -295,6 +295,11 @@ namespace Vocal {
                 });
             }
             
+            // Get any episode updates from gpodder
+            
+            // TODO: make it async and actually process the updates
+            gpodder_client.get_episode_updates ();
+            
             info ("Controller initialization finished. Running post-creation sequence.");
             post_creation_sequence();
         }
@@ -420,6 +425,8 @@ namespace Vocal {
                     window.shownotes.set_notes_text(current_episode.description);
                 }
                 window.show_all();
+                
+                gpodder_client.update_episode (current_episode, EpisodeAction.PLAY);
             }
         }
 
@@ -452,6 +459,8 @@ namespace Vocal {
             }
 
             window.show_all();
+            
+            gpodder_client.update_episode (current_episode, EpisodeAction.PLAY);
         }
         
         /*

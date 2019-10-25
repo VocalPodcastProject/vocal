@@ -834,6 +834,7 @@ namespace Vocal {
 
             //  Add the download to the downloads popup
             downloads.add_download(details_box);
+            
         }
 
 
@@ -1181,6 +1182,9 @@ namespace Vocal {
             if (details != null && episode.parent == details.podcast) {
                 details.shownotes.hide_download_button();
             }
+            
+            // Update gpodder.net
+            controller.gpodder_client.update_episode (episode, EpisodeAction.DOWNLOAD);
         }
 
 
@@ -1190,6 +1194,9 @@ namespace Vocal {
         private void on_episode_delete_request(Episode episode) {
             controller.library.delete_local_episode(episode);
             details.on_single_delete(episode);
+            
+            // Update gpodder.net
+            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.DELETE);
         }
 
 
@@ -1761,6 +1768,9 @@ namespace Vocal {
                 if(controller.player.current_episode.last_played_position != 0)
                     controller.library.set_episode_playback_position(controller.player.current_episode);
             }
+            
+            // Update gpodder.net if necessary
+            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.PLAY);
 
             // If an episode is currently playing and Vocal is set to keep playing in the background, hide the window
             if(controller.player.playing && controller.settings.keep_playing_in_background) {

@@ -19,6 +19,10 @@
 
 namespace Vocal {
 
+	public enum EpisodeAction {
+		DOWNLOAD, PLAY, DELETE, NEW;
+	}
+
     public class gpodderClient {
     
         private static gpodderClient _default_instance = null;
@@ -95,7 +99,7 @@ namespace Vocal {
             string jsonbody = 
             """
             {
-                "caption": "Vocal running on my computer",
+            	"caption": "Vocal running on my computer",
                 "type": "laptop"
             }
             """;
@@ -217,6 +221,113 @@ namespace Vocal {
                 return (string)message.response_body.data;
             } else {
                 return "";
+            }
+        }
+        
+        public bool get_episode_updates () {
+        	var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
+		        }
+	        }); 
+	        string endpoint = "https://gpodder.net/api/2/episodes/%s.json".printf (controller.settings.gpodder_username);
+	        var message = new Soup.Message ("GET", endpoint);
+            session.send_message (message);
+            
+            if (message.status_code == 200) {
+            	// TODO: actually process updates
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
+        public bool update_episode (Episode episode, EpisodeAction action) {
+        
+            var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
+		        }
+	        }); 
+	        
+        	string timestamp = new GLib.DateTime.now_utc ().to_string ();
+        	
+        	info(episode.last_played_position.to_string());
+        
+			string jsonbody;
+			if (action == EpisodeAction.DOWNLOAD || action == EpisodeAction.DELETE || action == EpisodeAction.NEW) {
+				jsonbody = """
+				{
+					"podcast": "%s",
+					"episode": "%s",
+					"device": "%s",
+					"action": "%s",
+					"timestamp": "%s"
+				}
+				""".printf(episode.parent.feed_uri, episode.uri, controller.settings.gpodder_device_name, action.to_string ().down (), timestamp);
+			} else {
+				jsonbody =
+				"""
+				[
+					{
+						"podcast": "%s",
+						"episode": "%s",
+						"device": "%s",
+						"action": "play",
+						"position": %s,
+						"timestamp": "%s"
+					}
+				]
+				""".printf(episode.parent.feed_uri, episode.uri, controller.settings.gpodder_device_name, ((int)episode.last_played_position).to_string (), timestamp);
+			}
+			
+	        string endpoint = "https://gpodder.net/api/2/episodes/%s.json".printf (controller.settings.gpodder_username);
+            var message = new Soup.Message ("POST", endpoint);
+            
+            message.set_request ("text/json", Soup.MemoryUse.STATIC, jsonbody.data);
+            session.send_message (message);
+            
+            info ((string)message.response_body.data);
+            info (message.status_code.to_string ());
+
+            if (message.status_code == 200) {
+            	info ("Episode progress updated in gpodder.net for " + episode.title);
+                return true;
+            } else {
+            	info ("Failed to update progress in gpodder.net for " + episode.title);
+                return false;
             }
         }
     }

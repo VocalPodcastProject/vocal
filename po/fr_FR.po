@@ -1,0 +1,752 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# 
+# Translators:
+# Corentin Noël <tintou@mailoo.org>, 2017
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Julien Chaumont <transifex@julienc.io>, 2016-2017
+# Mikaël Chevalier <mikael.chevalier1305@gmail.com>, 2018
+msgid ""
+msgstr ""
+"Project-Id-Version: Vocal\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-27 06:18-0400\n"
+"PO-Revision-Date: 2019-04-07 14:37+0000\n"
+"Last-Translator: Nathan Dyer <nathandyer@fastmail.com>\n"
+"Language-Team: French (France) (http://www.transifex.com/needle-and-thread/vocal/language/fr_FR/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../src/Controller.vala:403 ../src/Controller.vala:407
+msgid "Pause"
+msgstr "Pause"
+
+#: ../src/Controller.vala:430 ../src/Controller.vala:434
+#: ../src/Widgets/EpisodeDetailBox.vala:125
+#: ../src/Widgets/EpisodeDetailBox.vala:318 ../src/Widgets/Toolbar.vala:225
+#: ../src/Widgets/VideoControls.vala:40
+msgid "Play"
+msgstr "Lire"
+
+#: ../src/Controller.vala:496
+msgid "Adding new podcast: <b>"
+msgstr "Ajouter un nouveau podcast : <b>"
+
+#: ../src/Controller.vala:555
+msgid ""
+"Please make sure you selected the correct feed and that it is still "
+"available."
+msgstr "Veuillez vérifier que vous avez sélectionné le bon flux et qu'il est toujours disponible."
+
+#: ../src/Controller.vala:557
+msgid ""
+"There seems to be a problem with your internet connection. Make sure you are"
+" online and then try again."
+msgstr "Il semble qu'il y ait un problème avec votre connexion internet. Veuillez vérifier que vous êtes bien connecté et essayez à nouveau."
+
+#: ../src/Controller.vala:562
+msgid "Error Adding Podcast"
+msgstr "Erreur lors de l'ajout du podcast"
+
+#: ../src/Controller.vala:604
+msgid "Fresh content has been added to your library."
+msgstr "Du nouveau contenu a été ajouté à votre bibliothèque."
+
+#: ../src/Library.vala:760
+msgid "'%s' from '%s' has finished downloading."
+msgstr "'%s' à partir de '%s' a été téléchargé."
+
+#: ../src/Library.vala:761
+msgid "Episode Download Complete"
+msgstr "Téléchargement de l'épisode terminé"
+
+#: ../src/Library.vala:766
+msgid "Downloads Complete"
+msgstr "Téléchargements terminés"
+
+#: ../src/Library.vala:766
+msgid "New episodes have been downloaded."
+msgstr "De nouveaux épisodes ont été téléchargés"
+
+#: ../src/MainWindow.vala:92
+msgid "Vocal"
+msgstr ""
+
+#: ../src/MainWindow.vala:264 ../src/MainWindow.vala:267
+#: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
+#: ../src/Widgets/SearchResultsView.vala:68
+msgid "Return to Library"
+msgstr "Revenir à la bibliothèque"
+
+#: ../src/MainWindow.vala:298
+msgid "Welcome to Vocal"
+msgstr "Bienvenue dans Vocal"
+
+#: ../src/MainWindow.vala:298
+msgid "Build Your Library By Adding Podcasts"
+msgstr "Construisez votre bibliothèque en ajoutant des podcasts"
+
+#: ../src/MainWindow.vala:299
+msgid "Browse Podcasts"
+msgstr "Parcourir les podcasts"
+
+#: ../src/MainWindow.vala:300
+msgid "Browse through podcasts and choose some to add to your library."
+msgstr ""
+
+#: ../src/MainWindow.vala:301
+msgid "Add a New Feed"
+msgstr "Ajouter un nouveau flux"
+
+#: ../src/MainWindow.vala:301
+msgid "Provide the web address of a podcast feed."
+msgstr "Indiquer l'adresse web d'un flux de podcast."
+
+#: ../src/MainWindow.vala:302
+msgid "Import Subscriptions"
+msgstr "Importer des abonnements"
+
+#: ../src/MainWindow.vala:303
+msgid ""
+"If you have exported feeds from another podcast manager, import them here."
+msgstr "Si vous avez exporté des flux d'un autre gestionnaire de podcasts, importez-les ici."
+
+#: ../src/MainWindow.vala:356
+msgid "Good Stuff is On Its Way"
+msgstr "De bonnes choses arrivent"
+
+#: ../src/MainWindow.vala:357
+msgid ""
+"If you are importing several podcasts it can take a few minutes. Your "
+"library will be ready shortly."
+msgstr "Si vous importez beaucoup de podcasts cela peut prendre quelques minutes.\nVotre bibliothèque sera bientôt prête."
+
+#: ../src/MainWindow.vala:369
+msgid "Welcome"
+msgstr "Bienvenue"
+
+#: ../src/MainWindow.vala:370
+msgid "Importing"
+msgstr "Importation en cours"
+
+#: ../src/MainWindow.vala:371
+msgid "All Podcasts"
+msgstr "Tous les podcasts"
+
+#: ../src/MainWindow.vala:372 ../src/Widgets/DirectoryArt.vala:69
+msgid "Details"
+msgstr "Détails"
+
+#: ../src/MainWindow.vala:373 ../src/Widgets/NewEpisodesView.vala:49
+#: ../src/Widgets/Toolbar.vala:104
+msgid "New Episodes"
+msgstr ""
+
+#: ../src/MainWindow.vala:374
+msgid "Video"
+msgstr "Vidéo"
+
+#: ../src/MainWindow.vala:391
+msgid "Browse Podcast Directory"
+msgstr "Parcourir le dossier des podcasts"
+
+#: ../src/MainWindow.vala:392
+msgid "Search Results"
+msgstr "Résultats de la recherche"
+
+#: ../src/MainWindow.vala:856 ../src/MainWindow.vala:895
+#: ../src/Widgets/PodcastView.vala:778
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ../src/MainWindow.vala:857
+msgid "Save"
+msgstr "Enregistrer"
+
+#: ../src/MainWindow.vala:860 ../src/MainWindow.vala:899
+#: ../src/Widgets/PodcastView.vala:782
+msgid "All files"
+msgstr "Tous les fichiers"
+
+#: ../src/MainWindow.vala:864
+msgid "OPML and XML files"
+msgstr "Fichiers OPML et XML"
+
+#: ../src/MainWindow.vala:892
+msgid "Select Subscription File"
+msgstr "Sélectionner le fichier d'abonnement"
+
+#: ../src/MainWindow.vala:896 ../src/Widgets/PodcastView.vala:779
+msgid "Open"
+msgstr "Ouvrir"
+
+#: ../src/MainWindow.vala:903
+msgid "OPML files"
+msgstr "Fichiers OPML"
+
+#: ../src/MainWindow.vala:956
+msgid "Error Importing from File"
+msgstr "Erreur d'importation depuis le fichier."
+
+#: ../src/MainWindow.vala:1074
+msgid ""
+"Additional plugins are needed to play media. Would you like for Vocal to "
+"install them for you?"
+msgstr "Des plugins additionnels sont nécessaires pour lire le média. Voulez-vous que Vocal les installe pour vous ?"
+
+#: ../src/MainWindow.vala:1224
+msgid "Are you sure you want to mark all episodes from '%s' as played?"
+msgstr "Êtes-vous sûr de vouloir marquer tous les épisodes de '%s' comme lus ?"
+
+#: ../src/MainWindow.vala:1437
+msgid "Are you sure you want to remove '%s' from your controller.library?"
+msgstr ""
+
+#: ../src/MainWindow.vala:1441
+msgid "No"
+msgstr "Non"
+
+#: ../src/MainWindow.vala:1442
+msgid "Yes"
+msgstr "Oui"
+
+#: ../src/MainWindow.vala:1765
+msgid ""
+"Vocal is currently downloading episodes. Exiting will cause the downloads to"
+" be canceled. Are you sure you want to exit?"
+msgstr "Vocal télécharge actuellement des épisodes. Quitter pourrait annuler les téléchargements. Êtes-vous sûr de vouloir quitter ?"
+
+#: ../src/Utils/FeedParser.vala:367
+msgid "Selected file doesn't appear to contain podcast subscriptions."
+msgstr "Le fichier sélectionné ne semble pas contenir d'abonnements à des podcasts."
+
+#: ../src/Utils/FeedParser.vala:378
+msgid "Selected file seems to be empty."
+msgstr "Le fichier sélectionné semble être vide."
+
+#: ../src/Vocal.vala:59
+msgid "translator-credits"
+msgstr "Launchpad Contributions:\n  Dorian Griffiths https://launchpad.net/~info-hw\n  Mathieu A. https://launchpad.net/~mathieu-adamczewski\n  Nathan Dyer https://launchpad.net/~nathandyer\n  RM https://launchpad.net/~l4rt1st-1nc0nnu\n  Raison https://launchpad.net/~sorian-slimani\n  Romain De Filippi https://launchpad.net/~romain-defilippi"
+
+#: ../src/Widgets/AddFeedDialog.vala:42
+msgid "Add New Podcast"
+msgstr "Ajouter un nouveau podcast"
+
+#: ../src/Widgets/AddFeedDialog.vala:53
+msgid "<b>Add a new podcast feed to the library</b>"
+msgstr "<b>Ajouter un nouveau flux de podcast à la bibliothèque</b>"
+
+#: ../src/Widgets/AddFeedDialog.vala:58
+msgid "Podcast feed web address"
+msgstr "Adresse web du flux du podcast"
+
+#: ../src/Widgets/CloudLoginDialog.vala:44
+msgid "Login to gPodder.net"
+msgstr "Connexion à gPodder.net"
+
+#: ../src/Widgets/CloudLoginDialog.vala:53
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+#: ../src/Widgets/CloudLoginDialog.vala:55
+msgid "Password"
+msgstr "Mot de passe"
+
+#: ../src/Widgets/CloudLoginDialog.vala:69
+msgid "Login"
+msgstr "Connexion"
+
+#: ../src/Widgets/CloudLoginDialog.vala:70
+msgid "Register for gPodder.net"
+msgstr "Inscription à gPodder.net"
+
+#: ../src/Widgets/DirectoryArt.vala:88 ../src/Widgets/SearchResultBox.vala:134
+msgid "No summary available."
+msgstr "Aucun résumé disponible."
+
+#: ../src/Widgets/DirectoryArt.vala:100
+msgid "Subscribe"
+msgstr "S'abonner"
+
+#: ../src/Widgets/DirectoryView.vala:51
+msgid "iTunes Top 100 Podcasts"
+msgstr "Top 100 des podcasts sur iTunes"
+
+#: ../src/Widgets/DirectoryView.vala:62
+msgid "Go Back"
+msgstr "Retour"
+
+#: ../src/Widgets/DirectoryView.vala:72
+msgid "Done"
+msgstr "Terminé"
+
+#: ../src/Widgets/DirectoryView.vala:104
+msgid "Loading iTunes Store"
+msgstr "Chargement de l'iTunes Store"
+
+#: ../src/Widgets/DownloadDetailBox.vala:111
+msgid "Cancel Download"
+msgstr "Annuler le téléchargement"
+
+#: ../src/Widgets/DownloadDetailBox.vala:187
+msgid "minute"
+msgid_plural "minutes"
+msgstr[0] "minute"
+msgstr[1] "minutes"
+
+#: ../src/Widgets/DownloadDetailBox.vala:191
+msgid "second"
+msgid_plural "seconds"
+msgstr[0] "seconde"
+msgstr[1] "secondes"
+
+#: ../src/Widgets/DownloadsPopover.vala:51
+msgid "No Active Downloads"
+msgstr "Aucun téléchargement en cours"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:80
+msgid "This episode is currently being played"
+msgstr "Cet épisode est en cours de lecture"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:127
+#: ../src/Widgets/EpisodeDetailBox.vala:321
+msgid "Stream Episode"
+msgstr "Streamer l'épisode"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:143
+msgid "Download Episode"
+msgstr "Télécharger l'épisode"
+
+#: ../src/Widgets/EpisodeDetailBox.vala:191
+msgid "No description available."
+msgstr "Aucune description disponible"
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:32
+msgid "Upload to Internet Archive"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:57
+msgid "Please verify that the information below is correct before continuing."
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:63
+msgid "Episode Title"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:69
+msgid "Podcast Name"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:75
+msgid "Podcast Description"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:89
+msgid "Next…"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:97
+msgid ""
+"Legal warning: uploading copyrighted materials to the Internet Archvie is "
+"illegal. Please make sure you are uploading a copylefted (Creative Commons) "
+"episode that you are legally entitled to redistribute."
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:102
+#: ../src/Widgets/Shownotes.vala:108
+msgid "Upload to the Internet Archive"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:108
+msgid "Uploading episode…"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:111
+msgid ""
+"Thanks for contributing to the Internet Archive and the Podcast Archival "
+"Project"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:131
+msgid "Finish"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:154
+msgid "Upload Complete"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:168
+msgid "Upload Failed"
+msgstr ""
+
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:170
+msgid ""
+"Be sure to check your network connection and API keys, then try again later."
+msgstr ""
+
+#: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
+msgid "Your Podcasts"
+msgstr "Vos podcasts"
+
+#: ../src/Widgets/NewEpisodesView.vala:58
+msgid "Add all new episodes to the queue"
+msgstr ""
+
+#: ../src/Widgets/PlaybackBox.vala:43
+msgid "<b>Select an episode to start playing…</b>"
+msgstr "<b>Sélectionnez un épisode pour commencer à le lire... </b>"
+
+#: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
+msgid "Show newer episodes at the top of the list"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:111 ../src/Widgets/PodcastView.vala:118
+msgid "Show older episodes at the top of the list"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:130
+msgid "Add New Episodes to Queue"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:142 ../src/Widgets/Sidepane.vala:98
+msgid "Download all episodes"
+msgstr "Télécharger tous les épisodes"
+
+#: ../src/Widgets/PodcastView.vala:147
+msgid "Mark All Played"
+msgstr "Tout marquer comme lu"
+
+#: ../src/Widgets/PodcastView.vala:161
+msgid "Edit podcast details"
+msgstr "Modifier les informations du podcast"
+
+#: ../src/Widgets/PodcastView.vala:164
+msgid "Select different cover art"
+msgstr "Changer la jaquette"
+
+#: ../src/Widgets/PodcastView.vala:165
+msgid "Set podcast license to Creative Commons"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:176
+msgid "Unsubscribe"
+msgstr "Se désabonner"
+
+#: ../src/Widgets/PodcastView.vala:270
+msgid ""
+"Before you can upload to the Internet Archive you must add your archive.org "
+"account's API keys. Visit https://archive.org/account/s3.php to see your "
+"keys, then paste them in the settings."
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:287
+msgid ""
+"You must download this episode first before uploading to the Internet "
+"Archive. Would you like to download this episode?"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:416
+msgid "Add selected episodes to queue"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:426 ../src/Widgets/Sidepane.vala:248
+msgid "Mark selected episodes as played"
+msgstr "Marquer les épisodes selectionnés comme lus"
+
+#: ../src/Widgets/PodcastView.vala:441
+msgid "Mark selected episodes as new"
+msgstr "Marquer les épisodes sélectionnés comme non lus"
+
+#: ../src/Widgets/PodcastView.vala:455 ../src/Widgets/Sidepane.vala:310
+msgid "Delete local files for selected episodes"
+msgstr "Supprimer les fichiers locaux des épisodes sélectionnés"
+
+#: ../src/Widgets/PodcastView.vala:458 ../src/Widgets/Sidepane.vala:314
+msgid ""
+"Are you sure you want to delete the downloaded files for the selected "
+"episodes?"
+msgstr "Voulez-vous vraiment supprimer les fichiers téléchargés pour ces épisodes ?"
+
+#: ../src/Widgets/PodcastView.vala:504
+msgid "Mark as played"
+msgstr "Marquer comme lu"
+
+#: ../src/Widgets/PodcastView.vala:512
+msgid "Mark as new"
+msgstr "Marquer comme non lu"
+
+#: ../src/Widgets/PodcastView.vala:520 ../src/Widgets/Sidepane.vala:408
+msgid "Delete Local File"
+msgstr "Supprimer le fichier local"
+
+#: ../src/Widgets/PodcastView.vala:524
+msgid "Are you sure you want to delete the downloaded episode '%s'?"
+msgstr "Êtes-vous sûr de vouloir supprimer l'épisode téléchargé '%s' ?"
+
+#: ../src/Widgets/PodcastView.vala:648
+msgid "No show notes available."
+msgstr "Aucune note disponible."
+
+#: ../src/Widgets/PodcastView.vala:738 ../src/Widgets/Sidepane.vala:624
+msgid "No episodes available."
+msgstr "Pas d'épisodes disponibles."
+
+#: ../src/Widgets/PodcastView.vala:775
+msgid "Select Album Art"
+msgstr "Choisir une jaquette pour l'album"
+
+#: ../src/Widgets/PodcastView.vala:786
+msgid "Image Files"
+msgstr "Dossier image"
+
+#: ../src/Widgets/PodcastView.vala:816
+msgid ""
+"Vocal did not detect that this podcast is licensed as Creative Commons. "
+"Changing this will unlock Internet Archive integration for this podcast. "
+"Please make sure this change is correct before proceeding. Do you wish to "
+"make this change?"
+msgstr ""
+
+#: ../src/Widgets/PodcastView.vala:844
+msgid "%d unplayed episodes"
+msgstr "%d épisodes non lus"
+
+#: ../src/Widgets/PodcastView.vala:874
+msgid "I'm listening to %s from %s"
+msgstr "J'écoute %s à partir de %s"
+
+#: ../src/Widgets/QueuePopover.vala:37
+msgid "No episodes in queue"
+msgstr ""
+
+#: ../src/Widgets/QueueRow.vala:71
+msgid "Remove episode from queue"
+msgstr "Supprimer l'épisode de la file"
+
+#: ../src/Widgets/SearchResultBox.vala:125
+msgid "Summary"
+msgstr "Résumé"
+
+#: ../src/Widgets/SearchResultBox.vala:159
+msgid "Subscribe to podcast"
+msgstr "S'abonner au podcast"
+
+#: ../src/Widgets/SearchResultsView.vala:86
+msgid "Episodes from Your Library"
+msgstr "Épisodes depuis votre bibliothèque"
+
+#: ../src/Widgets/SearchResultsView.vala:87
+msgid "Podcasts from Your Library"
+msgstr "Podcasts depuis votre bibliothèque"
+
+#: ../src/Widgets/SearchResultsView.vala:88
+msgid "iTunes Podcast Results"
+msgstr "Podcasts depuis iTunes"
+
+#: ../src/Widgets/SearchResultsView.vala:117
+msgid "Search Results for <i>%s</i>"
+msgstr "Résultats de recherche pour <i>%s</i>"
+
+#: ../src/Widgets/SearchResultsView.vala:153
+msgid "No matching episodes found in your library."
+msgstr "Aucun épisode trouvé correspondant à la recherche dans votre bibliothèque."
+
+#: ../src/Widgets/SearchResultsView.vala:154
+msgid "No matching podcasts found in your library."
+msgstr "Aucun podcast trouvé correspondant à la recherche dans votre bibliothèque."
+
+#: ../src/Widgets/SettingsDialog.vala:59 ../src/Widgets/Toolbar.vala:172
+msgid "Preferences"
+msgstr "Préférences"
+
+#: ../src/Widgets/SettingsDialog.vala:75
+msgid "Automatically download new episodes:"
+msgstr "Télécharger automatiquement les nouveaux épisodes :"
+
+#: ../src/Widgets/SettingsDialog.vala:93
+msgid "Keep my library clean:"
+msgstr "Garder ma bibliothèque propre :"
+
+#: ../src/Widgets/SettingsDialog.vala:111
+msgid "Show podcast names below cover art:"
+msgstr "Afficher les noms des podcasts en dessous de la jaquette :"
+
+#: ../src/Widgets/SettingsDialog.vala:138
+msgid "Seconds to skip back:"
+msgstr "Nombre de secondes pour le retour rapide :"
+
+#: ../src/Widgets/SettingsDialog.vala:156
+msgid "Seconds to skip forward:"
+msgstr "Nombre de secondes pour l'avance rapide :"
+
+#: ../src/Widgets/SettingsDialog.vala:199
+msgid "Show iTunes Store results from:"
+msgstr "Afficher les résultats de la recherche sur l'iTunes Store à partir de :"
+
+#: ../src/Widgets/SettingsDialog.vala:239
+msgid "Archive.org S3 Access Key"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:248
+msgid "Archive.org S3 Secret Key"
+msgstr ""
+
+#: ../src/Widgets/SettingsDialog.vala:263
+msgid "Close"
+msgstr "Fermer"
+
+#: ../src/Widgets/Shownotes.vala:70
+msgid "Mark this episode as played"
+msgstr "Marquer cet épisode comme lu"
+
+#: ../src/Widgets/Shownotes.vala:75
+msgid "Mark this episode as new"
+msgstr "Marquer cet épisode comme non lu"
+
+#: ../src/Widgets/Shownotes.vala:80
+msgid "Download episode"
+msgstr "Télécharger l'épisode"
+
+#: ../src/Widgets/Shownotes.vala:85
+msgid "Share this episode"
+msgstr "Partager cet épisode"
+
+#: ../src/Widgets/Shownotes.vala:88
+msgid "Copy shareable link"
+msgstr "Copier le lien de partage"
+
+#: ../src/Widgets/Shownotes.vala:89
+msgid "Send a Tweet…"
+msgstr "Envoyer un Tweet ..."
+
+#: ../src/Widgets/Shownotes.vala:90
+msgid "Copy the direct episode link"
+msgstr "Copier le lien direct de l'épisode"
+
+#: ../src/Widgets/Shownotes.vala:139
+msgid "Add this episode to the up next list"
+msgstr "Ajouter cet épisode en haut de la liste suivante"
+
+#: ../src/Widgets/Shownotes.vala:147
+msgid "<b>Summary</b>"
+msgstr "<b>Résumé</b>"
+
+#: ../src/Widgets/Sidepane.vala:89
+msgid "Mark all episodes as played"
+msgstr "Marquer tous les épisodes comme lus"
+
+#: ../src/Widgets/Sidepane.vala:106
+msgid "Hide episodes that have already been played"
+msgstr "Masquer les épisodes déjà lus"
+
+#: ../src/Widgets/Sidepane.vala:126
+msgid "Remove podcast from library"
+msgstr "Supprimer le podcast de la bibliothèque"
+
+#: ../src/Widgets/Sidepane.vala:137
+msgid "More options"
+msgstr "Plus d'options"
+
+#: ../src/Widgets/Sidepane.vala:191
+msgid "Hide the episode side pane"
+msgstr "Masquer le volet d'épisode latéral"
+
+#: ../src/Widgets/Sidepane.vala:278
+msgid "Mark selected episodes as unplayed"
+msgstr "Marquer les épisodes selectionnés comme non lus"
+
+#: ../src/Widgets/Sidepane.vala:369
+msgid "Mark as Played"
+msgstr "Marquer comme lu"
+
+#: ../src/Widgets/Sidepane.vala:388
+msgid "Mark as Unplayed"
+msgstr "Marquer comme non lu"
+
+#: ../src/Widgets/Sidepane.vala:615
+msgid "No new episodes."
+msgstr "Pas de nouveaux épisodes."
+
+#: ../src/Widgets/Sidepane.vala:668
+msgid "%d episodes, %d unplayed"
+msgstr "%d épisodes, %d non lus"
+
+#: ../src/Widgets/Sidepane.vala:670
+msgid "%d episodes"
+msgstr "%d épisodes"
+
+#: ../src/Widgets/Toolbar.vala:83
+msgid "View show notes"
+msgstr "Voir les notes de l'épisode"
+
+#: ../src/Widgets/Toolbar.vala:93
+msgid "Coming up next"
+msgstr "À venir"
+
+#: ../src/Widgets/Toolbar.vala:119
+msgid "Check for Updates"
+msgstr "Chercher des mises à jour"
+
+#: ../src/Widgets/Toolbar.vala:124
+msgid "Add Podcast Feed…"
+msgstr "Ajouter un flux de podcast..."
+
+#: ../src/Widgets/Toolbar.vala:129
+msgid "Import Subcriptions…"
+msgstr "Importer des abonnements..."
+
+#: ../src/Widgets/Toolbar.vala:134
+msgid "Export Subscriptions…"
+msgstr "Exporter des abonnements..."
+
+#: ../src/Widgets/Toolbar.vala:139 ../src/Widgets/Toolbar.vala:150
+msgid "Use Light Theme"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:141 ../src/Widgets/Toolbar.vala:147
+msgid "Use Dark Theme"
+msgstr ""
+
+#: ../src/Widgets/Toolbar.vala:179
+msgid "Report a Problem…"
+msgstr "Signaler un problème…"
+
+#: ../src/Widgets/Toolbar.vala:187
+msgid "Donate…"
+msgstr "Faire un don..."
+
+#: ../src/Widgets/Toolbar.vala:195
+msgid "About"
+msgstr "À propos"
+
+#: ../src/Widgets/Toolbar.vala:236 ../src/Widgets/Toolbar.vala:251
+msgid "Fast forward %d seconds"
+msgstr "Avance rapide de %d secondes"
+
+#: ../src/Widgets/Toolbar.vala:244 ../src/Widgets/Toolbar.vala:252
+msgid "Rewind %d seconds"
+msgstr "Retour arrière de %d secondes"
+
+#: ../src/Widgets/Toolbar.vala:257
+msgid "Check for new episodes"
+msgstr "Vérifier les nouveaux épisodes"
+
+#: ../src/Widgets/Toolbar.vala:266
+msgid "Search your library or online"
+msgstr "Rechercher dans votre bibliothèque ou en ligne"
+
+#: ../src/Widgets/Toolbar.vala:276
+msgid "View the top podcasts in the iTunes Store"
+msgstr "Voir les meilleurs podcasts sur iTunes"
+
+#: ../src/Widgets/Toolbar.vala:311
+msgid "Downloads"
+msgstr "Téléchargements"
+
+#: ../src/Widgets/VideoControls.vala:60
+msgid "Exit Fullscreen"
+msgstr "Quitter le plein écran"

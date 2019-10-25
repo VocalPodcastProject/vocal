@@ -1,4 +1,4 @@
-%global appname com.github.needle-and-thread.vocal
+%global appname com.github.needleandthread.vocal
 
 Name:           vocal
 Summary:        Powerful, beautiful, and simple podcast client

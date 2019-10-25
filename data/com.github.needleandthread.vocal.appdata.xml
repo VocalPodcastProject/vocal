@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2018 Needle & Thread -->
 <component type="desktop">
-  <id>com.github.needle-and-thread.vocal</id>
+  <id>com.github.needleandthread.vocal</id>
   <metadata_license>CC0</metadata_license>
   <project_license>GPL-3.0+</project_license>
   <name>Vocal</name>
@@ -10,12 +10,12 @@
   
   <screenshots>
     <screenshot type="default">
-      <caption>Library View</caption>
-      <image width="1148" height="843">https://github.com/needle-and-thread/vocal/raw/master/screenshot1.png</image>
+      <caption>Library View with Light Theme</caption>
+      <image width="1148" height="775">https://github.com/needle-and-thread/vocal/raw/master/screenshot1.png</image>
     </screenshot>
     <screenshot type="default">
-      <caption>Podcast View</caption>
-      <image width="1148" height="843">https://github.com/needle-and-thread/vocal/raw/master/screenshot2.png</image>
+      <caption>Library View with Dark Theme</caption>
+      <image width="1148" height="775">https://github.com/needle-and-thread/vocal/raw/master/screenshot2.png</image>
     </screenshot>
     <screenshot type="default">
       <caption>iTunes Top 100 Podcasts</caption>
@@ -28,6 +28,10 @@
     <screenshot type="default">
       <caption>New Episode View</caption>
       <image width="1148" height="843">https://github.com/needle-and-thread/vocal/raw/master/screenshot5.png</image>
+    </screenshot>
+    <screenshot type="default">
+      <caption>Podcast View</caption>
+      <image width="1148" height="887">https://github.com/needle-and-thread/vocal/raw/master/screenshot6.png</image>
     </screenshot>
   </screenshots>
 
@@ -47,6 +51,7 @@
       <li>Smart library management</li>
       <li>Playback position saving</li>
       <li>Library importing and exporting</li>
+      <li>Internet Archive integration</li>
       <li>... and much more!</li>
     </ul>
   </description>
@@ -89,6 +94,48 @@
 
 
   <releases>
+    <release version = "2.4.2" timestamp="1558375090">
+      <description>
+        <p>This point release changes all the application IDs to com.needleandthread.vocal
+            to fix some issues with dbus and flatpaks.
+        </p>
+      </description>
+    </release>
+    <release version = "2.4.1" timestamp="1557775222">
+      <description>
+        <p>This is a small point release that includes a fix for the progress bar, which in version 2.4.0
+            had an issue where only the left half of the progress bar could be used for seeking.
+        </p>
+      </description>
+    </release>
+    <release version = "2.4" timestamp="1554918082">
+      <description>
+        <p>This release is packed to the gills with new features and stability enhancements!
+            A first for any podcast app, you can now submit Creative Commons licensed podcast
+            episodes to the Internet Archive directly from within Vocal. Many other requested
+            changes and quality of life improvments can also be found, such as chronological feeds
+            and a new theme switcher. The full changelog is as follows:
+        </p>
+        <ul>
+            <li>You can now switch between 'light' and 'dark' modes using the option in the gear menu
+            </li>
+            <li>Built-in Internet Archive episode uploads (for Creative Commons licensed feeds)
+            </li>
+            <li>Better search results
+            </li>
+            <li>Scrolling while hovering over the seekbar now seeks through the current episode
+            </li>
+            <li>Support for Atom podcast feeds
+            </li>
+            <li>Dramatically improved episode browsing (can now list both reverse-chronological or chronological - your choice)
+            </li>
+            <li>New and updated translations throughout many languages
+            </li>
+            <li>Lots of stability and performance enhancements under the hood
+            </li>
+        </ul>
+      </description>
+    </release>
     <release version = "2.3" timestamp="1541346569">
       <description>
         <p>Vocal's first release for elementary OS Juno!

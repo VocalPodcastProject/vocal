@@ -196,6 +196,9 @@ namespace Vocal {
                         else if (next_item_in_queue == "description") {
                             i++;
                             episode.description = queue[i];
+                        } else if (next_item_in_queue == "guid") {
+                            i++;
+                            episode.guid = queue[i];
                         }
                     }
 
@@ -578,10 +581,15 @@ namespace Vocal {
                             else if (next_item_in_queue == "description") {
                                 i++;
                                 episode.description = queue[i];
+                            } else if (next_item_in_queue == "guid") {
+                                i++;
+                                episode.guid = queue[i];
                             }
+
                         }
 
                         episode.parent = podcast;
+                        episode.podcast_uri = podcast.feed_uri;
 
                         if (previous_newest_episode != null) {
                             if (episode.title == previous_newest_episode.title.replace ("%27", "'")) {
@@ -670,12 +678,17 @@ namespace Vocal {
                             }
                         }
                         break;
+                    case "id":
+                        entry.guid = iterEntry->get_content ();
+                        break;
                     default:
                         break;
                 }
             }
 
             entry.parent=podcast;
+            entry.podcast_uri = podcast.feed_uri;
+
             episodes.add (entry);
         }
 

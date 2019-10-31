@@ -23,9 +23,9 @@ using Granite.Services;
 
 namespace Vocal {
 
-	namespace Option {
-		private static bool OPEN_HIDDEN = false;
-	}
+    namespace Option {
+        private static bool OPEN_HIDDEN = false;
+    }
 
     public class VocalApp : Granite.Application {
 
@@ -56,10 +56,10 @@ namespace Vocal {
             about_documenters = { "Nathan Dyer <mail@nathandyer.me>" };
             about_artists = { "Nathan Dyer (App) <mail@nathandyer.me>", "Harvey Cabaguio (Icons and Branding) <harvey@elementaryos.org", "Mashnoon Ibtesum (Artwork)" };
             about_comments = "Podcast Client for the Modern Desktop";
-            about_translators = _("translator-credits");
+            about_translators = _ ("translator-credits");
             about_license_type = Gtk.License.GPL_3_0;
 
-            set_options();
+            set_options ();
         }
 
         public const OptionEntry[] app_options = {
@@ -74,16 +74,16 @@ namespace Vocal {
         }
 
         public override void activate () {
-        
+
             if (controller == null) {
-                controller = new Controller(this);
+                controller = new Controller (this);
             }
 
             if (get_windows () == null) {
                 controller.window = new MainWindow (controller);
                 controller.open_hidden = Option.OPEN_HIDDEN;
-                if(!Option.OPEN_HIDDEN)
-                	controller.window.show_all ();
+                if (!Option.OPEN_HIDDEN)
+                    controller.window.show_all ();
             } else {
                 controller.window.present ();
             }
@@ -95,14 +95,14 @@ namespace Vocal {
             // Options
 
             var context = new OptionContext ();
-    		context.add_main_entries (app_options, "vocal");
-        	context.add_group (Gtk.get_option_group (true));
+            context.add_main_entries (app_options, "vocal");
+            context.add_group (Gtk.get_option_group (true));
 
-        	try {
-	            context.parse (ref args);
-	        } catch (Error e) {
-	            warning (e.message);
-	        }
+            try {
+                context.parse (ref args);
+            } catch (Error e) {
+                warning (e.message);
+            }
 
             // Init internationalization support
             string package_name = Constants.GETTEXT_PACKAGE;
@@ -114,25 +114,25 @@ namespace Vocal {
             // Initialize GtkClutter
             var err = GtkClutter.init (ref args);
             if (err != Clutter.InitError.SUCCESS) {
-                stdout.puts("Could not initialize clutter gtk\n");
+                stdout.puts ("Could not initialize clutter gtk\n");
                 error ("Could not initalize clutter! "+err.to_string ());
             }
 
             // Initialize Clutter
             err = Clutter.init (ref args);
             if (err != Clutter.InitError.SUCCESS) {
-                stdout.puts("Could not initialize clutter.\n");
+                stdout.puts ("Could not initialize clutter.\n");
                 error ("Could not initalize clutter! "+err.to_string ());
             }
 
             // Initialize GStreamer
             Gst.init (ref args);
-            Gst.PbUtils.init();
+            Gst.PbUtils.init ();
 
             // Set the media role
             GLib.Environ.set_variable ({"PULSE_PROP_media.role"}, "audio", "true");
 
-			// Create a new instance of the app and run it
+            // Create a new instance of the app and run it
             var app = new Vocal.VocalApp ();
             app.args = args;
             app.run (args);

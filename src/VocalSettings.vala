@@ -36,7 +36,7 @@ public class VocalSettings : Granite.Services.Settings {
     public int sidebar_width {get; set; }
     public int fast_forward_seconds { get; set; }
     public int rewind_seconds { get; set;}
-    
+
     public string library_location { get; set; }
     public string last_played_media { get; set; }
     public string itunes_store_country { get; set; }
@@ -46,13 +46,13 @@ public class VocalSettings : Granite.Services.Settings {
     public string gpodder_username { get; set; }
     public string gpodder_last_successful_sync_timestamp { get; set; }
     
-    private VocalSettings() {
-        base("com.github.needleandthread.vocal");
+    private VocalSettings () {
+        base ("com.github.needleandthread.vocal");
     }
 
-    public static VocalSettings get_default_instance() {
-        if(_default_instance == null)
-            _default_instance = new VocalSettings();
+    public static VocalSettings get_default_instance () {
+        if (_default_instance == null)
+            _default_instance = new VocalSettings ();
 
         return _default_instance;
     }

@@ -25,42 +25,42 @@ using Gst.PbUtils;
 namespace Vocal {
     public class Player : ClutterGst.Playback {
 
-    	private static Player? player = null;
+        private static Player? player = null;
         public static Player? get_default (string[] args) {
             if (player == null) {
-                player = new Player(args);
+                player = new Player (args);
             }
             return player;
         }
-    
-        public signal void state_changed(Gst.State new_state);
-        public signal void additional_plugins_required(Gst.Message message);
 
-        public signal void new_position_available();
+        public signal void state_changed (Gst.State new_state);
+        public signal void additional_plugins_required (Gst.Message message);
+
+        public signal void new_position_available ();
         private string tag_string;
 
         public Episode current_episode;
 
-        private Player(string[]? args) {
-        
+        private Player (string[]? args) {
+
             bool new_launch = true;
 
             current_episode = null;
-            
+
             // Check every half-second if the current media is playing, and if it is
             // send a signal that there is a new position available
-            GLib.Timeout.add(500, () => {
-                
-                if(playing)
-                    new_position_available();
+            GLib.Timeout.add (500, () => {
+
+                if (playing)
+                    new_position_available ();
                 if (new_launch && duration > 0.0) {
-                    new_position_available();
+                    new_position_available ();
                     new_launch = false;
                 }
                 return true;
             });
         }
-        
+
         /*
          *  Returns the total duration of the currently playing media
          */
@@ -75,32 +75,32 @@ namespace Vocal {
             return this.progress;
         }
 
-	    /*
+        /*
          * Sets the current state to pause
          */
         public void pause () {
             this.playing = false;
         }
 
-	    /*
+        /*
          * Sets the current state to playing
          */
         public void play () {
 
             this.playing = true;
         }
-        
+
         /*
          * Seeks backward in the currently playing media n number of seconds
          */
         public void seek_backward (int num_seconds) {
-            
+
             double total_seconds = duration;
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
-            set_position(progress - percentage_of_total_seconds);
+            set_position (progress - percentage_of_total_seconds);
         }
-        
+
         /*
          * Seeks forward in the currently playing media n number of seconds
          */
@@ -108,75 +108,75 @@ namespace Vocal {
             double total_seconds = duration;
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
-            set_position(progress + percentage_of_total_seconds);
+            set_position (progress + percentage_of_total_seconds);
         }
-        
+
         /*
          * Sets the episode that is currently being played
          */
         public void set_episode (Episode episode) {
-  
+
             this.current_episode = episode;
-            
+
             // Set the URI
             this.uri = episode.playback_uri;
-            info("Setting playback URI: %s".printf(episode.playback_uri));
+            info ("Setting playback URI: %s".printf (episode.playback_uri));
             /*
-            
+
             // If it's a video podcast, get the width and height and configure that information
-            if(episode.parent.content_type == MediaType.VIDEO) {
-	            try {
-		            var info = new Gst.PbUtils.Discoverer (10 * Gst.SECOND).discover_uri (this.uri);
-		            var video = info.get_video_streams ();
-		            if (video.data != null) {
-		                var video_info = (Gst.PbUtils.DiscovererVideoInfo)video.data;
-		                video_width = video_info.get_width ();
-		                video_height = video_info.get_height ();
+            if (episode.parent.content_type == MediaType.VIDEO) {
+                try {
+                    var info = new Gst.PbUtils.Discoverer (10 * Gst.SECOND).discover_uri (this.uri);
+                    var video = info.get_video_streams ();
+                    if (video.data != null) {
+                        var video_info = (Gst.PbUtils.DiscovererVideoInfo)video.data;
+                        video_width = video_info.get_width ();
+                        video_height = video_info.get_height ();
 
-		                configure_video();
+                        configure_video ();
 
-		            }
-	            }catch(Error e) {
-	            	warning(e.message);
-	            }
+                    }
+                }catch (Error e) {
+                    warning (e.message);
+                }
             }
             */
         }
-        
+
         /*
          * Change the playback rate
          */
         /*
-        public void set_playback_rate(double rate) {
-            int64 pos = get_position();
+        public void set_playback_rate (double rate) {
+            int64 pos = get_position ();
             this.seek (2.0,
             Gst.Format.TIME, Gst.SeekFlags.SKIP,
             Gst.SeekType.NONE, pos,
             Gst.SeekType.NONE, duration);
-        } 
+        }
         */
-        
-        
+
+
         /*
          *  Sets the currently playing media position
          */
         public void set_position (double pos) {
             this.progress = pos;
-            new_position_available();
+            new_position_available ();
         }
 
-		/*
-		 * Sets the current volume
-		 */
-	    public void set_volume (double val) {
-	        this.audio_volume = val;
-	    }
-	    
-	    /*
-		 * Gets the current volume
-		 */
-	    public double get_volume () {
-	        return this.audio_volume;
-	    }
+        /*
+         * Sets the current volume
+         */
+        public void set_volume (double val) {
+            this.audio_volume = val;
+        }
+
+        /*
+         * Gets the current volume
+         */
+        public double get_volume () {
+            return this.audio_volume;
+        }
     }
 }

@@ -18,19 +18,19 @@
 ***/
 
 namespace Vocal {
-    
-    public class DirectoryEntry { 
-    
+
+    public class DirectoryEntry {
+
         public string artist = "";
-        public string artworkUrl55 = "";
-        public string artworkUrl60 = "";
-        public string artworkUrl170 = "";
-        public string artworkUrl600 = "";
-        public string itunesUrl = "";
-        public string feedUrl = "";
+        public string artworkUrl55 = "";  // vala-lint=naming-convention
+        public string artworkUrl60 = "";  // vala-lint=naming-convention
+        public string artworkUrl170 = "";  // vala-lint=naming-convention
+        public string artworkUrl600 = "";  // vala-lint=naming-convention
+        public string itunesUrl = "";  // vala-lint=naming-convention
+        public string feedUrl = "";  // vala-lint=naming-convention
         public string summary = "";
         public string title = "";
-        
-        public DirectoryEntry() {}
+
+        public DirectoryEntry () {}
     }
 }

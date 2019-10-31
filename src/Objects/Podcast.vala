@@ -22,15 +22,15 @@ using Gee;
 namespace Vocal {
     public class Podcast {
 
-        public  ArrayList<Episode> episodes = null;  // the episodes belonging to this podcast
+        public ArrayList<Episode> episodes = null;  // the episodes belonging to this podcast
 
-        public string       name = "";               // podcast name
-        public string       feed_uri = "";           // the uri for the podcast
-        public string       remote_art_uri = "";     // the web link to the album art if local is unavailable
-        public string       local_art_uri = "";      // where the locally cached album art is located
-        public string       description = "";        // the episode's description
-        public MediaType    content_type;            // is the podcast an audio or video feed?
-        public License license = License.UNKNOWN; // the type of license
+        public string name = "";                    // podcast name
+        public string feed_uri = "";                // the uri for the podcast
+        public string remote_art_uri = "";          // the web link to the album art if local is unavailable
+        public string local_art_uri = "";           // where the locally cached album art is located
+        public string description = "";             // the episode's description
+        public MediaType content_type;              // is the podcast an audio or video feed?
+        public License license = License.UNKNOWN;   // the type of license
 
         /*
          * Gets and sets the coverart, whether it's from a remote source
@@ -56,12 +56,12 @@ namespace Vocal {
 
             // If the URI begins with "file://" set local uri, otherwise set the remote uri
             set {
-                string[] split = value.split(":");
-                string proto = split[0].ascii_down();
-                if(proto == "http" || proto == "https") {
-                    remote_art_uri = value.replace("%27", "'");
+                string[] split = value.split (":");
+                string proto = split[0].ascii_down ();
+                if (proto == "http" || proto == "https") {
+                    remote_art_uri = value.replace ("%27", "'");
                 } else {
-                    local_art_uri = "file://" + value.replace("%27", "'");
+                    local_art_uri = "file://" + value.replace ("%27", "'");
                 }
             }
         }
@@ -71,20 +71,20 @@ namespace Vocal {
          * Default constructor for an empty podcast
          */
         public Podcast () {
-            episodes = new ArrayList<Episode>();
+            episodes = new ArrayList<Episode> ();
             content_type = MediaType.UNKNOWN;
         }
 
-        public Podcast.with_name(string name) {
-            this();
+        public Podcast.with_name (string name) {
+            this ();
             this.name = name;
         }
 
         /*
          * Add a new episode to the library
          */
-        public void add_episode(Episode new_episode) {
-            episodes.insert(0, new_episode);
+        public void add_episode (Episode new_episode) {
+            episodes.insert (0, new_episode);
         }
 
     }

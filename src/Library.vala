@@ -79,6 +79,7 @@ namespace Vocal {
         private GLib.List<string> podcasts_being_added = new GLib.List<string> ();
 
         private Controller controller;
+        public string pending_import = null;
 
         /*
          * Constructor for the library
@@ -168,6 +169,8 @@ namespace Vocal {
                 export_to_OPML (export_path);
 
                 podcasts.clear ();
+
+                this.pending_import = export_path; // save location for later import.
 
                 // Create backup of existing db tables.
                 query = """

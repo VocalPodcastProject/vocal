@@ -300,7 +300,10 @@ namespace Vocal {
             if (first_run || library.empty ()) {
                 window.show_all ();
                 window.switch_visible_page (window.welcome);
-
+                if (library.pending_import != null) {
+                    info ("Starting subscription migration as import: %s", library.pending_import);
+                    window.import_podcasts (library.pending_import);
+                }
             } else {
                 // Populate the IconViews from the library
                 window.populate_views ();

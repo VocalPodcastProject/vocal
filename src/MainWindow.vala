@@ -892,36 +892,46 @@ namespace Vocal {
         /*
          * Choose a file to import to the controller.library
          */
-        public void import_podcasts () {
+        public void import_podcasts (string? import_file = null) {
 
             controller.currently_importing = true;
+            int decision = Gtk.ResponseType.NONE;
+            bool run_pending_import = false;
+            Gtk.FileChooserDialog file_chooser = null;
+            string file_name;
 
-            var file_chooser = new Gtk.FileChooserDialog (_ ("Select Subscription File"),
-                 this,
-                 Gtk.FileChooserAction.OPEN,
-                 _ ("Cancel"), Gtk.ResponseType.CANCEL,
-                 _ ("Open"), Gtk.ResponseType.ACCEPT);
+            if (import_file == null) {
 
-            var all_files_filter = new Gtk.FileFilter ();
-            all_files_filter.set_filter_name (_ ("All files"));
-            all_files_filter.add_pattern ("*");
+                file_chooser = new Gtk.FileChooserDialog ("Save Subscriptions to XML File",
+                          this,
+                          Gtk.FileChooserAction.SAVE,
+                          _ ("Cancel"), Gtk.ResponseType.CANCEL,
+                          _ ("Save"), Gtk.ResponseType.ACCEPT);
 
-            var opml_filter = new Gtk.FileFilter ();
-            opml_filter.set_filter_name (_ ("OPML files"));
-            opml_filter.add_mime_type ("text/x-opml+xml");
+                var all_files_filter = new Gtk.FileFilter ();
+                all_files_filter.set_filter_name (_ ("All files"));
+                all_files_filter.add_pattern ("*");
 
-            file_chooser.add_filter (opml_filter);
-            file_chooser.add_filter (all_files_filter);
+                var opml_filter = new Gtk.FileFilter ();
+                opml_filter.set_filter_name (_ ("OPML files"));
+                opml_filter.add_mime_type ("text/x-opml+xml");
 
-            file_chooser.modal = true;
+                file_chooser.add_filter (opml_filter);
+                file_chooser.add_filter (all_files_filter);
 
-            int decision = file_chooser.run ();
-            string file_name = file_chooser.get_filename ();
+                file_chooser.modal = true;
 
-            file_chooser.destroy ();
+                decision = file_chooser.run ();
+                file_name = file_chooser.get_filename ();
+
+                file_chooser.destroy ();
+            } else {
+                run_pending_import = true;
+                file_name = import_file;
+            }
 
             //If the user selects a file, get the name and parse it
-            if (decision == Gtk.ResponseType.ACCEPT) {
+            if (decision == Gtk.ResponseType.ACCEPT || run_pending_import == true) {
 
                 toolbar.show_playback_box ();
 

@@ -52,12 +52,14 @@ namespace Vocal {
             get_header_bar ().get_style_context ().remove_class ("header-bar");
 
             this.modal = true;
-            this.resizable = false;
+            this.resizable = true;
             this.set_transient_for(controller.window);
             content_box = get_content_area () as Gtk.Box;
             content_box.homogeneous = false;
             content_box.margin = 12;
             content_box.spacing = 6;
+            
+            this.set_size_request (50, 50);
             
             notebook = new Gtk.Stack ();
             notebook.transition_type = Gtk.StackTransitionType.SLIDE_LEFT_RIGHT;
@@ -73,6 +75,14 @@ namespace Vocal {
             
             content_box.pack_start (notebook, true, true, 0);
             
+            this.show.connect ( () => {
+            	// For some reason setting this during creation
+            	// doesn't work, but doing it when the dialog shows
+            	// does.
+            	if (controller.settings.gpodder_username != "") {
+		        	notebook.set_visible_child (overview_box);
+		        }
+            });
             
             // Login Box
 
@@ -156,8 +166,6 @@ namespace Vocal {
             device_name_box.pack_start (known_device_expander, true, true, 12);
             device_name_box.pack_start (complete_setup_button, true, true, 12);
             
-            notebook.set_visible_child (login_box);
-            
             // Overview Box
             
             var last_sync_label = new Gtk.Label (_("Latest Successful Sync: Never"));
@@ -181,7 +189,6 @@ namespace Vocal {
             overview_box.pack_start (full_sync_button, true, true, 12);
             overview_box.pack_start (episode_sync_box, true, true, 12);
             
-            this.set_size_request (50, 50);
         }
         
         private void on_login_request () {

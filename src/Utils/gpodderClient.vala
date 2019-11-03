@@ -308,6 +308,90 @@ namespace Vocal {
             }
         }
         
+        public async bool get_episode_updates_async () {
+        
+        	var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
+		        }
+	        }); 
+	        string endpoint = "https://gpodder.net/api/2/episodes/%s.json".printf (controller.settings.gpodder_username);
+	        if(controller.settings.gpodder_last_successful_sync_timestamp != "") {
+	        	endpoint += "?since=%s&aggregated=true".printf (controller.settings.gpodder_last_successful_sync_timestamp);
+	        } else {
+	        	endpoint += "?aggregated=true";
+	        }
+	        
+	        var message = new Soup.Message ("GET", endpoint);
+            session.send_message (message);
+            
+            if (message.status_code == 200) {
+            	
+            	info ("Episode actions successfully loaded. Parsing results and updating records.");
+            	
+            	var parser = new Json.Parser ();
+				parser.load_from_data ((string) message.response_body.flatten ().data, -1);
+
+				var root_object = parser.get_root ().get_object ();
+				var actions = root_object.get_array_member ("actions");
+            	
+            	// If we've never synced actions before, all we care about is the current timestamp
+            	if(controller.settings.gpodder_last_successful_sync_timestamp != "") {
+
+					foreach (var action in actions.get_elements ()) {
+						var object = action.get_object ();
+						var podcast = object.get_string_member ("podcast");
+						var episode = object.get_string_member ("episode");
+						var action_type = object.get_string_member ("action");
+						int64 position = 0;
+						if (action_type == "play") {
+						
+							// The only interesting action to update is a 'play' event, to get the new position
+							// We don't really care if other devices deleted or downloaded an episode file
+							
+							position = object.get_int_member ("position");
+						
+							// Locate the episode in the library and update it
+							foreach (var lib_podcast in controller.library.podcasts) {
+								if (lib_podcast.feed_uri == podcast) {
+									foreach (var lib_episode in lib_podcast.episodes ) {
+										if (lib_episode.uri == episode) {
+											lib_episode.last_played_position = position;
+											controller.library.set_episode_playback_position (lib_episode);
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+					
+				var updated_timestamp = root_object.get_int_member ("timestamp");
+				controller.settings.gpodder_last_successful_sync_timestamp = updated_timestamp.to_string ();
+				
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
         public bool update_episode (Episode episode, EpisodeAction action) {
         
             var session = new Soup.Session ();

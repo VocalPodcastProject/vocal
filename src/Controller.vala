@@ -43,6 +43,7 @@ namespace Vocal {
         public signal void track_changed (string episode_title, string podcast_name, string artwork_uri, uint64 duration);
         public signal void playback_status_changed (string status);
         public signal void update_status_changed (bool currently_updating);
+        public signal void gpodder_sync_status_changed (bool currently_syncing);
 
         /* Runtime flags */
 
@@ -267,12 +268,28 @@ namespace Vocal {
                 library.autoclean_library ();
             }
 
-            // Check for updates after 20 seconds
-            GLib.Timeout.add (20000, () => {
-                on_update_request ();
+            // Check for gpodder updates after 5 seconds, then check for new episodes
+            GLib.Timeout.add (5000, () => {
+            
+            	// Get any episode updates from gpodder
+            
+		        // TODO: make it async and actually process the updates
+		        if (settings.gpodder_username != "") {
+		        	gpodder_sync_status_changed (true);
+		        	var loop = new MainLoop();
+                    gpodder_client.get_episode_updates_async.begin ((obj, res) => {
+                        bool? success = gpodder_client.get_episode_updates_async.end (res);
+                        gpodder_sync_status_changed (false);
+		                on_update_request ();
+                        loop.quit();
+                    });
+                    loop.run();
+		        	
+	        	} else {
+                	on_update_request ();
+            	}
                 return false;
             });
-
 
             // Set minutes elapsed to zero since the app is just now starting up
             minutes_elapsed_in_period = 0;
@@ -293,12 +310,7 @@ namespace Vocal {
                     return true;
                 });
             }
-            
-            // Get any episode updates from gpodder
-            
-            // TODO: make it async and actually process the updates
-            gpodder_client.get_episode_updates ();
-            
+                       
             info ("Controller initialization finished. Running post-creation sequence.");
             post_creation_sequence ();
         }

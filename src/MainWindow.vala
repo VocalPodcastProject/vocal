@@ -460,9 +460,7 @@ namespace Vocal {
             toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
             
             toolbar.sync_dialog_selected.connect ( () => {
-            	if (sync_dialog == null) {
-            		sync_dialog = new SyncDialog(controller);
-            	}
+	    		sync_dialog = new SyncDialog(controller);
                 sync_dialog.show_all ();
             });
             
@@ -557,6 +555,14 @@ namespace Vocal {
             controller.update_status_changed.connect ( (currently_updating) => {
                 if (currently_updating) {
                     show_infobar (_("Checking for new episodes…"), MessageType.INFO);
+                } else {
+                    hide_infobar ();
+                }
+            });
+            
+            controller.gpodder_sync_status_changed.connect ( (currently_syncing) => {
+                if (currently_syncing) {
+                    show_infobar (_("Syncing with your gpodder account…"), MessageType.INFO);
                 } else {
                     hide_infobar ();
                 }

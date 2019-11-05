@@ -313,7 +313,7 @@ namespace Vocal {
             foreach (Episode e in e_matches) {
                 Podcast parent = null;
                 foreach (Podcast p in library.podcasts) {
-                    if (e.parent.name == p.name) {
+                    if (e.podcast_uri == p.feed_uri) {
                         parent = p;
                     }
                 }

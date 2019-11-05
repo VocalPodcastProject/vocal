@@ -1095,6 +1095,8 @@ namespace Vocal {
                     episode.podcast_uri = val;
                 } else if (col_name == "guid") {
                     episode.guid = val;
+                } else if (col_name == "link") {
+                    episode.link = val;
                 }
             }
 
@@ -1273,10 +1275,11 @@ namespace Vocal {
                 latest_position     TEXT,
                 download_status     TEXT,
                 play_status         TEXT,
-                guid                TEXT
+                guid                TEXT,
+                link                TEXT
               );
 
-              CREATE UNIQUE INDEX episode_guid ON Episode (guid, podcast_uri);
+              CREATE UNIQUE INDEX episode_guid ON Episode (guid, link, podcast_uri);
               CREATE INDEX episode_title ON Episode (title);
               CREATE INDEX episode_released ON Episode (released);
 
@@ -1361,12 +1364,11 @@ namespace Vocal {
          */
         public bool write_episode_to_database (Episode episode) {
 
-            assert (episode.guid != null && episode.guid != "");
             assert (episode.podcast_uri != null && episode.podcast_uri != "");
 
             string query = "INSERT OR REPLACE INTO Episode " +
-                           " (title, podcast_uri, uri, local_uri, released, description, latest_position, download_status, play_status, guid) " +
-                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10);";
+                           " (title, podcast_uri, uri, local_uri, released, description, latest_position, download_status, play_status, guid, link) " +
+                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);";
 
             Sqlite.Statement stmt;
             int ec = db.prepare_v2 (query, query.length, out stmt);
@@ -1396,6 +1398,7 @@ namespace Vocal {
             stmt.bind_text (8, download_text);
             stmt.bind_text (9, played_text);
             stmt.bind_text (10, episode.guid);
+            stmt.bind_text (11, episode.link);
 
             ec = stmt.step ();
 

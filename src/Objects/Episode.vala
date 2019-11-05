@@ -24,6 +24,7 @@ namespace Vocal {
     public class Episode : GLib.Object {
 
         public string guid = null;
+        public string link = "";
         public string podcast_uri = null;
         public string title = "";                       // the title of the episode
         public string description = "";                 // the description/shownotes

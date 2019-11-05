@@ -199,6 +199,9 @@ namespace Vocal {
                         } else if (next_item_in_queue == "guid") {
                             i++;
                             episode.guid = queue[i];
+                        } else if (next_item_in_queue == "link") {
+                            i++;
+                            episode.link = queue[i];
                         }
                     }
 
@@ -584,6 +587,9 @@ namespace Vocal {
                             } else if (next_item_in_queue == "guid") {
                                 i++;
                                 episode.guid = queue[i];
+                            } else if (next_item_in_queue == "link") {
+                                i++;
+                                episode.link = queue[i];
                             }
 
                         }
@@ -667,6 +673,7 @@ namespace Vocal {
                             string attr_name = propEntry->name;
                             if (attr_name == "href") {
                                 entry.uri=propEntry->children->content;
+                                entry.link = entry.uri;
                             } else if (attr_name == "type" && podcast != null) {
                                 podcast.content_type = MediaType.UNKNOWN;
 

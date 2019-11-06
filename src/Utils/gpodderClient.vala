@@ -156,6 +156,48 @@ namespace Vocal {
             }
         }
         
+        public async bool upload_subscriptions_async () {
+        
+            string subs = "";
+            foreach (Podcast p in controller.library.podcasts) {
+                subs += p.feed_uri + "\n";
+            }
+            
+            var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
+		        }
+	        }); 
+	        
+	        string endpoint = "https://gpodder.net/subscriptions/%s/%s.txt".printf (controller.settings.gpodder_username, controller.settings.gpodder_device_name);
+            var message = new Soup.Message ("PUT", endpoint);
+            
+            message.set_request ("text/plain", Soup.MemoryUse.STATIC, subs.data);
+            session.send_message (message);
+
+            if (message.status_code == 200) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        
         public GLib.List<string> get_device_list () {
             List<string> list = new List<string> ();
             
@@ -191,6 +233,41 @@ namespace Vocal {
         }
         
         public string get_subscriptions_list () {
+            var session = new Soup.Session ();
+            session.user_agent = "vocal";
+            
+            int counter = 0;
+            session.authenticate.connect ((msg, auth, retrying) => {
+		        if (counter < 3) {
+			        if (retrying == true) {
+				        warning ("Invalid user name or password.\n");
+			        }
+			        var loop = new MainLoop();
+                    controller.password_manager.get_password_async.begin("gpodder.net-password", (obj, res) => {
+                        string? password = controller.password_manager.get_password_async.end(res);
+		                if (password != null){
+		                    auth.authenticate (controller.settings.gpodder_username, password);
+	                    }
+		                counter++;
+                        loop.quit();
+                    });
+                    loop.run();
+		        }
+	        }); 
+	        
+	        string endpoint = "https://gpodder.net/subscriptions/%s.opml".printf (controller.settings.gpodder_username);
+            var message = new Soup.Message ("GET", endpoint);
+            session.send_message (message);
+            
+            if (message.status_code == 200) {
+                return (string)message.response_body.data;
+            } else {
+                return "";
+            }
+        }
+        
+        
+        public async string get_subscriptions_list_async () {
             var session = new Soup.Session ();
             session.user_agent = "vocal";
             

@@ -26,7 +26,6 @@ using Granite.Widgets;
 
 namespace Vocal {
 
-
     public class Controller : GLib.Object {
 
         public MainWindow window = null;
@@ -43,7 +42,6 @@ namespace Vocal {
         public signal void track_changed (string episode_title, string podcast_name, string artwork_uri, uint64 duration);
         public signal void playback_status_changed (string status);
         public signal void update_status_changed (bool currently_updating);
-        public signal void gpodder_sync_status_changed (bool currently_syncing);
 
         /* Runtime flags */
 
@@ -271,17 +269,28 @@ namespace Vocal {
             // Check for gpodder updates after 5 seconds, then check for new episodes
             GLib.Timeout.add (5000, () => {
             
-            	// Get any episode updates from gpodder
+            	// Get new subscriptions from gpodder.net
             
-		        // TODO: make it async and actually process the updates
 		        if (settings.gpodder_username != "") {
-		        	gpodder_sync_status_changed (true);
+		        	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
 		        	var loop = new MainLoop();
-                    gpodder_client.get_episode_updates_async.begin ((obj, res) => {
-                        bool? success = gpodder_client.get_episode_updates_async.end (res);
-                        gpodder_sync_status_changed (false);
-		                on_update_request ();
-                        loop.quit();
+                	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
+                	
+		                    string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
+                			library.add_from_OPML (cloud_subs_opml);
+		                    
+		                    // Next, get any episode updates
+		                    window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
+		                    gpodder_client.get_episode_updates_async.begin ((obj, res) => {
+
+		                    	bool? success = gpodder_client.get_episode_updates_async.end (res);
+		                    	window.hide_infobar ();
+		                    	
+		                    	// Now update the actual feeds and quit the loop
+						        on_update_request ();
+				                loop.quit();
+		                    });
+		                    
                     });
                     loop.run();
 		        	
@@ -538,6 +547,21 @@ namespace Vocal {
             loop.run ();
 
             if (success) {
+            
+            	// Send update to gpodder API if necessary
+            	if (settings.gpodder_username != "") {
+            	
+            		info (_("Uploading subscriptions to gpodder.net."));
+		        	var gpodder_loop = new MainLoop ();
+		        	window.show_infobar (_("Uploading subscriptions to gpodder.net…"), MessageType.INFO);
+		            gpodder_client.upload_subscriptions_async.begin ((obj, res) => {
+	                    gpodder_client.upload_subscriptions_async.end (res);
+	                    window.hide_infobar ();
+		                gpodder_loop.quit ();
+		            });
+		            gpodder_loop.run ();
+	            }
+            	
                 window.toolbar.show_shownotes_button ();
                 window.toolbar.show_volume_button ();
                 window.toolbar.show_playlist_button ();

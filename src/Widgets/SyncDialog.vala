@@ -47,12 +47,9 @@ namespace Vocal {
             
             title = _("Library Synchronization");
             this.controller = controller;
-            
-            (get_header_bar () as Gtk.HeaderBar).show_close_button = false;
-            get_header_bar ().get_style_context ().remove_class ("header-bar");
 
             this.modal = true;
-            this.resizable = true;
+            this.resizable = false;
             this.set_transient_for(controller.window);
             content_box = get_content_area () as Gtk.Box;
             content_box.homogeneous = false;

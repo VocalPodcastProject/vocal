@@ -559,14 +559,6 @@ namespace Vocal {
                     hide_infobar ();
                 }
             });
-            
-            controller.gpodder_sync_status_changed.connect ( (currently_syncing) => {
-                if (currently_syncing) {
-                    show_infobar (_("Syncing with your gpodder account…"), MessageType.INFO);
-                } else {
-                    hide_infobar ();
-                }
-            });
 
             // Create the search box
             search_results_view = new SearchResultsView (controller.library);
@@ -1831,7 +1823,7 @@ namespace Vocal {
             }
         }
         
-        private void show_infobar (string message, MessageType type) {
+        public void show_infobar (string message, MessageType type) {
             infobar.set_no_show_all (false);
             infobar.show_all ();
    
@@ -1850,7 +1842,7 @@ namespace Vocal {
             infobar.show_all ();
         }
         
-        private void hide_infobar () {
+        public void hide_infobar () {
             infobar.revealed = false;
             hiding_timer = GLib.Timeout.add (500, () => {
                 infobar.set_no_show_all (true);

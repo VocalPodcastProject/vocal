@@ -169,7 +169,14 @@ namespace Vocal {
             var logout_button = new Gtk.Button.with_label (_("Logout"));            
             var full_sync_button = new Gtk.Button.with_label (_("Perform a Full Sync Now"));
             
+            logout_button.clicked.connect (() => {
+            	controller.settings.gpodder_username = "";
+            	notebook.set_visible_child (login_box);
+            });
+            
             var episode_sync_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
+            episode_sync_box.halign = Gtk.Align.CENTER;
+            episode_sync_box.valign = Gtk.Align.CENTER;
             var sync_episodes_label = new Gtk.Label (_("Sync Episode Activity"));
             var sync_episodes_switch = new Gtk.Switch ();
             

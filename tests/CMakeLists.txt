@@ -25,9 +25,6 @@ OPTIONS
     ${GLOBAL_VALAC_OPTIONS}
 )
 
-message (${TEST_EXEC_NAME})
-message (${VOCAL_UNIT_TESTS_C_SOURCES})
-
 add_executable(${TEST_EXEC_NAME}
     ${VOCAL_UNIT_TESTS_C_SOURCES}
 )

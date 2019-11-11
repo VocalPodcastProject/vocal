@@ -58,7 +58,7 @@ namespace Vocal {
                     Gtk.IconSize.SMALL_TOOLBAR
                 );
             }
-            artwork_image.tooltip_text = _ ("View show notes");
+            artwork_image.tooltip_text = _ ("View this episodes shownotes or check the queue");
             artwork_image.margin_right = 12;
             artwork_image.margin_left = 12;
             artwork_image.halign = Gtk.Align.END;

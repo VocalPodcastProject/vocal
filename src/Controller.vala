@@ -412,7 +412,7 @@ namespace Vocal {
                 if (!currently_importing) {
                     window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
                     window.video_controls.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
-                    window.shownotes.set_notes_text (current_episode.description);
+                    window.artwork_popover.set_notes_text (current_episode.description);
                 }
                 window.show_all ();
             }
@@ -443,7 +443,7 @@ namespace Vocal {
             if (!currently_importing) {
                 window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
                 window.video_controls.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
-                window.shownotes.set_notes_text (current_episode.description);
+                window.artwork_popover.set_notes_text (current_episode.description);
             }
 
             window.show_all ();

@@ -27,12 +27,13 @@ namespace Vocal {
 
         public Gtk.Label episode_label;
         public Gtk.Label podcast_label;
-        public Gtk.Image artwork_button;
+        public Gtk.Image artwork_image;
         private Gtk.ProgressBar progress_bar;
         private Gtk.Scale scale;
         private Gtk.Grid scale_grid;
         private Gtk.Label left_time;
         private Gtk.Label right_time;
+        public Gtk.Button volume_button;
 
         /*
          * Default constructor for a PlaybackBox
@@ -47,19 +48,20 @@ namespace Vocal {
             
             // Create the show notes button
             if (Utils.check_elementary ()) {
-                artwork_button = new Gtk.Image.from_icon_name (
+                artwork_image = new Gtk.Image.from_icon_name (
                     "help-info-symbolic",
                     Gtk.IconSize.SMALL_TOOLBAR
                 );
             } else {
-                artwork_button = new Gtk.Image.from_icon_name (
+                artwork_image = new Gtk.Image.from_icon_name (
                     "dialog-information-symbolic",
                     Gtk.IconSize.SMALL_TOOLBAR
                 );
             }
-            artwork_button.tooltip_text = _ ("View show notes");
-            artwork_button.valign = Gtk.Align.CENTER;
-            artwork_button.valign = Gtk.Align.START;
+            artwork_image.tooltip_text = _ ("View show notes");
+            artwork_image.margin_right = 12;
+            artwork_image.margin_left = 12;
+            artwork_image.halign = Gtk.Align.END;
             
             this.episode_label = new Gtk.Label ("");
             this.episode_label.set_ellipsize (Pango.EllipsizeMode.END);
@@ -78,6 +80,7 @@ namespace Vocal {
             scale.set_value (0.0);
             scale.hexpand = true;
             scale.draw_value = false;
+            scale.width_request = 100;
             scale.get_style_context ().add_class ("seekbar");
             left_time = new Gtk.Label ("0:00");
             right_time = new Gtk.Label ("0:00");
@@ -107,9 +110,14 @@ namespace Vocal {
             label_box.valign = Gtk.Align.CENTER;
             label_box.halign = Gtk.Align.START;
             
-            this.add (artwork_button);
+            volume_button = new Gtk.Button.from_icon_name ("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            volume_button.relief = Gtk.ReliefStyle.NONE;
+            volume_button.margin_right = 12;
+            
+            this.add (artwork_image);
             this.add (label_box);
             this.add (scale_grid);
+            this.add (volume_button);
         }
 
         public override void get_preferred_width (out int minimum_width, out int natural_width) {
@@ -187,26 +195,41 @@ namespace Vocal {
             scale.show ();
         }
         
-        public void show_artwork_button () {
-            if (artwork_button != null) {
-                artwork_button.set_no_show_all (false);
-                artwork_button.show ();
+        public void show_artwork_image () {
+            if (artwork_image != null) {
+                artwork_image.set_no_show_all (false);
+                artwork_image.show ();
             }
         }
 
-        public void hide_artwork_button () {
-            if (artwork_button != null) {
-                artwork_button.set_no_show_all (true);
-                artwork_button.hide ();
+        public void hide_artwork_image () {
+            if (artwork_image != null) {
+                artwork_image.set_no_show_all (true);
+                artwork_image.hide ();
             }
         }
         
-        public void set_artwork_button_image (string uri) {
-        	artwork_button.clear ();
+        public void set_artwork_image_image (string uri) {
+        	info ("Setting artwork button to: " + uri);
+        	artwork_image.clear ();
         	var artwork = GLib.File.new_for_uri (uri);
             var icon = new GLib.FileIcon (artwork);
-            artwork_button = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
-        	artwork_button.pixel_size = 25;
+            artwork_image.gicon = icon;
+        	artwork_image.pixel_size = 40;
+        }
+        
+        public void show_volume_button () {
+            if (volume_button != null) {
+                volume_button.set_no_show_all (false);
+                volume_button.show ();
+            }
+        }
+
+        public void hide_volume_button () {
+            if (volume_button != null) {
+                volume_button.set_no_show_all (true);
+                volume_button.hide ();
+            }
         }
     }
 }

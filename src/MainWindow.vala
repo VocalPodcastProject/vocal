@@ -466,10 +466,10 @@ namespace Vocal {
 
             toolbar.export_selected.connect (export_podcasts);
             toolbar.downloads_selected.connect (show_downloads_popover);
-            //toolbar.playback_box.artwork_button.clicked.connect (() => { shownotes.show_all (); });
+            //toolbar.playback_box.artwork_image.clicked.connect (() => { shownotes.show_all (); });
 
-            toolbar.volume_button.clicked.connect (() => {
-                var popover = new Gtk.Popover (toolbar.volume_button);
+            toolbar.playback_box.volume_button.clicked.connect (() => {
+                var popover = new Gtk.Popover (toolbar.playback_box.volume_button);
                 var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
                 scale.inverted = true;
                 scale.draw_value = false;
@@ -479,16 +479,16 @@ namespace Vocal {
                 scale.value_changed.connect (() => {
                     controller.player.set_volume (scale.get_value ());
                     if (scale.get_value () > 0.7) {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-high-symbolic";
                     } else if (scale.get_value () > 0.4) {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-medium-symbolic";
                     } else if (scale.get_value () > 0.1) {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-low-symbolic";
                     } else {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-muted-symbolic";
                     }
                 });
@@ -508,7 +508,7 @@ namespace Vocal {
             info ("Creating show notes popover.");
 
             // Create the show notes popover
-            shownotes = new ShowNotesPopover (toolbar.playback_box.artwork_button);
+            shownotes = new ShowNotesPopover (toolbar.playback_box.artwork_image);
 
             info ("Creating downloads popover.");
             downloads = new DownloadsPopover (toolbar.download);
@@ -630,7 +630,7 @@ namespace Vocal {
                                         if (episode.title == fields[0]) {
                                             controller.current_episode = episode;
                                             toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                                            toolbar.playback_box.set_artwork_button_image (controller.current_episode.parent.coverart_uri);
+                                            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
                                             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
 
                                             try {
@@ -788,6 +788,7 @@ namespace Vocal {
 
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
+            toolbar.playback_box.set_artwork_image_image (episode.parent.coverart_uri);
             shownotes.set_notes_text (controller.current_episode.description);
             controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
         }
@@ -941,8 +942,8 @@ namespace Vocal {
                 toolbar.show_playback_box ();
 
                 // Hide the shownotes button
-                toolbar.playback_box.hide_artwork_button ();
-                toolbar.hide_volume_button ();
+                toolbar.playback_box.hide_artwork_image ();
+                toolbar.playback_box.hide_volume_button ();
                 toolbar.hide_playlist_button ();
 
                 if (current_widget == welcome) {
@@ -986,8 +987,8 @@ namespace Vocal {
                     // Make the refresh and export items sensitive now
                     toolbar.export_item.sensitive = true;
 
-                    toolbar.playback_box.show_artwork_button ();
-                    toolbar.show_volume_button ();
+                    toolbar.playback_box.show_artwork_image ();
+                    toolbar.playback_box.show_volume_button ();
                     toolbar.show_playlist_button ();
 
                     if (current_widget == import_message_box) {
@@ -1000,7 +1001,7 @@ namespace Vocal {
 
                     if (controller.player.playing) {
                         toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                        toolbar.playback_box.set_artwork_button_image (controller.current_episode.parent.coverart_uri);
+                        toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
                         video_controls.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
                     }
 

@@ -489,8 +489,8 @@ namespace Vocal {
             }
 
             // Hide the shownotes button
-            window.toolbar.playback_box.hide_artwork_button ();
-            window.toolbar.hide_volume_button ();
+            window.toolbar.playback_box.hide_artwork_image ();
+            window.toolbar.playback_box.hide_volume_button ();
             window.toolbar.hide_playlist_button ();
 
             window.show_infobar (_ ("Adding new podcast: <b>" + feed + "</b>"), MessageType.INFO);
@@ -512,8 +512,8 @@ namespace Vocal {
             loop.run ();
 
             if (success) {
-                window.toolbar.playback_box.show_artwork_button ();
-                window.toolbar.show_volume_button ();
+                window.toolbar.playback_box.show_artwork_image ();
+                window.toolbar.playback_box.show_volume_button ();
                 window.toolbar.show_playlist_button ();
 
                 if (!player.playing)

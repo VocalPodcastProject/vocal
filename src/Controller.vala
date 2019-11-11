@@ -489,11 +489,11 @@ namespace Vocal {
             }
 
             // Hide the shownotes button
-            window.toolbar.hide_shownotes_button ();
+            window.toolbar.playback_box.hide_artwork_button ();
             window.toolbar.hide_volume_button ();
             window.toolbar.hide_playlist_button ();
 
-            window.toolbar.playback_box.set_message (_ ("Adding new podcast: <b>" + feed + "</b>"));
+            window.show_infobar (_ ("Adding new podcast: <b>" + feed + "</b>"), MessageType.INFO);
             window.toolbar.show_playback_box ();
 
             var loop = new MainLoop ();
@@ -512,7 +512,7 @@ namespace Vocal {
             loop.run ();
 
             if (success) {
-                window.toolbar.show_shownotes_button ();
+                window.toolbar.playback_box.show_artwork_button ();
                 window.toolbar.show_volume_button ();
                 window.toolbar.show_playlist_button ();
 

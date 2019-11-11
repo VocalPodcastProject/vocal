@@ -26,7 +26,6 @@ namespace Vocal {
         public signal void add_podcast_selected ();
         public signal void import_podcasts_selected ();
         public signal void export_selected ();
-        public signal void shownotes_selected ();
         public signal void playlist_selected ();
         public signal void preferences_selected ();
         public signal void donate_selected ();
@@ -49,7 +48,6 @@ namespace Vocal {
         private Gtk.Button backward;
         private Gtk.Button refresh;
         public Gtk.Button download;
-        public Gtk.Button shownotes_button;
         public Gtk.Button volume_button;
         public Gtk.Button search_button;
         private Gtk.Button podcast_store_button;
@@ -57,7 +55,6 @@ namespace Vocal {
         public Gtk.Button new_episodes_button;
 
         public Gtk.MenuItem export_item;
-        private Gtk.Box headerbar_box;
         public PlaybackBox playback_box;
 
         private VocalSettings settings;
@@ -65,34 +62,13 @@ namespace Vocal {
         public Toolbar (VocalSettings settings, bool? first_run = false, bool? on_elementary = Utils.check_elementary ()) {  // vala-lint=line-length
 
             this.settings = settings;
-
-            // Create the box that will be used for the title in the headerbar
-            headerbar_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 10);
-
+            
+			
             // Create the box to be shown during playback
             playback_box = new PlaybackBox ();
 
             // Set the playback box in the middle of the HeaderBar
             playback_box.hexpand = true;
-
-            // Create the show notes button
-            if (on_elementary) {
-                shownotes_button = new Gtk.Button.from_icon_name (
-                    "help-info-symbolic",
-                    Gtk.IconSize.SMALL_TOOLBAR
-                );
-            } else {
-                shownotes_button = new Gtk.Button.from_icon_name (
-                    "dialog-information-symbolic",
-                    Gtk.IconSize.SMALL_TOOLBAR
-                );
-            }
-            shownotes_button.tooltip_text = _ ("View show notes");
-            shownotes_button.valign = Gtk.Align.CENTER;
-            shownotes_button.clicked.connect (() => {
-                shownotes_selected ();
-            });
-            shownotes_button.relief = Gtk.ReliefStyle.NONE;
 
             volume_button = new Gtk.Button.from_icon_name ("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             volume_button.relief = Gtk.ReliefStyle.NONE;
@@ -107,21 +83,12 @@ namespace Vocal {
 
             if (on_elementary) {
                 new_episodes_button = new Gtk.Button.from_icon_name ("help-about-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
+                new_episodes_button.relief = Gtk.ReliefStyle.NONE;
             } else {
                 new_episodes_button = new Gtk.Button.from_icon_name ("starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
             }
             new_episodes_button.tooltip_text = _ ("New Episodes");
-            new_episodes_button.relief = Gtk.ReliefStyle.NONE;
-
-            headerbar_box.add (shownotes_button);
-            headerbar_box.add (volume_button);
-            headerbar_box.add (playback_box);
-            headerbar_box.add (playlist_button);
-            headerbar_box.halign = Gtk.Align.CENTER;
-            headerbar_box.margin_left = 50;
-            headerbar_box.margin_right = 50;
-
-
+            
             // Create the menus and menuitems
             menu = new Gtk.Menu ();
 
@@ -169,6 +136,7 @@ namespace Vocal {
             export_item.activate.connect (() => {
                 export_selected ();
             });
+            
             menu.add (check_for_updates);
             menu.add (new Gtk.SeparatorMenuItem ());
             menu.add (add_feed_item);
@@ -210,20 +178,21 @@ namespace Vocal {
 
             // Create the AppMenu
             app_menu = new Gtk.MenuButton ();
-             app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", on_elementary ? on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR));  // vala-lint=line-length
+            app_menu.set_image (new Gtk.Image.from_icon_name ("open-menu-symbolic", on_elementary ? on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR));  // vala-lint=line-length
             app_menu.popup = menu;
-            app_menu.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	app_menu.relief = Gtk.ReliefStyle.NONE;
+        	}
             app_menu.valign = Gtk.Align.CENTER;
 
-
-            // Populate the toolbar
-            pack_end (app_menu);
-            set_custom_title (headerbar_box);
-
-            // Initially hide the headearbar_box
+            // Initially hide the playback box
             hide_playback_box ();
 
             this.show_close_button = true;
+            
+            // Left-hand controls
+            
+            var left_button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
             // Create new icons for placback functions and downloads
             var playpause_image = new Gtk.Image.from_icon_name (
@@ -235,8 +204,11 @@ namespace Vocal {
             play_pause.image = playpause_image;
             play_pause.has_tooltip = true;
             play_pause.tooltip_text = _ ("Play");
-            play_pause.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	play_pause.relief = Gtk.ReliefStyle.NONE;
+        	}
             play_pause.valign = Gtk.Align.CENTER;
+            play_pause.get_style_context ().add_class ("play-button");
 
             var forward_image = new Gtk.Image.from_icon_name (
                 "media-seek-forward-symbolic",
@@ -245,11 +217,15 @@ namespace Vocal {
             forward = new Gtk.Button ();
             forward.image = forward_image;
             forward.has_tooltip = true;
-            forward.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	forward.relief = Gtk.ReliefStyle.NONE;
+        	}
             forward.hexpand = true;
             forward.halign = Gtk.Align.START;
             forward.tooltip_text = _ ("Fast forward %d seconds".printf (this.settings.fast_forward_seconds));
             forward.valign = Gtk.Align.CENTER;
+            forward.get_style_context ().add_class ("forward-button");
+            forward.width_request = 30;
 
             var backward_image = new Gtk.Image.from_icon_name (
                 "media-seek-backward-symbolic",
@@ -258,10 +234,14 @@ namespace Vocal {
             backward = new Gtk.Button ();
             backward.image = backward_image;
             backward.has_tooltip = true;
-            backward.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	backward.relief = Gtk.ReliefStyle.NONE;
+        	}
             backward.tooltip_text = _ ("Rewind %d seconds".printf (this.settings.rewind_seconds));
+            backward.valign = Gtk.Align.START;
             backward.valign = Gtk.Align.CENTER;
-
+            backward.get_style_context ().add_class ("backward-button");
+            
             play_pause.get_style_context ().add_class ("vocal-headerbar-button");
 
             // Connect the changed signal for settings to update the tooltips
@@ -280,7 +260,9 @@ namespace Vocal {
             var rate_button = new Gtk.Button.with_label ("");
             rate_button.get_style_context ().add_class ("rate-button");
             rate_button.get_style_context ().add_class ("h3");
-            rate_button.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	rate_button.relief = Gtk.ReliefStyle.NONE;
+        	}
             rate_button.valign = Gtk.Align.CENTER;
 
             search_button = new Gtk.Button.from_icon_name (
@@ -288,7 +270,9 @@ namespace Vocal {
                 on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR
             );
             search_button.tooltip_text = _ ("Search your library or online");
-            search_button.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	search_button.relief = Gtk.ReliefStyle.NONE;
+        	}
             search_button.valign = Gtk.Align.CENTER;
 
 
@@ -297,6 +281,7 @@ namespace Vocal {
                     "system-software-install-symbolic",
                     on_elementary ? Gtk.IconSize.LARGE_TOOLBAR : Gtk.IconSize.SMALL_TOOLBAR
                 );
+                podcast_store_button.relief = Gtk.ReliefStyle.NONE;
             } else {
                 podcast_store_button = new Gtk.Button.from_icon_name (
                     "application-rss+xml-symbolic",
@@ -304,7 +289,6 @@ namespace Vocal {
                 );
             }
             podcast_store_button.tooltip_text = _ ("View the top podcasts in the iTunes Store");
-            podcast_store_button.relief = Gtk.ReliefStyle.NONE;
             podcast_store_button.valign = Gtk.Align.CENTER;
 
             // Connect signals to appropriate handlers
@@ -345,7 +329,9 @@ namespace Vocal {
             download.image = download_image;
             download.has_tooltip = true;
             download.tooltip_text = _ ("Downloads");
-            download.relief = Gtk.ReliefStyle.NONE;
+            if (on_elementary) {
+            	download.relief = Gtk.ReliefStyle.NONE;
+        	}
             download.valign = Gtk.Align.CENTER;
 
             download.clicked.connect (() => {
@@ -355,14 +341,30 @@ namespace Vocal {
             download.hide ();
 
             // Add the buttons
-            pack_start (backward);
-            pack_start (play_pause);
-            pack_start (forward);
+            left_button_box.pack_start (backward);
+            left_button_box.pack_start (play_pause);
+            left_button_box.pack_start (forward);
+            
+            left_button_box.halign = Gtk.Align.START;
+            backward.width_request = 40;
+            forward.width_request = 40;
+            play_pause.width_request = 60;
+            
+            var right_button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 3);
 
-            pack_end (search_button);
-            pack_end (podcast_store_button);
-            pack_end (download);
-            pack_end (new_episodes_button);
+            // Populate the toolbar
+            right_button_box.pack_end (app_menu);
+            right_button_box.pack_end (search_button);
+            right_button_box.pack_end (podcast_store_button);
+            right_button_box.pack_end (download);
+            right_button_box.pack_end (new_episodes_button);
+            right_button_box.halign = Gtk.Align.END;
+            
+            this.spacing = 0;
+            
+            this.pack_start (left_button_box);
+            this.set_custom_title (playback_box);
+            this.pack_end (right_button_box);
         }
 
 
@@ -375,32 +377,18 @@ namespace Vocal {
         }
 
         public void hide_playback_box () {
-            if (headerbar_box != null) {
-                this.headerbar_box.no_show_all = true;
-                this.headerbar_box.hide ();
+            if (playback_box != null) {
+                this.playback_box.no_show_all = true;
+                this.playback_box.hide ();
             }
         }
 
 
         public void show_playback_box () {
-            if (headerbar_box != null) {
-                this.headerbar_box.no_show_all = false;
-                this.headerbar_box.show ();
+            if (playback_box != null) {
+                this.playback_box.no_show_all = false;
+                this.playback_box.show ();
                 show_all ();
-            }
-        }
-
-        public void show_shownotes_button () {
-            if (shownotes_button != null) {
-                shownotes_button.set_no_show_all (false);
-                shownotes_button.show ();
-            }
-        }
-
-        public void hide_shownotes_button () {
-            if (shownotes_button != null) {
-                shownotes_button.set_no_show_all (true);
-                shownotes_button.hide ();
             }
         }
 

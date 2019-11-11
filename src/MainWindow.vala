@@ -107,6 +107,20 @@ namespace Vocal {
                 .controls {
                     background-color: #FFF;
                 }
+                
+                .play-button {
+                	border-radius: 0px;
+                }
+                
+                .forward-button {
+                	border-top-left-radius: 0px;
+                	border-bottom-left-radius: 0px;
+                }
+                
+                .backward-button {
+                	border-top-right-radius: 0px;
+                	border-bottom-right-radius: 0px;
+            	}
 
 
                 .episode-list {
@@ -452,7 +466,7 @@ namespace Vocal {
 
             toolbar.export_selected.connect (export_podcasts);
             toolbar.downloads_selected.connect (show_downloads_popover);
-            toolbar.shownotes_button.clicked.connect (() => { shownotes.show_all (); });
+            //toolbar.playback_box.artwork_button.clicked.connect (() => { shownotes.show_all (); });
 
             toolbar.volume_button.clicked.connect (() => {
                 var popover = new Gtk.Popover (toolbar.volume_button);
@@ -494,7 +508,7 @@ namespace Vocal {
             info ("Creating show notes popover.");
 
             // Create the show notes popover
-            shownotes = new ShowNotesPopover (toolbar.shownotes_button);
+            shownotes = new ShowNotesPopover (toolbar.playback_box.artwork_button);
 
             info ("Creating downloads popover.");
             downloads = new DownloadsPopover (toolbar.download);
@@ -616,6 +630,7 @@ namespace Vocal {
                                         if (episode.title == fields[0]) {
                                             controller.current_episode = episode;
                                             toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
+                                            toolbar.playback_box.set_artwork_button_image (controller.current_episode.parent.coverart_uri);
                                             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
 
                                             try {
@@ -926,7 +941,7 @@ namespace Vocal {
                 toolbar.show_playback_box ();
 
                 // Hide the shownotes button
-                toolbar.hide_shownotes_button ();
+                toolbar.playback_box.hide_artwork_button ();
                 toolbar.hide_volume_button ();
                 toolbar.hide_playlist_button ();
 
@@ -971,7 +986,7 @@ namespace Vocal {
                     // Make the refresh and export items sensitive now
                     toolbar.export_item.sensitive = true;
 
-                    toolbar.show_shownotes_button ();
+                    toolbar.playback_box.show_artwork_button ();
                     toolbar.show_volume_button ();
                     toolbar.show_playlist_button ();
 
@@ -985,6 +1000,7 @@ namespace Vocal {
 
                     if (controller.player.playing) {
                         toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
+                        toolbar.playback_box.set_artwork_button_image (controller.current_episode.parent.coverart_uri);
                         video_controls.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
                     }
 
@@ -1217,7 +1233,7 @@ namespace Vocal {
          */
         public void on_import_status_changed (int current, int total, string title) {
             show_all ();
-            toolbar.playback_box.set_message_and_percentage ("Adding feed %d/%d: %s".printf (current, total, title), (double) ((double)current/ (double)total));
+            show_infobar (_("Adding feed %d/%d: %s").printf (current, total, title), MessageType.INFO);
         }
 
 
@@ -1796,7 +1812,7 @@ namespace Vocal {
             }
         }
         
-        private void show_infobar (string message, MessageType type) {
+        public void show_infobar (string message, MessageType type) {
             infobar.set_no_show_all (false);
             infobar.show_all ();
    
@@ -1815,7 +1831,7 @@ namespace Vocal {
             infobar.show_all ();
         }
         
-        private void hide_infobar () {
+        public void hide_infobar () {
             infobar.revealed = false;
             hiding_timer = GLib.Timeout.add (500, () => {
                 infobar.set_no_show_all (true);

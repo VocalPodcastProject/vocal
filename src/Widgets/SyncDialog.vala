@@ -169,13 +169,19 @@ namespace Vocal {
             var logout_button = new Gtk.Button.with_label (_("Logout"));            
             var full_sync_button = new Gtk.Button.with_label (_("Perform a Full Sync Now"));
             
+            if (controller.settings.gpodder_last_successful_sync_timestamp != "") {
+		        int64 last_sync_timestap = int64.parse(controller.settings.gpodder_last_successful_sync_timestamp);
+		        var last_sync_datetime = new DateTime.from_unix_utc (last_sync_timestap);
+		        last_sync_label.label = _("Last Succcessful Sync: " + last_sync_datetime.to_local ().to_string ());
+	        }
+		        
             logout_button.clicked.connect (() => {
             	controller.settings.gpodder_username = "";
             	notebook.set_visible_child (login_box);
             });
             
             var episode_sync_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-            episode_sync_box.halign = Gtk.Align.CENTER;
+            episode_sync_box.halign = Gtk.Align.END;
             episode_sync_box.valign = Gtk.Align.CENTER;
             var sync_episodes_label = new Gtk.Label (_("Sync Episode Activity"));
             var sync_episodes_switch = new Gtk.Switch ();
@@ -188,10 +194,29 @@ namespace Vocal {
             episode_sync_box.pack_start (sync_episodes_label, true, true, 12);
             episode_sync_box.pack_start (sync_episodes_switch, true, true, 12);
             
+            var remove_podcast_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
+            remove_podcast_box.halign = Gtk.Align.END;
+            remove_podcast_box.valign = Gtk.Align.CENTER;
+            var remove_podcast_label = new Gtk.Label (_("Remove Podcasts from Library That Have Been Removed From Your gpodder.net Account"));
+            remove_podcast_label.wrap = true;
+            remove_podcast_label.max_width_chars = 30;
+            remove_podcast_label.justify = Gtk.Justification.RIGHT;
+            var remove_podcast_switch = new Gtk. Switch ();
+            remove_podcast_switch.valign = Gtk.Align.CENTER;
+            
+            remove_podcast_switch.active = controller.settings.gpodder_remove_deleted_podcasts;
+            remove_podcast_switch.activate.connect ( () => {
+            	controller.settings.gpodder_remove_deleted_podcasts = remove_podcast_switch.active;
+            });
+            
+            remove_podcast_box.pack_start (remove_podcast_label, true, true, 12);
+            remove_podcast_box.pack_start (remove_podcast_switch, true, true, 12);
+            
             overview_box.pack_start (last_sync_label, true, true, 12);
             overview_box.pack_start (logout_button, true, true, 12);
             overview_box.pack_start (full_sync_button, true, true, 12);
             overview_box.pack_start (episode_sync_box, true, true, 12);
+            overview_box.pack_start (remove_podcast_box, true, true, 12);
             
         }
         

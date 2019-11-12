@@ -178,6 +178,16 @@
 			</description>
 		</key>
 		
+		<key name="gpodder-remove-deleted-podcasts" type="b">
+			<default>false</default>
+			<summary>Whether or not to remove podcasts that are no longer in the gpodder.net subscriptions</summary>
+			<description>
+				When set to true, Vocal will automatically remove a podcast from the library when
+				it is no longer in the user's gpodder.net subscription list (typically following
+				a delete event from another device).
+			</description>
+		</key>
+		
 		<key name="gpodder-last-successful-sync-timestamp" type="s">
 			<default>""</default>
 			<summary>The UNIX timestamp of the last successful episode sync</summary>

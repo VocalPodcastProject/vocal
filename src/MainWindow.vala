@@ -947,7 +947,7 @@ namespace Vocal {
                 }
 
                 var loop = new MainLoop ();
-                controller.library.add_from_OPML (file_name, (obj, res) => {
+                controller.library.add_from_OPML (file_name, false, (obj, res) => {
 
                     Gee.ArrayList<string> failed_feed_list = controller.library.add_from_OPML.end (res);
 

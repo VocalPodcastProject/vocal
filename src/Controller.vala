@@ -277,7 +277,7 @@ namespace Vocal {
                 	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
                 	
 		                    string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
-                			library.add_from_OPML (cloud_subs_opml);
+                			library.add_from_OPML (cloud_subs_opml, true);
 		                    
 		                    // Next, get any episode updates
 		                    window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
@@ -285,6 +285,28 @@ namespace Vocal {
 
 		                    	bool? success = gpodder_client.get_episode_updates_async.end (res);
 		                    	window.hide_infobar ();
+		                    	
+		                    	// If necessary, remove podcasts from library that are missing in
+		                    	if (settings.gpodder_remove_deleted_podcasts) {
+		                    	
+		                    		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
+		                    		
+		                    		// TODO: use a singleton pattern so there's only one instance
+		                    		FeedParser feed_parser = new FeedParser ();
+		                    		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
+		                    		foreach (Podcast p in library.podcasts) {
+		                    			bool found = false;
+		                    			foreach (string feed in cloud_feeds) {
+		                    				if (p.feed_uri == feed) {
+		                    					found = true;
+	                    					}
+		                    			}
+		                    			if (!found) {
+		                    				// Remove podcast
+		                    				library.remove_podcast (p);
+		                    			}
+		                    		}
+		                    	}
 		                    	
 		                    	// Now update the actual feeds and quit the loop
 						        on_update_request ();

@@ -358,7 +358,7 @@ namespace Vocal {
         /*
          * Parses an OPML file and returns an array listing each feed discovered within
          */
-        public string[] parse_feeds_from_OPML (string path) throws VocalLibraryError {  // vala-lint=naming-convention
+        public string[] parse_feeds_from_OPML (string path, bool raw_data = false) throws VocalLibraryError {  // vala-lint=naming-convention
             var feeds = new Gee.ArrayList<string> ();
 
             queue.clear ();
@@ -380,7 +380,13 @@ namespace Vocal {
             }
             */
             
-            Xml.Doc* doc = Xml.Parser.parse_file (path);
+            Xml.Doc* doc;
+            
+            if (!raw_data) {
+				doc = Xml.Parser.parse_file (path);
+        	} else {
+        		doc = Xml.Parser.parse_memory (path, path.length);
+        	}
 
             // Make sure that it didn't return a null reference
             if (doc == null) {

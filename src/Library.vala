@@ -178,7 +178,7 @@ namespace Vocal {
         /*
          * Adds podcasts to the library from the provided OPML file path
          */
-        public async Gee.ArrayList<string> add_from_OPML (string path) {
+        public async Gee.ArrayList<string> add_from_OPML (string path, bool? raw_data = false) {
             Gee.ArrayList<string> failed_feeds = new Gee.ArrayList<string> ();
 
             SourceFunc callback = add_from_OPML.callback;
@@ -186,7 +186,7 @@ namespace Vocal {
             ThreadFunc<void*> run = () => {
                 try {
                     FeedParser feed_parser = new FeedParser ();
-                    string[] feeds = feed_parser.parse_feeds_from_OPML (path);
+                    string[] feeds = feed_parser.parse_feeds_from_OPML (path, raw_data);
                     info ("Done parsing feeds.");
 
                     int i = 0;

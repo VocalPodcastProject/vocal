@@ -180,3 +180,5 @@ install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/64/com.github.needleandthread.v
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/128/com.github.needleandthread.vocal.svg DESTINATION share/icons/hicolor/128x128/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/scalable/com.github.needleandthread.vocal-symbolic.svg DESTINATION share/icons/hicolor/scalable/apps)
 install (FILES ${CMAKE_CURRENT_SOURCE_DIR}/icons/assets/vocal-missing.png DESTINATION share/vocal)
+
+add_subdirectory (tests)

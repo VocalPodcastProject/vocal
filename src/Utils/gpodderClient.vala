@@ -70,7 +70,7 @@ namespace Vocal {
             }
         }
         
-        private bool update_device_data () {
+        public bool update_device_data () {
             var session = new Soup.Session ();
             session.user_agent = "vocal";
             
@@ -228,7 +228,19 @@ namespace Vocal {
             session.send_message (message);           
             
             //TODO: parse message response and append items to the list
-            
+            var parser = new Json.Parser ();
+			parser.load_from_data ((string) message.response_body.flatten ().data, -1);
+
+			Json.Array? root_array = parser.get_root ().get_array ();
+			if (root_array != null) {
+				for (int i = 0; i < root_array.get_length (); i++) {
+					var object_element = root_array.get_object_element (i);
+					var device_name = object_element.get_string_member ("id");
+					info (device_name);
+					list.append (device_name);
+				}
+			}
+			
             return list;
         }
         

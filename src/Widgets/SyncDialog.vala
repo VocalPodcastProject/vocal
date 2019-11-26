@@ -42,6 +42,7 @@ namespace Vocal {
         private Gtk.Box overview_box;
         
         private Gtk.ComboBox known_device_dropdown;
+        private GLib.List<string> device_list;
         
         public SyncDialog (Controller controller) {
             
@@ -140,12 +141,12 @@ namespace Vocal {
             var complete_setup_button = new Gtk.Button.with_label (_("Complete Setup"));
             
             complete_setup_button.clicked.connect ( () => {
-                // if (controller.gpodder_client.update_device_data ()) {
-                notebook.set_visible_child (overview_box);
-                controller.gpodder_client.upload_subscriptions ();
-                string cloud_subs_opml = controller.gpodder_client.get_subscriptions_list ();
-                controller.library.add_from_OPML (cloud_subs_opml);
-                // }
+                if (controller.gpodder_client.update_device_data ()) {
+		            notebook.set_visible_child (overview_box);
+		            controller.gpodder_client.upload_subscriptions ();
+		            string cloud_subs_opml = controller.gpodder_client.get_subscriptions_list ();
+		            controller.library.add_from_OPML (cloud_subs_opml);
+                }
             });
             
             known_device_expander.add (known_device_dropdown);
@@ -156,6 +157,20 @@ namespace Vocal {
                 } else {
                     device_name_entry.sensitive = false;
                 }
+            });
+            
+            // Update device name
+            known_device_dropdown.changed.connect ( () => {
+            	if (device_name_entry.sensitive == false) {
+            		int active_id = known_device_dropdown.active;
+            		controller.settings.gpodder_device_name = device_list.nth_data (active_id);
+            	}
+            });
+            
+            device_name_entry.changed.connect ( () => {
+            	if (device_name_entry.sensitive == true) {
+            		controller.settings.gpodder_device_name = device_name_entry.text;
+            	}
             });
             
             device_name_box.pack_start (device_title, true, true, 12);
@@ -229,9 +244,9 @@ namespace Vocal {
                     Gtk.ListStore list_store = new Gtk.ListStore (1, typeof(string));
                     Gtk.TreeIter iter;
 
-                    var list = controller.gpodder_client.get_device_list ();
+                    device_list = controller.gpodder_client.get_device_list ();
                     
-                    foreach(string s in list) {
+                    foreach(string s in device_list) {
                         list_store.append (out iter);
                         list_store.set (iter, 0, s);
                     }

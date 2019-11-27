@@ -554,5 +554,13 @@ namespace Vocal {
                 return false;
             }
         }
+        
+        public async void update_all_episode_positions_async () {
+        	foreach (Podcast p in controller.library.podcasts) {
+        		foreach (Episode e in p.episodes) {
+        			update_episode (e, EpisodeAction.PLAY);
+        		}
+        	}
+        }
     }
 }

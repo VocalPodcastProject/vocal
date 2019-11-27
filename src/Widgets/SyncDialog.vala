@@ -184,6 +184,8 @@ namespace Vocal {
             var logout_button = new Gtk.Button.with_label (_("Logout"));            
             var full_sync_button = new Gtk.Button.with_label (_("Perform a Full Sync Now"));
             
+            full_sync_button.clicked.connect (on_full_sync_clicked);
+            
             if (controller.settings.gpodder_last_successful_sync_timestamp != "") {
 		        int64 last_sync_timestap = int64.parse(controller.settings.gpodder_last_successful_sync_timestamp);
 		        var last_sync_datetime = new DateTime.from_unix_utc (last_sync_timestap);
@@ -261,6 +263,54 @@ namespace Vocal {
                     gpodder_password_entry.grab_focus ();
                 }
             }
+        }
+        
+        private void on_full_sync_clicked () {
+        	controller.window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
+        	var loop = new MainLoop();
+        	controller.gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
+        	
+                string cloud_subs_opml = controller.gpodder_client.get_subscriptions_list_async.end (res);
+    			controller.library.add_from_OPML (cloud_subs_opml, true);
+                
+                // Next, get any episode updates
+                controller.window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
+                controller.gpodder_client.get_episode_updates_async.begin ((obj, res) => {
+
+                	bool? success = controller.gpodder_client.get_episode_updates_async.end (res);
+                	
+                	// If necessary, remove podcasts from library that are missing in
+                	if (controller.settings.gpodder_remove_deleted_podcasts) {
+                	
+                		controller.window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
+                		
+                		// TODO: use a singleton pattern so there's only one instance
+                		FeedParser feed_parser = new FeedParser ();
+                		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
+                		foreach (Podcast p in controller.library.podcasts) {
+                			bool found = false;
+                			foreach (string feed in cloud_feeds) {
+                				if (p.feed_uri == feed) {
+                					found = true;
+            					}
+                			}
+                			if (!found) {
+                				// Remove podcast
+                				controller.library.remove_podcast (p);
+                			}
+                		}
+                	}
+                	
+                	// Update all the episode statuses
+                	controller.window.show_infobar (_("Uploading all episode positions to gpodder.net…"), MessageType.INFO);
+                	controller.gpodder_client.update_all_episode_positions_async.begin ((obj, res) => {
+                		controller.gpodder_client.update_all_episode_positions_async.end (res);
+                		controller.window.hide_infobar ();
+                		loop.quit ();
+                	});
+                });
+            });
+            loop.run ();
         }
     }
 }

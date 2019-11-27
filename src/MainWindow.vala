@@ -404,7 +404,7 @@ namespace Vocal {
 
             // Change the player position to match scale changes
             toolbar.playback_box.scale_changed.connect (() => {
-                controller.player.set_position (toolbar.playback_box.get_progress_bar_fill ());
+                controller.player.set_progress (toolbar.playback_box.get_progress_bar_fill ());
             });
 
             toolbar.check_for_updates_selected.connect (() => {
@@ -496,7 +496,7 @@ namespace Vocal {
 
             // Repeat for the video playback box scale
             video_controls.progress_bar_scale_changed.connect (() => {
-                controller.player.set_position (video_controls.progress_bar_fill);
+                controller.player.set_progress (video_controls.progress_bar_fill);
             });
 
             this.set_titlebar (toolbar);

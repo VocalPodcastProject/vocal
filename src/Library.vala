@@ -1047,9 +1047,9 @@ namespace Vocal {
                     }
                 }
                 else if (col_name == "latest_position") {
-                    double position = 0;
-                    if (double.try_parse (val, out position)) {
-                        episode.last_played_position = position;
+                    int64 position = 0;
+                    if (int64.try_parse (val, out position)) {
+                        episode.last_played_position = (int)position;
                     }
                 }
                 else if (col_name == "parent_podcast_name") {

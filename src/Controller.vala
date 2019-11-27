@@ -118,8 +118,9 @@ namespace Vocal {
             // to set the new progress on the playback box
             player.new_position_available.connect (() => {
 
-                if (player.progress > 0)
-                    player.current_episode.last_played_position = player.progress;
+                if (player.progress > 0) {
+                    player.current_episode.last_played_position = (int) player.get_position ();
+                }
 
                 int mins_remaining;
                 int secs_remaining;
@@ -432,7 +433,7 @@ namespace Vocal {
                 playback_status_changed ("Playing");
 
                 // Seek if necessary
-                if (current_episode.last_played_position > 0 && current_episode.last_played_position > player.progress) {
+                if (current_episode.last_played_position > 0 && current_episode.last_played_position > player.get_position ()) {
 
                     // If it's a streaming episode, seeking takes longer
                     // Temporarily pause the track and give it some time to seek
@@ -489,7 +490,7 @@ namespace Vocal {
                 window.video_controls.tooltip_text = _ ("Play");
 
                 // Set last played position
-                current_episode.last_played_position = player.progress;
+                current_episode.last_played_position = (int) player.get_position ();
                 library.set_episode_playback_position (player.current_episode);
             }
 

@@ -377,7 +377,7 @@ namespace Vocal {
 								if (lib_podcast.feed_uri == podcast) {
 									foreach (var lib_episode in lib_podcast.episodes ) {
 										if (lib_episode.uri == episode) {
-											lib_episode.last_played_position = position;
+											lib_episode.last_played_position = (int)position;
 											controller.library.set_episode_playback_position (lib_episode);
 											break;
 										}
@@ -461,7 +461,8 @@ namespace Vocal {
 								if (lib_podcast.feed_uri == podcast) {
 									foreach (var lib_episode in lib_podcast.episodes ) {
 										if (lib_episode.uri == episode) {
-											lib_episode.last_played_position = position;
+											info("Updated episode playback position: %s,%d".printf (lib_episode.title, (int) position));
+											lib_episode.last_played_position = (int) position;
 											controller.library.set_episode_playback_position (lib_episode);
 											break;
 										}

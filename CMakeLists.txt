@@ -118,7 +118,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/EpisodeDetailBox.vala
     src/Widgets/AddFeedDialog.vala
     src/Widgets/DownloadsPopover.vala
-    src/Widgets/ShowNotesPopover.vala
+    src/Widgets/ArtworkPopover.vala
     src/Widgets/InternetArchiveUploadDialog.vala
     src/Widgets/PlaybackBox.vala
     src/Widgets/SettingsDialog.vala
@@ -133,7 +133,7 @@ vala_precompile(VALA_C ${EXEC_NAME}
     src/Widgets/PodcastView.vala
     src/Widgets/Shownotes.vala
     src/Widgets/Toolbar.vala
-    src/Widgets/QueuePopover.vala
+    src/Widgets/QueueBox.vala
     src/Widgets/QueueRow.vala
     src/Widgets/SearchResultBox.vala
     src/Widgets/SyncDialog.vala

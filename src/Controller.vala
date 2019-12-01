@@ -465,7 +465,7 @@ namespace Vocal {
                 if (!currently_importing) {
                     window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
                     window.video_controls.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
-                    window.shownotes.set_notes_text (current_episode.description);
+                    window.artwork_popover.set_notes_text (current_episode.description);
                 }
                 window.show_all();
                 
@@ -499,7 +499,7 @@ namespace Vocal {
             if (!currently_importing) {
                 window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
                 window.video_controls.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
-                window.shownotes.set_notes_text (current_episode.description);
+                window.artwork_popover.set_notes_text (current_episode.description);
             }
 
             window.show_all();
@@ -547,11 +547,11 @@ namespace Vocal {
             }
 
             // Hide the shownotes button
-            window.toolbar.hide_shownotes_button ();
-            window.toolbar.hide_volume_button ();
+            window.toolbar.playback_box.hide_artwork_image ();
+            window.toolbar.playback_box.hide_volume_button ();
             window.toolbar.hide_playlist_button ();
 
-            window.toolbar.playback_box.set_message (_ ("Adding new podcast: <b>" + feed + "</b>"));
+            window.show_infobar (_ ("Adding new podcast: <b>" + feed + "</b>"), MessageType.INFO);
             window.toolbar.show_playback_box ();
 
             var loop = new MainLoop ();
@@ -570,6 +570,9 @@ namespace Vocal {
             loop.run ();
 
             if (success) {
+
+                window.toolbar.playback_box.show_artwork_image ();
+                window.toolbar.playback_box.show_volume_button ();
             
             	// Send update to gpodder API if necessary
             	if (settings.gpodder_username != "") {
@@ -585,8 +588,6 @@ namespace Vocal {
 		            gpodder_loop.run ();
 	            }
             	
-                window.toolbar.show_shownotes_button ();
-                window.toolbar.show_volume_button ();
                 window.toolbar.show_playlist_button ();
 
                 if (!player.playing)

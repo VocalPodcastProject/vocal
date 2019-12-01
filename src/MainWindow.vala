@@ -48,8 +48,7 @@ namespace Vocal {
 
         public AddFeedDialog add_feed;
         private DownloadsPopover downloads;
-        public ShowNotesPopover shownotes;
-        private QueuePopover queue_popover;
+        public ArtworkPopover artwork_popover;
         private Gtk.MessageDialog missing_dialog;
         private SettingsDialog settings_dialog;
         public VideoControls video_controls;
@@ -108,6 +107,20 @@ namespace Vocal {
                 .controls {
                     background-color: #FFF;
                 }
+                
+                .play-button {
+                	border-radius: 0px;
+                }
+                
+                .forward-button {
+                	border-top-left-radius: 0px;
+                	border-bottom-left-radius: 0px;
+                }
+                
+                .backward-button {
+                	border-top-right-radius: 0px;
+                	border-bottom-right-radius: 0px;
+            	}
 
 
                 .episode-list {
@@ -447,7 +460,7 @@ namespace Vocal {
             toolbar.play_pause_selected.connect (controller.play_pause);
             toolbar.seek_forward_selected.connect (controller.seek_forward);
             toolbar.seek_backward_selected.connect (controller.seek_backward);
-            toolbar.playlist_button.clicked.connect (() => { queue_popover.show_all (); });
+            toolbar.playlist_button.clicked.connect (() => { artwork_popover.queue_box.show_all (); });
 
             toolbar.store_selected.connect (() => {
                 details.pane_should_hide ();
@@ -457,16 +470,9 @@ namespace Vocal {
             toolbar.export_selected.connect (export_podcasts);
             toolbar.downloads_selected.connect (show_downloads_popover);
 
-            toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
-            
-            toolbar.sync_dialog_selected.connect ( () => {
-	    		sync_dialog = new SyncDialog(controller);
-                sync_dialog.show_all ();
-            });
-            
-            toolbar.volume_button.clicked.connect(() => {
+            toolbar.playback_box.volume_button.clicked.connect (() => {
+                var popover = new Gtk.Popover (toolbar.playback_box.volume_button);
 
-                var popover = new Gtk.Popover (toolbar.volume_button);
                 var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
                 scale.inverted = true;
                 scale.draw_value = false;
@@ -476,16 +482,16 @@ namespace Vocal {
                 scale.value_changed.connect (() => {
                     controller.player.set_volume (scale.get_value ());
                     if (scale.get_value () > 0.7) {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-high-symbolic";
                     } else if (scale.get_value () > 0.4) {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-medium-symbolic";
                     } else if (scale.get_value () > 0.1) {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-low-symbolic";
                     } else {
-                        var vol_image = toolbar.volume_button.image as Gtk.Image;
+                        var vol_image = toolbar.playback_box.volume_button.image as Gtk.Image;
                         vol_image.icon_name = "audio-volume-muted-symbolic";
                     }
                 });
@@ -505,7 +511,12 @@ namespace Vocal {
             info ("Creating show notes popover.");
 
             // Create the show notes popover
-            shownotes = new ShowNotesPopover (toolbar.shownotes_button);
+            artwork_popover = new ArtworkPopover (toolbar.playback_box.artwork_image);
+            toolbar.playback_box.artwork.button_press_event.connect ( () => {
+            	artwork_popover.popup ();
+            	artwork_popover.show_all ();
+            	return false;
+            });
 
             info ("Creating downloads popover.");
             downloads = new DownloadsPopover (toolbar.download);
@@ -516,30 +527,30 @@ namespace Vocal {
             downloads.all_downloads_complete.connect (toolbar.hide_downloads_menuitem);
 
             info ("Creating queue popover.");
+            
             // Create the queue popover
-            queue_popover = new QueuePopover (toolbar.playlist_button);
             controller.library.queue_changed.connect (() => {
-                queue_popover.set_queue (controller.library.queue);
+                artwork_popover.queue_box.set_queue (controller.library.queue);
             });
-            queue_popover.set_queue (controller.library.queue);
-            queue_popover.move_up.connect ((e) => {
+            artwork_popover.queue_box.set_queue (controller.library.queue);
+            artwork_popover.queue_box.move_up.connect ((e) => {
                 controller.library.move_episode_up_in_queue (e);
-                queue_popover.show_all ();
+                artwork_popover.queue_box.show_all ();
             });
-            queue_popover.move_down.connect ((e) => {
+            artwork_popover.queue_box.move_down.connect ((e) => {
                 controller.library.move_episode_down_in_queue (e);
-                queue_popover.show_all ();
+                artwork_popover.queue_box.show_all ();
             });
-            queue_popover.update_queue.connect ((oldPos, newPos) => {
+            artwork_popover.queue_box.update_queue.connect ((oldPos, newPos) => {
                 controller.library.update_queue (oldPos, newPos);
-                queue_popover.show_all ();
+                artwork_popover.queue_box.show_all ();
             });
 
-            queue_popover.remove_episode.connect ((e) => {
+            artwork_popover.queue_box.remove_episode.connect ((e) => {
                 controller.library.remove_episode_from_queue (e);
-                queue_popover.show_all ();
+                artwork_popover.queue_box.show_all ();
             });
-            queue_popover.play_episode_from_queue_immediately.connect (play_episode_from_queue_immediately);
+            artwork_popover.queue_box.play_episode_from_queue_immediately.connect (play_episode_from_queue_immediately);
 
             info ("Adding notebook to window.");
             current_widget = notebook;
@@ -627,13 +638,14 @@ namespace Vocal {
                                         if (episode.title == fields[0]) {
                                             controller.current_episode = episode;
                                             toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
+                                            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
                                             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
 
                                             try {
 
                                                 controller.player.set_episode (controller.current_episode);
                                                 controller.player.set_position (controller.current_episode.last_played_position);
-                                                shownotes.set_notes_text (episode.description);
+                                                artwork_popover.set_notes_text (episode.description);
 
                                             } catch (Error e) {
                                                 warning (e.message);
@@ -756,14 +768,14 @@ namespace Vocal {
         private void play_episode_from_queue_immediately (Episode e) {
 
             controller.current_episode = e;
-            queue_popover.hide ();
+            artwork_popover.queue_box.hide ();
             controller.library.remove_episode_from_queue (e);
 
             controller.play ();
 
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64)controller.player.duration);
-            shownotes.set_notes_text (controller.current_episode.description);
+            artwork_popover.set_notes_text (controller.current_episode.description);
             controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
         }
 
@@ -784,7 +796,8 @@ namespace Vocal {
 
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-            shownotes.set_notes_text (controller.current_episode.description);
+            toolbar.playback_box.set_artwork_image_image (episode.parent.coverart_uri);
+            artwork_popover.set_notes_text (controller.current_episode.description);
             controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
         }
 
@@ -938,8 +951,8 @@ namespace Vocal {
                 toolbar.show_playback_box ();
 
                 // Hide the shownotes button
-                toolbar.hide_shownotes_button ();
-                toolbar.hide_volume_button ();
+                toolbar.playback_box.hide_artwork_image ();
+                toolbar.playback_box.hide_volume_button ();
                 toolbar.hide_playlist_button ();
 
                 if (current_widget == welcome) {
@@ -983,8 +996,8 @@ namespace Vocal {
                     // Make the refresh and export items sensitive now
                     toolbar.export_item.sensitive = true;
 
-                    toolbar.show_shownotes_button ();
-                    toolbar.show_volume_button ();
+                    toolbar.playback_box.show_artwork_image ();
+                    toolbar.playback_box.show_volume_button ();
                     toolbar.show_playlist_button ();
 
                     if (current_widget == import_message_box) {
@@ -997,6 +1010,7 @@ namespace Vocal {
 
                     if (controller.player.playing) {
                         toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
+                        toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
                         video_controls.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
                     }
 
@@ -1235,7 +1249,7 @@ namespace Vocal {
          */
         public void on_import_status_changed (int current, int total, string title) {
             show_all ();
-            toolbar.playback_box.set_message_and_percentage ("Adding feed %d/%d: %s".printf (current, total, title), (double) ((double)current/ (double)total));
+            show_infobar (_("Adding feed %d/%d: %s").printf (current, total, title), MessageType.INFO);
         }
 
 
@@ -1624,7 +1638,7 @@ namespace Vocal {
 
                 // Set the shownotes, the media information, and update the last played media in the settings
                 controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-                shownotes.set_notes_text (controller.current_episode.description);
+                artwork_popover.set_notes_text (controller.current_episode.description);
                 controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
             } else {
                 controller.player.playing = false;

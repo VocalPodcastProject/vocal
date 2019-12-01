@@ -317,7 +317,7 @@ namespace Vocal {
             welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
             welcome.append("document-open", _("Import Subscriptions"),
                     _("If you have exported feeds from another podcast manager, import them here."));
-            welcome.append("emblem-synchronizing-symbolic", _("Sync With gpodder"), _("Login to your gpodder.net account and synchronize your library."));
+            welcome.append("emblem-synchronizing-symbolic", _("Sync With gpodder"), _("Log in to your gpodder.net account and synchronize your library."));
             
             welcome.activated.connect(on_welcome);
             info ("Creating new episodes view.");

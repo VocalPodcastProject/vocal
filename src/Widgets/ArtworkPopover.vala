@@ -60,6 +60,9 @@ namespace Vocal {
 			main_container.add (stack_switcher);
 			main_container.add (stack);
 			
+			stack_switcher.halign = Gtk.Align.CENTER;
+			stack_switcher.margin = 12;
+			
 			this.add (main_container);
         }
 

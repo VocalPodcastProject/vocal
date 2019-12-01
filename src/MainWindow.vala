@@ -508,10 +508,10 @@ namespace Vocal {
 
             // Create the show notes popover
             artwork_popover = new ArtworkPopover (toolbar.playback_box.artwork_image);
-            toolbar.playback_box.artwork_image.button_press_event.connect ( () => {
-            	info ("button press");
+            toolbar.playback_box.artwork.button_press_event.connect ( () => {
             	artwork_popover.popup ();
-            	return true;
+            	artwork_popover.show_all ();
+            	return false;
             });
 
             info ("Creating downloads popover.");

@@ -27,6 +27,7 @@ namespace Vocal {
 
         public Gtk.Label episode_label;
         public Gtk.Label podcast_label;
+        public Gtk.EventBox artwork;
         public Gtk.Image artwork_image;
         private Gtk.ProgressBar progress_bar;
         private Gtk.Scale scale;
@@ -46,6 +47,8 @@ namespace Vocal {
 
             this.width_request = 300;
             
+            artwork = new Gtk.EventBox ();
+            
             // Create the show notes button
             if (Utils.check_elementary ()) {
                 artwork_image = new Gtk.Image.from_icon_name (
@@ -58,7 +61,7 @@ namespace Vocal {
                     Gtk.IconSize.SMALL_TOOLBAR
                 );
             }
-            artwork_image.tooltip_text = _ ("View this episodes shownotes or check the queue");
+            artwork_image.tooltip_text = _ ("View the shownotes for this episode or check the queue");
             artwork_image.margin_right = 12;
             artwork_image.margin_left = 12;
             artwork_image.halign = Gtk.Align.END;
@@ -114,7 +117,8 @@ namespace Vocal {
             volume_button.relief = Gtk.ReliefStyle.NONE;
             volume_button.margin_right = 12;
             
-            this.add (artwork_image);
+            artwork.add (artwork_image);
+            this.add (artwork);
             this.add (label_box);
             this.add (scale_grid);
             this.add (volume_button);

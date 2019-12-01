@@ -25,6 +25,7 @@ namespace Vocal {
     public class Toolbar : Gtk.HeaderBar {
 
         public signal void add_podcast_selected ();
+        public signal void sync_dialog_selected ();
         public signal void import_podcasts_selected ();
         public signal void export_selected ();
         public signal void playlist_selected ();
@@ -153,6 +154,8 @@ namespace Vocal {
             menu.add (add_feed_item);
             menu.add (import_item);
             menu.add (export_item);
+            menu.add (new Gtk.SeparatorMenuItem ());
+            menu.add (sync_dialog_item);
             menu.add (new Gtk.SeparatorMenuItem ());
 
             menu.add (dark_mode_item);

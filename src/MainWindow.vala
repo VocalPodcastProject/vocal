@@ -455,6 +455,11 @@ namespace Vocal {
             toolbar.new_episodes_button.clicked.connect (() => {
                 switch_visible_page (new_episodes_view);
             });
+            
+            toolbar.sync_dialog_selected.connect ( () => {
+	    		sync_dialog = new SyncDialog(controller);
+                sync_dialog.show_all ();
+            });
 
             toolbar.refresh_selected.connect (controller.on_update_request);
             toolbar.play_pause_selected.connect (controller.play_pause);

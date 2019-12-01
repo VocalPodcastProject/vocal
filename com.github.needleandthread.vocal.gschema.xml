@@ -148,5 +148,54 @@
 				close is pressed.
 			</description>
 		</key>
+		
+		<key name="gpodder-device-name" type="s">
+			<default>"vocal"</default>
+			<summary>The name of the device for gpodder.net</summary>
+			<description>
+				The name of the device that gets displayed on gpodder.net. Typically,
+				it is set to some combination of "vocal" and the hardware device name.
+				That said, you can get as creative as you want.
+			</description>
+		</key>
+		
+		<key name="gpodder-username" type="s">
+			<default>""</default>
+			<summary>The username of the last successfully logged-in gpodder.net user</summary>
+			<description>
+				Contains the username of the last gpodder.net user account to successfully
+				login to the service.
+			</description>
+		</key>
+		
+		<key name="gpodder-sync-episode-status" type="b">
+			<default>true</default>
+			<summary>Whether or not to keep episode status in sync with the cloud</summary>
+			<description>
+				When set to true, Vocal will automatically sync all the episode statuses with
+				gpodder.net, including whether or not an episode has been listened to, as well as 
+				playback progress.
+			</description>
+		</key>
+		
+		<key name="gpodder-remove-deleted-podcasts" type="b">
+			<default>false</default>
+			<summary>Whether or not to remove podcasts that are no longer in the gpodder.net subscriptions</summary>
+			<description>
+				When set to true, Vocal will automatically remove a podcast from the library when
+				it is no longer in the user's gpodder.net subscription list (typically following
+				a delete event from another device).
+			</description>
+		</key>
+		
+		<key name="gpodder-last-successful-sync-timestamp" type="s">
+			<default>""</default>
+			<summary>The UNIX timestamp of the last successful episode sync</summary>
+			<description>
+				The UNIX timestamp of the last time Vocal successfully contacted the
+				gpodder.net service and received an update of episode actions.
+			</description>
+		</key>
+		
 	</schema>
 </schemalist>

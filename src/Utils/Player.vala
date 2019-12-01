@@ -62,20 +62,6 @@ namespace Vocal {
         }
 
         /*
-         *  Returns the total duration of the currently playing media
-         */
-        public double get_duration () {
-            return this.duration;
-        }
-
-        /*
-         * Returns the current position of the media
-         */
-        public double get_position () {
-            return this.progress;
-        }
-
-        /*
          * Sets the current state to pause
          */
         public void pause () {
@@ -98,7 +84,7 @@ namespace Vocal {
             double total_seconds = duration;
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
-            set_position (progress - percentage_of_total_seconds);
+            set_progress (progress - percentage_of_total_seconds);
         }
 
         /*
@@ -108,7 +94,7 @@ namespace Vocal {
             double total_seconds = duration;
             double percentage_of_total_seconds = num_seconds / total_seconds;
 
-            set_position (progress + percentage_of_total_seconds);
+            set_progress (progress + percentage_of_total_seconds);
         }
 
         /*
@@ -155,15 +141,16 @@ namespace Vocal {
             Gst.SeekType.NONE, duration);
         }
         */
-
-
+        
         /*
-         *  Sets the currently playing media position
+         * Sets the currently playing media position, in seconds
          */
-        public void set_position (double pos) {
-            this.progress = pos;
-            new_position_available ();
-        }
+		public void set_position (int seconds) {
+			double calculated_progress = (double)seconds / get_duration ();
+			set_progress (calculated_progress);
+			new_position_available ();
+		}
+
 
         /*
          * Sets the current volume

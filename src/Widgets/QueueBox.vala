@@ -1,7 +1,7 @@
 /***
   BEGIN LICENSE
 
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
+  Copyright (C) 2014-2019 Nathan Dyer <mail@nathandyer.me>
   This program is free software: you can redistribute it and/or modify it
   under the terms of the GNU Lesser General Public License version 3, as
   published by the Free Software Foundation.
@@ -18,7 +18,7 @@
 ***/
 
 namespace Vocal {
-    public class QueuePopover : Gtk.Popover {
+    public class QueueBox : Gtk.Box {
         public signal void update_queue (int oldPos, int newPos);  // vala-lint=naming-convention
         public signal void move_up (Episode e);
         public signal void move_down (Episode e);
@@ -31,9 +31,8 @@ namespace Vocal {
         private Gtk.ScrolledWindow scrolled_window;
         private Gtk.Box scrolled_box;
 
-        public QueuePopover (Gtk.Widget parent) {
-            this.set_relative_to (parent);
-
+        public QueueBox () {
+           
             label = new Gtk.Label (_ ("No episodes in queue"));
             label.get_style_context ().add_class ("h3");
             label.margin = 12;
@@ -113,15 +112,15 @@ namespace Vocal {
         public Gee.ArrayList<QueueListRow> rows;
 
         private const Gtk.TargetEntry targetEntries[] = {  // vala-lint=naming-convention
-          { "GTK_LIST_BOX_ROW", Gtk.TargetFlags.SAME_APP, 0 }
-    };
+			{ "GTK_LIST_BOX_ROW", Gtk.TargetFlags.SAME_APP, 0 }
+		};
 
         public QueueList (Gee.ArrayList<Episode> queue) {
             selection_mode = Gtk.SelectionMode.NONE;
             rows = new Gee.ArrayList<QueueListRow> ();
 
             Gtk.drag_dest_set (this, Gtk.DestDefaults.ALL, targetEntries, Gdk.DragAction.MOVE);
-      drag_data_received.connect (on_drag_data_received);
+			drag_data_received.connect (on_drag_data_received);
 
             foreach (Episode e in queue) {
                 QueueListRow listRow = new QueueListRow (e);
@@ -137,12 +136,12 @@ namespace Vocal {
 
         private bool scroll_up = false;
         private bool scrolling = false;
-    private bool should_scroll = false;
-    public Gtk.Adjustment vadjustment;
+		private bool should_scroll = false;
+		public Gtk.Adjustment vadjustment;
 
-    private const int SCROLL_STEP_SIZE = 10;
-    private const int SCROLL_DISTANCE = 30;
-    private const int SCROLL_DELAY = 50;
+		private const int SCROLL_STEP_SIZE = 10;
+		private const int SCROLL_DISTANCE = 30;
+		private const int SCROLL_DELAY = 50;
 
         public override bool drag_motion (Gdk.DragContext context, int x, int y, uint time) {
             check_scroll (y);
@@ -175,48 +174,47 @@ namespace Vocal {
             }
         }
 
-    private bool scroll () {
-      if (should_scroll) {
-        if (scroll_up) {
-          vadjustment.value -= SCROLL_STEP_SIZE;
-        } else {
-          vadjustment.value += SCROLL_STEP_SIZE;
-        }
-      } else {
-        scrolling = false;
-      }
+		private bool scroll () {
+			if (should_scroll) {
+				if (scroll_up) {
+					vadjustment.value -= SCROLL_STEP_SIZE;
+				} else {
+					vadjustment.value += SCROLL_STEP_SIZE;
+				}
+			} else {
+				scrolling = false;
+			}
 
-      return should_scroll;
-    }
+			return should_scroll;
+		}
 
-    private void on_drag_data_received (
-        Gdk.DragContext context,
-        int x,
-        int y,
-        Gtk.SelectionData selection_data,
-        uint target_type,
-        uint time
-    ) {
-        QueueListRow target;
-        Gtk.Widget row;
-        QueueListRow source;
-        int newPos;
-        int oldPos;
+		private void on_drag_data_received (
+	    Gdk.DragContext context,
+	    int x,
+	    int y,
+	    Gtk.SelectionData selection_data,
+	    uint target_type,
+	    uint time) {
+		    QueueListRow target;
+		    Gtk.Widget row;
+		    QueueListRow source;
+		    int newPos;
+		    int oldPos;
 
-        target = (QueueListRow) get_row_at_y (y);
+		    target = (QueueListRow) get_row_at_y (y);
 
-        newPos = target.get_index ();
-        row = ((Gtk.Widget[]) selection_data.get_data ())[0];
-        source = (QueueListRow) row.get_ancestor (typeof (QueueListRow));
-        oldPos = source.get_index ();
+		    newPos = target.get_index ();
+		    row = ((Gtk.Widget[]) selection_data.get_data ())[0];
+		    source = (QueueListRow) row.get_ancestor (typeof (QueueListRow));
+		    oldPos = source.get_index ();
 
-        if (source == target) {
-            return;
-        }
+		    if (source == target) {
+		        return;
+		    }
 
-        remove (source);
-        insert (source, newPos);
-        update_queue (oldPos, newPos);
-    }
+		    remove (source);
+		    insert (source, newPos);
+		    update_queue (oldPos, newPos);
+		}
     }
 }

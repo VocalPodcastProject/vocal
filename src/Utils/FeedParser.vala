@@ -358,13 +358,35 @@ namespace Vocal {
         /*
          * Parses an OPML file and returns an array listing each feed discovered within
          */
-        public string[] parse_feeds_from_OPML (string path) throws VocalLibraryError {  // vala-lint=naming-convention
+        public string[] parse_feeds_from_OPML (string path, bool raw_data = false) throws VocalLibraryError {  // vala-lint=naming-convention
             var feeds = new Gee.ArrayList<string> ();
 
             queue.clear ();
 
             // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Xml.Parser.parse_file (path);
+
+            /*
+            // TODO:
+            // I believe this is outdate code, but I'm leaving it commented out in case it is necessary.
+            // I can test it with the Ubuntu UK feed, if memory serves correctly
+            
+            Xml.Doc* doc;
+            
+            // If bracket character is in the path, assume it's the raw data, not a path
+            if (path.contains("<")) {
+                doc = Xml.Parser.parse_memory (path, path.length);
+            } else {
+                doc = Xml.Parser.parse_file (path);
+            }
+            */
+            
+            Xml.Doc* doc;
+            
+            if (!raw_data) {
+				doc = Xml.Parser.parse_file (path);
+        	} else {
+        		doc = Xml.Parser.parse_memory (path, path.length);
+        	}
 
             // Make sure that it didn't return a null reference
             if (doc == null) {

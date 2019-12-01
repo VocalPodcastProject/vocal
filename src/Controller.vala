@@ -26,7 +26,6 @@ using Granite.Widgets;
 
 namespace Vocal {
 
-
     public class Controller : GLib.Object {
 
         public MainWindow window = null;
@@ -35,7 +34,9 @@ namespace Vocal {
         public Library library = null;
         public Player player;
         public iTunesProvider itunes = null;
-
+        public PasswordManager password_manager = PasswordManager.get_default_instance ();
+        public gpodderClient gpodder_client;
+        
         /* Signals */
 
         public signal void track_changed (string episode_title, string podcast_name, string artwork_uri, uint64 duration);
@@ -91,8 +92,10 @@ namespace Vocal {
 
             library = new Library (this);
             library.run_database_update_check ();
-
-
+            
+            info ("Initiating the gpodder API");
+            gpodder_client = gpodderClient.get_default_instance (this);
+            
             // IMPORTANT NOTE: the player, library, and iTunes provider MUST exist before the MainWindow is created
 
             info ("Initializing the main window.");
@@ -115,8 +118,9 @@ namespace Vocal {
             // to set the new progress on the playback box
             player.new_position_available.connect (() => {
 
-                if (player.progress > 0)
-                    player.current_episode.last_played_position = player.progress;
+                if (player.progress > 0) {
+                    player.current_episode.last_played_position = (int) player.get_position ();
+                }
 
                 int mins_remaining;
                 int secs_remaining;
@@ -263,12 +267,61 @@ namespace Vocal {
                 library.autoclean_library ();
             }
 
-            // Check for updates after 20 seconds
-            GLib.Timeout.add (20000, () => {
-                on_update_request ();
+            // Check for gpodder updates after 5 seconds, then check for new episodes
+            GLib.Timeout.add (5000, () => {
+            
+            	// Get new subscriptions from gpodder.net
+            
+		        if (settings.gpodder_username != "") {
+		        	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
+		        	var loop = new MainLoop();
+                	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
+                	
+		                    string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
+                			library.add_from_OPML (cloud_subs_opml, true);
+		                    
+		                    // Next, get any episode updates
+		                    window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
+		                    gpodder_client.get_episode_updates_async.begin ((obj, res) => {
+
+		                    	bool? success = gpodder_client.get_episode_updates_async.end (res);
+		                    	window.hide_infobar ();
+		                    	
+		                    	// If necessary, remove podcasts from library that are missing in
+		                    	if (settings.gpodder_remove_deleted_podcasts) {
+		                    	
+		                    		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
+		                    		
+		                    		// TODO: use a singleton pattern so there's only one instance
+		                    		FeedParser feed_parser = new FeedParser ();
+		                    		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
+		                    		foreach (Podcast p in library.podcasts) {
+		                    			bool found = false;
+		                    			foreach (string feed in cloud_feeds) {
+		                    				if (p.feed_uri == feed) {
+		                    					found = true;
+	                    					}
+		                    			}
+		                    			if (!found) {
+		                    				// Remove podcast
+		                    				library.remove_podcast (p);
+		                    			}
+		                    		}
+		                    	}
+		                    	
+		                    	// Now update the actual feeds and quit the loop
+						        on_update_request ();
+				                loop.quit();
+		                    });
+		                    
+                    });
+                    loop.run();
+		        	
+	        	} else {
+                	on_update_request ();
+            	}
                 return false;
             });
-
 
             // Set minutes elapsed to zero since the app is just now starting up
             minutes_elapsed_in_period = 0;
@@ -289,7 +342,7 @@ namespace Vocal {
                     return true;
                 });
             }
-
+                       
             info ("Controller initialization finished. Running post-creation sequence.");
             post_creation_sequence ();
         }
@@ -380,7 +433,7 @@ namespace Vocal {
                 playback_status_changed ("Playing");
 
                 // Seek if necessary
-                if (current_episode.last_played_position > 0 && current_episode.last_played_position > player.progress) {
+                if (current_episode.last_played_position > 0 && current_episode.last_played_position > player.get_position ()) {
 
                     // If it's a streaming episode, seeking takes longer
                     // Temporarily pause the track and give it some time to seek
@@ -414,7 +467,10 @@ namespace Vocal {
                     window.video_controls.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
                     window.shownotes.set_notes_text (current_episode.description);
                 }
-                window.show_all ();
+                window.show_all();
+                
+                gpodder_client.update_episode (current_episode, EpisodeAction.PLAY);
+
             }
         }
 
@@ -434,7 +490,7 @@ namespace Vocal {
                 window.video_controls.tooltip_text = _ ("Play");
 
                 // Set last played position
-                current_episode.last_played_position = player.progress;
+                current_episode.last_played_position = (int) player.get_position ();
                 library.set_episode_playback_position (player.current_episode);
             }
 
@@ -446,7 +502,9 @@ namespace Vocal {
                 window.shownotes.set_notes_text (current_episode.description);
             }
 
-            window.show_all ();
+            window.show_all();
+            
+            gpodder_client.update_episode (current_episode, EpisodeAction.PLAY);
         }
 
         /*
@@ -512,6 +570,21 @@ namespace Vocal {
             loop.run ();
 
             if (success) {
+            
+            	// Send update to gpodder API if necessary
+            	if (settings.gpodder_username != "") {
+            	
+            		info (_("Uploading subscriptions to gpodder.net."));
+		        	var gpodder_loop = new MainLoop ();
+		        	window.show_infobar (_("Uploading subscriptions to gpodder.net…"), MessageType.INFO);
+		            gpodder_client.upload_subscriptions_async.begin ((obj, res) => {
+	                    gpodder_client.upload_subscriptions_async.end (res);
+	                    window.hide_infobar ();
+		                gpodder_loop.quit ();
+		            });
+		            gpodder_loop.run ();
+	            }
+            	
                 window.toolbar.show_shownotes_button ();
                 window.toolbar.show_volume_button ();
                 window.toolbar.show_playlist_button ();

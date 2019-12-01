@@ -21,23 +21,26 @@ using Gtk;
 using Gee;
 using Granite;
 namespace Vocal {
-    public class Toolbar : Gtk.HeaderBar {
 
-        public signal void add_podcast_selected ();
-        public signal void import_podcasts_selected ();
-        public signal void export_selected ();
-        public signal void shownotes_selected ();
-        public signal void playlist_selected ();
-        public signal void preferences_selected ();
-        public signal void donate_selected ();
-        public signal void refresh_selected ();
-        public signal void rate_button_selected ();
-        public signal void store_selected ();
-        public signal void play_pause_selected ();
-        public signal void seek_forward_selected ();
-        public signal void seek_backward_selected ();
-        public signal void downloads_selected ();
-        public signal void check_for_updates_selected ();
+	public class Toolbar : Gtk.HeaderBar {
+
+		public signal void add_podcast_selected();
+		public signal void import_podcasts_selected();
+		public signal void export_selected();
+		public signal void sync_dialog_selected ();
+		public signal void shownotes_selected();
+		public signal void playlist_selected();
+		public signal void preferences_selected();
+		public signal void donate_selected();
+		public signal void refresh_selected();
+		public signal void rate_button_selected();
+		public signal void store_selected();
+		public signal void play_pause_selected();
+		public signal void seek_forward_selected();
+		public signal void seek_backward_selected();
+		public signal void downloads_selected();
+        public signal void check_for_updates_selected();
+
         public signal void about_selected ();
         public signal void theme_toggled ();
 
@@ -160,27 +163,40 @@ namespace Vocal {
                 }
                 theme_toggled ();
             });
+            
+            var sync_dialog_item = new Gtk.MenuItem.with_label (_("Library Synchronization"));
+            
+            // Set refresh and export insensitive if there isn't a library to export
+            if (first_run) {
+                //refresh_item.sensitive = false;
+                sync_dialog_item.sensitive = false;
+            }
+            sync_dialog_item.activate.connect(() => {
+            	sync_dialog_selected ();
+        	});
 
             // Set refresh and export insensitive if there isn't a library to export
             if (first_run) {
                 //refresh_item.sensitive = false;
                 export_item.sensitive = false;
             }
-            export_item.activate.connect (() => {
-                export_selected ();
-            });
-            menu.add (check_for_updates);
-            menu.add (new Gtk.SeparatorMenuItem ());
-            menu.add (add_feed_item);
-            menu.add (import_item);
-            menu.add (export_item);
-            menu.add (new Gtk.SeparatorMenuItem ());
+
+            export_item.activate.connect(() => {
+            	export_selected();
+        	});
+            menu.add(check_for_updates);
+            menu.add(new Gtk.SeparatorMenuItem());
+            menu.add(add_feed_item);
+            menu.add(import_item);
+            menu.add(export_item);
+            menu.add (sync_dialog_item);
+            menu.add(new Gtk.SeparatorMenuItem());
             menu.add (dark_mode_item);
 
+            var preferences_item = new Gtk.MenuItem.with_label(_("Preferences"));
+            preferences_item.activate.connect(() => {
+                preferences_selected();
 
-            var preferences_item = new Gtk.MenuItem.with_label ( _("Preferences"));
-            preferences_item.activate.connect (() => {
-                preferences_selected ();
             });
             menu.add (preferences_item);
             menu.add (new Gtk.SeparatorMenuItem ());

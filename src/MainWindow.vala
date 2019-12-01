@@ -56,6 +56,7 @@ namespace Vocal {
         private Gtk.Revealer return_revealer;
         private Gtk.Button return_to_library;
         private Gtk.Box search_results_box;
+        private SyncDialog sync_dialog;
         private Gtk.InfoBar infobar;
 
         /* Icon views and related variables */
@@ -296,12 +297,15 @@ namespace Vocal {
             info ("Creating welcome screen.");
 
             // Create a welcome screen and add it to the notebook (no matter if first run or not)
-            welcome = new Granite.Widgets.Welcome (_ ("Welcome to Vocal"), _ ("Build Your Library By Adding Podcasts"));
-            welcome.append (controller.on_elementary ? "preferences-desktop-online-accounts" : "applications-internet", _ ("Browse Podcasts"),
-                 _ ("Browse through podcasts and choose some to add to your library."));
-            welcome.append ("list-add", _ ("Add a New Feed"), _ ("Provide the web address of a podcast feed."));
-            welcome.append ("document-open", _ ("Import Subscriptions"),
-                    _ ("If you have exported feeds from another podcast manager, import them here."));
+
+            welcome = new Granite.Widgets.Welcome (_("Welcome to Vocal"), _("Build Your Library By Adding Podcasts"));
+            welcome.append(controller.on_elementary ? "preferences-desktop-online-accounts" : "applications-internet", _("Browse Podcasts"),
+                 _("Browse through podcasts and choose some to add to your library."));
+            welcome.append("list-add", _("Add a New Feed"), _("Provide the web address of a podcast feed."));
+            welcome.append("document-open", _("Import Subscriptions"),
+                    _("If you have exported feeds from another podcast manager, import them here."));
+            welcome.append("emblem-synchronizing-symbolic", _("Sync With gpodder"), _("Login to your gpodder.net account and synchronize your library."));
+            
             welcome.activated.connect(on_welcome);
             info ("Creating new episodes view.");
             new_episodes_view = new NewEpisodesView (controller);
@@ -400,7 +404,7 @@ namespace Vocal {
 
             // Change the player position to match scale changes
             toolbar.playback_box.scale_changed.connect (() => {
-                controller.player.set_position (toolbar.playback_box.get_progress_bar_fill ());
+                controller.player.set_progress (toolbar.playback_box.get_progress_bar_fill ());
             });
 
             toolbar.check_for_updates_selected.connect (() => {
@@ -452,9 +456,16 @@ namespace Vocal {
 
             toolbar.export_selected.connect (export_podcasts);
             toolbar.downloads_selected.connect (show_downloads_popover);
-            toolbar.shownotes_button.clicked.connect (() => { shownotes.show_all (); });
 
-            toolbar.volume_button.clicked.connect (() => {
+            toolbar.shownotes_button.clicked.connect(() => { shownotes.show_all(); });
+            
+            toolbar.sync_dialog_selected.connect ( () => {
+	    		sync_dialog = new SyncDialog(controller);
+                sync_dialog.show_all ();
+            });
+            
+            toolbar.volume_button.clicked.connect(() => {
+
                 var popover = new Gtk.Popover (toolbar.volume_button);
                 var scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
                 scale.inverted = true;
@@ -485,7 +496,7 @@ namespace Vocal {
 
             // Repeat for the video playback box scale
             video_controls.progress_bar_scale_changed.connect (() => {
-                controller.player.set_position (video_controls.progress_bar_fill);
+                controller.player.set_progress (video_controls.progress_bar_fill);
             });
 
             this.set_titlebar (toolbar);
@@ -833,7 +844,8 @@ namespace Vocal {
             });
 
             //  Add the download to the downloads popup
-            downloads.add_download (details_box);
+            downloads.add_download(details_box);
+            
         }
 
 
@@ -935,7 +947,7 @@ namespace Vocal {
                 }
 
                 var loop = new MainLoop ();
-                controller.library.add_from_OPML (file_name, (obj, res) => {
+                controller.library.add_from_OPML (file_name, false, (obj, res) => {
 
                     Gee.ArrayList<string> failed_feed_list = controller.library.add_from_OPML.end (res);
 
@@ -1181,15 +1193,21 @@ namespace Vocal {
             if (details != null && episode.parent == details.podcast) {
                 details.shownotes.hide_download_button ();
             }
+            
+            // Update gpodder.net
+            controller.gpodder_client.update_episode (episode, EpisodeAction.DOWNLOAD);
         }
 
 
         /*
-         * Called when an episode needs to be deleted (locally)
-         */
-        private void on_episode_delete_request (Episode episode) {
-            controller.library.delete_local_episode (episode);
-            details.on_single_delete (episode);
+		 * Called when an episode needs to be deleted (locally)
+		 */
+        private void on_episode_delete_request(Episode episode) {
+            controller.library.delete_local_episode(episode);
+            details.on_single_delete(episode);
+            
+            // Update gpodder.net
+            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.DELETE);
         }
 
 
@@ -1720,6 +1738,12 @@ namespace Vocal {
                 // The import podcasts method will handle any errors
                 import_podcasts ();
 
+			// gpodder.net
+            } else if (index == 3) {
+            	if (sync_dialog == null) {
+            		sync_dialog = new SyncDialog (controller);
+            	}
+            	sync_dialog.show_all ();
             }
         }
 
@@ -1752,6 +1776,9 @@ namespace Vocal {
                 if (controller.player.current_episode.last_played_position != 0)
                     controller.library.set_episode_playback_position (controller.player.current_episode);
             }
+            
+            // Update gpodder.net if necessary
+            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.PLAY);
 
             // If an episode is currently playing and Vocal is set to keep playing in the background, hide the window
             if (controller.player.playing && controller.settings.keep_playing_in_background) {
@@ -1796,7 +1823,7 @@ namespace Vocal {
             }
         }
         
-        private void show_infobar (string message, MessageType type) {
+        public void show_infobar (string message, MessageType type) {
             infobar.set_no_show_all (false);
             infobar.show_all ();
    
@@ -1815,7 +1842,7 @@ namespace Vocal {
             infobar.show_all ();
         }
         
-        private void hide_infobar () {
+        public void hide_infobar () {
             infobar.revealed = false;
             hiding_timer = GLib.Timeout.add (500, () => {
                 infobar.set_no_show_all (true);

@@ -414,7 +414,7 @@ namespace Vocal {
             ThreadFunc<void*> run = () => {
                 // Create a new DateTime that is the current date and then subtract one week
                 GLib.DateTime week_ago = new GLib.DateTime.now_utc ();
-                week_ago.add_weeks (-1);
+                week_ago = week_ago.add_weeks(-1); 
 
                 foreach (Podcast p in podcasts) {
                     foreach (Episode e in p.episodes) {

@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Vocal\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-27 06:18-0400\n"
-"PO-Revision-Date: 2019-04-07 14:37+0000\n"
+"POT-Creation-Date: 2019-12-01 17:15-0500\n"
+"PO-Revision-Date: 2019-12-02 15:33+0000\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Dutch (http://www.transifex.com/needle-and-thread/vocal/language/nl/)\n"
 "MIME-Version: 1.0\n"
@@ -19,210 +19,246 @@ msgstr ""
 "Language: nl\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../src/Controller.vala:403 ../src/Controller.vala:407
+#: ../src/Controller.vala:276 ../src/Widgets/SyncDialog.vala:269
+msgid "Checking for new podcast subscriptions from your other devices…"
+msgstr "Bezig met controleren op nieuwe abonnementen van je andere apparaten..."
+
+#: ../src/Controller.vala:284 ../src/Widgets/SyncDialog.vala:277
+msgid "Updating episode playback positions from your other devices…"
+msgstr "Bezig met bijwerken van afspeelposities van je andere apparaten..."
+
+#: ../src/Controller.vala:293 ../src/Widgets/SyncDialog.vala:285
+msgid "Cleaning up old subscriptions no longer in your gpodder.net account…"
+msgstr "Bezig met opschonen van oude abonnementen op je gpodder.net-account..."
+
+#: ../src/Controller.vala:456 ../src/Controller.vala:460
 msgid "Pause"
 msgstr "Pauzeren"
 
-#: ../src/Controller.vala:430 ../src/Controller.vala:434
+#: ../src/Controller.vala:486 ../src/Controller.vala:490
 #: ../src/Widgets/EpisodeDetailBox.vala:125
-#: ../src/Widgets/EpisodeDetailBox.vala:318 ../src/Widgets/Toolbar.vala:225
-#: ../src/Widgets/VideoControls.vala:40
+#: ../src/Widgets/EpisodeDetailBox.vala:320 ../src/Widgets/Toolbar.vala:221
+#: ../src/Widgets/VideoControls.vala:44
 msgid "Play"
 msgstr "Afspelen"
 
-#: ../src/Controller.vala:496
+#: ../src/Controller.vala:554
 msgid "Adding new podcast: <b>"
 msgstr "Nieuwe podcast toevoegen: <b>"
 
-#: ../src/Controller.vala:555
+#: ../src/Controller.vala:580
+msgid "Uploading subscriptions to gpodder.net."
+msgstr "Bezig met uploaden van abbonementen naar gpodder.net..."
+
+#: ../src/Controller.vala:582
+msgid "Uploading subscriptions to gpodder.net…"
+msgstr "Bezig met uploaden van abbonementen naar gpodder.net..."
+
+#: ../src/Controller.vala:629
 msgid ""
 "Please make sure you selected the correct feed and that it is still "
 "available."
 msgstr "Zorg ervoor dat je de juiste feed kiest en dat deze nog steeds beschikbaar is."
 
-#: ../src/Controller.vala:557
+#: ../src/Controller.vala:631
 msgid ""
 "There seems to be a problem with your internet connection. Make sure you are"
 " online and then try again."
-msgstr "Er lijkt een probleem te zijn met je internetverbinding. Zorg ervoor dat je verbonden bent en probeer het opnieuw."
+msgstr "Er lijkt een probleem te zijn met je internetverbinding. Controleer of je verbonden bent en probeer het opnieuw."
 
-#: ../src/Controller.vala:562
+#: ../src/Controller.vala:636
 msgid "Error Adding Podcast"
 msgstr "Kan podcast niet toevoegen"
 
-#: ../src/Controller.vala:604
+#: ../src/Controller.vala:679
 msgid "Fresh content has been added to your library."
 msgstr "Er zijn nieuwe items toegevoegd aan je verzameling."
 
-#: ../src/Library.vala:760
+#: ../src/Library.vala:758
 msgid "'%s' from '%s' has finished downloading."
 msgstr "'%s' van '%s' is gedownload."
 
-#: ../src/Library.vala:761
+#: ../src/Library.vala:759
 msgid "Episode Download Complete"
 msgstr "Downloaden afgerond"
 
-#: ../src/Library.vala:766
+#: ../src/Library.vala:764
 msgid "Downloads Complete"
 msgstr "Downloads afgerond"
 
-#: ../src/Library.vala:766
+#: ../src/Library.vala:764
 msgid "New episodes have been downloaded."
 msgstr "Er zijn nieuwe afleveringen gedownload."
 
-#: ../src/MainWindow.vala:92
+#: ../src/MainWindow.vala:93
 msgid "Vocal"
 msgstr "Vocal"
 
-#: ../src/MainWindow.vala:264 ../src/MainWindow.vala:267
+#: ../src/MainWindow.vala:279 ../src/MainWindow.vala:282
 #: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
-#: ../src/Widgets/SearchResultsView.vala:68
+#: ../src/Widgets/SearchResultsView.vala:69
 msgid "Return to Library"
 msgstr "Terug naar verzameling"
 
-#: ../src/MainWindow.vala:298
+#: ../src/MainWindow.vala:314
 msgid "Welcome to Vocal"
 msgstr "Welkom bij Vocal"
 
-#: ../src/MainWindow.vala:298
+#: ../src/MainWindow.vala:314
 msgid "Build Your Library By Adding Podcasts"
 msgstr "Leg een verzameling aan door podcasts toe te voegen"
 
-#: ../src/MainWindow.vala:299
+#: ../src/MainWindow.vala:315
 msgid "Browse Podcasts"
 msgstr "Podcasts verkennen"
 
-#: ../src/MainWindow.vala:300
+#: ../src/MainWindow.vala:316
 msgid "Browse through podcasts and choose some to add to your library."
 msgstr "Blader door de podcasts en kies welke je wilt toevoegen aan je verzameling."
 
-#: ../src/MainWindow.vala:301
+#: ../src/MainWindow.vala:317
 msgid "Add a New Feed"
 msgstr "Nieuwe feed toevoegen"
 
-#: ../src/MainWindow.vala:301
+#: ../src/MainWindow.vala:317
 msgid "Provide the web address of a podcast feed."
 msgstr "Geef het webadres van een podcastfeed op."
 
-#: ../src/MainWindow.vala:302
+#: ../src/MainWindow.vala:318
 msgid "Import Subscriptions"
 msgstr "Abonnementen importeren"
 
-#: ../src/MainWindow.vala:303
+#: ../src/MainWindow.vala:319
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
 msgstr "Als je feeds hebt geëxporteerd uit een andere podcastbeheerder, importeer ze dan hier."
 
-#: ../src/MainWindow.vala:356
+#: ../src/MainWindow.vala:320
+msgid "Sync With gpodder"
+msgstr "Synchroniseren met gpodder"
+
+#: ../src/MainWindow.vala:320
+msgid "Log in to your gpodder.net account and synchronize your library."
+msgstr "Log in op je gpodder.net-account en synchroniseer je verzameling."
+
+#: ../src/MainWindow.vala:373
 msgid "Good Stuff is On Its Way"
 msgstr "Er gaan goede dingen gebeuren"
 
-#: ../src/MainWindow.vala:357
+#: ../src/MainWindow.vala:374
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
-msgstr "Als je verschillende podcasts importeert, dan kan het enkele minuten duren. Je verzameling is z.s.m. gereed."
+msgstr "Als je meerdere podcasts importeert, dan kan het enkele minuten duren. Je verzameling is z.s.m. gereed."
 
-#: ../src/MainWindow.vala:369
+#: ../src/MainWindow.vala:386
 msgid "Welcome"
 msgstr "Welkom"
 
-#: ../src/MainWindow.vala:370
+#: ../src/MainWindow.vala:387
 msgid "Importing"
 msgstr "Bezig met importeren"
 
-#: ../src/MainWindow.vala:371
+#: ../src/MainWindow.vala:388
 msgid "All Podcasts"
 msgstr "Alle podcasts"
 
-#: ../src/MainWindow.vala:372 ../src/Widgets/DirectoryArt.vala:69
+#: ../src/MainWindow.vala:389 ../src/Widgets/DirectoryArt.vala:79
 msgid "Details"
 msgstr "Informatie"
 
-#: ../src/MainWindow.vala:373 ../src/Widgets/NewEpisodesView.vala:49
-#: ../src/Widgets/Toolbar.vala:104
+#: ../src/MainWindow.vala:390 ../src/Widgets/NewEpisodesView.vala:49
+#: ../src/Widgets/Toolbar.vala:90
 msgid "New Episodes"
 msgstr "Nieuwe afleveringen"
 
-#: ../src/MainWindow.vala:374
+#: ../src/MainWindow.vala:391
 msgid "Video"
 msgstr "Video"
 
-#: ../src/MainWindow.vala:391
+#: ../src/MainWindow.vala:408
 msgid "Browse Podcast Directory"
 msgstr "Podcastmap verkennen"
 
-#: ../src/MainWindow.vala:392
+#: ../src/MainWindow.vala:409
 msgid "Search Results"
 msgstr "Zoekresultaten"
 
-#: ../src/MainWindow.vala:856 ../src/MainWindow.vala:895
-#: ../src/Widgets/PodcastView.vala:778
+#: ../src/MainWindow.vala:573
+msgid "Checking for new episodes…"
+msgstr "Bezig met controleren op nieuwe afleveringen..."
+
+#: ../src/MainWindow.vala:893 ../src/MainWindow.vala:932
+#: ../src/Widgets/PodcastView.vala:802
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: ../src/MainWindow.vala:857
+#: ../src/MainWindow.vala:894
 msgid "Save"
 msgstr "Opslaan"
 
-#: ../src/MainWindow.vala:860 ../src/MainWindow.vala:899
-#: ../src/Widgets/PodcastView.vala:782
+#: ../src/MainWindow.vala:897 ../src/MainWindow.vala:936
+#: ../src/Widgets/PodcastView.vala:806
 msgid "All files"
 msgstr "Alle bestanden"
 
-#: ../src/MainWindow.vala:864
+#: ../src/MainWindow.vala:901
 msgid "OPML and XML files"
 msgstr "OPML- en XML-bestanden"
 
-#: ../src/MainWindow.vala:892
+#: ../src/MainWindow.vala:929
 msgid "Select Subscription File"
 msgstr "Abonnementsbestand kiezen"
 
-#: ../src/MainWindow.vala:896 ../src/Widgets/PodcastView.vala:779
+#: ../src/MainWindow.vala:933 ../src/Widgets/PodcastView.vala:803
 msgid "Open"
 msgstr "Openen"
 
-#: ../src/MainWindow.vala:903
+#: ../src/MainWindow.vala:940
 msgid "OPML files"
 msgstr "OPML-bestanden"
 
-#: ../src/MainWindow.vala:956
+#: ../src/MainWindow.vala:993
 msgid "Error Importing from File"
 msgstr "Kan bestand niet importeren"
 
-#: ../src/MainWindow.vala:1074
+#: ../src/MainWindow.vala:1112
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
 msgstr "Je hebt extra plug-ins nodig om media af te spelen. Wil je dat Vocal dit voor je doet?"
 
-#: ../src/MainWindow.vala:1224
+#: ../src/MainWindow.vala:1257
+msgid "Adding feed %d/%d: %s"
+msgstr "Bezig met toevoegen van feed %d/%d: %s"
+
+#: ../src/MainWindow.vala:1268
 msgid "Are you sure you want to mark all episodes from '%s' as played?"
 msgstr "Weet je zeker dat je alle afleveringen van '%s' wilt markeren als afgespeeld?"
 
-#: ../src/MainWindow.vala:1437
+#: ../src/MainWindow.vala:1476
 msgid "Are you sure you want to remove '%s' from your controller.library?"
 msgstr "Weet je zeker dat je '%s' wilt verwijderen uit je controller.library?"
 
-#: ../src/MainWindow.vala:1441
+#: ../src/MainWindow.vala:1480
 msgid "No"
 msgstr "Nee"
 
-#: ../src/MainWindow.vala:1442
+#: ../src/MainWindow.vala:1481
 msgid "Yes"
 msgstr "Ja"
 
-#: ../src/MainWindow.vala:1765
+#: ../src/MainWindow.vala:1808
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to"
 " be canceled. Are you sure you want to exit?"
-msgstr "Vocal is bezig afleveringen te downloaden. Afsluiten breekt het downloaden af. Weet je zeker dat je wilt afsluiten?"
+msgstr "Vocal is bezig afleveringen te downloaden. Als je afsluit, wordt het downloaden afgebroken. Weet je zeker dat je wilt afsluiten?"
 
-#: ../src/Utils/FeedParser.vala:367
+#: ../src/Utils/FeedParser.vala:394
 msgid "Selected file doesn't appear to contain podcast subscriptions."
 msgstr "Het gekozen bestand bevat geen podcastabonnementen."
 
-#: ../src/Utils/FeedParser.vala:378
+#: ../src/Utils/FeedParser.vala:406
 msgid "Selected file seems to be empty."
 msgstr "Het gekozen bestand is leeg."
 
@@ -242,31 +278,19 @@ msgstr "<b>Voeg een nieuwe podcastfeed toe aan de verzameling</b>"
 msgid "Podcast feed web address"
 msgstr "Webadres van podcastfeed"
 
-#: ../src/Widgets/CloudLoginDialog.vala:44
-msgid "Login to gPodder.net"
-msgstr "Inloggen op gPodder.net"
+#: ../src/Widgets/ArtworkPopover.vala:41
+msgid "Shownotes"
+msgstr "Aantekeningen"
 
-#: ../src/Widgets/CloudLoginDialog.vala:53
-msgid "Username"
-msgstr "Gebruikersnaam"
+#: ../src/Widgets/ArtworkPopover.vala:42
+msgid "Queue"
+msgstr "Wachtrij"
 
-#: ../src/Widgets/CloudLoginDialog.vala:55
-msgid "Password"
-msgstr "Wachtwoord"
-
-#: ../src/Widgets/CloudLoginDialog.vala:69
-msgid "Login"
-msgstr "Inloggen"
-
-#: ../src/Widgets/CloudLoginDialog.vala:70
-msgid "Register for gPodder.net"
-msgstr "Registreren op gPodder.net"
-
-#: ../src/Widgets/DirectoryArt.vala:88 ../src/Widgets/SearchResultBox.vala:134
+#: ../src/Widgets/DirectoryArt.vala:98 ../src/Widgets/SearchResultBox.vala:147
 msgid "No summary available."
 msgstr "Geen samenvatting beschikbaar."
 
-#: ../src/Widgets/DirectoryArt.vala:100
+#: ../src/Widgets/DirectoryArt.vala:110
 msgid "Subscribe"
 msgstr "Abonneren"
 
@@ -311,7 +335,7 @@ msgid "This episode is currently being played"
 msgstr "Deze aflevering wordt momenteel afgespeeld"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:127
-#: ../src/Widgets/EpisodeDetailBox.vala:321
+#: ../src/Widgets/EpisodeDetailBox.vala:323
 msgid "Stream Episode"
 msgstr "Aflevering streamen"
 
@@ -327,76 +351,76 @@ msgstr "Geen omschrijving beschikbaar."
 msgid "Upload to Internet Archive"
 msgstr "Uploaden naar Internet Archive"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:57
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:58
 msgid "Please verify that the information below is correct before continuing."
-msgstr "Zorg ervoor dat de onderstaande informatie juist is voordat je doorgaat."
+msgstr "Controleer of onderstaande informatie juist is voordat je doorgaat."
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:63
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:65
 msgid "Episode Title"
 msgstr "Naam van aflevering"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:69
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:71
 msgid "Podcast Name"
 msgstr "Podcastnaam"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:75
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:77
 msgid "Podcast Description"
 msgstr "Podcastomschrijving"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:89
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:91
 msgid "Next…"
 msgstr "Volgende..."
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:97
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:100
 msgid ""
 "Legal warning: uploading copyrighted materials to the Internet Archvie is "
 "illegal. Please make sure you are uploading a copylefted (Creative Commons) "
 "episode that you are legally entitled to redistribute."
-msgstr "Juridische waarschuwing: het uploaden van materiaal met auteursrecht danwel copyright naar Internet Archive is illegaal. Zorg ervoor dat je een aflevering uploadt die onder bijv. de Creative Commons-licentie is uitgebracht en opnieuw mag verspreiden"
+msgstr "Juridische waarschuwing: het uploaden van materiaal met auteursrecht danwel copyright naar Internet Archive is illegaal. Upload alléén afleveringen die onder bijv. de Creative Commons-licentie zijn uitgebracht en opnieuw mogen worden verspreid."
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:102
-#: ../src/Widgets/Shownotes.vala:108
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:106
+#: ../src/Widgets/Shownotes.vala:120
 msgid "Upload to the Internet Archive"
 msgstr "Uploaden naar Internet Archive"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:108
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:112
 msgid "Uploading episode…"
 msgstr "Bezig met uploaden..."
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:111
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:116
 msgid ""
 "Thanks for contributing to the Internet Archive and the Podcast Archival "
 "Project"
 msgstr "Bedankt voor het bijdragen aan Internet Archive en het Podcast Archival-project"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:131
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:137
 msgid "Finish"
 msgstr "Afronden"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:154
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:160
 msgid "Upload Complete"
 msgstr "Uploaden voltooid"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:168
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:174
 msgid "Upload Failed"
 msgstr "Uploaden mislukt"
 
-#: ../src/Widgets/InternetArchiveUploadDialog.vala:170
+#: ../src/Widgets/InternetArchiveUploadDialog.vala:177
 msgid ""
 "Be sure to check your network connection and API keys, then try again later."
 msgstr "Controleer je internetverbinding en API-sleutels en probeer het opnieuw."
 
 #: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
 msgid "Your Podcasts"
-msgstr "Jouw podcasts"
+msgstr "Mijn podcasts"
 
 #: ../src/Widgets/NewEpisodesView.vala:58
 msgid "Add all new episodes to the queue"
 msgstr "Alle nieuwe afleveringen toevoegen aan wachtrij"
 
-#: ../src/Widgets/PlaybackBox.vala:43
-msgid "<b>Select an episode to start playing…</b>"
-msgstr "<b>Kies een af te spelen aflevering...</b>"
+#: ../src/Widgets/PlaybackBox.vala:64
+msgid "View the shownotes for this episode or check the queue"
+msgstr "Toon de aantekeningen bij deze aflevering, of de wachtrij"
 
 #: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
 msgid "Show newer episodes at the top of the list"
@@ -410,98 +434,98 @@ msgstr "Oudere afleveringen bovenaan de lijst tonen"
 msgid "Add New Episodes to Queue"
 msgstr "Nieuwe afleveringen toevoegen aan wachtrij"
 
-#: ../src/Widgets/PodcastView.vala:142 ../src/Widgets/Sidepane.vala:98
+#: ../src/Widgets/PodcastView.vala:145 ../src/Widgets/Sidepane.vala:101
 msgid "Download all episodes"
 msgstr "Alle afleveringen downloaden"
 
-#: ../src/Widgets/PodcastView.vala:147
+#: ../src/Widgets/PodcastView.vala:150
 msgid "Mark All Played"
-msgstr "Alle markeren als afgespeeld"
+msgstr "Allen markeren als afgespeeld"
 
-#: ../src/Widgets/PodcastView.vala:161
+#: ../src/Widgets/PodcastView.vala:167
 msgid "Edit podcast details"
-msgstr "Podcastinformatie bewerken"
+msgstr "Podcastinformatie aanpassen"
 
-#: ../src/Widgets/PodcastView.vala:164
+#: ../src/Widgets/PodcastView.vala:170
 msgid "Select different cover art"
 msgstr "Andere omslag kiezen"
 
-#: ../src/Widgets/PodcastView.vala:165
+#: ../src/Widgets/PodcastView.vala:172
 msgid "Set podcast license to Creative Commons"
 msgstr "Podcastlicentie instellen op Creative Commons"
 
-#: ../src/Widgets/PodcastView.vala:176
+#: ../src/Widgets/PodcastView.vala:184
 msgid "Unsubscribe"
 msgstr "Deabonneren"
 
-#: ../src/Widgets/PodcastView.vala:270
+#: ../src/Widgets/PodcastView.vala:283
 msgid ""
 "Before you can upload to the Internet Archive you must add your archive.org "
 "account's API keys. Visit https://archive.org/account/s3.php to see your "
 "keys, then paste them in the settings."
 msgstr "Voordat je kunt uploaden naar Internet Archive moet je de API-sleutels van je archive.org-account toevoegen. Ga naar https://archive.org/account/s3.php om je sleutels op te vragen en plak ze hier in de instellingen."
 
-#: ../src/Widgets/PodcastView.vala:287
+#: ../src/Widgets/PodcastView.vala:306
 msgid ""
 "You must download this episode first before uploading to the Internet "
 "Archive. Would you like to download this episode?"
-msgstr "Je moet de aflevering downloaden voordat je hem uploaden naar Internet Archive. Wil je deze aflevering downloaden?"
+msgstr "Je moet de aflevering downloaden voordat je hem kunt uploaden naar Internet Archive. Wil je deze aflevering downloaden?"
 
-#: ../src/Widgets/PodcastView.vala:416
+#: ../src/Widgets/PodcastView.vala:436
 msgid "Add selected episodes to queue"
 msgstr "Geselecteerde afleveringen toevoegen aan wachtrij"
 
-#: ../src/Widgets/PodcastView.vala:426 ../src/Widgets/Sidepane.vala:248
+#: ../src/Widgets/PodcastView.vala:446 ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
 msgstr "Geselecteerde afleveringen markeren als afgespeeld"
 
-#: ../src/Widgets/PodcastView.vala:441
+#: ../src/Widgets/PodcastView.vala:461
 msgid "Mark selected episodes as new"
 msgstr "Geselecteerde afleveringen markeren als nieuw"
 
-#: ../src/Widgets/PodcastView.vala:455 ../src/Widgets/Sidepane.vala:310
+#: ../src/Widgets/PodcastView.vala:475 ../src/Widgets/Sidepane.vala:313
 msgid "Delete local files for selected episodes"
 msgstr "Lokale bestanden van geselecteerde afleveringen wissen"
 
-#: ../src/Widgets/PodcastView.vala:458 ../src/Widgets/Sidepane.vala:314
+#: ../src/Widgets/PodcastView.vala:482 ../src/Widgets/Sidepane.vala:321
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
 msgstr "Weet je zeker dat je de gedownloade bestanden van de geselecteerde afleveringen wilt wissen?"
 
-#: ../src/Widgets/PodcastView.vala:504
+#: ../src/Widgets/PodcastView.vala:529
 msgid "Mark as played"
 msgstr "Markeren als afgespeeld"
 
-#: ../src/Widgets/PodcastView.vala:512
+#: ../src/Widgets/PodcastView.vala:537
 msgid "Mark as new"
 msgstr "Markeren als nieuw"
 
-#: ../src/Widgets/PodcastView.vala:520 ../src/Widgets/Sidepane.vala:408
+#: ../src/Widgets/PodcastView.vala:545 ../src/Widgets/Sidepane.vala:416
 msgid "Delete Local File"
 msgstr "Lokaal bestand verwijderen"
 
-#: ../src/Widgets/PodcastView.vala:524
+#: ../src/Widgets/PodcastView.vala:553
 msgid "Are you sure you want to delete the downloaded episode '%s'?"
-msgstr "Weet je zeker dat je de gedownloade aflevering '%s' wilt verwijderen?"
+msgstr "Weet je zeker dat je de gedownloade aflevering ('%s') wilt verwijderen?"
 
-#: ../src/Widgets/PodcastView.vala:648
+#: ../src/Widgets/PodcastView.vala:675
 msgid "No show notes available."
 msgstr "Geen aantekeningen beschikbaar."
 
-#: ../src/Widgets/PodcastView.vala:738 ../src/Widgets/Sidepane.vala:624
+#: ../src/Widgets/PodcastView.vala:762 ../src/Widgets/Sidepane.vala:643
 msgid "No episodes available."
 msgstr "Geen afleveringen beschikbaar."
 
-#: ../src/Widgets/PodcastView.vala:775
+#: ../src/Widgets/PodcastView.vala:799
 msgid "Select Album Art"
 msgstr "Albumomslag kiezen"
 
-#: ../src/Widgets/PodcastView.vala:786
+#: ../src/Widgets/PodcastView.vala:810
 msgid "Image Files"
 msgstr "Afbeeldingsbestanden"
 
-#: ../src/Widgets/PodcastView.vala:816
+#: ../src/Widgets/PodcastView.vala:844
 msgid ""
 "Vocal did not detect that this podcast is licensed as Creative Commons. "
 "Changing this will unlock Internet Archive integration for this podcast. "
@@ -509,127 +533,131 @@ msgid ""
 "make this change?"
 msgstr "Vocal heeft geen Creative Commons-licentie aangetroffen bij deze podcast. Wijzig dit om Internet Archive-integratie in te schakelen, maar zorg ervoor dat de wijziging juist is. Wil je deze wijziging doorvoeren?"
 
-#: ../src/Widgets/PodcastView.vala:844
+#: ../src/Widgets/PodcastView.vala:873
 msgid "%d unplayed episodes"
 msgstr "%d onafgespeelde afleveringen"
 
-#: ../src/Widgets/PodcastView.vala:874
+#: ../src/Widgets/PodcastView.vala:904
 msgid "I'm listening to %s from %s"
 msgstr "Ik luister naar %s van %s"
 
-#: ../src/Widgets/QueuePopover.vala:37
+#: ../src/Widgets/QueueBox.vala:36
 msgid "No episodes in queue"
 msgstr "Geen afleveringen in wachtrij"
 
-#: ../src/Widgets/QueueRow.vala:71
+#: ../src/Widgets/QueueRow.vala:79
 msgid "Remove episode from queue"
 msgstr "Aflevering verwijderen uit wachtrij"
 
-#: ../src/Widgets/SearchResultBox.vala:125
+#: ../src/Widgets/SearchResultBox.vala:138
 msgid "Summary"
 msgstr "Samenvatting"
 
-#: ../src/Widgets/SearchResultBox.vala:159
+#: ../src/Widgets/SearchResultBox.vala:172
 msgid "Subscribe to podcast"
 msgstr "Abonneren op podcast"
 
-#: ../src/Widgets/SearchResultsView.vala:86
+#: ../src/Widgets/SearchResultsView.vala:87
 msgid "Episodes from Your Library"
 msgstr "Afleveringen uit je verzameling"
 
-#: ../src/Widgets/SearchResultsView.vala:87
+#: ../src/Widgets/SearchResultsView.vala:88
 msgid "Podcasts from Your Library"
 msgstr "Podcasts uit je verzameling"
 
-#: ../src/Widgets/SearchResultsView.vala:88
+#: ../src/Widgets/SearchResultsView.vala:89
 msgid "iTunes Podcast Results"
 msgstr "iTunes-podcastresultaten"
 
-#: ../src/Widgets/SearchResultsView.vala:117
+#: ../src/Widgets/SearchResultsView.vala:118
 msgid "Search Results for <i>%s</i>"
 msgstr "Zoekresultaten voor <i>%s</i>"
 
-#: ../src/Widgets/SearchResultsView.vala:153
+#: ../src/Widgets/SearchResultsView.vala:154
 msgid "No matching episodes found in your library."
 msgstr "Geen overeenkomstige afleveringen aangetroffen."
 
-#: ../src/Widgets/SearchResultsView.vala:154
+#: ../src/Widgets/SearchResultsView.vala:155
 msgid "No matching podcasts found in your library."
 msgstr "Geen overeenkomstige podcasts aangetroffen."
 
-#: ../src/Widgets/SettingsDialog.vala:59 ../src/Widgets/Toolbar.vala:172
+#: ../src/Widgets/SettingsDialog.vala:62 ../src/Widgets/Toolbar.vala:163
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: ../src/Widgets/SettingsDialog.vala:75
+#: ../src/Widgets/SettingsDialog.vala:78
+msgid "Keep playing podcasts when the window is closed:"
+msgstr "Doorgaan met afspelen als het venster wordt gesloten:"
+
+#: ../src/Widgets/SettingsDialog.vala:95
 msgid "Automatically download new episodes:"
 msgstr "Download nieuwe afleveringen automatisch:"
 
-#: ../src/Widgets/SettingsDialog.vala:93
+#: ../src/Widgets/SettingsDialog.vala:113
 msgid "Keep my library clean:"
-msgstr "Houdt mijn verzameling netjes:"
+msgstr "Organiseer mijn verzameling:"
 
-#: ../src/Widgets/SettingsDialog.vala:111
+#: ../src/Widgets/SettingsDialog.vala:131
 msgid "Show podcast names below cover art:"
-msgstr "Podcastnamen tonen onder omslag"
+msgstr "Podcastnamen tonen onder omslag:"
 
-#: ../src/Widgets/SettingsDialog.vala:138
+#: ../src/Widgets/SettingsDialog.vala:158
 msgid "Seconds to skip back:"
 msgstr "Aantal terug te spoelen seconden:"
 
-#: ../src/Widgets/SettingsDialog.vala:156
+#: ../src/Widgets/SettingsDialog.vala:176
 msgid "Seconds to skip forward:"
 msgstr "Aantal vooruit te spoelen seconden:"
 
-#: ../src/Widgets/SettingsDialog.vala:199
+#: ../src/Widgets/SettingsDialog.vala:219
 msgid "Show iTunes Store results from:"
 msgstr "iTunes-winkelresultaten tonen van:"
 
-#: ../src/Widgets/SettingsDialog.vala:239
+#: ../src/Widgets/SettingsDialog.vala:262
 msgid "Archive.org S3 Access Key"
 msgstr "Archive.org S3-toegangssleutel"
 
-#: ../src/Widgets/SettingsDialog.vala:248
+#: ../src/Widgets/SettingsDialog.vala:271
 msgid "Archive.org S3 Secret Key"
 msgstr "Archive.org S3 geheime sleutel"
 
-#: ../src/Widgets/SettingsDialog.vala:263
+#: ../src/Widgets/SettingsDialog.vala:286
 msgid "Close"
 msgstr "Sluiten"
 
-#: ../src/Widgets/Shownotes.vala:70
+#: ../src/Widgets/Shownotes.vala:73
 msgid "Mark this episode as played"
-msgstr "Deze aflevering markeren als afgespeeld"
+msgstr "Aflevering markeren als afgespeeld"
 
-#: ../src/Widgets/Shownotes.vala:75
+#: ../src/Widgets/Shownotes.vala:78
 msgid "Mark this episode as new"
-msgstr "Deze aflevering markeren als nieuw"
+msgstr "Aflevering markeren als nieuw"
 
-#: ../src/Widgets/Shownotes.vala:80
+#: ../src/Widgets/Shownotes.vala:86
 msgid "Download episode"
 msgstr "Aflevering downloaden"
 
-#: ../src/Widgets/Shownotes.vala:85
+#: ../src/Widgets/Shownotes.vala:94
 msgid "Share this episode"
-msgstr "Deze aflevering delen"
+msgstr "Aflevering delen"
 
-#: ../src/Widgets/Shownotes.vala:88
+#: ../src/Widgets/Shownotes.vala:97
 msgid "Copy shareable link"
 msgstr "Link om te delen kopiëren"
 
-#: ../src/Widgets/Shownotes.vala:89
+#: ../src/Widgets/Shownotes.vala:98
 msgid "Send a Tweet…"
 msgstr "Tweet versturen..."
 
-#: ../src/Widgets/Shownotes.vala:90
+#: ../src/Widgets/Shownotes.vala:99
 msgid "Copy the direct episode link"
-msgstr "Kopieer de afleveringslink"
+msgstr "Afleveringslink kopiëren"
 
-#: ../src/Widgets/Shownotes.vala:139
+#: ../src/Widgets/Shownotes.vala:151
 msgid "Add this episode to the up next list"
-msgstr "Deze aflevering toevoegen aan de wachtrij"
+msgstr "Aflevering toevoegen aan de wachtrij"
 
-#: ../src/Widgets/Shownotes.vala:147
+#: ../src/Widgets/Shownotes.vala:159
 msgid "<b>Summary</b>"
 msgstr "<b>Samenvatting</b>"
 
@@ -637,114 +665,176 @@ msgstr "<b>Samenvatting</b>"
 msgid "Mark all episodes as played"
 msgstr "Alle afleveringen markeren als afgespeeld"
 
-#: ../src/Widgets/Sidepane.vala:106
+#: ../src/Widgets/Sidepane.vala:109
 msgid "Hide episodes that have already been played"
 msgstr "Reeds afgespeelde afleveringen verbergen"
 
-#: ../src/Widgets/Sidepane.vala:126
+#: ../src/Widgets/Sidepane.vala:129
 msgid "Remove podcast from library"
 msgstr "Podcast verwijderen uit verzameling"
 
-#: ../src/Widgets/Sidepane.vala:137
+#: ../src/Widgets/Sidepane.vala:140
 msgid "More options"
 msgstr "Meer opties"
 
-#: ../src/Widgets/Sidepane.vala:191
+#: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
 msgstr "Zijbalk verbergen"
 
-#: ../src/Widgets/Sidepane.vala:278
+#: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
 msgstr "Geselecteerde afleveringen markeren als onafgespeeld"
 
-#: ../src/Widgets/Sidepane.vala:369
+#: ../src/Widgets/Sidepane.vala:377
 msgid "Mark as Played"
 msgstr "Markeren als afgespeeld"
 
-#: ../src/Widgets/Sidepane.vala:388
+#: ../src/Widgets/Sidepane.vala:396
 msgid "Mark as Unplayed"
 msgstr "Markeren als onafgespeeld"
 
-#: ../src/Widgets/Sidepane.vala:615
+#: ../src/Widgets/Sidepane.vala:634
 msgid "No new episodes."
 msgstr "Geen nieuwe afleveringen."
 
-#: ../src/Widgets/Sidepane.vala:668
+#: ../src/Widgets/Sidepane.vala:687
 msgid "%d episodes, %d unplayed"
 msgstr "%d afleveringen; %d onafgespeeld"
 
-#: ../src/Widgets/Sidepane.vala:670
+#: ../src/Widgets/Sidepane.vala:689
 msgid "%d episodes"
 msgstr "%d afleveringen"
 
-#: ../src/Widgets/Toolbar.vala:83
-msgid "View show notes"
-msgstr "Aantekeningen bekijken"
+#: ../src/Widgets/SyncDialog.vala:49 ../src/Widgets/Toolbar.vala:131
+msgid "Library Synchronization"
+msgstr "Verzameling synchroniseren"
 
-#: ../src/Widgets/Toolbar.vala:93
+#: ../src/Widgets/SyncDialog.vala:87
+msgid "Sign in to gpodder.net"
+msgstr "Inloggen op gpodder.net"
+
+#: ../src/Widgets/SyncDialog.vala:92
+msgid "Username"
+msgstr "Gebruikersnaam"
+
+#: ../src/Widgets/SyncDialog.vala:99
+msgid "Password"
+msgstr "Wachtwoord"
+
+#: ../src/Widgets/SyncDialog.vala:112
+msgid "Login"
+msgstr "Inloggen"
+
+#: ../src/Widgets/SyncDialog.vala:119
+msgid "Need an account?"
+msgstr "Heb je nog geen account?"
+
+#: ../src/Widgets/SyncDialog.vala:127
+msgid "Pick a New Device Name for This Computer"
+msgstr "Geef een apparaatnaam op voor deze computer"
+
+#: ../src/Widgets/SyncDialog.vala:135
+msgid "Or, Choose an Existing Device"
+msgstr "Of kies een bestaand apparaat"
+
+#: ../src/Widgets/SyncDialog.vala:141
+msgid "Complete Setup"
+msgstr "Instellen voltooien"
+
+#: ../src/Widgets/SyncDialog.vala:183
+msgid "Latest Successful Sync: Never"
+msgstr "Laatst gesynchroniseerd: nooit"
+
+#: ../src/Widgets/SyncDialog.vala:184
+msgid "Logout"
+msgstr "Uitloggen"
+
+#: ../src/Widgets/SyncDialog.vala:185
+msgid "Perform a Full Sync Now"
+msgstr "Nu volledig synchroniseren"
+
+#: ../src/Widgets/SyncDialog.vala:192
+msgid "Last Succcessful Sync: "
+msgstr "Laatst gesynchroniseerd: "
+
+#: ../src/Widgets/SyncDialog.vala:203
+msgid "Sync Episode Activity"
+msgstr "Afleveringsactiviteit synchroniseren"
+
+#: ../src/Widgets/SyncDialog.vala:217
+msgid ""
+"Remove Podcasts from Library That Have Been Removed From Your gpodder.net "
+"Account"
+msgstr "Podcasts verwijderen uit je verzameling die niet meer aanwezig zijn op je gpodder.net-account"
+
+#: ../src/Widgets/SyncDialog.vala:305
+msgid "Uploading all episode positions to gpodder.net…"
+msgstr "Bezig met uploaden van afspeelposities naar gpodder.net..."
+
+#: ../src/Widgets/Toolbar.vala:77
 msgid "Coming up next"
 msgstr "Volgende in de wachtrij"
 
-#: ../src/Widgets/Toolbar.vala:119
+#: ../src/Widgets/Toolbar.vala:95
 msgid "Check for Updates"
 msgstr "Controleren op updates"
 
-#: ../src/Widgets/Toolbar.vala:124
+#: ../src/Widgets/Toolbar.vala:100
 msgid "Add Podcast Feed…"
 msgstr "Podcastfeed toevoegen..."
 
-#: ../src/Widgets/Toolbar.vala:129
+#: ../src/Widgets/Toolbar.vala:105
 msgid "Import Subcriptions…"
 msgstr "Abonnementen importeren..."
 
-#: ../src/Widgets/Toolbar.vala:134
+#: ../src/Widgets/Toolbar.vala:110
 msgid "Export Subscriptions…"
 msgstr "Abonnementen exporteren..."
 
-#: ../src/Widgets/Toolbar.vala:139 ../src/Widgets/Toolbar.vala:150
+#: ../src/Widgets/Toolbar.vala:115 ../src/Widgets/Toolbar.vala:126
 msgid "Use Light Theme"
 msgstr "Licht thema gebruiken"
 
-#: ../src/Widgets/Toolbar.vala:141 ../src/Widgets/Toolbar.vala:147
+#: ../src/Widgets/Toolbar.vala:117 ../src/Widgets/Toolbar.vala:123
 msgid "Use Dark Theme"
 msgstr "Donker thema gebruiken"
 
-#: ../src/Widgets/Toolbar.vala:179
+#: ../src/Widgets/Toolbar.vala:171
 msgid "Report a Problem…"
 msgstr "Probleem melden..."
 
-#: ../src/Widgets/Toolbar.vala:187
+#: ../src/Widgets/Toolbar.vala:179
 msgid "Donate…"
 msgstr "Doneren..."
 
-#: ../src/Widgets/Toolbar.vala:195
+#: ../src/Widgets/Toolbar.vala:187
 msgid "About"
 msgstr "Over"
 
-#: ../src/Widgets/Toolbar.vala:236 ../src/Widgets/Toolbar.vala:251
+#: ../src/Widgets/Toolbar.vala:240 ../src/Widgets/Toolbar.vala:264
 msgid "Fast forward %d seconds"
 msgstr "%d seconden vooruitspoelen"
 
-#: ../src/Widgets/Toolbar.vala:244 ../src/Widgets/Toolbar.vala:252
+#: ../src/Widgets/Toolbar.vala:255 ../src/Widgets/Toolbar.vala:265
 msgid "Rewind %d seconds"
 msgstr "%d seconden terugspoelen"
 
-#: ../src/Widgets/Toolbar.vala:257
+#: ../src/Widgets/Toolbar.vala:273
 msgid "Check for new episodes"
 msgstr "Controleren op nieuwe afleveringen"
 
-#: ../src/Widgets/Toolbar.vala:266
+#: ../src/Widgets/Toolbar.vala:287
 msgid "Search your library or online"
-msgstr "Doorzoek je bibliotheek of het internet"
+msgstr "Doorzoek je verzameling of het internet"
 
-#: ../src/Widgets/Toolbar.vala:276
+#: ../src/Widgets/Toolbar.vala:306
 msgid "View the top podcasts in the iTunes Store"
 msgstr "Bekijk de top-podcasts uit de iTunes-winkel"
 
-#: ../src/Widgets/Toolbar.vala:311
+#: ../src/Widgets/Toolbar.vala:346
 msgid "Downloads"
 msgstr "Downloads"
 
-#: ../src/Widgets/VideoControls.vala:60
+#: ../src/Widgets/VideoControls.vala:64
 msgid "Exit Fullscreen"
 msgstr "Beeldvullende modus afsluiten"

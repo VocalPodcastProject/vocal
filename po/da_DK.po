@@ -3,174 +3,173 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Emin Tufan <etcetin@gmail.com>, 2018
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2015
+# David Nielsen <gnomeuser@gmail.com>, 2019
 msgid ""
 msgstr ""
 "Project-Id-Version: Vocal\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-01 17:15-0500\n"
-"PO-Revision-Date: 2019-12-01 22:19+0000\n"
-"Last-Translator: Nathan Dyer <nathandyer@fastmail.com>\n"
-"Language-Team: Turkish (http://www.transifex.com/needle-and-thread/vocal/language/tr/)\n"
+"PO-Revision-Date: 2019-12-04 18:14+0000\n"
+"Last-Translator: David Nielsen <gnomeuser@gmail.com>\n"
+"Language-Team: Danish (Denmark) (http://www.transifex.com/needle-and-thread/vocal/language/da_DK/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: tr\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: da_DK\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../src/Controller.vala:276 ../src/Widgets/SyncDialog.vala:269
 msgid "Checking for new podcast subscriptions from your other devices…"
-msgstr ""
+msgstr "Søger efter nye podcast abonnementer fra dine andre enheder..."
 
 #: ../src/Controller.vala:284 ../src/Widgets/SyncDialog.vala:277
 msgid "Updating episode playback positions from your other devices…"
-msgstr ""
+msgstr "Opdaterer episode afspilningspositioner fra dine andre enheder..."
 
 #: ../src/Controller.vala:293 ../src/Widgets/SyncDialog.vala:285
 msgid "Cleaning up old subscriptions no longer in your gpodder.net account…"
-msgstr ""
+msgstr "Fjerner gamle abonnementer som ikke længere er en del af din gpodder konto… "
 
 #: ../src/Controller.vala:456 ../src/Controller.vala:460
 msgid "Pause"
-msgstr "Duraklat"
+msgstr "Pause"
 
 #: ../src/Controller.vala:486 ../src/Controller.vala:490
 #: ../src/Widgets/EpisodeDetailBox.vala:125
 #: ../src/Widgets/EpisodeDetailBox.vala:320 ../src/Widgets/Toolbar.vala:221
 #: ../src/Widgets/VideoControls.vala:44
 msgid "Play"
-msgstr "Oynat"
+msgstr "Afspil"
 
 #: ../src/Controller.vala:554
 msgid "Adding new podcast: <b>"
-msgstr "Yeni podcast ekleniyor: <b>"
+msgstr "Tilføjer ny podcast: <b>"
 
 #: ../src/Controller.vala:580
 msgid "Uploading subscriptions to gpodder.net."
-msgstr ""
+msgstr "Sender abonnementer til gpodder.net."
 
 #: ../src/Controller.vala:582
 msgid "Uploading subscriptions to gpodder.net…"
-msgstr ""
+msgstr "Sender abonnementer til gpodder.net..."
 
 #: ../src/Controller.vala:629
 msgid ""
 "Please make sure you selected the correct feed and that it is still "
 "available."
-msgstr "Doğru beslemeyi seçtiğinizden ve hala kullanılabilir olduğundan emin olun."
+msgstr "Kontroller venligst at du har valgt den korrekte podcast og at den stadigvæk er tilgængelig."
 
 #: ../src/Controller.vala:631
 msgid ""
 "There seems to be a problem with your internet connection. Make sure you are"
 " online and then try again."
-msgstr "İnternet bağlantınızda bir sorun var gibi gözüküyor. Çevrim içi olduğunuzdan emin olun ve yeniden deneyin."
+msgstr "Det lader til at der er et problem med din internet forbindelse. Kontroller venligst at du er online og prøv igen."
 
 #: ../src/Controller.vala:636
 msgid "Error Adding Podcast"
-msgstr "Podcast Eklerken Hata"
+msgstr "Fejl ved tilføjelse af podcast"
 
 #: ../src/Controller.vala:679
 msgid "Fresh content has been added to your library."
-msgstr "Kütüphanenize taze içerik eklendi."
+msgstr "Nyt indhold er blevet tilføjet til dit bibliotek."
 
 #: ../src/Library.vala:758
 msgid "'%s' from '%s' has finished downloading."
-msgstr "'%s' / '%s' indirmesi tamamlandı."
+msgstr "'%s' fra '%s' er blevet hentet."
 
 #: ../src/Library.vala:759
 msgid "Episode Download Complete"
-msgstr "Bölüm İndirme Tamamlandı"
+msgstr "Episode er hentet"
 
 #: ../src/Library.vala:764
 msgid "Downloads Complete"
-msgstr "İndirmeler Tamamlandı"
+msgstr "Nedhentning komplet"
 
 #: ../src/Library.vala:764
 msgid "New episodes have been downloaded."
-msgstr "Yeni bölümler indirildi."
+msgstr "Nye episoder er blevet hentet."
 
 #: ../src/MainWindow.vala:93
 msgid "Vocal"
-msgstr ""
+msgstr "Vocal"
 
 #: ../src/MainWindow.vala:279 ../src/MainWindow.vala:282
 #: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
 #: ../src/Widgets/SearchResultsView.vala:69
 msgid "Return to Library"
-msgstr "Kütüphaneye Dön"
+msgstr "Tilbage til bibliotek"
 
 #: ../src/MainWindow.vala:314
 msgid "Welcome to Vocal"
-msgstr "Vocalʼe Hoş Geldiniz"
+msgstr "Velkommen til Vocal"
 
 #: ../src/MainWindow.vala:314
 msgid "Build Your Library By Adding Podcasts"
-msgstr "Podcast Ekleyerek Kütüphanenizi İnşa Edin"
+msgstr "Byg dit bibliotek ved at tilføje podcasts"
 
 #: ../src/MainWindow.vala:315
 msgid "Browse Podcasts"
-msgstr "Podcastʼlere Göz At"
+msgstr "Gennemse podcasts"
 
 #: ../src/MainWindow.vala:316
 msgid "Browse through podcasts and choose some to add to your library."
-msgstr ""
+msgstr "Gennemse podcasts og vælg nogle at tilføje til dit bibliotek."
 
 #: ../src/MainWindow.vala:317
 msgid "Add a New Feed"
-msgstr "Yeni Akış Ekle"
+msgstr "Tilføj en ny podcast"
 
 #: ../src/MainWindow.vala:317
 msgid "Provide the web address of a podcast feed."
-msgstr "Podcast beslemesinin web adresini verin."
+msgstr "Angiv web adressen på en podcast."
 
 #: ../src/MainWindow.vala:318
 msgid "Import Subscriptions"
-msgstr "Abonelikleri İçe Aktar"
+msgstr "Importer abonnementer"
 
 #: ../src/MainWindow.vala:319
 msgid ""
 "If you have exported feeds from another podcast manager, import them here."
-msgstr "Eğer başka podcast yöneticisinden beslemeleri dışa aktardıysanız, onları buradan içe aktarın."
+msgstr "Hvis du har eksporterede podcasts fra et andet podcast håndteringsprogram kan du importerer dem her."
 
 #: ../src/MainWindow.vala:320
 msgid "Sync With gpodder"
-msgstr ""
+msgstr "Synkroniser med gpodder"
 
 #: ../src/MainWindow.vala:320
 msgid "Log in to your gpodder.net account and synchronize your library."
-msgstr ""
+msgstr "Log på din gpodder.net konto og synkroniser dit bibliotek."
 
 #: ../src/MainWindow.vala:373
 msgid "Good Stuff is On Its Way"
-msgstr "İyi Mal Yolda"
+msgstr "Gode ting er på vej"
 
 #: ../src/MainWindow.vala:374
 msgid ""
 "If you are importing several podcasts it can take a few minutes. Your "
 "library will be ready shortly."
-msgstr "Eğer birçok podcast içe aktarıyorsanız bu biraz zaman alabilir. Kütüphaneniz kısa zamanda hazır olacak."
+msgstr "Hvis du importerer adskillige podcasts kan det tag et par minutter. Dit bibliotek er klart lige straks."
 
 #: ../src/MainWindow.vala:386
 msgid "Welcome"
-msgstr "Hoş Geldiniz"
+msgstr "Velkommen"
 
 #: ../src/MainWindow.vala:387
 msgid "Importing"
-msgstr "İçe Aktarma"
+msgstr "Importerer"
 
 #: ../src/MainWindow.vala:388
 msgid "All Podcasts"
-msgstr "Tüm Podcastʼler"
+msgstr "Alle podcasts"
 
 #: ../src/MainWindow.vala:389 ../src/Widgets/DirectoryArt.vala:79
 msgid "Details"
-msgstr "Ayrıntılar"
+msgstr "Detaljer"
 
 #: ../src/MainWindow.vala:390 ../src/Widgets/NewEpisodesView.vala:49
 #: ../src/Widgets/Toolbar.vala:90
 msgid "New Episodes"
-msgstr ""
+msgstr "Nye episoder"
 
 #: ../src/MainWindow.vala:391
 msgid "Video"
@@ -178,352 +177,352 @@ msgstr "Video"
 
 #: ../src/MainWindow.vala:408
 msgid "Browse Podcast Directory"
-msgstr "Podcast Dizinine Göz At"
+msgstr "Gennemse podcast indeks"
 
 #: ../src/MainWindow.vala:409
 msgid "Search Results"
-msgstr "Arama Sonuçları"
+msgstr "Søgningsresultater"
 
 #: ../src/MainWindow.vala:573
 msgid "Checking for new episodes…"
-msgstr ""
+msgstr "Søger efter nye episoder..."
 
 #: ../src/MainWindow.vala:893 ../src/MainWindow.vala:932
 #: ../src/Widgets/PodcastView.vala:802
 msgid "Cancel"
-msgstr "İptal"
+msgstr "Annullér"
 
 #: ../src/MainWindow.vala:894
 msgid "Save"
-msgstr "Kaydet"
+msgstr "Gem"
 
 #: ../src/MainWindow.vala:897 ../src/MainWindow.vala:936
 #: ../src/Widgets/PodcastView.vala:806
 msgid "All files"
-msgstr "Tüm dosyalar"
+msgstr "Alle filer"
 
 #: ../src/MainWindow.vala:901
 msgid "OPML and XML files"
-msgstr "OPML ve XML dosyaları"
+msgstr "OPML og XML filer  "
 
 #: ../src/MainWindow.vala:929
 msgid "Select Subscription File"
-msgstr "Abonelik Dosyası Seç"
+msgstr "Vælg abonnementfil"
 
 #: ../src/MainWindow.vala:933 ../src/Widgets/PodcastView.vala:803
 msgid "Open"
-msgstr "Aç"
+msgstr "Åbn"
 
 #: ../src/MainWindow.vala:940
 msgid "OPML files"
-msgstr "OPML dosyaları"
+msgstr "OPML filer"
 
 #: ../src/MainWindow.vala:993
 msgid "Error Importing from File"
-msgstr "Dosyadan İçe Aktarılırken Hata"
+msgstr "Fejl ved importering fra fil"
 
 #: ../src/MainWindow.vala:1112
 msgid ""
 "Additional plugins are needed to play media. Would you like for Vocal to "
 "install them for you?"
-msgstr "Ortamı oynatmak için ek eklentiler gerekiyor. Vocalʼin sizin yerinize bunları kurmasını ister misiniz?"
+msgstr "Yderligere plugins er nødvendige for at afspille media, ønsker du at Vocal installerer dem for dig?"
 
 #: ../src/MainWindow.vala:1257
 msgid "Adding feed %d/%d: %s"
-msgstr ""
+msgstr "Tilføjere podcast %d/%d: %s"
 
 #: ../src/MainWindow.vala:1268
 msgid "Are you sure you want to mark all episodes from '%s' as played?"
-msgstr "'%s' podcastʼindeki tüm bölümleri oynatıldı olarak imlemek istediğize emin misiniz?"
+msgstr "Er du sikker på at du ønsker at markerer alle episoder fra '%s' som afspillede?"
 
 #: ../src/MainWindow.vala:1476
 msgid "Are you sure you want to remove '%s' from your controller.library?"
-msgstr ""
+msgstr "Er du sikker på at du ønsker at fjerne '%s' fra dit controller.library?"
 
 #: ../src/MainWindow.vala:1480
 msgid "No"
-msgstr "Hayır"
+msgstr "Nej"
 
 #: ../src/MainWindow.vala:1481
 msgid "Yes"
-msgstr "Evet"
+msgstr "Ja"
 
 #: ../src/MainWindow.vala:1808
 msgid ""
 "Vocal is currently downloading episodes. Exiting will cause the downloads to"
 " be canceled. Are you sure you want to exit?"
-msgstr "Vocal, şimdi bölümleri indiriyor. Çıkmak indirmelerin iptal olmasına neden olabilir. Çıkmak istediğinize emin misiniz?"
+msgstr "Vocal henter episoder, ved at afslutte vil disse operationer blive afbrudt. Er du sikker på at du ønsker dette?"
 
 #: ../src/Utils/FeedParser.vala:394
 msgid "Selected file doesn't appear to contain podcast subscriptions."
-msgstr "Seçili dosya podcast abonelikleri içeriyor gibi durmuyor."
+msgstr "Den valgte fil lader ikke til at indholde podcast abonnementer."
 
 #: ../src/Utils/FeedParser.vala:406
 msgid "Selected file seems to be empty."
-msgstr "Seçilen dosya boş gözüküyor."
+msgstr "Den valgte fil lader til at være tom."
 
 #: ../src/Vocal.vala:59
 msgid "translator-credits"
-msgstr "Launchpad Katkıları:\n  Ayhan Kuru https://launchpad.net/~ayhankuru"
+msgstr "David Nielsen"
 
 #: ../src/Widgets/AddFeedDialog.vala:42
 msgid "Add New Podcast"
-msgstr "Yeni Podcast Ekle"
+msgstr "Tilføj ny podcast"
 
 #: ../src/Widgets/AddFeedDialog.vala:53
 msgid "<b>Add a new podcast feed to the library</b>"
-msgstr "<b>Kütüphaneye yeni podcast beslemesi ekle</b>"
+msgstr "<b>Tilføj en ny podcast til bibliotektet</b>"
 
 #: ../src/Widgets/AddFeedDialog.vala:58
 msgid "Podcast feed web address"
-msgstr "Podcast beslemesinin web adresi"
+msgstr "Podcast web adresse"
 
 #: ../src/Widgets/ArtworkPopover.vala:41
 msgid "Shownotes"
-msgstr ""
+msgstr "Episode noter"
 
 #: ../src/Widgets/ArtworkPopover.vala:42
 msgid "Queue"
-msgstr ""
+msgstr "Kø"
 
 #: ../src/Widgets/DirectoryArt.vala:98 ../src/Widgets/SearchResultBox.vala:147
 msgid "No summary available."
-msgstr "Özet yok."
+msgstr "Ingen opsummering tilgængelig."
 
 #: ../src/Widgets/DirectoryArt.vala:110
 msgid "Subscribe"
-msgstr "Abone ol"
+msgstr "Abonnér"
 
 #: ../src/Widgets/DirectoryView.vala:51
 msgid "iTunes Top 100 Podcasts"
-msgstr "iTunes Top 100 Podcast"
+msgstr "Top 100 podcasts fra iTunes"
 
 #: ../src/Widgets/DirectoryView.vala:62
 msgid "Go Back"
-msgstr "Geri Dön"
+msgstr "Vend tilbage"
 
 #: ../src/Widgets/DirectoryView.vala:72
 msgid "Done"
-msgstr "Bitti"
+msgstr "Færdig"
 
 #: ../src/Widgets/DirectoryView.vala:104
 msgid "Loading iTunes Store"
-msgstr "iTunes Store yükleniyor"
+msgstr "Indlæser iTunes Store"
 
 #: ../src/Widgets/DownloadDetailBox.vala:111
 msgid "Cancel Download"
-msgstr "İndirmeyi İptal Et"
+msgstr "Annullér hentning"
 
 #: ../src/Widgets/DownloadDetailBox.vala:187
 msgid "minute"
 msgid_plural "minutes"
-msgstr[0] "dakika"
-msgstr[1] "dakika"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/Widgets/DownloadDetailBox.vala:191
 msgid "second"
 msgid_plural "seconds"
-msgstr[0] "saniye"
-msgstr[1] "saniye"
+msgstr[0] ""
+msgstr[1] ""
 
 #: ../src/Widgets/DownloadsPopover.vala:51
 msgid "No Active Downloads"
-msgstr "Aktif İndirme Yok"
+msgstr "Ingen aktive nedhentelser"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:80
 msgid "This episode is currently being played"
-msgstr "Şimdi bu bölüm oynatıldı"
+msgstr "Denne episode bliver i øjeblikket afspillet"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:127
 #: ../src/Widgets/EpisodeDetailBox.vala:323
 msgid "Stream Episode"
-msgstr "Bölümü Akıt"
+msgstr "Stream episode"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:143
 msgid "Download Episode"
-msgstr "Bölümü İndir"
+msgstr "Hent episode"
 
 #: ../src/Widgets/EpisodeDetailBox.vala:191
 msgid "No description available."
-msgstr "Açıklama yok."
+msgstr "Ingen beskrivelse tilgængelig."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:32
 msgid "Upload to Internet Archive"
-msgstr ""
+msgstr "Send til Internet Archive"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:58
 msgid "Please verify that the information below is correct before continuing."
-msgstr ""
+msgstr "Kontroller venligst at informationen forneden er korrekt før du forsætter."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:65
 msgid "Episode Title"
-msgstr ""
+msgstr "Episode titel"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:71
 msgid "Podcast Name"
-msgstr ""
+msgstr "Podcast navn"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:77
 msgid "Podcast Description"
-msgstr ""
+msgstr "Podcast beskrivelse"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:91
 msgid "Next…"
-msgstr ""
+msgstr "Næste..."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:100
 msgid ""
 "Legal warning: uploading copyrighted materials to the Internet Archvie is "
 "illegal. Please make sure you are uploading a copylefted (Creative Commons) "
 "episode that you are legally entitled to redistribute."
-msgstr ""
+msgstr "Juridisk advarsel: upload af ophavsretligt beskyttet materiale til Internet Archive er ulovligt. Sørg for, at du sender en copylefted (Creative Commons) episode, som du lovligt har ret til at dele."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:106
 #: ../src/Widgets/Shownotes.vala:120
 msgid "Upload to the Internet Archive"
-msgstr ""
+msgstr "Send til Internet Archive"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:112
 msgid "Uploading episode…"
-msgstr ""
+msgstr "Sender episode..."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:116
 msgid ""
 "Thanks for contributing to the Internet Archive and the Podcast Archival "
 "Project"
-msgstr ""
+msgstr "Mange tak fordi du har hjulpet Internet Archive og podcast arkiveringsprojektet"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:137
 msgid "Finish"
-msgstr ""
+msgstr "Færdiggør"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:160
 msgid "Upload Complete"
-msgstr ""
+msgstr "Færdig med at sende"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:174
 msgid "Upload Failed"
-msgstr ""
+msgstr "Kunne ikke sende"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:177
 msgid ""
 "Be sure to check your network connection and API keys, then try again later."
-msgstr ""
+msgstr "Kontroller venligst at din internet forbindelse og dine API nøgler, og prøv igen senere."
 
 #: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
 msgid "Your Podcasts"
-msgstr "Podcast'leriniz"
+msgstr "Dine podcasts"
 
 #: ../src/Widgets/NewEpisodesView.vala:58
 msgid "Add all new episodes to the queue"
-msgstr ""
+msgstr "Tilføj alle nye episoder til køen"
 
 #: ../src/Widgets/PlaybackBox.vala:64
 msgid "View the shownotes for this episode or check the queue"
-msgstr ""
+msgstr "Vis episoder noter for denne episode eller kontroller køen"
 
 #: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
 msgid "Show newer episodes at the top of the list"
-msgstr ""
+msgstr "Vis nyere episoder i toppen af listen"
 
 #: ../src/Widgets/PodcastView.vala:111 ../src/Widgets/PodcastView.vala:118
 msgid "Show older episodes at the top of the list"
-msgstr ""
+msgstr "Vis ældre episoder i toppen af listen"
 
 #: ../src/Widgets/PodcastView.vala:130
 msgid "Add New Episodes to Queue"
-msgstr ""
+msgstr "Tilføj nye episoder til kø"
 
 #: ../src/Widgets/PodcastView.vala:145 ../src/Widgets/Sidepane.vala:101
 msgid "Download all episodes"
-msgstr "Tüm bölümleri indir"
+msgstr "Hent alle episoder"
 
 #: ../src/Widgets/PodcastView.vala:150
 msgid "Mark All Played"
-msgstr "Tümünü Oynatıldı Olarak İmle"
+msgstr "Markér alle som afspillet"
 
 #: ../src/Widgets/PodcastView.vala:167
 msgid "Edit podcast details"
-msgstr "Podcast ayrıntılarını düzenle"
+msgstr "Redigér podcast detaljer"
 
 #: ../src/Widgets/PodcastView.vala:170
 msgid "Select different cover art"
-msgstr "Başka kapak resmi seç"
+msgstr "Vælg alternativt cover billede"
 
 #: ../src/Widgets/PodcastView.vala:172
 msgid "Set podcast license to Creative Commons"
-msgstr ""
+msgstr "Sæt podcast licens til Creative Commons"
 
 #: ../src/Widgets/PodcastView.vala:184
 msgid "Unsubscribe"
-msgstr "Abonelikten çık"
+msgstr "Afmeld abonnement"
 
 #: ../src/Widgets/PodcastView.vala:283
 msgid ""
 "Before you can upload to the Internet Archive you must add your archive.org "
 "account's API keys. Visit https://archive.org/account/s3.php to see your "
 "keys, then paste them in the settings."
-msgstr ""
+msgstr "Inden du kan sende episoder til Internet Archive, skal du tilføje din archive.org-kontos API nøgler. Besøg https://archive.org/account/s3.php for at se dine nøgler og tilføj dem derefter i indstillingerne."
 
 #: ../src/Widgets/PodcastView.vala:306
 msgid ""
 "You must download this episode first before uploading to the Internet "
 "Archive. Would you like to download this episode?"
-msgstr ""
+msgstr "Du skal hente denne episode før du kan sende den til Internet Archive. Ønsker du at hente denne episode?"
 
 #: ../src/Widgets/PodcastView.vala:436
 msgid "Add selected episodes to queue"
-msgstr ""
+msgstr "Tilføj valgte episoder til kø"
 
 #: ../src/Widgets/PodcastView.vala:446 ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
-msgstr "Seçili bölümleri oynatıldı olarak imle"
+msgstr "Markér valgte episoder som afspillet"
 
 #: ../src/Widgets/PodcastView.vala:461
 msgid "Mark selected episodes as new"
-msgstr "Seçili bölümleri yeni olarak imle"
+msgstr "Markér valgte episoder som nye"
 
 #: ../src/Widgets/PodcastView.vala:475 ../src/Widgets/Sidepane.vala:313
 msgid "Delete local files for selected episodes"
-msgstr "Seçili bölümlerin yerel dosyalarını sil"
+msgstr "Slet hentede filer for de valgte episoder"
 
 #: ../src/Widgets/PodcastView.vala:482 ../src/Widgets/Sidepane.vala:321
 msgid ""
 "Are you sure you want to delete the downloaded files for the selected "
 "episodes?"
-msgstr "Seçili bölümler için indirilmiş dosyaları silmek istediğinize emin misiniz?"
+msgstr "Er du sikker på at du vil slette de hentede filer for de valgte episoder?"
 
 #: ../src/Widgets/PodcastView.vala:529
 msgid "Mark as played"
-msgstr "Oynatıldı olarak imle"
+msgstr "Markér som afspillet"
 
 #: ../src/Widgets/PodcastView.vala:537
 msgid "Mark as new"
-msgstr "Yeni olarak imle"
+msgstr "Markér som ny"
 
 #: ../src/Widgets/PodcastView.vala:545 ../src/Widgets/Sidepane.vala:416
 msgid "Delete Local File"
-msgstr "Yerel Dosyayı Sil"
+msgstr "Slet hentet file"
 
 #: ../src/Widgets/PodcastView.vala:553
 msgid "Are you sure you want to delete the downloaded episode '%s'?"
-msgstr "'%s' indirilmiş bölümünü silmek istediğinize emin misiniz?"
+msgstr "Er du sikker på at du vil slette den hentede episode '%s'?"
 
 #: ../src/Widgets/PodcastView.vala:675
 msgid "No show notes available."
-msgstr "Gösteri notları yok."
+msgstr "Ingen episode noter tilgængelige."
 
 #: ../src/Widgets/PodcastView.vala:762 ../src/Widgets/Sidepane.vala:643
 msgid "No episodes available."
-msgstr "Bölüm yok."
+msgstr "Ingen episoder tilgængelig."
 
 #: ../src/Widgets/PodcastView.vala:799
 msgid "Select Album Art"
-msgstr "Albüm Kapağı Seç"
+msgstr "Vælg cover billede"
 
 #: ../src/Widgets/PodcastView.vala:810
 msgid "Image Files"
-msgstr "Resim Dosyaları"
+msgstr "Billedefiler"
 
 #: ../src/Widgets/PodcastView.vala:844
 msgid ""
@@ -531,310 +530,310 @@ msgid ""
 "Changing this will unlock Internet Archive integration for this podcast. "
 "Please make sure this change is correct before proceeding. Do you wish to "
 "make this change?"
-msgstr ""
+msgstr "Vocal kunne ikke bekræfte at denne podcast er under en Creative Commons licens. Ved at ændre dette kan Internet Archive integration for denne podcast tillades. Kontroller venligst at denne ændring er korrekt før du forsætter. Ønsker du at fortage denne ændring?"
 
 #: ../src/Widgets/PodcastView.vala:873
 msgid "%d unplayed episodes"
-msgstr "%d oynatılmamış bölüm"
+msgstr "%d uafspillet episoder"
 
 #: ../src/Widgets/PodcastView.vala:904
 msgid "I'm listening to %s from %s"
-msgstr "%s / %s dinliyorum"
+msgstr "Jeg lytter til %s fra %s"
 
 #: ../src/Widgets/QueueBox.vala:36
 msgid "No episodes in queue"
-msgstr ""
+msgstr "Ingen episoder i kø"
 
 #: ../src/Widgets/QueueRow.vala:79
 msgid "Remove episode from queue"
-msgstr "Bölümü kuyruktan kaldır"
+msgstr "Fjern episode fra kø"
 
 #: ../src/Widgets/SearchResultBox.vala:138
 msgid "Summary"
-msgstr "Özet"
+msgstr "Opsummering"
 
 #: ../src/Widgets/SearchResultBox.vala:172
 msgid "Subscribe to podcast"
-msgstr "Podcastʼe abone ol"
+msgstr "Abonnér på podcast"
 
 #: ../src/Widgets/SearchResultsView.vala:87
 msgid "Episodes from Your Library"
-msgstr "Kütüphanenizden Bölümler"
+msgstr "Episoder fra dit bibliotek"
 
 #: ../src/Widgets/SearchResultsView.vala:88
 msgid "Podcasts from Your Library"
-msgstr "Kütüphanenizden Podcastʼler"
+msgstr "Podcasts fra dit bibliotek"
 
 #: ../src/Widgets/SearchResultsView.vala:89
 msgid "iTunes Podcast Results"
-msgstr "iTunes Podcast Sonuçları"
+msgstr "iTunes podcast resultater"
 
 #: ../src/Widgets/SearchResultsView.vala:118
 msgid "Search Results for <i>%s</i>"
-msgstr "<i>%s</i> İçin Arama Sonuçları"
+msgstr "Søgningsresultater for <i>%s</i>"
 
 #: ../src/Widgets/SearchResultsView.vala:154
 msgid "No matching episodes found in your library."
-msgstr "Kütüphanenizde eşleşen bölüm bulunamadı."
+msgstr "Ingen matchende episoder fundet i dit bibliotek."
 
 #: ../src/Widgets/SearchResultsView.vala:155
 msgid "No matching podcasts found in your library."
-msgstr "Kütüphanenizde eşleşen podcast bulunamadı."
+msgstr "Ingen matchende podcasts fundet i dit bibliotek."
 
 #: ../src/Widgets/SettingsDialog.vala:62 ../src/Widgets/Toolbar.vala:163
 msgid "Preferences"
-msgstr "Tercihler"
+msgstr "Indstillinger"
 
 #: ../src/Widgets/SettingsDialog.vala:78
 msgid "Keep playing podcasts when the window is closed:"
-msgstr ""
+msgstr "Forsæt med at afspille podcasts efter vinduet er lukket:"
 
 #: ../src/Widgets/SettingsDialog.vala:95
 msgid "Automatically download new episodes:"
-msgstr "Yeni bölümleri kendiliğinden indir:"
+msgstr "Hent automatisk nye episoder:"
 
 #: ../src/Widgets/SettingsDialog.vala:113
 msgid "Keep my library clean:"
-msgstr "Kütüphanemi temiz tut:"
+msgstr "Hold mit bibliotek rent:"
 
 #: ../src/Widgets/SettingsDialog.vala:131
 msgid "Show podcast names below cover art:"
-msgstr "Podcast adlarını kapak resminin altında göster:"
+msgstr "Vis podcast navne under cover billedet:"
 
 #: ../src/Widgets/SettingsDialog.vala:158
 msgid "Seconds to skip back:"
-msgstr "Geri atlanacak saniye:"
+msgstr "Sekunder at springe tilbage:"
 
 #: ../src/Widgets/SettingsDialog.vala:176
 msgid "Seconds to skip forward:"
-msgstr "İleri atlanacak saniye:"
+msgstr "Sekunder at springe frem:"
 
 #: ../src/Widgets/SettingsDialog.vala:219
 msgid "Show iTunes Store results from:"
-msgstr "iTunes Store sonuçlarını şuradan göster:"
+msgstr "Vis iTunes Store resultater fra:"
 
 #: ../src/Widgets/SettingsDialog.vala:262
 msgid "Archive.org S3 Access Key"
-msgstr ""
+msgstr "Archive.org S3 adgangsnøgle"
 
 #: ../src/Widgets/SettingsDialog.vala:271
 msgid "Archive.org S3 Secret Key"
-msgstr ""
+msgstr "Archive.org S3 hemmelig nøgle"
 
 #: ../src/Widgets/SettingsDialog.vala:286
 msgid "Close"
-msgstr "Kapat"
+msgstr "Luk"
 
 #: ../src/Widgets/Shownotes.vala:73
 msgid "Mark this episode as played"
-msgstr "Bu bölümü oynatıldı olarak imle"
+msgstr "Markér denne episode som afspillet"
 
 #: ../src/Widgets/Shownotes.vala:78
 msgid "Mark this episode as new"
-msgstr "Bu bölümü yeni olarak imle"
+msgstr "Markér denne episode som ny"
 
 #: ../src/Widgets/Shownotes.vala:86
 msgid "Download episode"
-msgstr "Bölümü indir"
+msgstr "Hent episode"
 
 #: ../src/Widgets/Shownotes.vala:94
 msgid "Share this episode"
-msgstr "Bu bölümü paylaş"
+msgstr "Del denne episode"
 
 #: ../src/Widgets/Shownotes.vala:97
 msgid "Copy shareable link"
-msgstr "Paylaşılabilir bağlantı kopyala"
+msgstr "Kopiér link til deling"
 
 #: ../src/Widgets/Shownotes.vala:98
 msgid "Send a Tweet…"
-msgstr "Tweet gönder…"
+msgstr "Send et tweet..."
 
 #: ../src/Widgets/Shownotes.vala:99
 msgid "Copy the direct episode link"
-msgstr "Doğrudan bölüm bağlantısını kopyala"
+msgstr "Kopiér et direkte link til episoden"
 
 #: ../src/Widgets/Shownotes.vala:151
 msgid "Add this episode to the up next list"
-msgstr "Bu bölümü sıradakilere ekle"
+msgstr "Tilføj denne episode til afspil næst køen"
 
 #: ../src/Widgets/Shownotes.vala:159
 msgid "<b>Summary</b>"
-msgstr "<b>Özet</b>"
+msgstr "<b>Opsummering</b>"
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
-msgstr "Tüm bölümleri oynatıldı olarak imle"
+msgstr "Markér alle episoder som afspillet"
 
 #: ../src/Widgets/Sidepane.vala:109
 msgid "Hide episodes that have already been played"
-msgstr "Zaten oynatılan bölümleri gizle"
+msgstr "Skjul episoder som allerede har været afspillet"
 
 #: ../src/Widgets/Sidepane.vala:129
 msgid "Remove podcast from library"
-msgstr "Podcastʼi kütüphaneden kaldır"
+msgstr "Fjern podcast fra bibliotek"
 
 #: ../src/Widgets/Sidepane.vala:140
 msgid "More options"
-msgstr "Daha çok seçenek"
+msgstr "Flere muligheder"
 
 #: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
-msgstr "Bölüm kenar bölmesini gizle"
+msgstr "Skjul episode sidepanel"
 
 #: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
-msgstr "Seçili bölümleri oynatılmadı olarak imle"
+msgstr "Markér valgte episoder som ikke afspillet"
 
 #: ../src/Widgets/Sidepane.vala:377
 msgid "Mark as Played"
-msgstr "Oynatıldı Olarak İmle"
+msgstr "Markér som afspillet"
 
 #: ../src/Widgets/Sidepane.vala:396
 msgid "Mark as Unplayed"
-msgstr "Oynatılmadı Olarak İmle"
+msgstr "Markér som ikke afspillet"
 
 #: ../src/Widgets/Sidepane.vala:634
 msgid "No new episodes."
-msgstr "Yeni bölüm yok."
+msgstr "Ingen nye episoder."
 
 #: ../src/Widgets/Sidepane.vala:687
 msgid "%d episodes, %d unplayed"
-msgstr "%d bölüm, %d oynatılmayan"
+msgstr "%d episoder, %d ikke afspillet"
 
 #: ../src/Widgets/Sidepane.vala:689
 msgid "%d episodes"
-msgstr "%d bölüm"
+msgstr "%d episoder"
 
 #: ../src/Widgets/SyncDialog.vala:49 ../src/Widgets/Toolbar.vala:131
 msgid "Library Synchronization"
-msgstr ""
+msgstr "Bibliotekssynkronisering"
 
 #: ../src/Widgets/SyncDialog.vala:87
 msgid "Sign in to gpodder.net"
-msgstr ""
+msgstr "Log på gpodder.net"
 
 #: ../src/Widgets/SyncDialog.vala:92
 msgid "Username"
-msgstr "Kullanıcı adı"
+msgstr "Brugernavn"
 
 #: ../src/Widgets/SyncDialog.vala:99
 msgid "Password"
-msgstr "Parola"
+msgstr "Adgangskode"
 
 #: ../src/Widgets/SyncDialog.vala:112
 msgid "Login"
-msgstr "Gir"
+msgstr "Log på"
 
 #: ../src/Widgets/SyncDialog.vala:119
 msgid "Need an account?"
-msgstr ""
+msgstr "Har du brug for en konto?"
 
 #: ../src/Widgets/SyncDialog.vala:127
 msgid "Pick a New Device Name for This Computer"
-msgstr ""
+msgstr "Vælg nyt enhedsnavn for denne computer"
 
 #: ../src/Widgets/SyncDialog.vala:135
 msgid "Or, Choose an Existing Device"
-msgstr ""
+msgstr "Eller vælg en eksisterende enhed"
 
 #: ../src/Widgets/SyncDialog.vala:141
 msgid "Complete Setup"
-msgstr ""
+msgstr "Færdiggøre indstilling"
 
 #: ../src/Widgets/SyncDialog.vala:183
 msgid "Latest Successful Sync: Never"
-msgstr ""
+msgstr "Seneste succesfulde synkronisering: aldrig"
 
 #: ../src/Widgets/SyncDialog.vala:184
 msgid "Logout"
-msgstr ""
+msgstr "Log af"
 
 #: ../src/Widgets/SyncDialog.vala:185
 msgid "Perform a Full Sync Now"
-msgstr ""
+msgstr "Foretage en fuldstændig synkronisering nu"
 
 #: ../src/Widgets/SyncDialog.vala:192
 msgid "Last Succcessful Sync: "
-msgstr ""
+msgstr "Seneste succesfulde synkronisering:"
 
 #: ../src/Widgets/SyncDialog.vala:203
 msgid "Sync Episode Activity"
-msgstr ""
+msgstr "Synkroniser episode aktivitet"
 
 #: ../src/Widgets/SyncDialog.vala:217
 msgid ""
 "Remove Podcasts from Library That Have Been Removed From Your gpodder.net "
 "Account"
-msgstr ""
+msgstr "Fjern podcasts far bibliotek som er blevet fjernet fra din gpodder.net konto"
 
 #: ../src/Widgets/SyncDialog.vala:305
 msgid "Uploading all episode positions to gpodder.net…"
-msgstr ""
+msgstr "Sender alle episode afspilningspositioner til gpodder.net..."
 
 #: ../src/Widgets/Toolbar.vala:77
 msgid "Coming up next"
-msgstr "Şimdi sırada"
+msgstr "Næste episode"
 
 #: ../src/Widgets/Toolbar.vala:95
 msgid "Check for Updates"
-msgstr "Güncellemeleri Denetle"
+msgstr "Søg efter opdateringer"
 
 #: ../src/Widgets/Toolbar.vala:100
 msgid "Add Podcast Feed…"
-msgstr "Podcast Beslemesi Ekle…"
+msgstr "Tilføj podcast..."
 
 #: ../src/Widgets/Toolbar.vala:105
 msgid "Import Subcriptions…"
-msgstr "Abonelikleri İçe Aktar…"
+msgstr "Importér abonnementer..."
 
 #: ../src/Widgets/Toolbar.vala:110
 msgid "Export Subscriptions…"
-msgstr "Abonelikleri Dışa Aktar…"
+msgstr "Eksportér abonnementer..."
 
 #: ../src/Widgets/Toolbar.vala:115 ../src/Widgets/Toolbar.vala:126
 msgid "Use Light Theme"
-msgstr ""
+msgstr "Benyt lyst udseende"
 
 #: ../src/Widgets/Toolbar.vala:117 ../src/Widgets/Toolbar.vala:123
 msgid "Use Dark Theme"
-msgstr ""
+msgstr "Benyt mørkt udseende"
 
 #: ../src/Widgets/Toolbar.vala:171
 msgid "Report a Problem…"
-msgstr "Sorun Bildir…"
+msgstr "Rapportér et problem..."
 
 #: ../src/Widgets/Toolbar.vala:179
 msgid "Donate…"
-msgstr "Bağış…"
+msgstr "Bidrag…"
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "About"
-msgstr "Hakkında"
+msgstr "Om"
 
 #: ../src/Widgets/Toolbar.vala:240 ../src/Widgets/Toolbar.vala:264
 msgid "Fast forward %d seconds"
-msgstr "%d saniye ileri sar"
+msgstr "Spring %d sekunder frem"
 
 #: ../src/Widgets/Toolbar.vala:255 ../src/Widgets/Toolbar.vala:265
 msgid "Rewind %d seconds"
-msgstr "%d saniye geri sar"
+msgstr "spring %d sekunder tilbage"
 
 #: ../src/Widgets/Toolbar.vala:273
 msgid "Check for new episodes"
-msgstr "Yeni bölümleri denetle"
+msgstr "Søg efter nye episoder"
 
 #: ../src/Widgets/Toolbar.vala:287
 msgid "Search your library or online"
-msgstr "Kütüphanenizde veya çevrim içi arayın"
+msgstr "Søg i dit bibliotek eller online"
 
 #: ../src/Widgets/Toolbar.vala:306
 msgid "View the top podcasts in the iTunes Store"
-msgstr "iTunes Storeʼdaki gözde podcastleri görün"
+msgstr "Vis de meste populære podcasts fra iTunes Store"
 
 #: ../src/Widgets/Toolbar.vala:346
 msgid "Downloads"
-msgstr "İndirilenler"
+msgstr "Hentede episoder"
 
 #: ../src/Widgets/VideoControls.vala:64
 msgid "Exit Fullscreen"
-msgstr "Tam Ekrandan Çık"
+msgstr "Forlad fuldskærmsvisning"

@@ -35,7 +35,7 @@ public class SoupClient {
     }
 
     public static bool check_connection () {
-        var uri = "http://www.needleandthread.co";
+        var uri = "https://www.vocalproject.net";
 
         try {
             SoupClient soup_client = new SoupClient ();

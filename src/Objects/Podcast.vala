@@ -84,6 +84,7 @@ namespace Vocal {
          * Add a new episode to the library
          */
         public void add_episode (Episode new_episode) {
+            new_episode.podcast_uri = this.feed_uri;
             episodes.insert (0, new_episode);
         }
 

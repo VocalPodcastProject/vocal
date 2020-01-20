@@ -79,6 +79,7 @@ namespace Vocal {
         private GLib.List<string> podcasts_being_added = new GLib.List<string> ();
 
         private Controller controller;
+        public string pending_import = null;
 
         /*
          * Constructor for the library
@@ -114,36 +115,21 @@ namespace Vocal {
          */
         public void run_database_update_check () {
 
-            if (!check_database_exists ()) {
+            if ( ! check_database_exists ()) {
                 return;
             }
 
-            info ("Performing database update check.");
+            prepare_database ();
 
-            // Open the database
-            int ec = Sqlite.Database.open (db_location, out db);
-            if (ec != Sqlite.OK) {
-                error ("Can't open database: %d: %s\n", db.errcode (), db.errmsg ());
-                return;
-            }
+            int current_db_version = get_db_version ();
 
-            // Temporarily add a dummy podcast
-            string query = """INSERT OR REPLACE INTO Podcast (name, feed_uri, album_art_url, album_art_local_uri, description, content_type)
-                VALUES ('%s','%s','%s','%s', '%s', '%s');""".printf ("dummy", "dummy", "dummy", "dummy", "dummy", "dummy");
-
-            string errmsg;
-
-            ec = db.exec (query, null, out errmsg);
-            if (ec != Sqlite.OK) {
-                warning ("Error: %s\n", errmsg);
-                return;
-            }
+            info ("Performing database update check. Current version: %d", current_db_version);
 
             // Check that license is in the database (added 2018-05-06)
-            query = """SELECT license FROM Podcast WHERE name = "dummy";""";
-            errmsg = null;
+            string query = """SELECT license FROM Podcast WHERE name = "dummy";""";
+            string errmsg = null;
 
-            ec = db.exec (query, null, out errmsg);
+            int ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
                 info ("License column does not exist in podcast table. Altering table to update.");
@@ -161,9 +147,54 @@ namespace Vocal {
                 }
             }
 
-            // Clean up by removing the dummy podcast
-            query = """DELETE FROM Podcast WHERE name = "dummy";""";
-            ec = db.exec (query, null, out errmsg);
+            if (current_db_version < 1) {
+                info ("Updating DB schema to v1 ...");
+
+                // Backup existing data before creating schema at current level.
+                // Load podcasts here since the export expects the library to be loaded.
+                Sqlite.Statement stmt;
+                query = "SELECT * FROM Podcast ORDER BY name";
+                ec = db.prepare_v2 (query, query.length, out stmt);
+
+                while (stmt.step () == Sqlite.ROW) {
+                    Podcast current = podcast_from_row (stmt);
+                    podcasts.add (current);
+                }
+
+                stmt.reset ();
+
+                string export_name = "vocal_export-%s.xml".printf (new GLib.DateTime.now_utc ().format ("%FT%TZ"));
+                string export_path = Path.build_filename(db_directory, export_name);
+                info ("exporting existing subscriptions to <%s>.", export_path);
+                export_to_OPML (export_path);
+
+                podcasts.clear ();
+
+                this.pending_import = export_path; // save location for later import.
+
+                // Create backup of existing db tables.
+                query = """
+                  BEGIN TRANSACTION;
+
+                  ALTER TABLE Podcast RENAME TO Podcast_V0;
+                  ALTER TABLE Episode RENAME TO Episode_V0;
+
+                  END TRANSACTION;
+                """;
+
+                ec = db.exec (query, null);
+                if (ec != Sqlite.OK) {
+                    error ("Rename of existing tables failed! (%d) %s", db.errcode (), db.errmsg ());
+                }
+
+                create_db_schema ();
+
+                info ("DB update finished.");
+
+                current_db_version = get_db_version ();
+            }
+
+            assert (current_db_version == 1);
         }
 
 
@@ -263,6 +294,7 @@ namespace Vocal {
                 podcasts.add (podcast);
 
                 foreach (Episode episode in podcast.episodes) {
+                    episode.podcast_uri = podcast.feed_uri;
                     write_episode_to_database (episode);
                 }
             } else {
@@ -774,6 +806,8 @@ namespace Vocal {
                 downloaded_episode = null;
                 bool found = false;
 
+                // TODO: the following can be very slow for large podcasts/databases, should be done in sql.
+
                 foreach (Podcast podcast in podcasts) {
                     if (!found) {
                         if (parent_podcast_name == podcast.name) {
@@ -863,13 +897,18 @@ namespace Vocal {
 
 
             // Repeat the process with the episodes
-
+            // TODO: instead of running a separate sql query for each podcast all episodes
+            //       can be loaded in single statement.
             foreach (Podcast podcast in podcasts) {
 
-                prepared_query_str = "SELECT * FROM Episode WHERE parent_podcast_name = '%s' ORDER BY rowid ASC".printf (podcast.name);
+                prepared_query_str = "SELECT e.*, p.name as parent_podcast_name
+                                      FROM Episode e
+                                      LEFT JOIN Podcast p on p.feed_uri = e.podcast_uri
+                                      WHERE podcast_uri = '%s'
+                                      ORDER BY e.rowid ASC".printf (podcast.feed_uri);
                 ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
                 if (ec != Sqlite.OK) {
-                    stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
+                    warning ("Error: %d: %s\n", db.errcode (), db.errmsg ());
                     return;
                 }
 
@@ -958,21 +997,21 @@ namespace Vocal {
             int ec;
 
             // Delete the podcast's episodes from the database
-            query = "DELETE FROM Episode WHERE parent_podcast_name = '%s';".printf (podcast.name.replace ("'", "%27"));
+            query = "DELETE FROM Episode WHERE podcast_uri = '%s';".printf (podcast.feed_uri.replace ("'", "%27"));
 
 
             ec = db.exec (query, null, out errmsg);
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %d: %s\n", db.errcode (), db.errmsg ());
+                warning ("Error: %d: %s\n", db.errcode (), db.errmsg ());
                 return;
             }
 
             // Delete the podcast from the database
-            query = "DELETE FROM Podcast WHERE name = '%s';".printf (podcast.name.replace ("'", "%27"));
+            query = "DELETE FROM Podcast WHERE feed_uri = '%s';".printf (podcast.feed_uri);
             ec = db.exec (query, null, out errmsg);
 
             if (ec != Sqlite.OK) {
-                stderr.printf ("Error: %s\n", errmsg);
+                warning ("Error: %d: %s\n", db.errcode (), db.errmsg ());
             }
 
             // Remove the local object as well
@@ -1026,10 +1065,8 @@ namespace Vocal {
                 else if (col_name == "local_uri") {
                     if (val != " (null)")
                         episode.local_uri = val;
-                }
-                else if (col_name == "release_date") {
-                    episode.date_released = val;
-                    episode.set_datetime_from_pubdate ();
+                } else if (col_name == "released") {
+                    episode.datetime_released = new GLib.DateTime.from_unix_local (val.to_int64 ());
                 }
                 else if (col_name == "download_status") {
                     if (val == "downloaded") {
@@ -1054,6 +1091,12 @@ namespace Vocal {
                 }
                 else if (col_name == "parent_podcast_name") {
                     episode.parent = new Podcast.with_name (val);
+                } else if (col_name == "podcast_uri") {
+                    episode.podcast_uri = val;
+                } else if (col_name == "guid") {
+                    episode.guid = val;
+                } else if (col_name == "link") {
+                    episode.link = val;
                 }
             }
 
@@ -1197,13 +1240,22 @@ namespace Vocal {
             // Create the vocal folder if it doesn't exist
             GLib.DirUtils.create_with_parents (db_directory, 0775);
 
+            create_db_schema ();
+
+            return true;
+
+        }
+
+        public void create_db_schema () {
+
             prepare_database ();
 
             string query = """
+              BEGIN TRANSACTION;
+
               CREATE TABLE Podcast (
-                id                  INT,
-                name                TEXT    PRIMARY KEY     NOT NULL,
-                feed_uri            TEXT                    NOT NULL,
+                name                TEXT                    NOT NULL,
+                feed_uri            TEXT    PRIMARY KEY     NOT NULL,
                 album_art_url       TEXT,
                 album_art_local_uri TEXT,
                 description         TEXT                    NOT NULL,
@@ -1211,26 +1263,37 @@ namespace Vocal {
                 license             TEXT
               );
 
+              CREATE INDEX podcast_name ON Podcast (name);
+
               CREATE TABLE Episode (
-                title               TEXT    PRIMARY KEY     NOT NULL,
-                parent_podcast_name TEXT                    NOT NULL,
-                parent_podcast_id   INT,
+                title               TEXT                    NOT NULL,
+                podcast_uri         TEXT                    NOT NULL,
                 uri                 TEXT                    NOT NULL,
                 local_uri           TEXT,
-                release_date        TEXT,
+                released            INT,
                 description         TEXT,
                 latest_position     TEXT,
                 download_status     TEXT,
-                play_status         TEXT
+                play_status         TEXT,
+                guid                TEXT,
+                link                TEXT
               );
+
+              CREATE UNIQUE INDEX episode_guid ON Episode (guid, link, podcast_uri);
+              CREATE INDEX episode_title ON Episode (title);
+              CREATE INDEX episode_released ON Episode (released);
+
+              PRAGMA user_version = 1;
+
+              END TRANSACTION;
             """;
 
             int ec = db.exec (query, null);
             if (ec != Sqlite.OK) {
-                error ("unable to create database %d: %s", db.errcode (), db.errmsg ());
+                error ("unable to create database schema %d: %s", db.errcode (), db.errmsg ());
             }
-            return true;
 
+            return;
         }
 
 
@@ -1301,9 +1364,11 @@ namespace Vocal {
          */
         public bool write_episode_to_database (Episode episode) {
 
+            assert (episode.podcast_uri != null && episode.podcast_uri != "");
+
             string query = "INSERT OR REPLACE INTO Episode " +
-                           " (title, parent_podcast_name, uri, local_uri, description, release_date, download_status, play_status, latest_position) " +
-                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9);";
+                           " (title, podcast_uri, uri, local_uri, released, description, latest_position, download_status, play_status, guid, link) " +
+                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);";
 
             Sqlite.Statement stmt;
             int ec = db.prepare_v2 (query, query.length, out stmt);
@@ -1324,14 +1389,16 @@ namespace Vocal {
             string download_text = (episode.current_download_status == DownloadStatus.DOWNLOADED) ? "downloaded" : "not_downloaded";
 
             stmt.bind_text (1, title);
-            stmt.bind_text (2, parent_podcast_name);
+            stmt.bind_text (2, episode.podcast_uri);
             stmt.bind_text (3, episode.uri);
             stmt.bind_text (4, episode.local_uri);
-            stmt.bind_text (5, episode.description);
-            stmt.bind_text (6, episode.date_released);
-            stmt.bind_text (7, download_text);
-            stmt.bind_text (8, played_text);
-            stmt.bind_text (9, episode.last_played_position.to_string ());
+            stmt.bind_int64 (5, episode.datetime_released.to_unix ());
+            stmt.bind_text (6, episode.description);
+            stmt.bind_text (7, episode.last_played_position.to_string ());
+            stmt.bind_text (8, download_text);
+            stmt.bind_text (9, played_text);
+            stmt.bind_text (10, episode.guid);
+            stmt.bind_text (11, episode.link);
 
             ec = stmt.step ();
 
@@ -1342,5 +1409,30 @@ namespace Vocal {
 
             return true;
         }
+
+
+        /*
+         * Returns the Sqlite user_version pragma used for checking current db schema version.
+         * https://www.sqlite.org/pragma.html#pragma_user_version
+         */
+        private int get_db_version () {
+            if (db == null) {
+                prepare_database ();
+            }
+
+            int version = 0;
+            int ec = db.exec ("PRAGMA user_version", (n_cols, values, col_names) => {
+                    version = values[0].to_int ();
+                    return 0;
+                }, null);
+
+            if (ec != Sqlite.OK) {
+                error ("Unable to determine database schema version! (%d) %s.",
+                       db.errcode (), db.errmsg ());
+            }
+
+            return version;
+        }
+
     }
 }

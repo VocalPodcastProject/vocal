@@ -97,13 +97,15 @@ namespace Vocal {
                     found_main_description = true;
                     i++;
                 }
-                else if (current == "image" && found_cover_art == false) {
+                else if (current == "image") {
 
                     if (queue[i + 2] == "href") {
-                        i += 3;
-                        podcast.remote_art_uri = queue[i];
-                    }
-                    else {
+                        // When there is an iTunes image, queue[i + 1] is empty
+                        if (queue[i + 1] == "" || found_cover_art == false) {
+                            i += 3;
+                            podcast.remote_art_uri = queue[i];
+                        }
+                    } else if (found_cover_art == false) {
                         while (queue[i] != "url") {
                             i++;
                         }

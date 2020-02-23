@@ -37,7 +37,7 @@ namespace Vocal {
         public signal void download_finished (Episode episode);
 
         // Fired when there is an update during import
-        public signal void import_status_changed (int current, int total, string name);
+        public signal void import_status_changed (int current, int total, string name, bool from_sync);
 
         // Fired when there is a new, new episode count
         private signal void new_episode_count_changed ();
@@ -209,7 +209,7 @@ namespace Vocal {
         /*
          * Adds podcasts to the library from the provided OPML file path
          */
-        public async Gee.ArrayList<string> add_from_OPML (string path, bool? raw_data = false) {
+        public async Gee.ArrayList<string> add_from_OPML (string path, bool? raw_data = false, bool from_sync) {
             Gee.ArrayList<string> failed_feeds = new Gee.ArrayList<string> ();
 
             SourceFunc callback = add_from_OPML.callback;
@@ -223,7 +223,7 @@ namespace Vocal {
                     int i = 0;
                     foreach (string feed in feeds) {
                         i++;
-                        import_status_changed (i, feeds.length, feed);
+                        import_status_changed (i, feeds.length, feed, from_sync);
                         bool temp_status = add_podcast_from_file (feed);
                         if (temp_status == false) {
                             failed_feeds.add (feed);

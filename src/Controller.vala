@@ -70,9 +70,6 @@ namespace Vocal {
 
         public int minutes_elapsed_in_period;
 
-
-
-
         public Controller (VocalApp app) {
 
             info ("Initializing the controller.");
@@ -271,82 +268,7 @@ namespace Vocal {
                 info ("Performing library autoclean.");
                 library.autoclean_library ();
             }
-
-            // Check for gpodder updates after 5 seconds, then check for new episodes
-            GLib.Timeout.add (5000, () => {
-            
-            	// Get new subscriptions from gpodder.net
-		        if (!library.empty () && settings.gpodder_username != "") {
-		        	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
-		        	var loop = new MainLoop();
-                	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
-                	
-		                    string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
-                			library.add_from_OPML (cloud_subs_opml, true);
-		                    
-		                    // Next, get any episode updates
-		                    window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
-		                    gpodder_client.get_episode_updates_async.begin ((obj, res) => {
-
-		                    	bool? success = gpodder_client.get_episode_updates_async.end (res);
-		                    	window.hide_infobar ();
-		                    	
-		                    	// If necessary, remove podcasts from library that are missing in
-		                    	if (settings.gpodder_remove_deleted_podcasts) {
-		                    	
-		                    		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
-		                    		
-		                    		// TODO: use a singleton pattern so there's only one instance
-		                    		FeedParser feed_parser = new FeedParser ();
-		                    		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
-		                    		foreach (Podcast p in library.podcasts) {
-		                    			bool found = false;
-		                    			foreach (string feed in cloud_feeds) {
-		                    				if (p.feed_uri == feed) {
-		                    					found = true;
-	                    					}
-		                    			}
-		                    			if (!found) {
-		                    				// Remove podcast
-		                    				library.remove_podcast (p);
-		                    			}
-		                    		}
-		                    	}
-		                    	
-		                    	// Now update the actual feeds and quit the loop
-						        on_update_request ();
-				                loop.quit();
-		                    });
-		                    
-                    });
-                    loop.run();
-		        	
-	        	} else {
-                	on_update_request ();
-            	}
-                return false;
-            });
-
-            // Set minutes elapsed to zero since the app is just now starting up
-            minutes_elapsed_in_period = 0;
-
-            // Automatically check for new episodes
-            if (settings.update_interval != 0) {
-
-                //Increase count and check for match every 5 minutes
-                GLib.Timeout.add (300000, () => {
-
-                    // The update interval increases/decreases by a step of 5 each time, so eventually
-                    // the current count will equal the update interval. When that happens, update.
-                    minutes_elapsed_in_period += 5;
-                    if (minutes_elapsed_in_period == settings.update_interval) {
-                        on_update_request ();
-                    }
-
-                    return true;
-                });
-            }
-                       
+   
             info ("Controller initialization finished. Running post-creation sequence.");
             post_creation_sequence ();
         }
@@ -366,8 +288,79 @@ namespace Vocal {
                 window.populate_views ();
                 window.show_all ();
                 window.switch_visible_page (window.all_scrolled);
-
             }
+            
+            // Set up the updating mechanism to trigger every 5 minutes
+            
+            // Set minutes elapsed to zero since the app is just now starting up
+            minutes_elapsed_in_period = 0;
+
+            // Automatically check for new episodes
+            if (settings.update_interval != 0) {
+
+                //Increase count and check for match every 5 minutes
+                GLib.Timeout.add (300000, () => {
+
+                    // The update interval increases/decreases by a step of 5 each time, so eventually
+                    // the current count will equal the update interval. When that happens, update.
+                    minutes_elapsed_in_period += 5;
+                    if (minutes_elapsed_in_period == settings.update_interval) {
+                        on_update_request ();
+                    }
+
+                    return true;
+                });
+            }
+            
+
+        	// Get new subscriptions from gpodder.net
+		    if (!library.empty () && settings.gpodder_username != "") {
+		    	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
+		    	var loop = new MainLoop();
+            	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
+            	
+		                string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
+            			library.add_from_OPML (cloud_subs_opml, true, true);
+		                
+		                // Next, get any episode updates
+		                window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
+		                gpodder_client.get_episode_updates_async.begin ((obj, res) => {
+
+		                	bool? success = gpodder_client.get_episode_updates_async.end (res);
+		                	
+		                	// If necessary, remove podcasts from library that are missing in
+		                	if (settings.gpodder_remove_deleted_podcasts) {
+		                	
+		                		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
+		                		
+		                		// TODO: use a singleton pattern so there's only one instance
+		                		FeedParser feed_parser = new FeedParser ();
+		                		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
+		                		foreach (Podcast p in library.podcasts) {
+		                			bool found = false;
+		                			foreach (string feed in cloud_feeds) {
+		                				if (p.feed_uri == feed) {
+		                					found = true;
+	                					}
+		                			}
+		                			if (!found) {
+		                				// Remove podcast
+		                				library.remove_podcast (p);
+		                			}
+		                		}
+		                	}
+		                	
+		                	// Now update the actual feeds and quit the loop
+						    on_update_request ();
+				            loop.quit();
+		                });
+		                
+                });
+                loop.run();
+		    	
+	    	} else {
+            	on_update_request ();
+        	}
         }
 
         /*
@@ -656,6 +649,8 @@ namespace Vocal {
             if (!checking_for_updates) {
 
                 info ("Checking for updates.");
+                
+                window.show_infobar ("Checking for updates…", MessageType.INFO);
 
                 checking_for_updates = true;
                 update_status_changed (true);
@@ -698,6 +693,8 @@ namespace Vocal {
                 }
 
                 int new_episode_count = new_episodes.size;
+                
+                window.hide_infobar ();
 
                 // Free up the memory from the arraylist
                 new_episodes = null;
@@ -707,6 +704,8 @@ namespace Vocal {
                     info ("Repopulating views after the update process has finished.");
                     window.populate_views_async ();
                 }
+                
+                
             } else {
                 info ("Vocal is already checking for updates.");
             }

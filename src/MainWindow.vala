@@ -975,7 +975,7 @@ namespace Vocal {
                 }
 
                 var loop = new MainLoop ();
-                controller.library.add_from_OPML (file_name, false, (obj, res) => {
+                controller.library.add_from_OPML (file_name, false, false, (obj, res) => {
 
                     Gee.ArrayList<string> failed_feed_list = controller.library.add_from_OPML.end (res);
 
@@ -1262,9 +1262,11 @@ namespace Vocal {
         /*
          * Called during an import event when the parser has started parsing a new feed
          */
-        public void on_import_status_changed (int current, int total, string title) {
+        public void on_import_status_changed (int current, int total, string title, bool from_sync) {
             show_all ();
-            show_infobar (_("Adding feed %d/%d: %s").printf (current, total, title), MessageType.INFO);
+            if (from_sync == false) {
+            	show_infobar (_("Adding feed %d/%d: %s").printf (current, total, title), MessageType.INFO);
+        	}
         }
 
 

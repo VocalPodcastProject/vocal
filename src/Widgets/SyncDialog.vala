@@ -145,7 +145,7 @@ namespace Vocal {
 		            notebook.set_visible_child (overview_box);
 		            controller.gpodder_client.upload_subscriptions ();
 		            string cloud_subs_opml = controller.gpodder_client.get_subscriptions_list ();
-		            controller.library.add_from_OPML (cloud_subs_opml);
+		            controller.library.add_from_OPML (cloud_subs_opml, false, false);
                 }
             });
             
@@ -271,7 +271,7 @@ namespace Vocal {
         	controller.gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
         	
                 string cloud_subs_opml = controller.gpodder_client.get_subscriptions_list_async.end (res);
-    			controller.library.add_from_OPML (cloud_subs_opml, true);
+    			controller.library.add_from_OPML (cloud_subs_opml, true, false);
                 
                 // Next, get any episode updates
                 controller.window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);

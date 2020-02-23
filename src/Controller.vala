@@ -252,6 +252,11 @@ namespace Vocal {
                 info ("Refilling library.");
                 library.refill_library ();
             } else {
+            	// In case gpodder.net credentials were left over from previous install, clear them out
+            	settings.gpodder_device_name = "";
+            	settings.gpodder_username = "";
+            	settings.gpodder_last_successful_sync_timestamp = "";
+
                 info ("Setting up library.");
                 library.setup_library ();
             }
@@ -271,8 +276,7 @@ namespace Vocal {
             GLib.Timeout.add (5000, () => {
             
             	// Get new subscriptions from gpodder.net
-            
-		        if (settings.gpodder_username != "") {
+		        if (!library.empty () && settings.gpodder_username != "") {
 		        	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
 		        	var loop = new MainLoop();
                 	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {

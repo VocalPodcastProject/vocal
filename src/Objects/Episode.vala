@@ -116,7 +116,8 @@ namespace Vocal {
 
             if (date_released != null) {
                 GLib.Time tm = GLib.Time ();
-                tm.strptime (date_released, "%a, %d %b %Y %H:%M:%S %Z");
+                date_released = date_released[5:date_released.length];
+                tm.strptime (date_released, "%d %b %Y %H:%M:%S %Z");
                 datetime_released = new DateTime.local (
                     1900 + tm.year,
                     1 + tm.month,

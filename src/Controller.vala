@@ -571,6 +571,7 @@ namespace Vocal {
 
             if (success) {
 
+                window.hide_infobar ();
                 window.toolbar.playback_box.show_artwork_image ();
                 window.toolbar.playback_box.show_volume_button ();
             

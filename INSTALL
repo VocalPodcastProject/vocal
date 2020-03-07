@@ -7,6 +7,7 @@ libxml-2.0
 granite
 gtk+-3.0
 gstreamer-1.0
+gvfs
 sqlite3
 
 

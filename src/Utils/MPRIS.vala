@@ -146,7 +146,7 @@ namespace Vocal {
 
 
         private const string INTERFACE_NAME = "org.mpris.MediaPlayer2.Player";
-        const string TRACK_ID = "/com/github/needleandthread/vocal/Track/%d";
+        const string TRACK_ID = "/com/github/needleandthread/vocal/Track/%u";
 
         public MprisPlayer (DBusConnection conn) {
             this.conn = conn;

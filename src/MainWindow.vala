@@ -649,7 +649,7 @@ namespace Vocal {
                                             try {
 
                                                 controller.player.set_episode (controller.current_episode);
-                                                controller.player.set_position (controller.current_episode.last_played_position);
+                                                controller.player.restore_position_episode = controller.current_episode;
                                                 artwork_popover.set_notes_text (episode.description);
 
                                             } catch (Error e) {

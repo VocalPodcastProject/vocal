@@ -1659,6 +1659,7 @@ namespace Vocal {
                 controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
             } else {
                 controller.player.playing = false;
+                controller.settings.last_played_media = "";
             }
 
             // Regenerate the new episode list in case the ended episode was one of the new episodes

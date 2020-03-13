@@ -144,13 +144,13 @@ namespace Vocal {
         /*
          * Sets the currently playing media position, in seconds
          */
-		public void set_position (int seconds) {
+        public void set_position (int seconds) {
             if (duration > 0.0) {
                 double calculated_progress = (double)seconds / duration;
                 set_progress (calculated_progress);
                 new_position_available ();
             }
-		}
+        }
 
 
         /*

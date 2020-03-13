@@ -146,9 +146,9 @@ namespace Vocal {
          */
 		public void set_position (int seconds) {
             if (duration > 0.0) {
-			    double calculated_progress = (double)seconds / duration;
-			    set_progress (calculated_progress);
-			    new_position_available ();
+                double calculated_progress = (double)seconds / duration;
+                set_progress (calculated_progress);
+                new_position_available ();
             }
 		}
 

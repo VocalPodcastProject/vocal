@@ -717,8 +717,12 @@ namespace Vocal {
                 foreach (Podcast p in podcasts) {
 
                     output_line =
-    """<outline text="%s" type="rss" xmlUrl="%s"/>
-    """.printf (p.name.replace ("\"", "'").replace ("&", "and"), p.feed_uri);
+"""<outline>
+        <text><![CDATA[%s]]></text>
+        <type>rss</type>
+        <xmlUrl><![CDATA[%s]]></xmlUrl>
+    </outline>
+""".printf (p.name, p.feed_uri);
                     stream.output_stream.write (output_line.data);
                 }
 

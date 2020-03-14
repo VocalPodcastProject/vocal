@@ -801,7 +801,7 @@ namespace Vocal {
 
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-            toolbar.playback_box.set_artwork_image_image (episode.parent.coverart_uri);
+            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
             artwork_popover.set_notes_text (controller.current_episode.description);
             controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
         }

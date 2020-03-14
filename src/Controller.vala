@@ -546,13 +546,7 @@ namespace Vocal {
                 }
             }
 
-            // Hide the shownotes button
-            window.toolbar.playback_box.hide_artwork_image ();
-            window.toolbar.playback_box.hide_volume_button ();
-            window.toolbar.hide_playlist_button ();
-
             window.show_infobar (_ ("Adding new podcast: <b>" + feed + "</b>"), MessageType.INFO);
-            window.toolbar.show_playback_box ();
 
             var loop = new MainLoop ();
             bool success = false;

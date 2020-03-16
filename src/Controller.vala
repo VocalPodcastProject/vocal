@@ -432,25 +432,6 @@ namespace Vocal {
                 player.play ();
                 playback_status_changed ("Playing");
 
-                // Seek if necessary
-                if (current_episode.last_played_position > 0 && current_episode.last_played_position > player.get_position ()) {
-
-                    // If it's a streaming episode, seeking takes longer
-                    // Temporarily pause the track and give it some time to seek
-                    if (current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                        player.pause ();
-                    }
-
-                    player.set_position (current_episode.last_played_position);
-
-                    // Pause for about a second to give time to catch up
-                    if (current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                        player.pause ();
-                        Thread.usleep (700000);
-                        player.play ();
-                    }
-                }
-
                 var playpause_image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 window.toolbar.set_play_pause_image (playpause_image);
                 window.toolbar.set_play_pause_text (_ ("Pause"));

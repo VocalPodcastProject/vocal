@@ -630,7 +630,7 @@ namespace Vocal {
                     if (controller.settings.last_played_media != null && controller.settings.last_played_media.length > 1) {
 
                         // Split the media into two different strings
-                        string[] fields = controller.settings.last_played_media.split (",");
+                        string[] fields = controller.settings.last_played_media;
                         bool found = false;
                         foreach (Podcast podcast in controller.library.podcasts) {
 
@@ -781,7 +781,7 @@ namespace Vocal {
             // Set the shownotes, the media information, and update the last played media in the settings
             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64)controller.player.duration);
             artwork_popover.set_notes_text (controller.current_episode.description);
-            controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
+            controller.settings.last_played_media = {controller.current_episode.title, controller.current_episode.parent.name};
         }
 
         /*
@@ -803,7 +803,7 @@ namespace Vocal {
             controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
             toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
             artwork_popover.set_notes_text (controller.current_episode.description);
-            controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
+            controller.settings.last_played_media = {controller.current_episode.title, controller.current_episode.parent.name};
         }
 
         /*
@@ -1656,10 +1656,10 @@ namespace Vocal {
                 // Set the shownotes, the media information, and update the last played media in the settings
                 controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
                 artwork_popover.set_notes_text (controller.current_episode.description);
-                controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
+                controller.settings.last_played_media = {controller.current_episode.title, controller.current_episode.parent.name};
             } else {
                 controller.player.playing = false;
-                controller.settings.last_played_media = "";
+                controller.settings.last_played_media = null;
             }
 
             // Regenerate the new episode list in case the ended episode was one of the new episodes

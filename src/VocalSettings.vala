@@ -39,7 +39,7 @@ public class VocalSettings : Granite.Services.Settings {
     public int rewind_seconds { get; set;}
 
     public string library_location { get; set; }
-    public string last_played_media { get; set; }
+    public string[] last_played_media { get; set; }
     public string itunes_store_country { get; set; }
     public string archive_access_key { get; set; }
     public string archive_secret_key { get; set; }

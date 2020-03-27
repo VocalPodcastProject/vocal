@@ -98,7 +98,7 @@ public class Utils {
         markup = markup.replace ("&", "&amp;");
 
         // Simplify (keep only href attribute) & preserve anchor tags.
-        Regex simpleLinks = new Regex ("<a (.*? (href[\\s=]*?\".*?\").*?)> (.*?)<[\\s\\/]*?a[\\s>]*",
+        Regex simpleLinks = new Regex ("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
                                       RegexCompileFlags.CASELESS | RegexCompileFlags.DOTALL);
         markup = simpleLinks.replace (markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
 

@@ -1867,6 +1867,7 @@ namespace Vocal {
             }
             var message_label = new Gtk.Label (message);
             message_label.margin_left = 12;
+            message_label.use_markup = true;
             content_area.add (message_label);
             
             infobar.revealed = true;

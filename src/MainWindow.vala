@@ -347,6 +347,7 @@ namespace Vocal {
             all_flowbox = new Gtk.FlowBox ();
             all_art = new Gee.ArrayList<CoverArt> ();
             all_flowbox.get_style_context ().add_class ("notebook-art");
+            all_flowbox.max_children_per_line = 20;
             all_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             all_flowbox.activate_on_single_click = true;
             all_flowbox.child_activated.connect (on_child_activated);

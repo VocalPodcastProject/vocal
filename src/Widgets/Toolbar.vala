@@ -375,8 +375,6 @@ namespace Vocal {
             right_button_box.pack_end (new_episodes_button);
             right_button_box.halign = Gtk.Align.END;
             
-            this.spacing = 0;
-            
             this.pack_start (left_button_box);
             this.set_custom_title (playback_box);
             this.pack_end (right_button_box);

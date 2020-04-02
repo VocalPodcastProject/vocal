@@ -663,7 +663,7 @@ namespace Vocal {
         private void on_row_selected () {
 
             GLib.List<weak ListBoxRow> rows = listbox.get_selected_rows ();
-            if (rows.length () < 1) {
+            if (rows.length () != 1) {
                 return;
             }
 
@@ -721,7 +721,9 @@ namespace Vocal {
 
         private void reset_episode_list () {
             foreach (var item in listbox.get_children ()) {
-                listbox.remove (item);
+                ListBoxRow row = (ListBoxRow) item;
+                row.selectable = false;
+                listbox.remove (row);
             }
 
             boxes.clear ();

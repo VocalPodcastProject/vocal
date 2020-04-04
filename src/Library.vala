@@ -100,7 +100,7 @@ namespace Vocal {
             local_library_path = settings.library_location.replace ("~", GLib.Environment.get_home_dir ());
 
 #if HAVE_LIBUNITY
-            launcher = Unity.LauncherEntry.get_for_desktop_id ("vocal.desktop");
+            launcher = Unity.LauncherEntry.get_for_desktop_id ("com.github.needleandthread.vocal.desktop");
             launcher.count = new_episode_count;
 #endif
 

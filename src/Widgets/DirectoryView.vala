@@ -33,6 +33,8 @@ namespace Vocal {
         private Gtk.Button first_run_continue_button;
 
         private Gtk.Box loading_box;
+        private Gtk.Label itunes_title;
+        private Gtk.Label loading_label;
 
         private Gtk.ScrolledWindow scrolled_window;
 
@@ -48,7 +50,7 @@ namespace Vocal {
             banner_box.get_style_context ().add_class ("toolbar");
             banner_box.get_style_context ().add_class ("library-toolbar");
 
-            var itunes_title = new Gtk.Label (_ ("iTunes Top 100 Podcasts"));
+            itunes_title = new Gtk.Label (_ ("iTunes Top 100 Podcasts"));
             itunes_title.margin_top = 15;
             itunes_title.margin_bottom = 5;
             itunes_title.justify = Gtk.Justification.CENTER;
@@ -101,7 +103,7 @@ namespace Vocal {
             loading_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 5);
             var spinner = new Gtk.Spinner ();
             spinner.active = true;
-            var loading_label = new Gtk.Label (_ ("Loading iTunes Store"));
+            loading_label = new Gtk.Label (_ ("Loading iTunes Store (0 / 100)"));
             loading_label.get_style_context ().add_class ("h2");
             loading_box.add (loading_label);
             loading_box.add (spinner);
@@ -131,6 +133,8 @@ namespace Vocal {
                 int i = 1;
                 if (entries == null) {
                     info ("iterating over entries");
+                    itunes_title.set_text ("Error when loading iTunes Top 100 Podcasts");
+                    loading_box.set_no_show_all (true);
                     return null;
                 }
 
@@ -148,6 +152,7 @@ namespace Vocal {
                         on_new_subscription (url);
                     });
                     flowbox.add (directory_art);
+                    loading_label.set_text ("Loading iTunes Store (%d / 100)".printf (i));
                     i++;
                 }
 

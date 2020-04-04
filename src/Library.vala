@@ -909,7 +909,7 @@ namespace Vocal {
                                       FROM Episode e
                                       LEFT JOIN Podcast p on p.feed_uri = e.podcast_uri
                                       WHERE podcast_uri = '%s'
-                                      ORDER BY e.rowid ASC".printf (podcast.feed_uri);
+                                      ORDER BY e.released ASC".printf (podcast.feed_uri);
                 ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
                 if (ec != Sqlite.OK) {
                     warning ("Error: %d: %s\n", db.errcode (), db.errmsg ());

@@ -330,7 +330,11 @@ namespace Vocal {
             });
             new_episodes_view.add_all_new_to_queue.connect ((episodes) => {
                 foreach (Episode e in episodes) {
-                    enqueue_episode (e);
+                    if (controller.get_episode () == null) {
+                        controller.set_episode (e);
+                    } else {
+                        enqueue_episode (e);
+                    }
                 }
             });
 

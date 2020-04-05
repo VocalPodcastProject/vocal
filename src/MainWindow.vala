@@ -642,27 +642,8 @@ namespace Vocal {
                                     // Attempt to find the matching episode, set it as the current episode, and display the information in the box
                                     foreach (Episode episode in podcast.episodes) {
                                         if (episode.title == fields[0]) {
-                                            controller.current_episode = episode;
-                                            toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                                            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-                                            controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-
-                                            try {
-
-                                                controller.player.set_episode (controller.current_episode);
-                                                controller.player.restore_position_episode = controller.current_episode;
-                                                artwork_popover.set_notes_text (episode.description);
-
-                                            } catch (Error e) {
-                                                warning (e.message);
-                                            }
-
-                                            if (controller.current_episode.last_played_position != 0) {
-                                                toolbar.show_playback_box ();
-                                            }
-                                            else {
-                                                toolbar.hide_playback_box ();
-                                            }
+                                            controller.set_episode (episode);
+                                            controller.player.restore_position_episode = episode;
                                         }
                                     }
                                 }
@@ -773,16 +754,11 @@ namespace Vocal {
          */
         private void play_episode_from_queue_immediately (Episode e) {
 
-            controller.current_episode = e;
-            artwork_popover.queue_box.hide ();
+            controller.set_episode (e);
+            artwork_popover.hide ();
             controller.library.remove_episode_from_queue (e);
 
             controller.play ();
-
-            // Set the shownotes, the media information, and update the last played media in the settings
-            controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64)controller.player.duration);
-            artwork_popover.set_notes_text (controller.current_episode.description);
-            controller.settings.last_played_media = {controller.current_episode.title, controller.current_episode.parent.name};
         }
 
         /*
@@ -792,19 +768,13 @@ namespace Vocal {
 
             // Get the episode
             if (episode == null) {
-                controller.current_episode = details.current_episode;
+                controller.set_episode (details.current_episode);
             } else {
-                controller.current_episode = episode;
+                controller.set_episode (episode);
             }
 
             controller.player.pause ();
             controller.play ();
-
-            // Set the shownotes, the media information, and update the last played media in the settings
-            controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-            artwork_popover.set_notes_text (controller.current_episode.description);
-            controller.settings.last_played_media = {controller.current_episode.title, controller.current_episode.parent.name};
         }
 
         /*
@@ -1025,9 +995,9 @@ namespace Vocal {
                     controller.currently_importing = false;
 
                     if (controller.player.playing) {
-                        toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                        toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-                        video_controls.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
+                        toolbar.playback_box.set_info_title (controller.get_episode ().title.replace ("%27", "'"), controller.get_episode ().parent.name.replace ("%27", "'"));
+                        toolbar.playback_box.set_artwork_image_image (controller.get_episode ().parent.coverart_uri);
+                        video_controls.set_info_title (controller.get_episode ().title.replace ("%27", "'"), controller.get_episode ().parent.name.replace ("%27", "'"));
                     }
 
                     loop.quit ();
@@ -1141,7 +1111,7 @@ namespace Vocal {
                             info ("GStreamer registry updated, attempting to start playback using the new plugins...");
 
                             // Reset the controller.player
-                            controller.player.current_episode = null;
+                            controller.set_episode (null);
 
                             controller.play ();
                          }
@@ -1237,7 +1207,7 @@ namespace Vocal {
             details.on_single_delete(episode);
             
             // Update gpodder.net
-            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.DELETE);
+            controller.gpodder_client.update_episode (controller.get_episode (), EpisodeAction.DELETE);
         }
 
 
@@ -1639,7 +1609,7 @@ namespace Vocal {
             toolbar.set_play_pause_image (playpause_image);
 
             // If there is a video showing, return to the controller.library view
-            if (controller.current_episode.parent.content_type == MediaType.VIDEO) {
+            if (controller.get_episode ().parent.content_type == MediaType.VIDEO) {
                 on_return_to_library ();
             }
 
@@ -1648,16 +1618,10 @@ namespace Vocal {
 
             controller.playback_status_changed ("Stopped");
 
-            controller.current_episode = controller.library.get_next_episode_in_queue ();
+            controller.set_episode (controller.library.get_next_episode_in_queue ());
 
-            if (controller.current_episode != null) {
-
+            if (controller.get_episode () != null) {
                 controller.play ();
-
-                // Set the shownotes, the media information, and update the last played media in the settings
-                controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-                artwork_popover.set_notes_text (controller.current_episode.description);
-                controller.settings.last_played_media = {controller.current_episode.title, controller.current_episode.parent.name};
             } else {
                 controller.player.playing = false;
                 controller.settings.last_played_media = null;
@@ -1811,7 +1775,7 @@ namespace Vocal {
             }
             
             // Update gpodder.net if necessary
-            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.PLAY);
+            controller.gpodder_client.update_episode (controller.get_episode (), EpisodeAction.PLAY);
 
             // If an episode is currently playing and Vocal is set to keep playing in the background, hide the window
             if (controller.player.playing && controller.settings.keep_playing_in_background) {

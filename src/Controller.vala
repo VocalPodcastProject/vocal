@@ -63,7 +63,7 @@ namespace Vocal {
 
         /* References, pointers, and containers */
 
-        public Episode current_episode;
+        private Episode current_episode;
         public Podcast highlighted_podcast;
 
         /* Miscellaneous global variables */
@@ -361,6 +361,30 @@ namespace Vocal {
 	    	} else {
             	on_update_request ();
         	}
+        }
+
+        public void set_episode (Episode? e) {
+            current_episode = e;
+            if (current_episode != null) {
+                try {
+                    player.set_episode (current_episode);
+                    window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
+                    window.toolbar.playback_box.set_artwork_image_image (current_episode.parent.coverart_uri);
+                    track_changed (current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
+                    settings.last_played_media = {current_episode.title, current_episode.parent.name};
+                    window.artwork_popover.set_notes_text (current_episode.description);
+                } catch (Error e) {
+                    warning (e.message);
+                }
+
+                window.toolbar.show_playback_box ();
+            } else {
+                window.toolbar.hide_playback_box ();
+            }
+        }
+
+        public Episode get_episode () {
+            return current_episode;
         }
 
         /*

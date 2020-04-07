@@ -67,7 +67,7 @@
 		</key>
 		
 		<key name="library-location" type="s">
-			<default>"~/vocal"</default>
+			<default>"~/.local/share/vocal"</default>
 			<summary>The directory where podcasts are stored</summary>
 			<description>
 				The directory where podcasts are stored

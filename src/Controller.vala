@@ -110,6 +110,9 @@ namespace Vocal {
             MPRIS mpris = new MPRIS (this);
             mpris.initialize ();
 
+            // Restore last played Episode after MPRIS has been initialized
+            mpris.initialized.connect (restore_episode);
+
 
             // Connect the new player position available signal from the player
             // to set the new progress on the playback box
@@ -385,6 +388,33 @@ namespace Vocal {
 
         public Episode get_episode () {
             return current_episode;
+        }
+
+        private void restore_episode () {
+            if (settings.last_played_media != null && settings.last_played_media.length > 1) {
+
+                info ("Restoring last played media.");
+
+                // Split the media into two different strings
+                string[] fields = settings.last_played_media;
+                bool found = false;
+                foreach (Podcast podcast in library.podcasts) {
+
+                    if (!found) {
+                        if (podcast.name == fields[1]) {
+                            found = true;
+
+                            // Attempt to find the matching episode, set it as the current episode, and display the information in the box
+                            foreach (Episode episode in podcast.episodes) {
+                                if (episode.title == fields[0]) {
+                                    set_episode (episode);
+                                    player.restore_position_episode = episode;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         /*

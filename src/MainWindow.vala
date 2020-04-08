@@ -624,39 +624,6 @@ namespace Vocal {
                     all_art.clear ();
                 }
 
-                //TODO: Move this to the controller
-
-                info ("Restoring last played media.");
-                // If the program was just launched, check to see what the last played media was
-                if (controller.newly_launched) {
-
-                    current_widget = all_scrolled;
-
-                    if (controller.settings.last_played_media != null && controller.settings.last_played_media.length > 1) {
-
-                        // Split the media into two different strings
-                        string[] fields = controller.settings.last_played_media;
-                        bool found = false;
-                        foreach (Podcast podcast in controller.library.podcasts) {
-
-                            if (!found) {
-                                if (podcast.name == fields[1]) {
-                                    found = true;
-
-                                    // Attempt to find the matching episode, set it as the current episode, and display the information in the box
-                                    foreach (Episode episode in podcast.episodes) {
-                                        if (episode.title == fields[0]) {
-                                            controller.set_episode (episode);
-                                            controller.player.restore_position_episode = episode;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-
                 // Refill the controller.library based on what is stored in the database (if it's not newly launched, in
                 // which case it has already been filled)
                 if (!controller.newly_launched) {

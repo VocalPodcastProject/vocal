@@ -1231,7 +1231,7 @@ namespace Vocal {
             if (settings.library_location == null) {
                 settings.library_location = GLib.Environment.get_user_data_dir () + """/vocal""";
             }
-            local_library_path = settings.library_location.replace ("~", GLib.Environment.get_user_data_dir ());
+            local_library_path = settings.library_location.replace ("~", GLib.Environment.get_home_dir ());
 
             // If the new local_library_path has been modified, update the setting
             if (settings.library_location != local_library_path) {

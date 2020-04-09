@@ -93,7 +93,8 @@ namespace Vocal {
 
                 else if (current == "description" && found_main_description == false) {
                     i++;
-                    podcast.description = queue[i];
+                    Regex p = new Regex ("</?p>");
+                    podcast.description = p.replace (queue[i], -1, 0, "");
                     found_main_description = true;
                     i++;
                 }

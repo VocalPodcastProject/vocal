@@ -1754,7 +1754,7 @@ namespace Vocal {
                 return true;
             } else if (downloads != null && downloads.downloads.size > 0) {
                 //If there are downloads verify that the user wishes to exit and cancel the downloads
-                var downloads_active_dialog = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _ ("Vocal is currently downloading episodes. Exiting will cause the downloads to be canceled. Are you sure you want to exit?"));
+                var downloads_active_dialog = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _ ("Vocal is currently downloading episodes. Exiting will cause the downloads to be cancelled. Are you sure you want to exit?"));
                 downloads_active_dialog.response.connect ((response_id) => {
                     downloads_active_dialog.destroy ();
                     if (response_id == Gtk.ResponseType.YES) {

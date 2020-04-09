@@ -47,7 +47,7 @@ namespace Vocal {
 
         public bool first_run = true;
         public bool newly_launched = true;
-        public bool should_quit_immediately = true;
+        public bool should_quit_immediately = false;
         public bool plugins_are_installing = false;
         public bool checking_for_updates = false;
         public bool is_closing = false;

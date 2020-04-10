@@ -1007,8 +1007,13 @@ namespace Vocal {
          */
          public void switch_visible_page (Gtk.Widget widget) {
 
-            if (current_widget != widget)
-                previous_widget = current_widget;
+            if (current_widget != widget) {
+                if (current_widget == welcome) {
+                    previous_widget = all_scrolled;
+                } else {
+                    previous_widget = current_widget;
+                }
+            }
 
             if (widget == all_scrolled) {
                 notebook.set_visible_child (all_scrolled);
@@ -1689,9 +1694,6 @@ namespace Vocal {
             // Show the store
             if (index == 0) {
                 switch_visible_page (directory_scrolled);
-
-                // Set the controller.library as the previous widget for return_to_library to work
-                previous_widget = all_scrolled;
             }
 
             // Add a new feed

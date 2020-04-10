@@ -597,10 +597,10 @@ namespace Vocal {
             });
 
             loop.run ();
+            window.hide_infobar ();
 
             if (success) {
 
-                window.hide_infobar ();
                 window.toolbar.playback_box.show_artwork_image ();
                 window.toolbar.playback_box.show_volume_button ();
             

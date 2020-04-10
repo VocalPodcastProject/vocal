@@ -135,6 +135,7 @@ namespace Vocal {
                     info ("iterating over entries");
                     itunes_title.set_text ("Error when loading iTunes Top 100 Podcasts");
                     loading_box.set_no_show_all (true);
+                    loading_box.hide ();
                     return null;
                 }
 

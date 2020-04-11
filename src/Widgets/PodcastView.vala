@@ -619,7 +619,7 @@ namespace Vocal {
             }
 
             name_label.set_text (podcast.name.replace ("%27", "'"));
-            description_label.set_text (podcast.description.replace ("""\n""", ""));
+            description_label.set_text (Utils.html_to_markup (podcast.description));
 
             reset_episode_list ();
             populate_episodes ();

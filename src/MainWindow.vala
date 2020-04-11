@@ -470,7 +470,6 @@ namespace Vocal {
             toolbar.play_pause_selected.connect (controller.play_pause);
             toolbar.seek_forward_selected.connect (controller.seek_forward);
             toolbar.seek_backward_selected.connect (controller.seek_backward);
-            toolbar.playlist_button.clicked.connect (() => { artwork_popover.queue_box.show_all (); });
 
             toolbar.store_selected.connect (() => {
                 details.pane_should_hide ();
@@ -905,13 +904,6 @@ namespace Vocal {
             //If the user selects a file, get the name and parse it
             if (decision == Gtk.ResponseType.ACCEPT || run_pending_import == true) {
 
-                toolbar.show_playback_box ();
-
-                // Hide the shownotes button
-                toolbar.playback_box.hide_artwork_image ();
-                toolbar.playback_box.hide_volume_button ();
-                toolbar.hide_playlist_button ();
-
                 if (current_widget == welcome) {
                     switch_visible_page (import_message_box);
                 }
@@ -952,10 +944,6 @@ namespace Vocal {
 
                     // Make the refresh and export items sensitive now
                     toolbar.export_item.sensitive = true;
-
-                    toolbar.playback_box.show_artwork_image ();
-                    toolbar.playback_box.show_volume_button ();
-                    toolbar.show_playlist_button ();
 
                     if (current_widget == import_message_box) {
                         switch_visible_page (all_scrolled);

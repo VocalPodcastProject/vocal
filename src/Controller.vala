@@ -618,8 +618,6 @@ namespace Vocal {
 		            gpodder_loop.run ();
 	            }
             	
-                window.toolbar.show_playlist_button ();
-
                 if (!player.playing)
                     window.toolbar.hide_playback_box ();
 

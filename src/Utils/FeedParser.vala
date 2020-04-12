@@ -165,7 +165,7 @@ namespace Vocal {
                                     string typestring = queue[i].slice (0, 5);
 
                                     if (typestring == "audio" || typestring == "video") {
-                                      found_media = true;
+                                        found_media = true;
                                     }
 
                                     if (podcast.content_type == MediaType.UNKNOWN) {

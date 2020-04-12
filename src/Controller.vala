@@ -374,7 +374,7 @@ namespace Vocal {
                     window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
                     window.toolbar.playback_box.set_artwork_image_image (current_episode.parent.coverart_uri);
                     track_changed (current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
-                    settings.last_played_media = {current_episode.title, current_episode.parent.name};
+                    settings.last_played_media = {current_episode.guid, current_episode.link, current_episode.podcast_uri};
                     window.artwork_popover.set_notes_text (current_episode.description);
                 } catch (Error e) {
                     warning (e.message);
@@ -391,7 +391,7 @@ namespace Vocal {
         }
 
         private void restore_episode () {
-            if (settings.last_played_media != null && settings.last_played_media.length > 1) {
+            if (settings.last_played_media != null && settings.last_played_media.length > 2) {
 
                 info ("Restoring last played media.");
 
@@ -401,12 +401,12 @@ namespace Vocal {
                 foreach (Podcast podcast in library.podcasts) {
 
                     if (!found) {
-                        if (podcast.name == fields[1]) {
+                        if (podcast.feed_uri == fields[2]) {
                             found = true;
 
                             // Attempt to find the matching episode, set it as the current episode, and display the information in the box
                             foreach (Episode episode in podcast.episodes) {
-                                if (episode.title == fields[0]) {
+                                if (episode.guid == fields[0] && episode.link == fields[1]) {
                                     set_episode (episode);
                                     player.restore_position_episode = episode;
                                 }

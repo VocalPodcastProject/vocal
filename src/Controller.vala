@@ -408,7 +408,6 @@ namespace Vocal {
                             foreach (Episode episode in podcast.episodes) {
                                 if (episode.guid == fields[0] && episode.link == fields[1]) {
                                     set_episode (episode);
-                                    player.restore_position_episode = episode;
                                 }
                             }
                         }

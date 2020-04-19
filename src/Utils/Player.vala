@@ -40,7 +40,7 @@ namespace Vocal {
         private string tag_string;
 
         public Episode current_episode;
-        public Episode? restore_position_episode = null;
+        private bool restore_position;
 
         private Player (string[]? args) {
 
@@ -50,9 +50,9 @@ namespace Vocal {
             // send a signal that there is a new position available
             GLib.Timeout.add (500, () => {
                 if (playing && duration > 0.0) {
-                    if (restore_position_episode == current_episode) {
+                    if (restore_position) {
                         set_position (current_episode.last_played_position);
-                        restore_position_episode = null;
+                        restore_position = false;
                     } 
                     new_position_available ();
                 }
@@ -106,6 +106,10 @@ namespace Vocal {
             // Set the URI
             this.uri = episode.playback_uri;
             info ("Setting playback URI: %s".printf (episode.playback_uri));
+
+            if (current_episode.last_played_position > 0) {
+                restore_position = true;
+            }
             /*
 
             // If it's a video podcast, get the width and height and configure that information

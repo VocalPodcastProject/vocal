@@ -367,6 +367,10 @@ namespace Vocal {
         }
 
         public void set_episode (Episode? e) {
+            if (current_episode != null) {
+                library.set_episode_playback_position (current_episode);
+            }
+
             current_episode = e;
             if (current_episode != null) {
                 try {

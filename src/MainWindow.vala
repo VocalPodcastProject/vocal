@@ -216,6 +216,7 @@ namespace Vocal {
             if (controller.settings.dark_mode_enabled) {
                 Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
             } else {
+                Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", false);
                 style_context.add_provider_for_screen (screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             }
 

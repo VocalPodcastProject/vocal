@@ -54,7 +54,7 @@ msgstr "Синхронизация подписок с gpodder.net."
 
 #: ../src/Controller.vala:582
 msgid "Uploading subscriptions to gpodder.net…"
-msgstr "Синхронизация подписок с gpodder.net."
+msgstr "Синхронизация подписок с gpodder.net…"
 
 #: ../src/Controller.vala:629
 msgid ""
@@ -375,7 +375,7 @@ msgstr "Описание подкаста"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:91
 msgid "Next…"
-msgstr "Далее..."
+msgstr "Далее…"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:100
 msgid ""
@@ -392,7 +392,7 @@ msgstr "Загрузка в Интернкт-архив"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:112
 msgid "Uploading episode…"
-msgstr "Загрузка эпизода..."
+msgstr "Загрузка эпизода…"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:116
 msgid ""
@@ -658,7 +658,7 @@ msgstr ""
 
 #: ../src/Widgets/Shownotes.vala:98
 msgid "Send a Tweet…"
-msgstr "Отправить Твит..."
+msgstr "Отправить Твит…"
 
 #: ../src/Widgets/Shownotes.vala:99
 msgid "Copy the direct episode link"
@@ -792,15 +792,15 @@ msgstr "Проверить наличие обновлений"
 
 #: ../src/Widgets/Toolbar.vala:100
 msgid "Add Podcast Feed…"
-msgstr "Добавить подкаст-ленту"
+msgstr "Добавить подкаст-ленту…"
 
 #: ../src/Widgets/Toolbar.vala:105
 msgid "Import Subcriptions…"
-msgstr "Импорт подписок..."
+msgstr "Импорт подписок…"
 
 #: ../src/Widgets/Toolbar.vala:110
 msgid "Export Subscriptions…"
-msgstr "Экспорт подписок..."
+msgstr "Экспорт подписок…"
 
 #: ../src/Widgets/Toolbar.vala:115 ../src/Widgets/Toolbar.vala:126
 msgid "Use Light Theme"
@@ -816,7 +816,7 @@ msgstr "Сообщить о проблеме"
 
 #: ../src/Widgets/Toolbar.vala:179
 msgid "Donate…"
-msgstr "Пожертвовать..."
+msgstr "Пожертвовать…"
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "About"

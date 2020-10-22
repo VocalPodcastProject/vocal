@@ -540,22 +540,25 @@ msgid ""
 "Please make sure this change is correct before proceeding. Do you wish to "
 "make this change?"
 msgstr ""
+"Vocal не нашёл у этого подкаста лицензию Creative Commons. "
+"Изменение этого параметра разблокирует интеграцию Интернет-архива для этого подкаста. "
+"Вы уверены, что всё правильно?"
 
 #: ../src/Widgets/PodcastView.vala:873
 msgid "%d unplayed episodes"
-msgstr ""
+msgstr "%d непроигранных"
 
 #: ../src/Widgets/PodcastView.vala:904
 msgid "I'm listening to %s from %s"
-msgstr ""
+msgstr "Слушаю %s от %s"
 
 #: ../src/Widgets/QueueBox.vala:36
 msgid "No episodes in queue"
-msgstr ""
+msgstr "Нет эпизодов в очереди"
 
 #: ../src/Widgets/QueueRow.vala:79
 msgid "Remove episode from queue"
-msgstr ""
+msgstr "Удалить эпизод из очереди"
 
 #: ../src/Widgets/SearchResultBox.vala:138
 msgid "Summary"
@@ -563,31 +566,31 @@ msgstr ""
 
 #: ../src/Widgets/SearchResultBox.vala:172
 msgid "Subscribe to podcast"
-msgstr ""
+msgstr "Подпишитесь на подкаст"
 
 #: ../src/Widgets/SearchResultsView.vala:87
 msgid "Episodes from Your Library"
-msgstr ""
+msgstr "Эпизоды из Вашей библиотеки"
 
 #: ../src/Widgets/SearchResultsView.vala:88
 msgid "Podcasts from Your Library"
-msgstr ""
+msgstr "Подкасты из Вашей бибблиотеки"
 
 #: ../src/Widgets/SearchResultsView.vala:89
 msgid "iTunes Podcast Results"
-msgstr ""
+msgstr "Результаты iTunes Podcast"
 
 #: ../src/Widgets/SearchResultsView.vala:118
 msgid "Search Results for <i>%s</i>"
-msgstr ""
+msgstr "Результаты поиска для <i>%s</i>"
 
 #: ../src/Widgets/SearchResultsView.vala:154
 msgid "No matching episodes found in your library."
-msgstr ""
+msgstr "Отсутствуют совпадения в Вашей библиотеке"
 
 #: ../src/Widgets/SearchResultsView.vala:155
 msgid "No matching podcasts found in your library."
-msgstr ""
+msgstr "Отсутствуют совпадения в Вашей библиотеке"
 
 #: ../src/Widgets/SettingsDialog.vala:62 ../src/Widgets/Toolbar.vala:163
 msgid "Preferences"
@@ -595,7 +598,7 @@ msgstr "Параметры"
 
 #: ../src/Widgets/SettingsDialog.vala:78
 msgid "Keep playing podcasts when the window is closed:"
-msgstr ""
+msgstr "Продолжать воспроизведение после закрытия:"
 
 #: ../src/Widgets/SettingsDialog.vala:95
 msgid "Automatically download new episodes:"
@@ -603,11 +606,11 @@ msgstr "Автоматически загружать новые эпизоды:
 
 #: ../src/Widgets/SettingsDialog.vala:113
 msgid "Keep my library clean:"
-msgstr ""
+msgstr "Очистить библиотеку"
 
 #: ../src/Widgets/SettingsDialog.vala:131
 msgid "Show podcast names below cover art:"
-msgstr ""
+msgstr "Показывать название подкастов под обложкой:"
 
 #: ../src/Widgets/SettingsDialog.vala:158
 msgid "Seconds to skip back:"
@@ -619,15 +622,15 @@ msgstr "Секунд перемотки вперёд:"
 
 #: ../src/Widgets/SettingsDialog.vala:219
 msgid "Show iTunes Store results from:"
-msgstr ""
+msgstr "Показать результаты iTunes Store из:"
 
 #: ../src/Widgets/SettingsDialog.vala:262
 msgid "Archive.org S3 Access Key"
-msgstr ""
+msgstr "Ключ доступа S3 к Archive.org »"
 
 #: ../src/Widgets/SettingsDialog.vala:271
 msgid "Archive.org S3 Secret Key"
-msgstr ""
+msgstr "Секретный ключ S3 Archive.org"
 
 #: ../src/Widgets/SettingsDialog.vala:286
 msgid "Close"
@@ -635,19 +638,19 @@ msgstr "Закрыть"
 
 #: ../src/Widgets/Shownotes.vala:73
 msgid "Mark this episode as played"
-msgstr ""
+msgstr "Отметить эпизод как прослушанный"
 
 #: ../src/Widgets/Shownotes.vala:78
 msgid "Mark this episode as new"
-msgstr ""
+msgstr "Отметить эпизод как новый"
 
 #: ../src/Widgets/Shownotes.vala:86
 msgid "Download episode"
-msgstr ""
+msgstr "Загрузить эпизод"
 
 #: ../src/Widgets/Shownotes.vala:94
 msgid "Share this episode"
-msgstr ""
+msgstr "Поделиться эпизодом"
 
 #: ../src/Widgets/Shownotes.vala:97
 msgid "Copy shareable link"
@@ -655,15 +658,15 @@ msgstr ""
 
 #: ../src/Widgets/Shownotes.vala:98
 msgid "Send a Tweet…"
-msgstr ""
+msgstr "Отправить Твит..."
 
 #: ../src/Widgets/Shownotes.vala:99
 msgid "Copy the direct episode link"
-msgstr ""
+msgstr "Скопировать ссылку на эпизод"
 
 #: ../src/Widgets/Shownotes.vala:151
 msgid "Add this episode to the up next list"
-msgstr ""
+msgstr "Добавить в список воспроизведения"
 
 #: ../src/Widgets/Shownotes.vala:159
 msgid "<b>Summary</b>"
@@ -671,7 +674,7 @@ msgstr ""
 
 #: ../src/Widgets/Sidepane.vala:89
 msgid "Mark all episodes as played"
-msgstr "Отметить все эпизоды как проигранный"
+msgstr "Отметить все эпизоды как прослушанные"
 
 #: ../src/Widgets/Sidepane.vala:109
 msgid "Hide episodes that have already been played"
@@ -687,27 +690,27 @@ msgstr "Дополнительные настройки"
 
 #: ../src/Widgets/Sidepane.vala:194
 msgid "Hide the episode side pane"
-msgstr ""
+msgstr "Скрыть боковую панель эпизода"
 
 #: ../src/Widgets/Sidepane.vala:281
 msgid "Mark selected episodes as unplayed"
-msgstr ""
+msgstr "Отметить выбранные эпизоды как непрослушанные"
 
 #: ../src/Widgets/Sidepane.vala:377
 msgid "Mark as Played"
-msgstr "Отметить как проигранный"
+msgstr "Отметить как прослушанный"
 
 #: ../src/Widgets/Sidepane.vala:396
 msgid "Mark as Unplayed"
-msgstr "Отметить как непроигранный"
+msgstr "Отметить как непрослушанный"
 
 #: ../src/Widgets/Sidepane.vala:634
 msgid "No new episodes."
-msgstr "Нет новых эпизод."
+msgstr "Нет новых эпизодов."
 
 #: ../src/Widgets/Sidepane.vala:687
 msgid "%d episodes, %d unplayed"
-msgstr "%d эпизодов, %d не проиграно"
+msgstr "%d эпизодов, %d не прослушано"
 
 #: ../src/Widgets/Sidepane.vala:689
 msgid "%d episodes"
@@ -715,11 +718,11 @@ msgstr "%d эпизодов"
 
 #: ../src/Widgets/SyncDialog.vala:49 ../src/Widgets/Toolbar.vala:131
 msgid "Library Synchronization"
-msgstr ""
+msgstr "Синхронизация библиотеки"
 
 #: ../src/Widgets/SyncDialog.vala:87
 msgid "Sign in to gpodder.net"
-msgstr ""
+msgstr "Вход в gpodder.net"
 
 #: ../src/Widgets/SyncDialog.vala:92
 msgid "Username"
@@ -735,57 +738,57 @@ msgstr "Логин"
 
 #: ../src/Widgets/SyncDialog.vala:119
 msgid "Need an account?"
-msgstr ""
+msgstr "Нужен новый аккаунт?"
 
 #: ../src/Widgets/SyncDialog.vala:127
 msgid "Pick a New Device Name for This Computer"
-msgstr ""
+msgstr "Выберите новое имя устройства для этого компьютера"
 
 #: ../src/Widgets/SyncDialog.vala:135
 msgid "Or, Choose an Existing Device"
-msgstr ""
+msgstr "Или выберите существующее устройство"
 
 #: ../src/Widgets/SyncDialog.vala:141
 msgid "Complete Setup"
-msgstr ""
+msgstr "Завершить установку"
 
 #: ../src/Widgets/SyncDialog.vala:183
 msgid "Latest Successful Sync: Never"
-msgstr ""
+msgstr "Последняя успешная синхронизация: никогда"
 
 #: ../src/Widgets/SyncDialog.vala:184
 msgid "Logout"
-msgstr ""
+msgstr "Выход"
 
 #: ../src/Widgets/SyncDialog.vala:185
 msgid "Perform a Full Sync Now"
-msgstr ""
+msgstr "Выполнить полную синхронизацию сейчас"
 
 #: ../src/Widgets/SyncDialog.vala:192
 msgid "Last Succcessful Sync: "
-msgstr ""
+msgstr "Последняя успешная синхронизация: "
 
 #: ../src/Widgets/SyncDialog.vala:203
 msgid "Sync Episode Activity"
-msgstr ""
+msgstr "Синхронизировать"
 
 #: ../src/Widgets/SyncDialog.vala:217
 msgid ""
 "Remove Podcasts from Library That Have Been Removed From Your gpodder.net "
 "Account"
-msgstr ""
+msgstr "Удаление из библиотеки подкастов, которые были удалены с вашего аккаунта gpodder.net"
 
 #: ../src/Widgets/SyncDialog.vala:305
 msgid "Uploading all episode positions to gpodder.net…"
-msgstr ""
+msgstr "Загрузка эпизодов на gpodder.net…"
 
 #: ../src/Widgets/Toolbar.vala:77
 msgid "Coming up next"
-msgstr ""
+msgstr "Далее"
 
 #: ../src/Widgets/Toolbar.vala:95
 msgid "Check for Updates"
-msgstr ""
+msgstr "Проверить наличие обновлений"
 
 #: ../src/Widgets/Toolbar.vala:100
 msgid "Add Podcast Feed…"
@@ -801,15 +804,15 @@ msgstr "Экспорт подписок..."
 
 #: ../src/Widgets/Toolbar.vala:115 ../src/Widgets/Toolbar.vala:126
 msgid "Use Light Theme"
-msgstr ""
+msgstr "Включить светлую тему"
 
 #: ../src/Widgets/Toolbar.vala:117 ../src/Widgets/Toolbar.vala:123
 msgid "Use Dark Theme"
-msgstr ""
+msgstr "Включить тёмную тему"
 
 #: ../src/Widgets/Toolbar.vala:171
 msgid "Report a Problem…"
-msgstr ""
+msgstr "Сообщить о проблеме"
 
 #: ../src/Widgets/Toolbar.vala:179
 msgid "Donate…"
@@ -817,7 +820,7 @@ msgstr "Пожертвовать..."
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "About"
-msgstr ""
+msgstr "О Vocal"
 
 #: ../src/Widgets/Toolbar.vala:240 ../src/Widgets/Toolbar.vala:264
 msgid "Fast forward %d seconds"
@@ -833,11 +836,11 @@ msgstr "Проверить новые эпизоды"
 
 #: ../src/Widgets/Toolbar.vala:287
 msgid "Search your library or online"
-msgstr ""
+msgstr "Ищите в своей библиотеке или в Интернете"
 
 #: ../src/Widgets/Toolbar.vala:306
 msgid "View the top podcasts in the iTunes Store"
-msgstr ""
+msgstr "Посмотреть топ подкастов из iTunes"
 
 #: ../src/Widgets/Toolbar.vala:346
 msgid "Downloads"

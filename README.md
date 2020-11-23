@@ -25,7 +25,8 @@ An official snap package is not yet available, although some community members a
 #### Building from source (on Debian based systems):
 
 1. Clone source:
-    git clone https://github.com/needle-and-thread/vocal.git
+
+    `git clone https://github.com/needle-and-thread/vocal.git`
 
 2. Install build dependencies:
     * libsecret-1-dev 
@@ -38,15 +39,18 @@ An official snap package is not yet available, although some community members a
     * libgranite5
 
 3. Make the build folder:
+
    cd vocal
    mkdir -p build
    cd build
 
 4. Build the package:
+
    cmake ..
    make
 
 5. Install the package:
+
    sudo make install
 
 ### Official OS packages

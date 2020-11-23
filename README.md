@@ -40,9 +40,9 @@ An official snap package is not yet available, although some community members a
 
 3. Make the build folder:
 
-   cd vocal
-   mkdir -p build
-   cd build
+   `cd vocal`
+   `mkdir -p build`
+   `cd build`
 
 4. Build the package:
 

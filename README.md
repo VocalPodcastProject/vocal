@@ -25,22 +25,22 @@ An official snap package is not yet available, although some community members a
 #### Building from source (on Debian based systems):
 
 1. Clone source:
-git clone https://github.com/needle-and-thread/vocal.git
+    git clone https://github.com/needle-and-thread/vocal.git
 
 2. Install build dependencies:
-sudo apt install libsecret-1-dev libclutter-gst-3.0-dev sqlite3 libwebkit2gtk-4.0-dev libgee-0.8-dev gir1.2-granite-1.0 libgranite-dev libgranite5
+    sudo apt install libsecret-1-dev libclutter-gst-3.0-dev sqlite3 libwebkit2gtk-4.0-dev libgee-0.8-dev gir1.2-granite-1.0 libgranite-dev libgranite5
 
 3. Make the build folder:
-cd vocal
-mkdir -p build
-cd build
+    cd vocal
+    mkdir -p build
+    cd build
 
 4. Build the package:
-cmake ..
-make 
+    cmake ..
+    make 
 
 5. Install the package:
-sudo make install
+    sudo make install
 
 ### Official OS packages
 We're working with a number of distributions to make sure it's as simple as possible to get Vocal out-of-the-box. Check below for the list of distributions where Vocal can be downloaded from the official repositories.

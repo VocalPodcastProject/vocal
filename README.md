@@ -31,9 +31,9 @@ An official snap package is not yet available, although some community members a
     `sudo apt install libsecret-1-dev libclutter-gst-3.0-dev sqlite3 libwebkit2gtk-4.0-dev libgee-0.8-dev gir1.2-granite-1.0 libgranite-dev libgranite5`
 
 3. Make the build folder:
-   `cd vocal`
-   `mkdir -p build`
-   `cd build`
+   > * cd vocal
+   > * mkdir -p build
+   > * cd build
 
 4. Build the package:
    `cmake ..`

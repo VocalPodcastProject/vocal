@@ -22,7 +22,7 @@ An official snap package is not yet available, although some community members a
 ### Debian Installers
 64-bit .deb installers can be downloaded from our [releases](https://github.com/needle-and-thread/vocal/releases) page. Please note: this method is highly discouraged. With the benefits of sandboxing, improved security, and greater simplicity, we are moving away from older installation methods. **Also, please note that our stable and daily PPAs will be abandoned in the near future.**
 
-#### Building from source (on Debian based systems):
+#### Building from source (on Debian-based systems):
 
 1. Clone source:
 
@@ -46,7 +46,7 @@ An official snap package is not yet available, although some community members a
 
 4. Build the package:
 
-   - `cmake ..`
+   - `cmake .. -DCMAKE_INSTALL_PREFIX=/usr`
    - `make`
 
 5. Install the package:

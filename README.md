@@ -46,12 +46,12 @@ An official snap package is not yet available, although some community members a
 
 4. Build the package:
 
-   cmake ..
-   make
+   - `cmake ..`
+   - `make`
 
 5. Install the package:
 
-   sudo make install
+   - `sudo make install`
 
 ### Official OS packages
 We're working with a number of distributions to make sure it's as simple as possible to get Vocal out-of-the-box. Check below for the list of distributions where Vocal can be downloaded from the official repositories.

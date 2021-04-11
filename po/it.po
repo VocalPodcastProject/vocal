@@ -3,15 +3,16 @@
 # This file is distributed under the same license as the PACKAGE package.
 # 
 # Translators:
-# Andrea Balzarotti <balzarotti.andrea@gmail.com>, 2017
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2014
+# Albano Battistella <albano_battistella@hotmail.com>, 2021.
+# Andrea Balzarotti <balzarotti.andrea@gmail.com>, 2017.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: Vocal\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-01 17:15-0500\n"
-"PO-Revision-Date: 2019-12-01 22:19+0000\n"
-"Last-Translator: Nathan Dyer <nathandyer@fastmail.com>\n"
+"PO-Revision-Date: 2021-04-11 11:19+0100\n"
+"Last-Translator: Albano Battistella <albano_battistella@hotmail.com>\n"
 "Language-Team: Italian (http://www.transifex.com/needle-and-thread/vocal/language/it/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -21,15 +22,15 @@ msgstr ""
 
 #: ../src/Controller.vala:276 ../src/Widgets/SyncDialog.vala:269
 msgid "Checking for new podcast subscriptions from your other devices…"
-msgstr ""
+msgstr "Controllo di nuovi abbonamenti ai podcast dagli altri dispositivi…"
 
 #: ../src/Controller.vala:284 ../src/Widgets/SyncDialog.vala:277
 msgid "Updating episode playback positions from your other devices…"
-msgstr ""
+msgstr "Aggiornamento delle posizioni di riproduzione degli episodi dagli altri dispositivi…"
 
 #: ../src/Controller.vala:293 ../src/Widgets/SyncDialog.vala:285
 msgid "Cleaning up old subscriptions no longer in your gpodder.net account…"
-msgstr ""
+msgstr "La cancellazione dei vecchi abbonamenti non è più nel tuo account gpodder.net…"
 
 #: ../src/Controller.vala:456 ../src/Controller.vala:460
 msgid "Pause"
@@ -48,11 +49,11 @@ msgstr "Aggiunta del nuovo podcast: <b>"
 
 #: ../src/Controller.vala:580
 msgid "Uploading subscriptions to gpodder.net."
-msgstr ""
+msgstr "Caricamento degli abbonamenti su gpodder.net."
 
 #: ../src/Controller.vala:582
 msgid "Uploading subscriptions to gpodder.net…"
-msgstr ""
+msgstr "Caricamento degli abbonamenti su gpodder.net…"
 
 #: ../src/Controller.vala:629
 msgid ""
@@ -114,7 +115,7 @@ msgstr "Naviga i Podcast"
 
 #: ../src/MainWindow.vala:316
 msgid "Browse through podcasts and choose some to add to your library."
-msgstr ""
+msgstr "Sfoglia i podcast e scegline alcuni da aggiungere alla tua libreria."
 
 #: ../src/MainWindow.vala:317
 msgid "Add a New Feed"
@@ -135,11 +136,11 @@ msgstr "Se hai esportato i feed da un altro podcast manager, importali qui."
 
 #: ../src/MainWindow.vala:320
 msgid "Sync With gpodder"
-msgstr ""
+msgstr "Sincronizza con gpodder"
 
 #: ../src/MainWindow.vala:320
 msgid "Log in to your gpodder.net account and synchronize your library."
-msgstr ""
+msgstr "Accedi al tuo account gpodder.net e sincronizza la tua libreria."
 
 #: ../src/MainWindow.vala:373
 msgid "Good Stuff is On Its Way"
@@ -170,7 +171,7 @@ msgstr "Dettagli"
 #: ../src/MainWindow.vala:390 ../src/Widgets/NewEpisodesView.vala:49
 #: ../src/Widgets/Toolbar.vala:90
 msgid "New Episodes"
-msgstr ""
+msgstr "Nuovi Episodi"
 
 #: ../src/MainWindow.vala:391
 msgid "Video"
@@ -186,7 +187,7 @@ msgstr "Cerca risultati"
 
 #: ../src/MainWindow.vala:573
 msgid "Checking for new episodes…"
-msgstr ""
+msgstr "Ricerca di nuovi episodi…"
 
 #: ../src/MainWindow.vala:893 ../src/MainWindow.vala:932
 #: ../src/Widgets/PodcastView.vala:802
@@ -238,7 +239,7 @@ msgstr "Sei sicuro di voler segnare tutti gli episodi da '%s' come già riprodot
 
 #: ../src/MainWindow.vala:1476
 msgid "Are you sure you want to remove '%s' from your controller.library?"
-msgstr ""
+msgstr "Sei sicuro di voler rimuovere '%s' dal tuo controller.library?"
 
 #: ../src/MainWindow.vala:1480
 msgid "No"
@@ -280,11 +281,11 @@ msgstr "Indirizzo web del feed del podcast"
 
 #: ../src/Widgets/ArtworkPopover.vala:41
 msgid "Shownotes"
-msgstr ""
+msgstr "Mostra note"
 
 #: ../src/Widgets/ArtworkPopover.vala:42
 msgid "Queue"
-msgstr ""
+msgstr "Coda"
 
 #: ../src/Widgets/DirectoryArt.vala:98 ../src/Widgets/SearchResultBox.vala:147
 msgid "No summary available."
@@ -304,7 +305,7 @@ msgstr "Torna indietro"
 
 #: ../src/Widgets/DirectoryView.vala:72
 msgid "Done"
-msgstr "Finito"
+msgstr "Fatto"
 
 #: ../src/Widgets/DirectoryView.vala:104
 msgid "Loading iTunes Store"
@@ -349,27 +350,27 @@ msgstr "Nessuna descrizione disponibile"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:32
 msgid "Upload to Internet Archive"
-msgstr ""
+msgstr "Carica su Internet Archive"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:58
 msgid "Please verify that the information below is correct before continuing."
-msgstr ""
+msgstr "Si prega di verificare che le informazioni di seguito siano corrette prima di continuare."
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:65
 msgid "Episode Title"
-msgstr ""
+msgstr "Titolo Episodio"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:71
 msgid "Podcast Name"
-msgstr ""
+msgstr "Nome Podcast"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:77
 msgid "Podcast Description"
-msgstr ""
+msgstr "Descrizione del Podcast"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:91
 msgid "Next…"
-msgstr ""
+msgstr "Prossimo…"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:100
 msgid ""
@@ -377,38 +378,44 @@ msgid ""
 "illegal. Please make sure you are uploading a copylefted (Creative Commons) "
 "episode that you are legally entitled to redistribute."
 msgstr ""
+"Avviso legale: il caricamento di materiali protetti da copyright su Internet Archvie è "
+"illegale. Assicurati di caricare un episodio con copyleft (Creative Commons) "
+"che sei legalmente autorizzato ad essere ridistribuito".
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:106
 #: ../src/Widgets/Shownotes.vala:120
 msgid "Upload to the Internet Archive"
-msgstr ""
+msgstr "Carica su Internet Archive"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:112
 msgid "Uploading episode…"
-msgstr ""
+msgstr "Caricamento episodio…"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:116
 msgid ""
 "Thanks for contributing to the Internet Archive and the Podcast Archival "
 "Project"
 msgstr ""
+"Grazie per aver contribuito a Internet Archive e Podcast Archival "
+"Progetto"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:137
 msgid "Finish"
-msgstr ""
+msgstr "Fine"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:160
 msgid "Upload Complete"
-msgstr ""
+msgstr "Caricamento Completato"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:174
 msgid "Upload Failed"
-msgstr ""
+msgstr "Caricamento Fallito"
 
 #: ../src/Widgets/InternetArchiveUploadDialog.vala:177
 msgid ""
 "Be sure to check your network connection and API keys, then try again later."
 msgstr ""
+"Assicurati di controllare la connessione di rete e le chiavi API, quindi riprova più tardi."
 
 #: ../src/Widgets/NewEpisodesView.vala:41 ../src/Widgets/PodcastView.vala:95
 msgid "Your Podcasts"
@@ -416,23 +423,23 @@ msgstr "I tuoi Podcast"
 
 #: ../src/Widgets/NewEpisodesView.vala:58
 msgid "Add all new episodes to the queue"
-msgstr ""
+msgstr "Aggiungi tutti i nuovi episodi alla coda"
 
 #: ../src/Widgets/PlaybackBox.vala:64
 msgid "View the shownotes for this episode or check the queue"
-msgstr ""
+msgstr "Visualizza le note mostrate per questo episodio o controlla la coda"
 
 #: ../src/Widgets/PodcastView.vala:109 ../src/Widgets/PodcastView.vala:123
 msgid "Show newer episodes at the top of the list"
-msgstr ""
+msgstr "Mostra i nuovi episodi all'inizio dell'elenco"
 
 #: ../src/Widgets/PodcastView.vala:111 ../src/Widgets/PodcastView.vala:118
 msgid "Show older episodes at the top of the list"
-msgstr ""
+msgstr "Mostra gli episodi precedenti in cima all'elenco"
 
 #: ../src/Widgets/PodcastView.vala:130
 msgid "Add New Episodes to Queue"
-msgstr ""
+msgstr "Aggiungi nuovi episodi alla coda"
 
 #: ../src/Widgets/PodcastView.vala:145 ../src/Widgets/Sidepane.vala:101
 msgid "Download all episodes"
@@ -452,7 +459,7 @@ msgstr "Seleziona una copertina differente"
 
 #: ../src/Widgets/PodcastView.vala:172
 msgid "Set podcast license to Creative Commons"
-msgstr ""
+msgstr "Imposta la licenza del podcast su Creative Commons"
 
 #: ../src/Widgets/PodcastView.vala:184
 msgid "Unsubscribe"
@@ -464,16 +471,21 @@ msgid ""
 "account's API keys. Visit https://archive.org/account/s3.php to see your "
 "keys, then paste them in the settings."
 msgstr ""
+"Prima di poter caricare su Internet Archive devi aggiungere le chiavi API dell'account sul "
+"tuo archive.org. Visita https://archive.org/account/s3.php per vedere le tue "
+"chiavi, quindi incollale nelle impostazioni."
 
 #: ../src/Widgets/PodcastView.vala:306
 msgid ""
 "You must download this episode first before uploading to the Internet "
 "Archive. Would you like to download this episode?"
 msgstr ""
+"Devi scaricare questo episodio prima di caricarlo su Internet "
+"Archive. Vuoi scaricare questo episodio?"
 
 #: ../src/Widgets/PodcastView.vala:436
 msgid "Add selected episodes to queue"
-msgstr ""
+msgstr "Aggiungi gli episodi selezionati alla coda"
 
 #: ../src/Widgets/PodcastView.vala:446 ../src/Widgets/Sidepane.vala:251
 msgid "Mark selected episodes as played"
@@ -532,6 +544,10 @@ msgid ""
 "Please make sure this change is correct before proceeding. Do you wish to "
 "make this change?"
 msgstr ""
+"Vocal non ha rilevato che questo podcast è concesso in licenza come Creative Commons. "
+"La modifica di questo sbloccherà l'integrazione di Internet Archive per questo podcast."
+"Assicurati che questa modifica sia corretta prima di procedere. Desideri "
+"fare questo cambiamento?"
 
 #: ../src/Widgets/PodcastView.vala:873
 msgid "%d unplayed episodes"
@@ -543,7 +559,7 @@ msgstr "Sto ascoltando %s da %s"
 
 #: ../src/Widgets/QueueBox.vala:36
 msgid "No episodes in queue"
-msgstr ""
+msgstr "Nessun episodio in coda"
 
 #: ../src/Widgets/QueueRow.vala:79
 msgid "Remove episode from queue"
@@ -587,7 +603,7 @@ msgstr "Preferenze"
 
 #: ../src/Widgets/SettingsDialog.vala:78
 msgid "Keep playing podcasts when the window is closed:"
-msgstr ""
+msgstr "Continua a riprodurre i podcast quando la finestra è chiusa:"
 
 #: ../src/Widgets/SettingsDialog.vala:95
 msgid "Automatically download new episodes:"
@@ -615,11 +631,11 @@ msgstr "Mostra risultati dell'iTunes Store da:"
 
 #: ../src/Widgets/SettingsDialog.vala:262
 msgid "Archive.org S3 Access Key"
-msgstr ""
+msgstr "Chiave di accesso Archive.org S3"
 
 #: ../src/Widgets/SettingsDialog.vala:271
 msgid "Archive.org S3 Secret Key"
-msgstr ""
+msgstr "Chiavi Segrete di Archive.org S3"
 
 #: ../src/Widgets/SettingsDialog.vala:286
 msgid "Close"
@@ -707,11 +723,11 @@ msgstr "%d episodi"
 
 #: ../src/Widgets/SyncDialog.vala:49 ../src/Widgets/Toolbar.vala:131
 msgid "Library Synchronization"
-msgstr ""
+msgstr "Sincronizzazione della libreria"
 
 #: ../src/Widgets/SyncDialog.vala:87
 msgid "Sign in to gpodder.net"
-msgstr ""
+msgstr "Accedi a gpodder.net"
 
 #: ../src/Widgets/SyncDialog.vala:92
 msgid "Username"
@@ -727,49 +743,51 @@ msgstr "Login"
 
 #: ../src/Widgets/SyncDialog.vala:119
 msgid "Need an account?"
-msgstr ""
+msgstr "Bisogno di un account?"
 
 #: ../src/Widgets/SyncDialog.vala:127
 msgid "Pick a New Device Name for This Computer"
-msgstr ""
+msgstr "Scegli un nuovo nome di dispositivo per questo computer"
 
 #: ../src/Widgets/SyncDialog.vala:135
 msgid "Or, Choose an Existing Device"
-msgstr ""
+msgstr "Oppure scegli un dispositivo esistente"
 
 #: ../src/Widgets/SyncDialog.vala:141
 msgid "Complete Setup"
-msgstr ""
+msgstr "Configurazione completa"
 
 #: ../src/Widgets/SyncDialog.vala:183
 msgid "Latest Successful Sync: Never"
-msgstr ""
+msgstr "Ultima sincronizzazione riuscita: mai"
 
 #: ../src/Widgets/SyncDialog.vala:184
 msgid "Logout"
-msgstr ""
+msgstr "Disconnetti"
 
 #: ../src/Widgets/SyncDialog.vala:185
 msgid "Perform a Full Sync Now"
-msgstr ""
+msgstr "Esegui ora una sincronizzazione completa"
 
 #: ../src/Widgets/SyncDialog.vala:192
 msgid "Last Succcessful Sync: "
-msgstr ""
+msgstr "Ultima Sincronizzazione Riuscita: "
 
 #: ../src/Widgets/SyncDialog.vala:203
 msgid "Sync Episode Activity"
-msgstr ""
+msgstr "Sincronizza Attività Episodio"
 
 #: ../src/Widgets/SyncDialog.vala:217
 msgid ""
 "Remove Podcasts from Library That Have Been Removed From Your gpodder.net "
 "Account"
 msgstr ""
+"Rimuovi i podcast dalla libreria che sono stati rimossi dal tuo Account "
+"gpodder.net"
 
 #: ../src/Widgets/SyncDialog.vala:305
 msgid "Uploading all episode positions to gpodder.net…"
-msgstr ""
+msgstr "Caricamento di tutte le posizioni degli episodi su gpodder.net…"
 
 #: ../src/Widgets/Toolbar.vala:77
 msgid "Coming up next"
@@ -793,11 +811,11 @@ msgstr "Esporta sottoscrizioni..."
 
 #: ../src/Widgets/Toolbar.vala:115 ../src/Widgets/Toolbar.vala:126
 msgid "Use Light Theme"
-msgstr ""
+msgstr "Usa Tema Chiaro"
 
 #: ../src/Widgets/Toolbar.vala:117 ../src/Widgets/Toolbar.vala:123
 msgid "Use Dark Theme"
-msgstr ""
+msgstr "Usa Tema Scuro"
 
 #: ../src/Widgets/Toolbar.vala:171
 msgid "Report a Problem…"
@@ -809,7 +827,7 @@ msgstr "Donazioni..."
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "About"
-msgstr "A riguardo"
+msgstr "Informazioni"
 
 #: ../src/Widgets/Toolbar.vala:240 ../src/Widgets/Toolbar.vala:264
 msgid "Fast forward %d seconds"

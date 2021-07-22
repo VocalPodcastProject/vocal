@@ -84,6 +84,7 @@ namespace Vocal {
             keep_playing_in_background_switch.notify["active"].connect (() => {
                 settings.keep_playing_in_background = keep_playing_in_background_switch.active;
             });
+            keep_playing_in_background_label.set_mnemonic_widget(keep_playing_in_background_switch);
 
             var keep_playing_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             keep_playing_box.spacing = 5;
@@ -97,11 +98,11 @@ namespace Vocal {
             autodownload_new_label.set_property ("xalign", 0);
 
             autodownload_new = new Gtk.Switch ();
-
             autodownload_new.set_active (settings.auto_download);
             autodownload_new.notify["active"].connect (() => {
                 settings.auto_download = autodownload_new.active;
             });
+            autodownload_new_label.set_mnemonic_widget(autodownload_new);
 
             var autodownload_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             autodownload_box.spacing = 5;
@@ -115,11 +116,11 @@ namespace Vocal {
             autoclean_label.set_property ("xalign", 0);
 
             autoclean = new Gtk.Switch ();
-
             autoclean.set_active (settings.autoclean_library);
             autoclean.notify["active"].connect (() => {
                 settings.autoclean_library = autoclean.active;
             });
+            autoclean_label.set_mnemonic_widget(autoclean);
 
             var autoclean_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             autoclean_box.spacing = 5;
@@ -138,6 +139,7 @@ namespace Vocal {
                 settings.show_name_label = show_name_label_switch.active;
                 show_name_label_toggled ();
             });
+            show_name_label_label.set_mnemonic_widget(show_name_label_switch);
 
             var show_label_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             show_label_box.spacing = 5;
@@ -165,6 +167,7 @@ namespace Vocal {
                 settings.rewind_seconds = (int) backward_spinner.value;
             });
             backward_spinner.halign = Gtk.Align.END;
+            backward_interval_label.set_mnemonic_widget(backward_spinner);
 
             backward_interval_box.pack_start (backward_interval_label, true, true, 0);
             backward_interval_box.pack_start (backward_spinner, false, false, 0);
@@ -183,6 +186,7 @@ namespace Vocal {
                 settings.fast_forward_seconds = (int) forward_spinner.value;
             });
             forward_spinner.halign = Gtk.Align.END;
+            forward_interval_label.set_mnemonic_widget(forward_spinner);
 
             forward_interval_box.pack_start (forward_interval_label, true, true, 0);
             forward_interval_box.pack_start (forward_spinner, false, false, 0);
@@ -225,6 +229,7 @@ namespace Vocal {
             combo_box.pack_start (renderer, true);
             combo_box.add_attribute (renderer, "text", 0);
             combo_box.active = active_pos;
+            itunes_country_label.set_mnemonic_widget(combo_box);
 
             // When the combo box changes, save the setting
             combo_box.changed.connect (() => {
@@ -267,6 +272,7 @@ namespace Vocal {
             archive_access_key_entry.changed.connect (() => {
                 settings.archive_access_key = archive_access_key_entry.text;
             });
+            archive_access_key_label.set_mnemonic_widget(archive_access_key_entry);
 
             archive_secret_key_label = new Gtk.Label (_ ("Archive.org S3 Secret Key"));
             archive_secret_key_label.justify = Gtk.Justification.LEFT;
@@ -276,6 +282,7 @@ namespace Vocal {
             archive_secret_key_entry.changed.connect (() => {
                 settings.archive_secret_key = archive_secret_key_entry.text;
             });
+            archive_secret_key_label.set_mnemonic_widget(archive_secret_key_entry);
 
             content_box.add (archive_api_key_linkbutton);
             content_box.add (archive_access_key_label);

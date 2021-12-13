@@ -88,7 +88,7 @@ namespace Vocal {
             details_button.clicked.connect (() => {
                 if (summary.length > 0) {
                     summary_label.set_text (summary);
-                } else if (url.contains ("itunes.apple")) {
+                } else if (url.contains ("podcasts.apple.com")) {
                     var itunes = new iTunesProvider ();
                     string rss_url = itunes.get_rss_from_itunes_url (url);
                     var feed_parser = new FeedParser ();

@@ -238,4 +238,9 @@
       </description>
     </release>
   </releases>
+  <custom>
+   <value key="x=appcenter-color-primary">#fff</value>
+   <value key="x-appcenter-color-primary-text">#333</value>
+   <value key="x-appcenter-suggested-price">0</value>
+  </custom>
 </component>

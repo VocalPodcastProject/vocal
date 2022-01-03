@@ -5,9 +5,15 @@
 public class TestPodcast : TestCase {
     
     private Vocal.Podcast podcast;
+    private string _name = "podcast";
+
+    public override string name { 
+        get { return this._name; }
+        set construct { this._name = value; } 
+    }
 
     public TestPodcast () {
-        base ("podcast");
+        Object(name:"podcast");
         add_test ("instantiation", test_inst);
         add_test ("name_empty", test_name_empty);
     }

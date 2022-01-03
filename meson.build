@@ -7,8 +7,18 @@ i18n = import('i18n')
 gnome = import('gnome')
 
 
-subdir('data')
-subdir('po')
+VERSION = '2.4.2'
+
+config = {
+'DATADIR': get_option('datadir'),
+'PKGDATADIR': get_option('datadir') + '/vocal',
+'GETTEXT_PACKAGE': 'vocal',
+'RELEASE_NAME': 'Break a Leg v2',
+'VERSION': VERSION,
+'VERSION_INFO': 'Release',
+'CACHE_DIR': '~/.cache/vocal',
+'USER_AGENT': 'vocal/' + VERSION
+}
 
 gresource = gnome.compile_resources(
     'gresource',
@@ -33,6 +43,7 @@ add_global_arguments([
     '--save-temps'
 ], language: 'vala')
 
+subdir('src')
 
 src = [
     gresource,
@@ -157,7 +168,8 @@ install_data(
     rename: 'vocal-missing.png',
 )
 
-# Run tests ???
+subdir('data')
+subdir('po')
 subdir('tests')
 
 executable(

@@ -1,23 +1,19 @@
-project('com.github.needleandthread.vocal', 'vala', 'c')
-
+project('com.github.needleandthread.vocal', 'vala', 'c', version: '2.4.2', meson_version: '>=0.53.2')
 meson.add_install_script('meson/post_install.py')
 
 ssmod = import('sourceset')
 i18n = import('i18n')
 gnome = import('gnome')
 
-
-VERSION = '2.4.2'
-
 config = {
-'DATADIR': get_option('datadir'),
-'PKGDATADIR': get_option('datadir') + '/vocal',
-'GETTEXT_PACKAGE': 'vocal',
-'RELEASE_NAME': 'Break a Leg v2',
-'VERSION': VERSION,
-'VERSION_INFO': 'Release',
-'CACHE_DIR': '~/.cache/vocal',
-'USER_AGENT': 'vocal/' + VERSION
+    'DATADIR': get_option('datadir'),
+    'PKGDATADIR': get_option('datadir') + '/vocal',
+    'GETTEXT_PACKAGE': 'vocal',
+    'RELEASE_NAME': 'Break a Leg v2',
+    'VERSION': meson.project_version(),
+    'VERSION_INFO': 'Release',
+    'CACHE_DIR': '~/.cache/vocal',
+    'USER_AGENT': 'vocal/' + meson.project_version(),
 }
 
 gresource = gnome.compile_resources(
@@ -105,28 +101,15 @@ dependencies = [
     dependency('libxml-2.0'),
     dependency('sqlite3'),
     dependency('webkit2gtk-4.0'),
+    dependency('unity', required: false),
+    dependency('libnotify', required: false),
     # meson.get_compiler('vala').find_library('webkit2gtk-3.0', dirs: vapi_dir)
 ]
-
-
-ss = ssmod.source_set()
-ss.add(src)
-ss.add(dependencies)
-ss.add(
-    when: dependency('unity'), 
-    if_true: dependency('unity'),
-)
-ss.add(
-    when: dependency('libnotify'), 
-    if_true: dependency('libnotify'),
-)
-config = configuration_data()
-ssconfig = ss.apply(config)
 
 i18n.merge_file(
     input: 'data' / 'com.github.needleandthread.vocal.desktop.in',
     output: meson.project_name() + '.desktop',
-    po_dir: meson.source_root() / 'po',
+    po_dir: 'po',
     type: 'desktop',
     install: true,
     install_dir: get_option('datadir') / 'applications',
@@ -135,7 +118,7 @@ i18n.merge_file(
 i18n.merge_file(
     input: 'data' / 'com.github.needleandthread.vocal.appdata.xml.in',
     output: meson.project_name() + '.appdata.xml',
-    po_dir: meson.source_root() / 'po',
+    po_dir: 'po',
     install: true,
     install_dir: get_option('datadir') / 'metainfo',
 )
@@ -146,26 +129,22 @@ foreach i : icon_sizes
     install_data(
         'icons' / i / 'com.github.needleandthread.vocal.svg',
         install_dir: get_option('datadir') / 'icons' / 'hicolor' / i + 'x' + i / 'apps',
-        rename: meson.project_name() + '.svg',
     )
 
     install_data(
         'icons' / i / 'com.github.needleandthread.vocal.svg',
         install_dir: get_option('datadir') / 'icons' / 'hicolor' / i + 'x' + i + '@2' / 'apps',
-        rename: meson.project_name() + '.svg',
     )
 endforeach
 
 install_data(
     'icons' / 'scalable'/ 'com.github.needleandthread.vocal-symbolic.svg',
     install_dir: get_option('datadir') / 'icons' / 'hicolor' / 'scalable' / 'apps',
-    rename: meson.project_name() + '-symbolic.svg',
 )
 
 install_data(
     'icons' / 'assets'/ 'vocal-missing.png',
     install_dir: get_option('datadir') / 'share' / 'vocal',
-    rename: 'vocal-missing.png',
 )
 
 subdir('data')
@@ -174,7 +153,7 @@ subdir('tests')
 
 executable(
     meson.project_name(),
-    sources: ssconfig.sources(),
+    sources: src,
     dependencies: dependencies,
     install: true
 )

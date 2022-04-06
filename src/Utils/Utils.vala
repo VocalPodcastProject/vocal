@@ -95,6 +95,8 @@ public class Utils {
             markup = original;
         }
 
+        markup = markup.replace ("&nbsp;", " ");
+        markup = markup.replace ("&#039;", "'");
         markup = markup.replace ("&", "&amp;");
 
         // Simplify (keep only href attribute) & preserve anchor tags.

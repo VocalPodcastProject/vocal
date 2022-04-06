@@ -124,9 +124,11 @@ namespace Vocal {
                 // states that datetimes should be in RFC 822 format,
                 // but date strings with different formats can cause a crash.
                 string[] time_formats = {
-                    "%a, %d %b %Y %H:%M:%S %Z",  // Sunday, 01 Jan 1970 00:00:00 GMT
-                    "%a, %b %d %Y %H:%M:%S %Z"  // Sunday, Jan 01 1970 00:00:00 GMT
+                    "%d %b %Y %H:%M:%S %Z",  // 01 Jan 1970 00:00:00 GMT
+                    "%b %d %Y %H:%M:%S %Z"  // Jan 01 1970 00:00:00 GMT
                 };
+                // GLib.Time.strptime doesn't accept strings containing the weekday (just returns NULL instead)
+                date_released = date_released[5:date_released.length];
                 foreach (string format in time_formats) {
                     var last_parsed_char = tm.strptime (date_released, format);
                     if (last_parsed_char != null) {

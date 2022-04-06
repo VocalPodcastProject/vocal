@@ -67,18 +67,18 @@
 		</key>
 		
 		<key name="library-location" type="s">
-			<default>"~/vocal"</default>
+			<default>"~/.local/share/vocal"</default>
 			<summary>The directory where podcasts are stored</summary>
 			<description>
 				The directory where podcasts are stored
 			</description>
 		</key>
 		
-		<key name="last-played-media" type="s">
-			<default>""</default>
+		<key name="last-played-media" type="as">
+			<default>[]</default>
 			<summary>The podcast and episode that was last playing</summary>
 			<description>
-				The podcast and episode that was last played, in podcast_name,episode_title format
+				The podcast and episode that was last played.
 			</description>
 		</key>
 

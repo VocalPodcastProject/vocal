@@ -143,9 +143,7 @@ namespace Vocal {
 
             local_episodes_listbox.button_press_event.connect (on_episode_activated);
             local_podcasts_listbox.button_press_event.connect (on_podcast_activated);
-            local_episodes_listbox.expand = true;
-            local_podcasts_listbox.expand = true;
-            cloud_results_flowbox.expand = true;
+            content_box.expand = true;
 
             local_episodes_widgets = new Gee.ArrayList<Widget> ();
             local_podcasts_widgets = new Gee.ArrayList<Widget> ();

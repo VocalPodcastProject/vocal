@@ -47,7 +47,7 @@ namespace Vocal {
 
         public bool first_run = true;
         public bool newly_launched = true;
-        public bool should_quit_immediately = true;
+        public bool should_quit_immediately = false;
         public bool plugins_are_installing = false;
         public bool checking_for_updates = false;
         public bool is_closing = false;
@@ -63,7 +63,7 @@ namespace Vocal {
 
         /* References, pointers, and containers */
 
-        public Episode current_episode;
+        private Episode current_episode;
         public Podcast highlighted_podcast;
 
         /* Miscellaneous global variables */
@@ -117,6 +117,9 @@ namespace Vocal {
             // Set up the MPRIS playback functionality
             MPRIS mpris = new MPRIS (this);
             mpris.initialize ();
+
+            // Restore last played Episode after MPRIS has been initialized
+            mpris.initialized.connect (restore_episode);
 
 
             // Connect the new player position available signal from the player
@@ -368,6 +371,60 @@ namespace Vocal {
         	}
         }
 
+        public void set_episode (Episode? e) {
+            if (current_episode != null) {
+                library.set_episode_playback_position (current_episode);
+            }
+
+            current_episode = e;
+            if (current_episode != null) {
+                try {
+                    player.set_episode (current_episode);
+                    window.toolbar.playback_box.set_info_title (current_episode.title.replace ("%27", "'"), current_episode.parent.name.replace ("%27", "'"));
+                    window.toolbar.playback_box.set_artwork_image_image (current_episode.parent.coverart_uri);
+                    track_changed (current_episode.title, current_episode.parent.name, current_episode.parent.coverart_uri, (uint64) player.duration);
+                    settings.last_played_media = {current_episode.guid, current_episode.link, current_episode.podcast_uri};
+                    window.artwork_popover.set_notes_text (current_episode.description);
+                } catch (Error e) {
+                    warning (e.message);
+                }
+
+                window.toolbar.show_playback_box ();
+            } else {
+                window.toolbar.hide_playback_box ();
+            }
+        }
+
+        public Episode get_episode () {
+            return current_episode;
+        }
+
+        private void restore_episode () {
+            if (settings.last_played_media != null && settings.last_played_media.length > 2) {
+
+                info ("Restoring last played media.");
+
+                // Split the media into two different strings
+                string[] fields = settings.last_played_media;
+                bool found = false;
+                foreach (Podcast podcast in library.podcasts) {
+
+                    if (!found) {
+                        if (podcast.feed_uri == fields[2]) {
+                            found = true;
+
+                            // Attempt to find the matching episode, set it as the current episode, and display the information in the box
+                            foreach (Episode episode in podcast.episodes) {
+                                if (episode.guid == fields[0] && episode.link == fields[1]) {
+                                    set_episode (episode);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         /*
          * Playback related methods
          */
@@ -436,25 +493,6 @@ namespace Vocal {
 
                 player.play ();
                 playback_status_changed ("Playing");
-
-                // Seek if necessary
-                if (current_episode.last_played_position > 0 && current_episode.last_played_position > player.get_position ()) {
-
-                    // If it's a streaming episode, seeking takes longer
-                    // Temporarily pause the track and give it some time to seek
-                    if (current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                        player.pause ();
-                    }
-
-                    player.set_position (current_episode.last_played_position);
-
-                    // Pause for about a second to give time to catch up
-                    if (current_episode.current_download_status == DownloadStatus.NOT_DOWNLOADED) {
-                        player.pause ();
-                        Thread.usleep (700000);
-                        player.play ();
-                    }
-                }
 
                 var playpause_image = new Gtk.Image.from_icon_name ("media-playback-pause-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
                 window.toolbar.set_play_pause_image (playpause_image);
@@ -551,13 +589,7 @@ namespace Vocal {
                 }
             }
 
-            // Hide the shownotes button
-            window.toolbar.playback_box.hide_artwork_image ();
-            window.toolbar.playback_box.hide_volume_button ();
-            window.toolbar.hide_playlist_button ();
-
             window.show_infobar (_ ("Adding new podcast: <b>" + feed + "</b>"), MessageType.INFO);
-            window.toolbar.show_playback_box ();
 
             var loop = new MainLoop ();
             bool success = false;
@@ -573,6 +605,7 @@ namespace Vocal {
             });
 
             loop.run ();
+            window.hide_infobar ();
 
             if (success) {
 
@@ -594,8 +627,6 @@ namespace Vocal {
 		            gpodder_loop.run ();
 	            }
             	
-                window.toolbar.show_playlist_button ();
-
                 if (!player.playing)
                     window.toolbar.hide_playback_box ();
 

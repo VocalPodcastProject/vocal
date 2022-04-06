@@ -331,7 +331,11 @@ namespace Vocal {
             });
             new_episodes_view.add_all_new_to_queue.connect ((episodes) => {
                 foreach (Episode e in episodes) {
-                    enqueue_episode (e);
+                    if (controller.get_episode () == null) {
+                        controller.set_episode (e);
+                    } else {
+                        enqueue_episode (e);
+                    }
                 }
             });
 
@@ -348,6 +352,7 @@ namespace Vocal {
             all_flowbox = new Gtk.FlowBox ();
             all_art = new Gee.ArrayList<CoverArt> ();
             all_flowbox.get_style_context ().add_class ("notebook-art");
+            all_flowbox.max_children_per_line = 20;
             all_flowbox.selection_mode = Gtk.SelectionMode.SINGLE;
             all_flowbox.activate_on_single_click = true;
             all_flowbox.child_activated.connect (on_child_activated);
@@ -466,7 +471,6 @@ namespace Vocal {
             toolbar.play_pause_selected.connect (controller.play_pause);
             toolbar.seek_forward_selected.connect (controller.seek_forward);
             toolbar.seek_backward_selected.connect (controller.seek_backward);
-            toolbar.playlist_button.clicked.connect (() => { artwork_popover.queue_box.show_all (); });
 
             toolbar.store_selected.connect (() => {
                 details.pane_should_hide ();
@@ -620,58 +624,6 @@ namespace Vocal {
                     all_art.clear ();
                 }
 
-                //TODO: Move this to the controller
-
-                info ("Restoring last played media.");
-                // If the program was just launched, check to see what the last played media was
-                if (controller.newly_launched) {
-
-                    current_widget = all_scrolled;
-
-                    if (controller.settings.last_played_media != null && controller.settings.last_played_media.length > 1) {
-
-                        // Split the media into two different strings
-                        string[] fields = controller.settings.last_played_media.split (",");
-                        bool found = false;
-                        foreach (Podcast podcast in controller.library.podcasts) {
-
-                            if (!found) {
-                                if (podcast.name == fields[1]) {
-                                    found = true;
-
-                                    // Attempt to find the matching episode, set it as the current episode, and display the information in the box
-                                    foreach (Episode episode in podcast.episodes) {
-                                        if (episode.title == fields[0]) {
-                                            controller.current_episode = episode;
-                                            toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                                            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-                                            controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-
-                                            try {
-
-                                                controller.player.set_episode (controller.current_episode);
-                                                controller.player.set_position (controller.current_episode.last_played_position);
-                                                artwork_popover.set_notes_text (episode.description);
-
-                                            } catch (Error e) {
-                                                warning (e.message);
-                                            }
-
-                                            if (controller.current_episode.last_played_position != 0) {
-                                                toolbar.show_playback_box ();
-                                            }
-                                            else {
-                                                toolbar.hide_playback_box ();
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-
-
                 // Refill the controller.library based on what is stored in the database (if it's not newly launched, in
                 // which case it has already been filled)
                 if (!controller.newly_launched) {
@@ -773,16 +725,11 @@ namespace Vocal {
          */
         private void play_episode_from_queue_immediately (Episode e) {
 
-            controller.current_episode = e;
-            artwork_popover.queue_box.hide ();
+            controller.set_episode (e);
+            artwork_popover.hide ();
             controller.library.remove_episode_from_queue (e);
 
             controller.play ();
-
-            // Set the shownotes, the media information, and update the last played media in the settings
-            controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64)controller.player.duration);
-            artwork_popover.set_notes_text (controller.current_episode.description);
-            controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
         }
 
         /*
@@ -792,19 +739,13 @@ namespace Vocal {
 
             // Get the episode
             if (episode == null) {
-                controller.current_episode = details.current_episode;
+                controller.set_episode (details.current_episode);
             } else {
-                controller.current_episode = episode;
+                controller.set_episode (episode);
             }
 
             controller.player.pause ();
             controller.play ();
-
-            // Set the shownotes, the media information, and update the last played media in the settings
-            controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-            toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-            artwork_popover.set_notes_text (controller.current_episode.description);
-            controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
         }
 
         /*
@@ -964,13 +905,6 @@ namespace Vocal {
             //If the user selects a file, get the name and parse it
             if (decision == Gtk.ResponseType.ACCEPT || run_pending_import == true) {
 
-                toolbar.show_playback_box ();
-
-                // Hide the shownotes button
-                toolbar.playback_box.hide_artwork_image ();
-                toolbar.playback_box.hide_volume_button ();
-                toolbar.hide_playlist_button ();
-
                 if (current_widget == welcome) {
                     switch_visible_page (import_message_box);
                 }
@@ -1012,10 +946,6 @@ namespace Vocal {
                     // Make the refresh and export items sensitive now
                     toolbar.export_item.sensitive = true;
 
-                    toolbar.playback_box.show_artwork_image ();
-                    toolbar.playback_box.show_volume_button ();
-                    toolbar.show_playlist_button ();
-
                     if (current_widget == import_message_box) {
                         switch_visible_page (all_scrolled);
                     }
@@ -1025,9 +955,9 @@ namespace Vocal {
                     controller.currently_importing = false;
 
                     if (controller.player.playing) {
-                        toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                        toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-                        video_controls.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
+                        toolbar.playback_box.set_info_title (controller.get_episode ().title.replace ("%27", "'"), controller.get_episode ().parent.name.replace ("%27", "'"));
+                        toolbar.playback_box.set_artwork_image_image (controller.get_episode ().parent.coverart_uri);
+                        video_controls.set_info_title (controller.get_episode ().title.replace ("%27", "'"), controller.get_episode ().parent.name.replace ("%27", "'"));
                     }
 
                     loop.quit ();
@@ -1066,8 +996,13 @@ namespace Vocal {
          */
          public void switch_visible_page (Gtk.Widget widget) {
 
-            if (current_widget != widget)
-                previous_widget = current_widget;
+            if (current_widget != widget) {
+                if (current_widget == welcome) {
+                    previous_widget = all_scrolled;
+                } else {
+                    previous_widget = current_widget;
+                }
+            }
 
             if (widget == all_scrolled) {
                 notebook.set_visible_child (all_scrolled);
@@ -1141,7 +1076,7 @@ namespace Vocal {
                             info ("GStreamer registry updated, attempting to start playback using the new plugins...");
 
                             // Reset the controller.player
-                            controller.player.current_episode = null;
+                            controller.set_episode (null);
 
                             controller.play ();
                          }
@@ -1237,7 +1172,7 @@ namespace Vocal {
             details.on_single_delete(episode);
             
             // Update gpodder.net
-            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.DELETE);
+            controller.gpodder_client.update_episode (controller.get_episode (), EpisodeAction.DELETE);
         }
 
 
@@ -1639,7 +1574,7 @@ namespace Vocal {
             toolbar.set_play_pause_image (playpause_image);
 
             // If there is a video showing, return to the controller.library view
-            if (controller.current_episode.parent.content_type == MediaType.VIDEO) {
+            if (controller.get_episode ().parent.content_type == MediaType.VIDEO) {
                 on_return_to_library ();
             }
 
@@ -1648,18 +1583,13 @@ namespace Vocal {
 
             controller.playback_status_changed ("Stopped");
 
-            controller.current_episode = controller.library.get_next_episode_in_queue ();
+            controller.set_episode (controller.library.get_next_episode_in_queue ());
 
-            if (controller.current_episode != null) {
-
+            if (controller.get_episode () != null) {
                 controller.play ();
-
-                // Set the shownotes, the media information, and update the last played media in the settings
-                controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-                artwork_popover.set_notes_text (controller.current_episode.description);
-                controller.settings.last_played_media = "%s,%s".printf (controller.current_episode.title, controller.current_episode.parent.name);
             } else {
                 controller.player.playing = false;
+                controller.settings.last_played_media = null;
             }
 
             // Regenerate the new episode list in case the ended episode was one of the new episodes
@@ -1753,9 +1683,6 @@ namespace Vocal {
             // Show the store
             if (index == 0) {
                 switch_visible_page (directory_scrolled);
-
-                // Set the controller.library as the previous widget for return_to_library to work
-                previous_widget = all_scrolled;
             }
 
             // Add a new feed
@@ -1810,7 +1737,7 @@ namespace Vocal {
             }
             
             // Update gpodder.net if necessary
-            controller.gpodder_client.update_episode (controller.current_episode, EpisodeAction.PLAY);
+            controller.gpodder_client.update_episode (controller.get_episode (), EpisodeAction.PLAY);
 
             // If an episode is currently playing and Vocal is set to keep playing in the background, hide the window
             if (controller.player.playing && controller.settings.keep_playing_in_background) {
@@ -1818,7 +1745,7 @@ namespace Vocal {
                 return true;
             } else if (downloads != null && downloads.downloads.size > 0) {
                 //If there are downloads verify that the user wishes to exit and cancel the downloads
-                var downloads_active_dialog = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _ ("Vocal is currently downloading episodes. Exiting will cause the downloads to be canceled. Are you sure you want to exit?"));
+                var downloads_active_dialog = new Gtk.MessageDialog (this, Gtk.DialogFlags.MODAL, Gtk.MessageType.WARNING, Gtk.ButtonsType.YES_NO, _ ("Vocal is currently downloading episodes. Exiting will cause the downloads to be cancelled. Are you sure you want to exit?"));
                 downloads_active_dialog.response.connect ((response_id) => {
                     downloads_active_dialog.destroy ();
                     if (response_id == Gtk.ResponseType.YES) {

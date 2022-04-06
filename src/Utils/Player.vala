@@ -40,22 +40,21 @@ namespace Vocal {
         private string tag_string;
 
         public Episode current_episode;
+        private bool restore_position;
 
         private Player (string[]? args) {
-
-            bool new_launch = true;
 
             current_episode = null;
 
             // Check every half-second if the current media is playing, and if it is
             // send a signal that there is a new position available
             GLib.Timeout.add (500, () => {
-
-                if (playing)
+                if (playing && duration > 0.0) {
+                    if (restore_position) {
+                        set_position (current_episode.last_played_position);
+                        restore_position = false;
+                    } 
                     new_position_available ();
-                if (new_launch && duration > 0.0) {
-                    new_position_available ();
-                    new_launch = false;
                 }
                 return true;
             });
@@ -107,6 +106,10 @@ namespace Vocal {
             // Set the URI
             this.uri = episode.playback_uri;
             info ("Setting playback URI: %s".printf (episode.playback_uri));
+
+            if (current_episode.last_played_position > 0) {
+                restore_position = true;
+            }
             /*
 
             // If it's a video podcast, get the width and height and configure that information
@@ -145,11 +148,13 @@ namespace Vocal {
         /*
          * Sets the currently playing media position, in seconds
          */
-		public void set_position (int seconds) {
-			double calculated_progress = (double)seconds / get_duration ();
-			set_progress (calculated_progress);
-			new_position_available ();
-		}
+        public void set_position (int seconds) {
+            if (duration > 0.0) {
+                double calculated_progress = (double)seconds / duration;
+                set_progress (calculated_progress);
+                new_position_available ();
+            }
+        }
 
 
         /*

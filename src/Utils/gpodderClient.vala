@@ -483,6 +483,10 @@ namespace Vocal {
         }
         
         public bool update_episode (Episode episode, EpisodeAction action) {
+
+			if (controller.settings.gpodder_username == "") {
+				return false;
+			}
         
             var session = new Soup.Session ();
             session.user_agent = "vocal";

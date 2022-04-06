@@ -40,6 +40,8 @@ namespace Vocal {
         private unowned DBusConnection conn;
         private uint owner_id;
 
+        public signal void initialized ();
+
         /*
          * Default constructor that simply sets the controller.window
          */
@@ -109,6 +111,7 @@ namespace Vocal {
                 });
 
                 connection.register_object ("/org/mpris/MediaPlayer2", player);
+                initialized ();
 
 
             }
@@ -146,7 +149,7 @@ namespace Vocal {
 
 
         private const string INTERFACE_NAME = "org.mpris.MediaPlayer2.Player";
-        const string TRACK_ID = "/com/github/needleandthread/vocal/Track/%d";
+        const string TRACK_ID = "/com/github/needleandthread/vocal/Track/%u";
 
         public MprisPlayer (DBusConnection conn) {
             this.conn = conn;

@@ -100,7 +100,7 @@ namespace Vocal {
             local_library_path = settings.library_location.replace ("~", GLib.Environment.get_home_dir ());
 
 #if HAVE_LIBUNITY
-            launcher = Unity.LauncherEntry.get_for_desktop_id ("vocal.desktop");
+            launcher = Unity.LauncherEntry.get_for_desktop_id ("com.github.needleandthread.vocal.desktop");
             launcher.count = new_episode_count;
 #endif
 
@@ -717,8 +717,12 @@ namespace Vocal {
                 foreach (Podcast p in podcasts) {
 
                     output_line =
-    """<outline text="%s" type="rss" xmlUrl="%s"/>
-    """.printf (p.name.replace ("\"", "'").replace ("&", "and"), p.feed_uri);
+"""<outline>
+        <text><![CDATA[%s]]></text>
+        <type>rss</type>
+        <xmlUrl><![CDATA[%s]]></xmlUrl>
+    </outline>
+""".printf (p.name, p.feed_uri);
                     stream.output_stream.write (output_line.data);
                 }
 
@@ -905,7 +909,7 @@ namespace Vocal {
                                       FROM Episode e
                                       LEFT JOIN Podcast p on p.feed_uri = e.podcast_uri
                                       WHERE podcast_uri = '%s'
-                                      ORDER BY e.rowid ASC".printf (podcast.feed_uri);
+                                      ORDER BY e.released ASC".printf (podcast.feed_uri);
                 ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
                 if (ec != Sqlite.OK) {
                     warning ("Error: %d: %s\n", db.errcode (), db.errmsg ());
@@ -1227,7 +1231,7 @@ namespace Vocal {
             if (settings.library_location == null) {
                 settings.library_location = GLib.Environment.get_user_data_dir () + """/vocal""";
             }
-            local_library_path = settings.library_location.replace ("~", GLib.Environment.get_user_data_dir ());
+            local_library_path = settings.library_location.replace ("~", GLib.Environment.get_home_dir ());
 
             // If the new local_library_path has been modified, update the setting
             if (settings.library_location != local_library_path) {

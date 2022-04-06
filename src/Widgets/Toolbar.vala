@@ -54,7 +54,6 @@ namespace Vocal {
 
         public Gtk.Button search_button;
         private Gtk.Button podcast_store_button;
-        public Gtk.Button playlist_button;
         public Gtk.Button new_episodes_button;
 
         public Gtk.MenuItem export_item;
@@ -72,14 +71,6 @@ namespace Vocal {
 
             // Set the playback box in the middle of the HeaderBar
             playback_box.hexpand = true;
-
-            playlist_button = new Gtk.Button.from_icon_name ("media-playlist-consecutive-symbolic");
-            playlist_button.tooltip_text = _ ("Coming up next");
-            playlist_button.clicked.connect (() => {
-                playlist_selected ();
-            });
-            playlist_button.relief = Gtk.ReliefStyle.NONE;
-            playlist_button.valign = Gtk.Align.CENTER;
 
             if (on_elementary) {
                 new_episodes_button = new Gtk.Button.from_icon_name ("help-about-symbolic", Gtk.IconSize.LARGE_TOOLBAR);
@@ -375,8 +366,6 @@ namespace Vocal {
             right_button_box.pack_end (new_episodes_button);
             right_button_box.halign = Gtk.Align.END;
             
-            this.spacing = 0;
-            
             this.pack_start (left_button_box);
             this.set_custom_title (playback_box);
             this.pack_end (right_button_box);
@@ -398,28 +387,11 @@ namespace Vocal {
             }
         }
 
-
         public void show_playback_box () {
             if (playback_box != null) {
                 this.playback_box.no_show_all = false;
                 this.playback_box.show ();
                 show_all ();
-            }
-        }
-
-
-
-        public void show_playlist_button () {
-            if (playlist_button != null) {
-                playlist_button.set_no_show_all (false);
-                playlist_button.show ();
-            }
-        }
-
-        public void hide_playlist_button () {
-            if (playlist_button != null) {
-                playlist_button.set_no_show_all (true);
-                playlist_button.hide ();
             }
         }
 

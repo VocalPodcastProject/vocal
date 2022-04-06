@@ -132,6 +132,7 @@ namespace Vocal {
                     Episode episode = new Episode ();
                     string next_item_in_queue = null;
                     bool found_summary = false;
+                    bool found_media = false;
 
                     while (next_item_in_queue != "item" && i < queue.size - 1) {
                         i++;
@@ -162,6 +163,11 @@ namespace Vocal {
                                     i++;
 
                                     string typestring = queue[i].slice (0, 5);
+
+                                    if (typestring == "audio" || typestring == "video") {
+                                        found_media = true;
+                                    }
+
                                     if (podcast.content_type == MediaType.UNKNOWN) {
                                         if (typestring == "audio") {
                                             podcast.content_type = MediaType.AUDIO;
@@ -169,10 +175,6 @@ namespace Vocal {
                                         else if (typestring == "video") {
                                             podcast.content_type = MediaType.VIDEO;
                                         }
-                                        else {
-                                            podcast.content_type = MediaType.UNKNOWN;
-                                        }
-
                                     }
 
                                     type_found = true;
@@ -209,7 +211,9 @@ namespace Vocal {
 
 
                     // Add the new episode to the podcast
-                    podcast.add_episode (episode);
+                    if (found_media) {
+                        podcast.add_episode (episode);
+                    }
 
                 }
 
@@ -347,6 +351,11 @@ namespace Vocal {
                 podcast = create_podcast_from_queue_atom (root);
             } else {
                 podcast = create_podcast_from_queue ();
+            }
+
+            if (podcast.content_type == MediaType.UNKNOWN) {
+                warning ("Feed doesn't contain any media files. Abort.");
+                return null;
             }
 
             if (podcast.name.length < 1) {
@@ -552,6 +561,7 @@ namespace Vocal {
                         Episode episode = new Episode ();
                         string next_item_in_queue = null;
                         bool found_summary = false;
+                        bool found_media = false;
 
 
                         while (next_item_in_queue != "item" && i < queue.size - 1) {
@@ -582,6 +592,11 @@ namespace Vocal {
                                         i++;
 
                                         string typestring = queue[i].slice (0, 5);
+
+                                        if (typestring == "audio" || typestring == "video") {
+                                            found_media = true;
+                                        }
+
                                         if (podcast.content_type == MediaType.UNKNOWN) {
                                             if (typestring == "audio") {
                                                 podcast.content_type = MediaType.AUDIO;
@@ -589,10 +604,6 @@ namespace Vocal {
                                             else if (typestring == "video") {
                                                 podcast.content_type = MediaType.VIDEO;
                                             }
-                                            else {
-                                                podcast.content_type = MediaType.UNKNOWN;
-                                            }
-
                                         }
 
                                         type_found = true;
@@ -628,17 +639,19 @@ namespace Vocal {
 
                         }
 
-                        episode.parent = podcast;
-                        episode.podcast_uri = podcast.feed_uri;
+                        if (found_media) {
+                            episode.parent = podcast;
+                            episode.podcast_uri = podcast.feed_uri;
 
-                        if (previous_newest_episode != null) {
-                            if (episode.title == previous_newest_episode.title.replace ("%27", "'")) {
-                                previous_found = true;
+                            if (previous_newest_episode != null) {
+                                if (episode.title == previous_newest_episode.title.replace ("%27", "'")) {
+                                    previous_found = true;
+                                } else {
+                                    new_episodes.add (episode);
+                                }
                             } else {
                                 new_episodes.add (episode);
                             }
-                        } else {
-                            new_episodes.add (episode);
                         }
                     }
 
@@ -687,6 +700,7 @@ namespace Vocal {
 
             /* Creating a Episode with values from <entry> tag. */
             Episode entry = new Episode ();
+            bool found_media = false;
 
             for (Xml.Node* iterEntry = iter->children; iterEntry != null; iterEntry = iterEntry->next) {
                 switch (iterEntry->name) {
@@ -709,12 +723,14 @@ namespace Vocal {
                                 entry.uri=propEntry->children->content;
                                 entry.link = entry.uri;
                             } else if (attr_name == "type" && podcast != null) {
-                                podcast.content_type = MediaType.UNKNOWN;
-
                                 if (propEntry->children->content.contains ("audio/")) {
                                     podcast.content_type = MediaType.AUDIO;
+                                    found_media = true;
                                 } else if (propEntry->children->content.contains ("video/")) {
                                     podcast.content_type = MediaType.VIDEO;
+                                    found_media = true;
+                                } else {
+                                    podcast.content_type = MediaType.UNKNOWN;
                                 }
                             }
                         }
@@ -727,10 +743,12 @@ namespace Vocal {
                 }
             }
 
-            entry.parent=podcast;
-            entry.podcast_uri = podcast.feed_uri;
+            if (found_media) {
+                entry.parent=podcast;
+                entry.podcast_uri = podcast.feed_uri;
 
-            episodes.add (entry);
+                episodes.add (entry);
+            }
         }
 
         for (int i=episodes.size; i > 0 && !previous_found; i--) {

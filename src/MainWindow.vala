@@ -216,6 +216,7 @@ namespace Vocal {
             if (controller.settings.dark_mode_enabled) {
                 Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", true);
             } else {
+                Gtk.Settings.get_default ().set ("gtk-application-prefer-dark-theme", false);
                 style_context.add_provider_for_screen (screen, headerbar_css_provider, Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION);
             }
 
@@ -437,9 +438,9 @@ namespace Vocal {
                 import_podcasts ();
             });
 
-            toolbar.about_selected.connect (() => {
-                controller.app.show_about (this);
-            });
+            //  toolbar.about_selected.connect (() => {
+            //      controller.app.show_about (this);
+            //  });
 
             toolbar.theme_toggled.connect (() => {
                 if (controller.settings.dark_mode_enabled) {

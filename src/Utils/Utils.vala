@@ -134,9 +134,16 @@ public class Utils {
             }
         }
 
-        // remaining < & > tags are translated
-        markup = markup.replace ("<", "&lt;");
-        markup = markup.replace (">", "&gt;");
+        Regex hrefs = new Regex("href='(.+?)'>");
+        markup = hrefs.replace_eval(markup, -1, 0, 0, (match_info, result) => {
+            var str = match_info.fetch(1);
+
+            str = str.replace("href='", "");
+            str = str.substring(0, -3);
+            
+            result.append("href='%s'>".printf(Markup.escape_text(str)));
+            return false;
+        });
 
         // Preserve hyperlinks
         markup = markup.replace ("?a?", "<a");

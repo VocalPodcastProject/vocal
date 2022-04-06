@@ -22,6 +22,37 @@ An official snap package is not yet available, although some community members a
 ### Debian Installers
 64-bit .deb installers can be downloaded from our [releases](https://github.com/needle-and-thread/vocal/releases) page. Please note: this method is highly discouraged. With the benefits of sandboxing, improved security, and greater simplicity, we are moving away from older installation methods. **Also, please note that our stable and daily PPAs will be abandoned in the near future.**
 
+#### Building from source (on Debian-based systems):
+
+1. Clone source:
+
+    `git clone https://github.com/needle-and-thread/vocal.git`
+
+2. Install build dependencies:
+    * libsecret-1-dev 
+    * libclutter-gst-3.0-dev 
+    * sqlite3
+    * libwebkit2gtk-4.0-dev 
+    * libgee-0.8-dev
+    * gir1.2-granite-1.0
+    * libgranite-dev
+    * libgranite5
+
+3. Make the build folder:
+
+   - `cd vocal`
+   - `mkdir -p build`
+   - `cd build`
+
+4. Build the package:
+
+   - `meson build --prefix=/usr`
+   - `ninja`
+
+5. Install the package:
+
+   - `sudo ninja install`
+
 ### Official OS packages
 We're working with a number of distributions to make sure it's as simple as possible to get Vocal out-of-the-box. Check below for the list of distributions where Vocal can be downloaded from the official repositories.
 

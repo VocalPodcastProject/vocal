@@ -233,8 +233,18 @@ namespace Vocal {
 
             string description = "";
 
-            // Call the Xml.Parser to parse the file, which returns an unowned reference
-            Xml.Doc* doc = Xml.Parser.parse_file (path);
+            Xml.Doc* doc;
+
+            if (SoupClient.valid_http_uri (path)) {
+                try {
+                    doc = XmlUtils.parse_string (soup_client.request_as_string (HttpMethod.GET, path));
+                } catch (GLib.Error e) {
+                    warning ("Failed to get podcast. %s", e.message);
+                    return null;
+                }
+            } else {
+                doc = Xml.Parser.parse_file (path);
+            }
 
             // Make sure that it didn't return a null reference
             if (doc == null) {

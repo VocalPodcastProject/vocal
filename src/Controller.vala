@@ -92,6 +92,14 @@ namespace Vocal {
             
             info ("Initiating the gpodder API");
             gpodder_client = gpodderClient.get_default_instance (this);
+
+            // Determine whether or not the local library exists
+            first_run = (!library.check_database_exists ());
+
+            // Use Dark theme by default if option is set globally
+            if (first_run && Gtk.Settings.get_default ().gtk_application_prefer_dark_theme) {
+                settings.dark_mode_enabled = true;
+            }
             
             // IMPORTANT NOTE: the player, library, and iTunes provider MUST exist before the MainWindow is created
 
@@ -244,9 +252,6 @@ namespace Vocal {
             // Connect the library's signals
             library.import_status_changed.connect (window.on_import_status_changed);
             library.download_finished.connect (window.on_download_finished);
-
-            // Determine whether or not the local library exists
-            first_run = (!library.check_database_exists ());
 
             if (!first_run) {
                 info ("Refilling library.");
@@ -604,6 +609,7 @@ namespace Vocal {
 
             if (success) {
 
+                window.hide_infobar ();
                 window.toolbar.playback_box.show_artwork_image ();
                 window.toolbar.playback_box.show_volume_button ();
             

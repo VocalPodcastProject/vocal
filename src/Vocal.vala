@@ -36,6 +36,8 @@ namespace Vocal {
             program_name = "Vocal";
             exec_name = "vocal";
 
+            flags |= ApplicationFlags.HANDLES_OPEN;
+
             build_data_dir = Constants.DATADIR;
             build_pkg_data_dir = Constants.PKGDATADIR;
             build_release_name = Constants.RELEASE_NAME;
@@ -62,7 +64,7 @@ namespace Vocal {
             set_options ();
         }
 
-        public const OptionEntry[] app_options = {
+        private const OptionEntry[] app_options = {
             { "hidden", 'h', 0, OptionArg.NONE, out Option.OPEN_HIDDEN, "Open without displaying the window so podcasts will continue to update", null },
             { null }
         };
@@ -87,6 +89,13 @@ namespace Vocal {
             } else {
                 controller.window.present ();
             }
+        }
+
+        public override void open(File[] feeds, string hint) {
+            activate();
+
+            foreach (var feed in feeds)
+                controller.add_podcast_feed(feed.get_uri());
         }
 
         public static void main (string [] args) {

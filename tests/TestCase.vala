@@ -22,13 +22,14 @@
 
 public abstract class TestCase : Object {
 
+    public abstract string name {get; set construct;}
     private GLib.TestSuite suite;
     private Adaptor[] adaptors = new Adaptor[0];
 
     public delegate void TestMethod ();
 
-    public TestCase (string name) {
-        this.suite = new GLib.TestSuite (name);
+    construct {
+        this.suite = new GLib.TestSuite (this.name);
     }
 
     public void add_test (string name, owned TestMethod test) {

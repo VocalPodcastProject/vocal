@@ -116,8 +116,25 @@ namespace Vocal {
 
             if (date_released != null) {
                 GLib.Time tm = GLib.Time ();
+                // Set a default time of now in case a time cannot be parsed
+                // from the pubdate string.
+                tm.mktime ();
+                // Supported time formats.
+                // The specification (https://cyber.harvard.edu/rss/rss.html)
+                // states that datetimes should be in RFC 822 format,
+                // but date strings with different formats can cause a crash.
+                string[] time_formats = {
+                    "%d %b %Y %H:%M:%S %Z",  // 01 Jan 1970 00:00:00 GMT
+                    "%b %d %Y %H:%M:%S %Z"  // Jan 01 1970 00:00:00 GMT
+                };
+                // GLib.Time.strptime doesn't accept strings containing the weekday (just returns NULL instead)
                 date_released = date_released[5:date_released.length];
-                tm.strptime (date_released, "%d %b %Y %H:%M:%S %Z");
+                foreach (string format in time_formats) {
+                    var last_parsed_char = tm.strptime (date_released, format);
+                    if (last_parsed_char != null) {
+                        break;
+                    }
+                }
                 datetime_released = new DateTime.local (
                     1900 + tm.year,
                     1 + tm.month,

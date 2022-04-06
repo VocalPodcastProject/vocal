@@ -433,9 +433,9 @@ namespace Vocal {
                 import_podcasts ();
             });
 
-            toolbar.about_selected.connect (() => {
-                controller.app.show_about (this);
-            });
+            //  toolbar.about_selected.connect (() => {
+            //      controller.app.show_about (this);
+            //  });
 
             toolbar.theme_toggled.connect (() => {
                 if (controller.settings.dark_mode_enabled) {

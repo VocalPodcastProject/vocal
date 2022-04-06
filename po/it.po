@@ -5,16 +5,17 @@
 # Translators:
 # Andrea Balzarotti <balzarotti.andrea@gmail.com>, 2017
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2014
-# Saverio <saverio.morelli@outlook.it>, 2021.
+# Saverio <saverio.morelli@outlook.it>, 2021
+# Albano Battistella <albano_battistella@hotmail.com>, 2022.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: Vocal\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-12-01 17:15-0500\n"
-"PO-Revision-Date: 2021-07-10 21:56+0200\n"
-"Last-Translator: Saverio <saverio.morelli@outlook.it>\n"
-"Language-Team: Italian <saverio.morelli@outlook.it>\n"
+"PO-Revision-Date: 2022-04-06 19:42+0100\n"
+"Last-Translator: Albano_battistella <albano_battistella@hotmail.com>\n"
+"Language-Team: Italian\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -76,12 +77,12 @@ msgid ""
 "There seems to be a problem with your internet connection. Make sure you are "
 "online and then try again."
 msgstr ""
-"Sembra che ci sia un problema con la tua connession internet. Assicurati di "
+"Sembra che ci sia un problema con la tua connessione internet. Assicurati di "
 "essere online e riprova."
 
 #: ../src/Controller.vala:636
 msgid "Error Adding Podcast"
-msgstr "Errore nell'Aggiungere il Podcast"
+msgstr "Errore nell'aggiungere il podcast"
 
 #: ../src/Controller.vala:679
 msgid "Fresh content has been added to your library."
@@ -111,7 +112,7 @@ msgstr "Vocal"
 #: ../src/Widgets/DirectoryView.vala:64 ../src/Widgets/DirectoryView.vala:78
 #: ../src/Widgets/SearchResultsView.vala:69
 msgid "Return to Library"
-msgstr "Ritorna alla Liberia"
+msgstr "Ritorna alla Libreria"
 
 #: ../src/MainWindow.vala:314
 msgid "Welcome to Vocal"
@@ -148,11 +149,11 @@ msgstr "Se hai esportato i feed da un altro podcast manager, importali qui."
 
 #: ../src/MainWindow.vala:320
 msgid "Sync With gpodder"
-msgstr "Sincronizza con gpodder"
+msgstr "Sincronizzazione con gpodder"
 
 #: ../src/MainWindow.vala:320
 msgid "Log in to your gpodder.net account and synchronize your library."
-msgstr "Accedi al tuoi account gpodder.net e sincronizzata la tua libreria."
+msgstr "Accedi al tuoi account gpodder.net e sincronizza la tua libreria."
 
 #: ../src/MainWindow.vala:373
 msgid "Good Stuff is On Its Way"
@@ -164,7 +165,7 @@ msgid ""
 "library will be ready shortly."
 msgstr ""
 "Se stai importanto molti podcast potrebbero essere necessari alcuni minuti "
-"di attesa. La tua libreria sarà pronta a breve"
+"di attesa. La tua libreria sarà pronta a breve."
 
 #: ../src/MainWindow.vala:386
 msgid "Welcome"
@@ -185,7 +186,7 @@ msgstr "Dettagli"
 #: ../src/MainWindow.vala:390 ../src/Widgets/NewEpisodesView.vala:49
 #: ../src/Widgets/Toolbar.vala:90
 msgid "New Episodes"
-msgstr "Nuovi episodi"
+msgstr "Nuovi Episodi"
 
 #: ../src/MainWindow.vala:391
 msgid "Video"
@@ -193,7 +194,7 @@ msgstr "Video"
 
 #: ../src/MainWindow.vala:408
 msgid "Browse Podcast Directory"
-msgstr "Naviga nella Cartella dei Podcast"
+msgstr "Naviga nella cartella dei podcast"
 
 #: ../src/MainWindow.vala:409
 msgid "Search Results"
@@ -487,7 +488,7 @@ msgstr "Imposta la licenza del podcast a Creative Commons"
 
 #: ../src/Widgets/PodcastView.vala:184
 msgid "Unsubscribe"
-msgstr "Disiscriviti"
+msgstr "Annulla l'iscrizione"
 
 #: ../src/Widgets/PodcastView.vala:283
 msgid ""
@@ -688,7 +689,7 @@ msgstr "Copia link condivisibile"
 
 #: ../src/Widgets/Shownotes.vala:98
 msgid "Send a Tweet…"
-msgstr "Invia un Tweet"
+msgstr "Invia un Tweet…"
 
 #: ../src/Widgets/Shownotes.vala:99
 msgid "Copy the direct episode link"
@@ -776,7 +777,7 @@ msgstr "Imposta un nuovo nome del dispositivo per questo computer"
 
 #: ../src/Widgets/SyncDialog.vala:135
 msgid "Or, Choose an Existing Device"
-msgstr "oppure, scegli un dispositivo esistente"
+msgstr "Oppure, scegli un dispositivo esistente"
 
 #: ../src/Widgets/SyncDialog.vala:141
 msgid "Complete Setup"
@@ -829,11 +830,11 @@ msgstr "Aggiunti un Feed Podcast"
 
 #: ../src/Widgets/Toolbar.vala:105
 msgid "Import Subcriptions…"
-msgstr "Importa Iscrizioni"
+msgstr "Importa Iscrizioni…"
 
 #: ../src/Widgets/Toolbar.vala:110
 msgid "Export Subscriptions…"
-msgstr "Esporta sottoscrizioni..."
+msgstr "Esporta sottoscrizioni…"
 
 #: ../src/Widgets/Toolbar.vala:115 ../src/Widgets/Toolbar.vala:126
 msgid "Use Light Theme"
@@ -845,15 +846,15 @@ msgstr "Utilizza il tema scuro"
 
 #: ../src/Widgets/Toolbar.vala:171
 msgid "Report a Problem…"
-msgstr "Segnala un problema"
+msgstr "Segnala un problema…"
 
 #: ../src/Widgets/Toolbar.vala:179
 msgid "Donate…"
-msgstr "Donazioni..."
+msgstr "Donazioni…"
 
 #: ../src/Widgets/Toolbar.vala:187
 msgid "About"
-msgstr "A riguardo"
+msgstr "Informazioni"
 
 #: ../src/Widgets/Toolbar.vala:240 ../src/Widgets/Toolbar.vala:264
 msgid "Fast forward %d seconds"
@@ -869,7 +870,7 @@ msgstr "Controlla nuovi episodi"
 
 #: ../src/Widgets/Toolbar.vala:287
 msgid "Search your library or online"
-msgstr "Cerca nella tua libreria od online"
+msgstr "Cerca nella tua libreria o online"
 
 #: ../src/Widgets/Toolbar.vala:306
 msgid "View the top podcasts in the iTunes Store"

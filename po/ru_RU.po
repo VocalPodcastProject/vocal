@@ -240,7 +240,7 @@ msgstr "Вы уверены, что хотите отметить все эпи�
 
 #: ../src/MainWindow.vala:1476
 msgid "Are you sure you want to remove '%s' from your controller.library?"
-msgstr "Вы уверены, что хотите удалить "% s" из библиотеки?"
+msgstr "Вы уверены, что хотите удалить "%s" из библиотеки?"
 
 #: ../src/MainWindow.vala:1480
 msgid "No"
@@ -515,7 +515,7 @@ msgstr "Удалить локальный файл."
 
 #: ../src/Widgets/PodcastView.vala:553
 msgid "Are you sure you want to delete the downloaded episode '%s'?"
-msgstr "Вы действительно хотите удалить загруженный выпуск "% s"?"
+msgstr "Вы действительно хотите удалить загруженный выпуск "%s"?"
 
 #: ../src/Widgets/PodcastView.vala:675
 msgid "No show notes available."

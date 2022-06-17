@@ -1,37 +1,32 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace Vocal {
 
     public class iTunesProvider {  // vala-lint=naming-convention
 
-        private SoupClient soup_client = null;
-
         public iTunesProvider () {
-            soup_client = new SoupClient ();
+
         }
 
         /*
          * Finds the public RSS feed address from any given iTunes store URL
          */
         public string? get_rss_from_itunes_url (string itunes_url, out string? name = null) {
-
+            var soup_client = new SoupClient ();
             string rss = "";
 
             // We just need to get the iTunes store iD
@@ -44,7 +39,8 @@ namespace Vocal {
 
             try {
                 var parser = new Json.Parser ();
-                parser.load_from_stream (soup_client.request (HttpMethod.GET, uri));
+                string response = soup_client.request_as_string(HttpMethod.GET, uri);
+                parser.load_from_data(response);
 
                 var root_object = parser.get_root ().get_object ();
 
@@ -71,7 +67,7 @@ namespace Vocal {
          * Finds the top n podcasts (100 by default) and returns it in an ArrayList
          */
         public GLib.List<DirectoryEntry>? get_top_podcasts (int? limit = 100) {
-
+            var soup_client = new SoupClient ();
 
             var settings = VocalSettings.get_default_instance ();
 
@@ -87,14 +83,13 @@ namespace Vocal {
             try {
                 parser.load_from_stream (soup_client.request (HttpMethod.GET, uri));
             } catch (Error e) {
-                warning ("An error occured fetching the top podcasts. %s", e.message);
+                warning ("An error occurred fetching the top podcasts. %s", e.message);
                 return null;
             }
 
             var root_object = parser.get_root ().get_object ();
             if (root_object == null) {
                 error ("Error loading iTunes results. Root object was null.");
-                return null;
             }
 
             var elements = root_object.get_object_member ("feed").get_array_member ("entry").get_elements ();
@@ -159,7 +154,7 @@ namespace Vocal {
          * them in an ArrayList
          */
         public Gee.ArrayList<DirectoryEntry>? search_by_term (string term, int? limit = 25) {
-
+            var soup_client = new SoupClient ();
             var uri = "https://itunes.apple.com/search?term=%s&entity=podcast&limit=%d".printf (
                 term.replace (" ", "+"),
                 limit

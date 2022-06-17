@@ -1,30 +1,27 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2019 Nathan Dyer <nathandyer@fastmail.com>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using Secret;
 public class PasswordManager {
 
     // Note of attribution: this code is heavily inspired by @Alecaddd's PasswordManager on Sequeler
     // https://github.com/Alecaddd/sequeler/blob/master/src/Services/PasswordManager.vala
-    
+
     private static PasswordManager _default_instance = null;
-    
+
     public static PasswordManager get_default_instance() {
         if(_default_instance == null)
             _default_instance = new PasswordManager();
@@ -35,11 +32,11 @@ public class PasswordManager {
 	public async void store_password_async (string id, string password) throws GLib.Error {
 		var attributes = new GLib.HashTable<string, string> (str_hash, str_equal);
 		attributes["id"] = id;
-		attributes["schema"] = "com.github.needleandthread.vocal";
+		attributes["schema"] = "com.github.VocalPodcastProject.vocal";
 
-		var key_name = "com.github.needleandthread.vocal" + "." + id;
-		
-		var schema = new Secret.Schema ("com.github.needleandthread.vocal", Secret.SchemaFlags.NONE,
+		var key_name = "com.github.VocalPodcastProject.vocal" + "." + id;
+
+		var schema = new Secret.Schema ("com.github.VocalPodcastProject.vocal", Secret.SchemaFlags.NONE,
              "id", Secret.SchemaAttributeType.STRING, "schema", Secret.SchemaAttributeType.STRING);
 
 		bool result = yield Secret.password_storev (schema, attributes, Secret.COLLECTION_DEFAULT, key_name, password, null);
@@ -54,11 +51,11 @@ public class PasswordManager {
 	public async string? get_password_async (string id) throws GLib.Error {
 		var attributes = new GLib.HashTable<string, string> (str_hash, str_equal);
 		attributes["id"] = id;
-		attributes["schema"] = "com.github.needleandthread.vocal";
+		attributes["schema"] = "com.github.VocalPodcastProject.vocal";
 
-		var key_name = "com.github.needleandthread.vocal" + "." + id;
-		
-		var schema = new Secret.Schema ("com.github.needleandthread.vocal", Secret.SchemaFlags.NONE,
+		var key_name = "com.github.VocalPodcastProject.vocal" + "." + id;
+
+		var schema = new Secret.Schema ("com.github.VocalPodcastProject.vocal", Secret.SchemaFlags.NONE,
              "id", Secret.SchemaAttributeType.STRING, "schema", Secret.SchemaAttributeType.STRING);
 
 		string? password = yield Secret.password_lookupv (schema, attributes, null);
@@ -74,11 +71,11 @@ public class PasswordManager {
 	public async void clear_password_async (string id) throws GLib.Error {
 		var attributes = new GLib.HashTable<string, string> (str_hash, str_equal);
 		attributes["id"] = id;
-		attributes["schema"] = "com.github.needleandthread.vocal";
+		attributes["schema"] = "com.github.VocalPodcastProject.vocal";
 
-		var key_name = "com.github.needleandthread.vocal" + "." + id;
-		
-		var schema = new Secret.Schema ("com.github.needleandthread.vocal", Secret.SchemaFlags.NONE,
+		var key_name = "com.github.VocalPodcastProject.vocal" + "." + id;
+
+		var schema = new Secret.Schema ("com.github.VocalPodcastProject.vocal", Secret.SchemaFlags.NONE,
              "id", Secret.SchemaAttributeType.STRING, "schema", Secret.SchemaAttributeType.STRING);
 
 		bool successfully_removed = yield Secret.password_clearv (schema, attributes, null);
@@ -90,11 +87,11 @@ public class PasswordManager {
 
 	public async void clear_all_passwords_async () throws GLib.Error {
 		var attributes = new GLib.HashTable<string, string> (str_hash, str_equal);
-		attributes["schema"] = "com.github.needleandthread.vocal";
+		attributes["schema"] = "com.github.VocalPodcastProject.vocal";
 
-        var schema = new Secret.Schema ("com.github.needleandthread.vocal", Secret.SchemaFlags.NONE,
+        var schema = new Secret.Schema ("com.github.VocalPodcastProject.vocal", Secret.SchemaFlags.NONE,
              "id", Secret.SchemaAttributeType.STRING, "schema", Secret.SchemaAttributeType.STRING);
-        
+
 		bool successfully_removed = yield Secret.password_clearv (schema, attributes, null);
 
 		if (!successfully_removed) {

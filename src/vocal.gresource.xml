@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+	<gresource prefix="/com/github/vocalpodcastproject/vocal">
+    <file compressed="true" alias="missing.png">../data/icons/assets/vocal-missing.png</file>
+  </gresource>
+</gresources>

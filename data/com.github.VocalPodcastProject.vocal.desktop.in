@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=vocal
+Exec=vocal
+Icon=com.github.VocalPodcastProject.vocal
+Terminal=false
+Type=Application
+Categories=GTK;
+StartupNotify=true

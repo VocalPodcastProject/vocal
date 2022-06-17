@@ -1,21 +1,18 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using Gee;
 using Gst;
@@ -54,10 +51,6 @@ namespace Vocal {
         private string db_directory = null;
         private string local_library_path;
 
-#if HAVE_LIBUNITY
-        private Unity.LauncherEntry launcher;
-#endif
-
         private VocalSettings settings;            // Vocal's settings
 
         Episode downloaded_episode = null;
@@ -78,17 +71,19 @@ namespace Vocal {
         public Gee.ArrayList<Episode> queue = new Gee.ArrayList<Episode> ();
         private GLib.List<string> podcasts_being_added = new GLib.List<string> ();
 
-        private Controller controller;
+        private Vocal.Application controller;
         public string pending_import = null;
 
         /*
          * Constructor for the library
          */
-        public Library (Controller controller) {
+        public Library (Vocal.Application controller) {
 
             this.controller = controller;
 
-            vocal_config_dir = GLib.Environment.get_user_config_dir () + """/vocal""";
+            vocal_config_dir = GLib.Environment.get_user_config_dir ();
+            local_library_path = GLib.Environment.get_user_data_dir ();
+
             this.db_directory = vocal_config_dir + """/database""";
             this.db_location = this.db_directory + """/vocal.db""";
 
@@ -96,15 +91,6 @@ namespace Vocal {
 
             settings = VocalSettings.get_default_instance ();
 
-            // Set the local library path (and replace ~ with the absolute home directory if need be)
-            local_library_path = settings.library_location.replace ("~", GLib.Environment.get_home_dir ());
-
-#if HAVE_LIBUNITY
-            launcher = Unity.LauncherEntry.get_for_desktop_id ("vocal.desktop");
-            launcher.count = new_episode_count;
-#endif
-
-            new_episode_count_changed.connect (set_new_badge);
             new_episode_count = 0;
         }
 
@@ -212,32 +198,28 @@ namespace Vocal {
         public async Gee.ArrayList<string> add_from_OPML (string path, bool? raw_data = false, bool from_sync) {
             Gee.ArrayList<string> failed_feeds = new Gee.ArrayList<string> ();
 
-            SourceFunc callback = add_from_OPML.callback;
+            GLib.Idle.add(add_from_OPML.callback);
 
-            ThreadFunc<void*> run = () => {
-                try {
-                    FeedParser feed_parser = new FeedParser ();
-                    string[] feeds = feed_parser.parse_feeds_from_OPML (path, raw_data);
-                    info ("Done parsing feeds.");
+            try {
+                FeedParser feed_parser = new FeedParser ();
+                string[] feeds = feed_parser.parse_feeds_from_OPML (path, raw_data);
+                info ("Done parsing feeds.");
 
-                    int i = 0;
-                    foreach (string feed in feeds) {
-                        i++;
-                        import_status_changed (i, feeds.length, feed, from_sync);
-                        bool temp_status = add_podcast_from_file (feed);
-                        if (temp_status == false) {
-                            failed_feeds.add (feed);
-                            warning ("Failed to add podcast from feed because add_podcast_from_file returned false. for: %s", feed);
-                        }
+                int i = 0;
+                foreach (string feed in feeds) {
+                    i++;
+                    import_status_changed (i, feeds.length, feed, from_sync);
+                    bool temp_status = add_podcast_from_file (feed);
+                    if (temp_status == false) {
+                        failed_feeds.add (feed);
+                        warning ("Failed to add podcast from feed because add_podcast_from_file returned false. for: %s", feed);
                     }
-                } catch (Error e) {
-                    info ("Error parsing OPML file. %s", e.message);
                 }
+            } catch (Error e) {
+                info ("Error parsing OPML file. %s", e.message);
+            }
 
-                Idle.add ((owned) callback);
-                return null;
-            };
-            Thread.create<void*> (run, false);
+
 
             yield;
 
@@ -260,33 +242,15 @@ namespace Vocal {
             }
 
             string podcast_path = local_library_path + "/%s".printf (podcast.name.replace ("%27", "'").replace ("%", "_"));
+            print("Podcast path: " + podcast_path + "\n");
 
             // Create a directory for downloads and artwork caching in the local library
             GLib.DirUtils.create_with_parents (podcast_path, 0775);
 
-            //  Locally cache the album art if necessary
-            try {
-                // Don't use the default coverart_path getter, we want to make sure we are using the remote URI
-                GLib.File remote_art = GLib.File.new_for_uri (podcast.remote_art_uri);
-                if (remote_art.query_exists ()) {
-                    // If the remote art exists, set the path of the new file and create another object for the local file
-                    string art_path = podcast_path + "/" + remote_art.get_basename ().replace ("%", "_");
-                    GLib.File local_art = GLib.File.new_for_path (art_path);
-
-                    // If the local album art doesn't exist
-                    if (!local_art.query_exists ()) {
-                        // Cache the art
-                        remote_art.copy (local_art, FileCopyFlags.NONE);
-                        // Mark the local path on the podcast
-                        podcast.local_art_uri = "file://" + art_path;
-                    } else {
-                        // it already exists so don't download again.
-                        podcast.local_art_uri = "file://" + art_path;
-                    }
-                }
-            } catch (Error e) {
-                error ("Unable to save a local copy of the album art. %s", e.message);
-            }
+            ImageCache image_cache = new ImageCache ();
+            image_cache.get_image_async.begin (podcast.remote_art_uri, (obj, res) => {
+                image_cache.get_image_async.end (res);
+            });
 
             // Add the podcast
             if (write_podcast_to_database (podcast)) {
@@ -333,15 +297,24 @@ namespace Vocal {
             podcasts_being_added.append (path);
 
             FeedParser feed_parser = new FeedParser ();
-            Podcast new_podcast = feed_parser.get_podcast_from_file (uri);
+            Podcast new_podcast = null;
+            try {
+                new_podcast = feed_parser.get_podcast_from_file (uri);
+            } catch (Error e) {
+                warning (e.message);
+            }
 
             if (new_podcast == null) {
                 warning ("Failed to parse %s", uri);
                 podcasts_being_added.remove (path);
                 return false;
             } else {
-                add_podcast (new_podcast);
-                podcasts_being_added.remove (path);
+                try {
+                    add_podcast (new_podcast);
+                    podcasts_being_added.remove (path);
+                } catch (Error e) {
+                    warning (e.message);
+                }
                 return true;
             }
         }
@@ -366,38 +339,31 @@ namespace Vocal {
                 }
             }
 
-            bool successful = true;
+            bool successful = false;
 
-            SourceFunc callback = async_add_podcast_from_file.callback;
+            GLib.Idle.add(async_add_podcast_from_file.callback);
 
-            ThreadFunc<void*> run = () => {
+            info ("Adding podcast from file: %s", path);
+            podcasts_being_added.append (path);
 
-                info ("Adding podcast from file: %s", path);
-                podcasts_being_added.append (path);
+            FeedParser parser = new FeedParser ();
 
-                FeedParser parser = new FeedParser ();
+            try {
+                Podcast new_podcast = parser.get_podcast_from_file (path);
 
-                try {
-                    Podcast new_podcast = parser.get_podcast_from_file (path);
-
-                    if (new_podcast == null) {
-                        info ("New podcast found to be null. %s", path);
-                        successful = false;
-                    } else {
-                        info ("Async Adding %s", new_podcast.name);
-                        add_podcast (new_podcast);
-                    }
-                } catch (Error e) {
-                    error ("Failed to add podcast: %s", e.message);
+                if (new_podcast == null) {
+                    info ("New podcast found to be null. %s", path);
                     successful = false;
+                } else {
+                    info ("Async Adding %s", new_podcast.name);
+                    successful = true;
+                    add_podcast (new_podcast);
                 }
+            } catch (Error e) {
+                error ("Failed to add podcast: %s", e.message);
+            }
 
-                podcasts_being_added.remove (path);
-
-                Idle.add ((owned) callback);
-                return null;
-            };
-            Thread.create<void*> (run, false);
+            podcasts_being_added.remove (path);
 
             yield;
 
@@ -409,32 +375,25 @@ namespace Vocal {
          */
         public async void autoclean_library () {
 
-            SourceFunc callback = autoclean_library.callback;
+            GLib.Idle.add(autoclean_library.callback);
 
-            ThreadFunc<void*> run = () => {
-                // Create a new DateTime that is the current date and then subtract one week
-                GLib.DateTime week_ago = new GLib.DateTime.now_utc ();
-                week_ago = week_ago.add_weeks(-1); 
+            // Create a new DateTime that is the current date and then subtract one week
+            GLib.DateTime week_ago = new GLib.DateTime.now_utc ();
+            week_ago = week_ago.add_weeks(-1);
 
-                foreach (Podcast p in podcasts) {
-                    foreach (Episode e in p.episodes) {
+            foreach (Podcast p in podcasts) {
+                foreach (Episode e in p.episodes) {
 
-                        // If e is downloaded, played, and more than a week old
-                        if (e.current_download_status == DownloadStatus.DOWNLOADED &&
-                            e.status == EpisodeStatus.PLAYED && e.datetime_released.compare (week_ago) == -1) {
+                    // If e is downloaded, played, and more than a week old
+                    if (e.current_download_status == DownloadStatus.DOWNLOADED &&
+                        e.status == EpisodeStatus.PLAYED && e.datetime_released.compare (week_ago) == -1) {
 
-                            // Delete the episode. Skip checking for an existing file, the delete_episode method will do that automatically
-                            info ("Episode %s is more than a week old. Deleting.".printf (e.title));
-                            delete_local_episode (e);
-                        }
+                        // Delete the episode. Skip checking for an existing file, the delete_episode method will do that automatically
+                        info ("Episode %s is more than a week old. Deleting.".printf (e.title));
+                        delete_local_episode (e);
                     }
                 }
-
-                Idle.add ((owned) callback);
-                return null;
-
-            };
-            Thread.create<void*> (run, false);
+            }
 
             yield;
         }
@@ -451,44 +410,39 @@ namespace Vocal {
          * Checks each feed in the library to see if new episodes are available
          */
         public async Gee.ArrayList<Episode> check_for_updates () {
-            SourceFunc callback = check_for_updates.callback;
+            GLib.Idle.add(check_for_updates.callback);
             Gee.ArrayList<Episode> new_episodes = new Gee.ArrayList<Episode> ();
 
             FeedParser parser = new FeedParser ();
 
-            ThreadFunc<void*> run = () => {
-                foreach (Podcast podcast in podcasts) {
-                    int added = -1;
-                    if (podcast.feed_uri != null && podcast.feed_uri.length > 4) {
-                        info ("updating feed %s", podcast.feed_uri);
+            foreach (Podcast podcast in podcasts) {
+                int added = -1;
+                if (podcast.feed_uri != null && podcast.feed_uri.length > 4) {
+                    info ("updating feed %s", podcast.feed_uri);
 
-                        try {
-                            added = parser.update_feed (podcast);
-                        } catch (Error e) {
-                            warning ("Failed to update feed for podcast: %s. %s", podcast.name, e.message);
-                            continue;
-                        }
-                    }
-
-                    while (added > 0) {
-                        int index = podcast.episodes.size - added;
-
-                        // Add the new episode to the arraylist in case it needs to be downloaded later
-                        new_episodes.add (podcast.episodes[index]);
-
-                        write_episode_to_database (podcast.episodes[index]);
-                        added--;
-                    }
-
-                    if (added == -1) {
-                        critical ("Unable to update podcast due to missing feed URL: " + podcast.name);
+                    try {
+                        added = parser.update_feed (podcast);
+                    } catch (Error e) {
+                        warning ("Failed to update feed for podcast: %s. %s", podcast.name, e.message);
+                        continue;
                     }
                 }
 
-                Idle.add ((owned) callback);
-                return null;
-            };
-            Thread.create<void*> (run, false);
+                while (added > 0) {
+                    int index = podcast.episodes.size - added;
+
+                    // Add the new episode to the arraylist in case it needs to be downloaded later
+                    new_episodes.add (podcast.episodes[index]);
+
+                    write_episode_to_database (podcast.episodes[index]);
+                    added--;
+                }
+
+                if (added == -1) {
+                    critical ("Unable to update podcast due to missing feed URL: " + podcast.name);
+                }
+            }
+
 
             yield;
 
@@ -505,7 +459,11 @@ namespace Vocal {
             if (local.query_exists ()) {
 
                 // Delete the file
-                local.delete ();
+                try {
+                    local.delete ();
+                } catch (Error e) {
+                    warning (e.message);
+                }
             }
 
             // Clear the fields in the episode
@@ -515,6 +473,7 @@ namespace Vocal {
             write_episode_to_database (e);
             recount_unplayed ();
         }
+
 
         /*
          * Downloads a podcast to the local directory and creates a DownloadDetailBox that is useful
@@ -528,57 +487,51 @@ namespace Vocal {
                 return null;
             }
 
-            string library_location;
-
-
-
-            if (settings.library_location != null) {
-                library_location = settings.library_location;
-            }
-            else {
-                library_location = GLib.Environment.get_user_data_dir () + """/vocal""";
-            }
-
-
             // Create a file object for the remotely hosted file
             GLib.File remote_file = GLib.File.new_for_uri (episode.uri);
+
+            bool remote_exists = remote_file.query_exists ();
+            if(remote_exists) {
+
+            }
 
             DownloadDetailBox detail_box = null;
 
             // Set the path of the new file and create another object for the local file
-            try {
-                string path = library_location + "/%s/%s".printf (episode.parent.name.replace ("%27", "'").replace ("%", "_"), remote_file.get_basename ());
-                GLib.File local_file = GLib.File.new_for_path (path);
+            string path = local_library_path + "/%s/%s".printf (episode.parent.name.replace ("%27", "'").replace ("%", "_"), remote_file.get_basename ());
 
-                detail_box = new DownloadDetailBox (episode);
-                detail_box.download_has_completed_successfully.connect (on_successful_download);
-                FileProgressCallback callback = detail_box.download_delegate;
-                GLib.Cancellable cancellable = new GLib.Cancellable ();
+            GLib.File local_file = GLib.File.new_for_path (path);
 
-                detail_box.cancel_requested.connect (() => {
+            detail_box = new DownloadDetailBox (episode);
+            detail_box.download_has_completed_successfully.connect (on_successful_download);
+            FileProgressCallback callback = detail_box.download_delegate;
+            GLib.Cancellable cancellable = new GLib.Cancellable ();
 
-                    cancellable.cancel ();
-                    bool exists = local_file.query_exists ();
-                    if (exists) {
-                        try {
-                            local_file.delete ();
-                        } catch (Error e) {
-                            stderr.puts ("Unable to delete file.\n");
-                        }
+            detail_box.cancel_requested.connect (() => {
+                cancellable.cancel ();
+                bool exists = local_file.query_exists ();
+                if (exists) {
+                    try {
+                        local_file.delete ();
+                    } catch (Error e) {
+                        stderr.puts ("Unable to delete file.\n");
                     }
+                }
 
-                });
+            });
 
-                remote_file.copy_async (local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, cancellable, callback);
+            remote_file.copy_async.begin (local_file, FileCopyFlags.OVERWRITE, 0, cancellable, callback, (obj, res) => {
+	            try {
+		            bool success = remote_file.copy_async.end (res);
+		            if(success) {
+                        // Set the episode's local uri to the new path
+                        mark_episode_as_downloaded (episode);
+                    }
+	            } catch (Error e) {
+		            warning ("Error: %s\n", e.message);
+	            }
 
-
-                // Set the episode's local uri to the new path
-                episode.local_uri = path;
-                mark_episode_as_downloaded (episode);
-
-
-            } catch (Error e) {
-            }
+            });
 
             if (batch_download_count > 0) {
                 batch_notification_needed = true;
@@ -746,10 +699,8 @@ namespace Vocal {
          * Marks an episode as downloaded in the database
          */
         public void mark_episode_as_downloaded (Episode episode) {
-
             episode.current_download_status = DownloadStatus.DOWNLOADED;
             write_episode_to_database (episode);
-
         }
 
         /*
@@ -780,59 +731,36 @@ namespace Vocal {
         public void on_successful_download (string episode_title, string parent_podcast_name) {
 
             batch_download_count--;
-            try {
-                recount_unplayed ();
-                set_new_badge ();
 
-#if HAVE_LIBNOTIFY
+            recount_unplayed ();
 
-            if (!batch_notification_needed) {
-                string message = _ ("'%s' from '%s' has finished downloading.").printf (episode_title.replace ("%27", "'"), parent_podcast_name.replace ("%27","'"));
-                var notification = new Notify.Notification (_ ("Episode Download Complete"), message, null);
-                if (!controller.window.focus_visible)
-                    notification.show ();
-            } else {
-                if (batch_download_count == 0) {
-                    var notification = new Notify.Notification (_ ("Downloads Complete"), _ ("New episodes have been downloaded."), "vocal");
-                    batch_notification_needed = false;
-                    if (!controller.window.focus_visible)
-                        notification.show ();
-                }
-            }
+            // Find the episode in the library
+            downloaded_episode = null;
+            bool found = false;
 
-#endif
+            // TODO: the following can be very slow for large podcasts/databases, should be done in sql.
 
-                // Find the episode in the library
-                downloaded_episode = null;
-                bool found = false;
-
-                // TODO: the following can be very slow for large podcasts/databases, should be done in sql.
-
-                foreach (Podcast podcast in podcasts) {
-                    if (!found) {
-                        if (parent_podcast_name == podcast.name) {
-                            foreach (Episode episode in podcast.episodes) {
-                                if (episode_title == episode.title) {
-                                    downloaded_episode = episode;
-                                    found = true;
-                                }
+            foreach (Podcast podcast in podcasts) {
+                if (!found) {
+                    if (parent_podcast_name == podcast.name) {
+                        foreach (Episode episode in podcast.episodes) {
+                            if (episode_title == episode.title) {
+                                downloaded_episode = episode;
+                                found = true;
                             }
-
                         }
+
                     }
                 }
-
-                // If the episode was found (and it should have been), mark as downloaded and write to database
-                if (downloaded_episode != null) {
-                    downloaded_episode.current_download_status = DownloadStatus.DOWNLOADED;
-                    mark_episode_as_downloaded (downloaded_episode);
-                }
-
-            } catch (Error e) {
-                error ("%s", e.message);
-            } finally {
-                download_finished (downloaded_episode);
             }
+
+            // If the episode was found (and it should have been), mark as downloaded and write to database
+            if (downloaded_episode != null) {
+                downloaded_episode.current_download_status = DownloadStatus.DOWNLOADED;
+                mark_episode_as_downloaded (downloaded_episode);
+            }
+
+            download_finished (downloaded_episode);
 
         }
 
@@ -866,14 +794,15 @@ namespace Vocal {
                     }
                 }
             }
-
-            set_new_badge ();
         }
 
         /*
          * Refills the local library from the contents stored in the database
          */
-        public void refill_library () {
+        public async void refill_library () {
+
+            GLib.Idle.add(this.refill_library.callback);
+
             podcasts.clear ();
             prepare_database ();
 
@@ -923,7 +852,8 @@ namespace Vocal {
             }
 
             recount_unplayed ();
-            set_new_badge ();
+
+            yield;
         }
 
         public ArrayList<Podcast> find_matching_podcasts (string term) {
@@ -936,15 +866,13 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Podcast WHERE name LIKE ? ORDER BY name";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text (1, "%" + term + "%", -1, null);
+            ec = stmt.bind_text (1, "%" + term + "%", -1);
             if (ec != Sqlite.OK) {
                 warning ("%d: %s\n", db.errcode (), db.errmsg ());
                 return matches;
             }
 
             // Use the prepared statement:
-
-            int cols = stmt.column_count ();
             while (stmt.step () == Sqlite.ROW) {
                 Podcast current = podcast_from_row (stmt);
 
@@ -965,15 +893,13 @@ namespace Vocal {
 
             string prepared_query_str = "SELECT * FROM Episode WHERE title LIKE ? ORDER BY title";
             int ec = db.prepare_v2 (prepared_query_str, prepared_query_str.length, out stmt);
-            ec = stmt.bind_text (1, "%" + term + "%", -1, null);
+            ec = stmt.bind_text (1, "%" + term + "%", -1);
             if (ec != Sqlite.OK) {
                 warning ("%d: %s\n".printf (db.errcode (), db.errmsg ()));
                 return matches;
             }
 
             // Use the prepared statement:
-
-            int cols = stmt.column_count ();
             while (stmt.step () == Sqlite.ROW) {
 
                 Episode current_ep = episode_from_row (stmt);
@@ -1066,7 +992,7 @@ namespace Vocal {
                     if (val != " (null)")
                         episode.local_uri = val;
                 } else if (col_name == "released") {
-                    episode.datetime_released = new GLib.DateTime.from_unix_local (val.to_int64 ());
+                    episode.datetime_released = new GLib.DateTime.from_unix_local (int64.parse(val));
                 }
                 else if (col_name == "download_status") {
                     if (val == "downloaded") {
@@ -1120,7 +1046,7 @@ namespace Vocal {
                     podcast.remote_art_uri = val;
                 }
                 else if (col_name == "album_art_local_uri") {
-                    podcast.local_art_uri = val;
+                    //podcast.local_art_uri = val;
                 }
                 else if (col_name == "description") {
                     podcast.description = val;
@@ -1159,48 +1085,24 @@ namespace Vocal {
             write_episode_to_database (episode);
         }
 
-/*
-        public void set_launcher_progress (double progress) {
-#if HAVE_LIBUNITY
-            if (progress > 0.0 && progress < 1.0) {
-                launcher.progress = progress;
-                launcher.progress_visible = true;
-            }
-            else {
-                launcher.progress_visible = false;
-            }
-#endif
-        }
-
-*/
-        /*
-         * Sets the count on the launcher to match the number of unplayed episodes (if there are
-         * unplayed episodes) if libunity is enabled.
-         */
-        public void set_new_badge () {
-#if HAVE_LIBUNITY
-            launcher.count = new_episode_count;
-            if (new_episode_count > 0) {
-                launcher.count_visible = true;
-            }
-            else {
-                launcher.count_visible = false;
-            }
-#endif
-
-        }
-
         public void set_new_local_album_art (string path_to_local_file, Podcast p) {
 
             // Copy the file
             GLib.File current_file = GLib.File.new_for_path (path_to_local_file);
 
-            InputStream input_stream = current_file.read ();
+            //InputStream input_stream = current_file.read ();
 
-            string path = settings.library_location + "/%s/cover.jpg".printf (p.name.replace ("%27", "'").replace ("%", "_"));
+            string path = local_library_path + "/%s/cover.jpg".printf (p.name.replace ("%27", "'").replace ("%", "_"));
             GLib.File local_file = GLib.File.new_for_path (path);
 
-            current_file.copy_async (local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, null, null);
+
+            current_file.copy_async.begin (local_file, FileCopyFlags.OVERWRITE, Priority.DEFAULT, null, null, (obj,res) => {
+                try {
+                    current_file.copy_async.end(res);
+                } catch (Error e) {
+                    warning (e.message);
+                }
+            });
 
             // Set the new file location in the database
             string query, errmsg;
@@ -1215,7 +1117,7 @@ namespace Vocal {
             }
 
             // Set the new file location for the podcast object
-            p.local_art_uri = local_file.get_uri ();
+            //p.local_art_uri = local_file.get_uri ();
 
         }
 
@@ -1224,15 +1126,6 @@ namespace Vocal {
          *  tables for both Podcasts and Episodes
          */
         public bool setup_library () {
-            if (settings.library_location == null) {
-                settings.library_location = GLib.Environment.get_user_data_dir () + """/vocal""";
-            }
-            local_library_path = settings.library_location.replace ("~", GLib.Environment.get_user_data_dir ());
-
-            // If the new local_library_path has been modified, update the setting
-            if (settings.library_location != local_library_path) {
-                settings.library_location = local_library_path;
-            }
 
             // Create the local library
             GLib.DirUtils.create_with_parents (local_library_path, 0775);
@@ -1335,14 +1228,14 @@ namespace Vocal {
                 return false;
             }
             /* This is here for compatibility. Escaping the name should not be necessary
-             * but is left to remain consitent with existing db entries since the name
+             * but is left to remain consistent with existing db entries since the name
              * is currently used as the key field. */
             string name = podcast.name.replace ("'", "%27");
 
             stmt.bind_text (1, name);
             stmt.bind_text (2, podcast.feed_uri);
             stmt.bind_text (3, podcast.remote_art_uri);
-            stmt.bind_text (4, podcast.local_art_uri);
+            stmt.bind_text (4, "");
             stmt.bind_text (5, podcast.description);
             stmt.bind_text (6, content_type_text);
             stmt.bind_text (7, license_text);
@@ -1379,10 +1272,9 @@ namespace Vocal {
             }
 
             /* This is here for compatibility. Escaping these values should not be necessary
-             * but is done to remain consitent with existing db entries since the title
+             * but is done to remain consistent with existing db entries since the title
              * and podcast name are currently used as key fields. */
             string title = episode.title.replace ("'", "%27");
-            string parent_podcast_name = episode.parent.name.replace ("'", "%27");
 
             // convert enums to text representations.
             string played_text = (episode.status == EpisodeStatus.PLAYED) ? "played" : "unplayed";
@@ -1422,7 +1314,7 @@ namespace Vocal {
 
             int version = 0;
             int ec = db.exec ("PRAGMA user_version", (n_cols, values, col_names) => {
-                    version = values[0].to_int ();
+                    version = int.parse(values[0]);
                     return 0;
                 }, null);
 
@@ -1436,3 +1328,4 @@ namespace Vocal {
 
     }
 }
+

@@ -1,21 +1,18 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using Gtk;
 
@@ -37,6 +34,8 @@ namespace Vocal {
         public Gtk.ProgressBar progress_bar = null;
         public Gtk.Label download_label = null;
 
+        public Episode episode;
+
         public double percentage;
         public int secs_elapsed;
         public bool download_complete;
@@ -57,20 +56,31 @@ namespace Vocal {
 
             string title = episode.title;
             string parent_podcast_name = episode.parent.name;
+            this.episode = episode;
 
             // Load the actual cover art
-            var file = GLib.File.new_for_uri (episode.parent.coverart_uri);
-            var icon = new GLib.FileIcon (file);
-            var image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
+            var image = new Gtk.Image();
+            ImageCache image_cache = new ImageCache ();
+            image_cache.get_image_async.begin (episode.parent.remote_art_uri, (obj, res) => {
+                Gdk.Pixbuf pixbuf = image_cache.get_image_async.end (res);
+                if (pixbuf != null) {
+                    image.clear ();
+                    image.gicon = pixbuf;
+                    image.show();
+                }
+            });
             image.pixel_size = 64;
+            image.overflow = Gtk.Overflow.HIDDEN;
+            image.get_style_context().add_class("squircle");
 
             this.episode_title = title;
             this.parent_podcast_name = parent_podcast_name;
             this.orientation = Gtk.Orientation.VERTICAL;
 
-            this.margin = 5;
-            this.margin_left = 12;
-            this.margin_right = 12;
+            this.margin_top = 5;
+            this.margin_bottom = 5;
+            this.margin_start = 12;
+            this.margin_end = 12;
             this.spacing = 5;
 
             // Set seconds elapsed to zero
@@ -92,38 +102,39 @@ namespace Vocal {
             podcast_label.max_width_chars = 15;
 
             var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
-            label_box.add (title_label);
-            label_box.add (podcast_label);
+            label_box.append (title_label);
+            label_box.append (podcast_label);
 
             var details_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 12);
-            details_box.add (image);
-            details_box.add (label_box);
+            details_box.append (image);
+            details_box.append (label_box);
 
             var progress_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
 
             progress_bar = new Gtk.ProgressBar ();
             progress_bar.show_text = false;
-            progress_bar.expand = true;
             progress_bar.valign = Gtk.Align.CENTER;
+            progress_bar.hexpand = true;
 
-            var cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic", Gtk.IconSize.BUTTON);
+            var cancel_button = new Gtk.Button.from_icon_name ("process-stop-symbolic");
             cancel_button.get_style_context ().add_class ("flat");
-            cancel_button.tooltip_text = _ ("Cancel Download");
+            cancel_button.tooltip_text = "Cancel Download";
             cancel_button.clicked.connect (() => {
                 cancel_requested (episode);
+                ready_for_removal (this);
             });
-            progress_box.add (progress_bar);
-            progress_box.add (cancel_button);
+            progress_box.append (progress_bar);
+            progress_box.append (cancel_button);
 
 
             download_label = new Gtk.Label ("");
             download_complete = false;
             download_label.xalign = 0;
 
-            this.add (details_box);
+            this.append (details_box);
 
-            label_box.add (progress_box);
-            label_box.add (download_label);
+            label_box.append (progress_box);
+            label_box.append (download_label);
 
 
             // While the download isn't complete, keep counting seconds elapsed

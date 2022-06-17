@@ -1,30 +1,27 @@
-/***
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
 
   Note: Parts of this MPRIS implementation are inspired by the Noise
   MPRIS plugin:
 
-          Original Authors: Andreas Obergrusberger
+         Original Authors: Andreas Obergrusberger
                                Jörn Magens
 
          Edited by: Scott Ringwelski
-
-  BEGIN LICENSE
-***/
+ */
 
 using Gee;
 using GLib;
@@ -35,7 +32,7 @@ namespace Vocal {
         public MprisPlayer player = null;
         public MprisRoot root = null;
 
-        private Controller controller;
+        private Vocal.Application controller;
 
         private unowned DBusConnection conn;
         private uint owner_id;
@@ -43,8 +40,8 @@ namespace Vocal {
         /*
          * Default constructor that simply sets the controller.window
          */
-        public MPRIS (Controller controller) {
-            this.controller = controller;
+        public MPRIS (Vocal.Application app) {
+            this.controller = app;
         }
 
         /*
@@ -53,7 +50,7 @@ namespace Vocal {
         public void initialize () {
 
             owner_id = Bus.own_name (BusType.SESSION,
-                                    "org.mpris.MediaPlayer2.com.github.needleandthread.vocal",
+                                    "org.mpris.MediaPlayer2.com.github.VocalPodcastProject.vocal",
                                     GLib.BusNameOwnerFlags.NONE,
                                     on_bus_acquired,
                                     on_name_acquired,
@@ -75,37 +72,37 @@ namespace Vocal {
                 connection.register_object ("/org/mpris/MediaPlayer2", root);
 
                 root.quit_requested.connect (() => {
-                    controller.window.destroy ();
+                    controller.active_window.destroy ();
                 });
                 root.raise_requiested.connect (() => {
-                    controller.window.present ();
+                    controller.active_window.present ();
                 });
 
 
                 player = new MprisPlayer (connection);
 
                 // Set up all the signals
-                controller.track_changed.connect (player.set_media_metadata);
-                controller.playback_status_changed.connect (player.set_playback_status);
+                controller.player.track_changed.connect (player.set_media_metadata);
+                controller.player.playback_status_changed.connect (player.set_playback_status);
 
                 player.play.connect (() => {
-                    controller.play ();
+                    controller.player.play ();
                 });
 
                 player.pause.connect (() => {
-                    controller.pause ();
+                    controller.player.pause ();
                 });
 
                 player.play_pause.connect (() => {
-                    controller.play_pause ();
+                    controller.player.play_pause ();
                 });
 
                 player.next.connect (() => {
-                    controller.seek_forward ();
+                    controller.player.skip_forward (15);
                 });
 
                 player.previous.connect (() => {
-                    controller.seek_backward ();
+                    controller.player.skip_back (15);
                 });
 
                 connection.register_object ("/org/mpris/MediaPlayer2", player);
@@ -146,13 +143,13 @@ namespace Vocal {
 
 
         private const string INTERFACE_NAME = "org.mpris.MediaPlayer2.Player";
-        const string TRACK_ID = "/com/github/needleandthread/vocal/Track/%d";
+        const string TRACK_ID = "/com/github/VocalPodcastProject/vocal/Track/%d";
 
         public MprisPlayer (DBusConnection conn) {
             this.conn = conn;
 
             // Set the metadata on initialization
-            this.set_media_metadata (" ", " ", """file:///usr/share/vocal/vocal-missing.png""", 60);
+            this.set_media_metadata (" ", " ", " ", 60);
         }
 
         // MPRIS requires a mpris:trackid metadata item.
@@ -220,7 +217,7 @@ namespace Vocal {
                                  );
             }
             catch (Error e) {
-                print ("Could not send MPRIS property change: %s\n", e.message);
+                warning ("Could not send MPRIS property change: %s\n", e.message);
             }
             send_property_source = 0;
             return false;
@@ -386,7 +383,7 @@ namespace Vocal {
 
         public string DesktopEntry {
             owned get {
-                return "com.github.needleandthread.vocal";
+                return "com.github.VocalPodcastProject.vocal";
             }
         }
 

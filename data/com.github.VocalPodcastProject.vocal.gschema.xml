@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="vocal">
+	<schema id="com.github.VocalPodcastProject.vocal" path="/com/github/VocalPodcastProject/vocal/">
+	    <key name="auto-download" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should automatically download new episodes</summary>
+			<description>
+				Whether or not Vocal should automatically download new episodes when they are available.
+			</description>
+		</key>
+
+		<key name="autoclean-library" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should automatically delete old downloaded episdes</summary>
+			<description>
+				Whether or not Vocal should automatically delete downloaded, played episodes that are more
+				than a week old.
+			</description>
+		</key>
+
+		<key name="window-width" type="i">
+			<default>990</default>
+			<summary>The user's last window width</summary>
+			<description>
+				The user's last window width
+			</description>
+		</key>
+
+		<key name="sidebar-width" type="i">
+			<default>325</default>
+			<summary>The user's preferred sidebar width</summary>
+			<description>
+				The preferred width of the sidebar that displays episode descriptions.
+			</description>
+		</key>
+
+		<key name="window-height" type="i">
+			<default>550</default>
+			<summary>The user's last window height</summary>
+			<description>
+				The user's last window height
+			</description>
+		</key>
+
+		<key name="update-interval" type="i">
+			<default>30</default>
+			<summary>The number of minutes between checking for episodes</summary>
+			<description>
+				The number of minutes to wait between checking for new episodes
+			</description>
+		</key>
+
+		<key name="fast-forward-seconds" type="i">
+			<default>30</default>
+			<summary>The number of seconds to fast forward</summary>
+			<description>
+				The number of seconds to fast forward
+			</description>
+		</key>
+
+		<key name="rewind-seconds" type="i">
+			<default>30</default>
+			<summary>The number of seconds to rewind</summary>
+			<description>
+				The number of seconds to rewind
+			</description>
+		</key>
+
+		<key name="last-played-media" type="s">
+			<default>""</default>
+			<summary>The podcast and episode that was last playing</summary>
+			<description>
+				The podcast and episode that was last played, in podcast_name,episode_title format
+			</description>
+		</key>
+
+		<key name="continue-running-after-close" type="b">
+			<default>true</default>
+			<summary>Whether or not Vocal should run in the background after closing</summary>
+			<description>
+				Whether or not Vocal should keep running in the background for feed updates and downloads.
+			</description>
+		</key>
+
+		<key name="itunes-store-country" type="s">
+			<default>"us"</default>
+			<summary>The iTunes country code to search for results</summary>
+			<description>
+				When finding the top n podcasts, Vocal will search for results from a particular country's iTunes Store.
+			</description>
+		</key>
+
+		<key name="show-name-label" type="b">
+			<default>false</default>
+			<summary>Whether or not Vocal should display the names of podcasts in the local library</summary>
+			<description>
+				When enabled, Vocal will show an extra label beneath the cover art in the library with the name of the podcast.
+			</description>
+		</key>
+
+		<key name="dark-mode-enabled" type="b">
+			<default>false</default>
+			<summary>Whether or not Vocal should use the dark theme instead of the light theme.</summary>
+			<description>
+				When enabled, Vocal will use the dark version of the GTK theme and modify the headerbar color if on elementary OS.
+			</description>
+		</key>
+
+		<key name="theme-preference" type="s">
+			<default>"system"</default>
+			<summary>Which theme to use</summary>
+			<description>
+				Whether to use 'system', 'light', or 'dark' theme.
+			</description>
+		</key>
+
+		<key name="newest-episodes-first" type="b">
+			<default>true</default>
+			<summary>Whether to show the newest episodes highest up in the list, or at the bottom</summary>
+			<description>
+				When set to true, Vocal will show the newest episodes at the top of episode lists. When false, the oldest
+				will be at the top.
+			</description>
+		</key>
+
+		<key name="keep-playing-in-background" type="b">
+			<default>true</default>
+			<summary>Whether or not to keep Vocal playing in the background</summary>
+			<description>
+				When set to true, Vocal will keep running and playing in the background when the
+				close button is pressed. When set to false, Vocal will exit the program when
+				close is pressed.
+			</description>
+		</key>
+
+		<key name="gpodder-device-name" type="s">
+			<default>"vocal"</default>
+			<summary>The name of the device for gpodder.net</summary>
+			<description>
+				The name of the device that gets displayed on gpodder.net. Typically,
+				it is set to some combination of "vocal" and the hardware device name.
+				That said, you can get as creative as you want.
+			</description>
+		</key>
+
+		<key name="gpodder-username" type="s">
+			<default>""</default>
+			<summary>The username of the last successfully logged-in gpodder.net user</summary>
+			<description>
+				Contains the username of the last gpodder.net user account to successfully
+				login to the service.
+			</description>
+		</key>
+
+		<key name="gpodder-sync-episode-status" type="b">
+			<default>true</default>
+			<summary>Whether or not to keep episode status in sync with the cloud</summary>
+			<description>
+				When set to true, Vocal will automatically sync all the episode statuses with
+				gpodder.net, including whether or not an episode has been listened to, as well as
+				playback progress.
+			</description>
+		</key>
+
+		<key name="gpodder-remove-deleted-podcasts" type="b">
+			<default>false</default>
+			<summary>Whether or not to remove podcasts that are no longer in the gpodder.net subscriptions</summary>
+			<description>
+				When set to true, Vocal will automatically remove a podcast from the library when
+				it is no longer in the user's gpodder.net subscription list (typically following
+				a delete event from another device).
+			</description>
+		</key>
+
+		<key name="gpodder-last-successful-sync-timestamp" type="s">
+			<default>""</default>
+			<summary>The UNIX timestamp of the last successful episode sync</summary>
+			<description>
+				The UNIX timestamp of the last time Vocal successfully contacted the
+				gpodder.net service and received an update of episode actions.
+			</description>
+		</key>
+	</schema>
+</schemalist>

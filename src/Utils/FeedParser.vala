@@ -1,25 +1,22 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 namespace Vocal {
 
-    errordomain VocalUpdateError {
+    public errordomain VocalUpdateError {
         NETWORK_ERROR, EMPTY_ADDRESS_ERROR;
     }
 
@@ -52,8 +49,8 @@ namespace Vocal {
             while (i < queue.size) {
                 string current = queue[i];
 
-                // Title can be ambigous, so only accept the first one
-                if (current == "title" && found_podcast_title == false) {
+                // Title can be ambiguous, so only accept the first one
+                if (current == "title" && found_podcast_title == false && queue[i+1] != "MP3 Audio") {
                     i++;
                     podcast.name = queue[i];
                     found_podcast_title = true;
@@ -131,7 +128,6 @@ namespace Vocal {
                     // Create a new episode
                     Episode episode = new Episode ();
                     string next_item_in_queue = null;
-                    bool found_summary = false;
 
                     while (next_item_in_queue != "item" && i < queue.size - 1) {
                         i++;
@@ -359,8 +355,8 @@ namespace Vocal {
 
             }
 
-            if (podcast.coverart_uri == null || podcast.coverart_uri.length < 1) {
-                podcast.coverart_uri = "resource:///com/github/needleandthread/vocal/banner.png";
+            if (podcast.remote_art_uri == null || podcast.remote_art_uri.length < 1) {
+                podcast.remote_art_uri = "resource:///com/github/needleandthread/vocal/banner.png";
             }
 
             if (podcast.feed_uri == null || podcast.feed_uri.length < 1) {
@@ -381,25 +377,8 @@ namespace Vocal {
 
             queue.clear ();
 
-            // Call the Xml.Parser to parse the file, which returns an unowned reference
+            Xml.Doc* doc;
 
-            /*
-            // TODO:
-            // I believe this is outdate code, but I'm leaving it commented out in case it is necessary.
-            // I can test it with the Ubuntu UK feed, if memory serves correctly
-            
-            Xml.Doc* doc;
-            
-            // If bracket character is in the path, assume it's the raw data, not a path
-            if (path.contains("<")) {
-                doc = Xml.Parser.parse_memory (path, path.length);
-            } else {
-                doc = Xml.Parser.parse_file (path);
-            }
-            */
-            
-            Xml.Doc* doc;
-            
             if (!raw_data) {
 				doc = Xml.Parser.parse_file (path);
         	} else {
@@ -551,8 +530,6 @@ namespace Vocal {
                         // Create a new episode
                         Episode episode = new Episode ();
                         string next_item_in_queue = null;
-                        bool found_summary = false;
-
 
                         while (next_item_in_queue != "item" && i < queue.size - 1) {
                             i++;

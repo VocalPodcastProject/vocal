@@ -1,47 +1,48 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 using Gtk;
 using Gee;
-using Granite;
-    namespace Vocal {
+namespace Vocal {
 
-        public class Shownotes : Gtk.ScrolledWindow {
+    public class Shownotes : Gtk.Box {
+
+        public signal void play();
+        public signal void enqueue();
+        public signal void download();
+        public signal void mark_as_new();
+        public signal void mark_as_played();
+        public signal void remove_download();
 
         public signal void copy_shareable_link ();
         public signal void send_tweet ();
         public signal void copy_direct_link ();
-        public signal void internet_archive_upload_requested ();
 
         public Gtk.Button play_button;
         public Gtk.Button queue_button;
         public Gtk.Button download_button;
         public Gtk.Button share_button;
-        public Gtk.Button internet_archive_button;
         public Gtk.Button mark_as_played_button;
         public Gtk.Button mark_as_new_button;
         public Gtk.Button delete_button;
         public Episode episode = null;
 
-        public Gtk.MenuItem shareable_link;
-        public Gtk.MenuItem tweet;
-        public Gtk.MenuItem link_to_file;
+        private Gtk.Button shareable_link;
+        private Gtk.Button tweet;
+        private Gtk.Button link_to_file;
 
         private Gtk.Label title_label;
         private Gtk.Label date_label;
@@ -50,142 +51,172 @@ using Granite;
 
         public Shownotes () {
 
+            this.orientation = Gtk.Orientation.VERTICAL;
+
             var content_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 0);
+            content_box.hexpand = true;
+            content_box.vexpand = true;
+
+
 
             shownotes_label = new Gtk.Label ("");
-            shownotes_label.margin = 12;
             shownotes_label.halign = Gtk.Align.START;
             shownotes_label.valign = Gtk.Align.START;
-            shownotes_label.xalign = 0;
             shownotes_label.wrap = true;
+            shownotes_label.margin_start = 12;
+            shownotes_label.vexpand = true;
 
             controls_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);
             controls_box.get_style_context ().add_class ("toolbar");
             controls_box.get_style_context ().add_class ("podcast-view-toolbar");
             controls_box.height_request = 30;
+            controls_box.halign = Gtk.Align.END;
 
-            mark_as_played_button = new Gtk.Button.from_icon_name (
-                "object-select-symbolic",
-                Gtk.IconSize.SMALL_TOOLBAR
-            );
+            mark_as_played_button = new Gtk.Button.from_icon_name ("object-select-symbolic");
             mark_as_played_button.has_tooltip = true;
-            mark_as_played_button.relief = Gtk.ReliefStyle.NONE;
             mark_as_played_button.tooltip_text = _ ("Mark this episode as played");
+            mark_as_played_button.clicked.connect( () => { mark_as_played(); });
 
-            mark_as_new_button = new Gtk.Button.from_icon_name ("non-starred-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            mark_as_new_button = new Gtk.Button.from_icon_name ("non-starred-symbolic");
             mark_as_new_button.has_tooltip = true;
-            mark_as_new_button.relief = Gtk.ReliefStyle.NONE;
             mark_as_new_button.tooltip_text = _ ("Mark this episode as new");
+            mark_as_new_button.clicked.connect(() => { mark_as_new(); });
 
-            download_button = new Gtk.Button.from_icon_name (
-                Utils.check_elementary () ? "browser-download-symbolic" : "document-save-symbolic",
-                Gtk.IconSize.SMALL_TOOLBAR
-            );
+            download_button = new Gtk.Button.from_icon_name ("document-save-symbolic");
             download_button.has_tooltip = true;
-            download_button.relief = Gtk.ReliefStyle.NONE;
             download_button.tooltip_text = _ ("Download episode");
+            download_button.clicked.connect(() => {download(); });
 
-            share_button = new Gtk.Button.from_icon_name (
-                Utils.check_elementary () ? "send-to-symbolic" : "emblem-shared-symbolic",
-                Gtk.IconSize.SMALL_TOOLBAR
-            );
+            delete_button = new Gtk.Button.from_icon_name("user-trash-symbolic");
+            delete_button.has_tooltip = true;
+            delete_button.tooltip_text = _("Delete downloaded file");
+            delete_button.clicked.connect(() => { remove_download(); });
+
+            share_button = new Gtk.Button.from_icon_name ("emblem-shared-symbolic");
             share_button.has_tooltip = true;
-            share_button.relief = Gtk.ReliefStyle.NONE;
             share_button.tooltip_text = _ ("Share this episode");
-            share_button.button_press_event.connect ((e) => {
-                var share_menu = new Gtk.Menu ();
-                shareable_link = new Gtk.MenuItem.with_label (_ ("Copy shareable link"));
-                tweet = new Gtk.MenuItem.with_label (_ ("Send a Tweet…"));
-                link_to_file = new Gtk.MenuItem.with_label (_ ("Copy the direct episode link"));
 
-                shareable_link.activate.connect (() => { copy_shareable_link (); });
-                   tweet.activate.connect (() => { send_tweet (); });
-                link_to_file.activate.connect (() => { copy_direct_link (); });
+            shareable_link = new Gtk.Button.with_label("Copy sharaeble link");
+            tweet = new Gtk.Button.with_label("Tweet this episode");
+            link_to_file = new Gtk.Button.with_label("Copy episode link");
 
-                share_menu.add (shareable_link);
-                share_menu.add (tweet);
-                share_menu.add (new Gtk.SeparatorMenuItem ());
-                share_menu.add (link_to_file);
-                share_menu.attach_to_widget (share_button, null);
-                share_menu.show_all ();
-                share_menu.popup (null, null, null, e.button, e.time);
-                return true;
+            shareable_link.get_style_context().remove_class("text-button");
+
+            shareable_link.clicked.connect(() => { copy_shareable_link(); });
+            tweet.clicked.connect(() => { send_tweet(); });
+            link_to_file.clicked.connect(() => { copy_direct_link(); });
+
+            var share_popover = new Gtk.Popover();
+            share_popover.set_parent(share_button);
+            var share_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            share_box.append(shareable_link);
+            share_box.append(tweet);
+            share_box.append(link_to_file);
+            share_popover.set_child(share_box);
+
+            share_button.clicked.connect(() => {
+                share_popover.popup();
             });
 
-            internet_archive_button = new Gtk.Button.from_icon_name (
-                "document-send-symbolic",
-                Gtk.IconSize.SMALL_TOOLBAR
-            );
-            internet_archive_button.relief = Gtk.ReliefStyle.NONE;
-            internet_archive_button.tooltip_text = _ ("Upload to the Internet Archive");
-            internet_archive_button.button_press_event.connect ((e) => {
-                internet_archive_upload_requested ();
-                return true;
-            });
+            controls_box.append (mark_as_played_button);
+            controls_box.append (mark_as_new_button);
+            controls_box.append (download_button);
+            controls_box.append (delete_button);
+            controls_box.append (share_button);
 
-            controls_box.pack_start (mark_as_played_button, false, false, 0);
-            controls_box.pack_start (mark_as_new_button, false, false, 0);
-            controls_box.pack_start (download_button, false, false, 0);
-            controls_box.pack_end (share_button, false, false, 0);
-            controls_box.pack_end (internet_archive_button, false, false, 0);
+            var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+            separator.height_request = 2;
+            Utils.set_margins(separator, 12);
 
             title_label = new Gtk.Label ("");
-            title_label.get_style_context ().add_class ("h3");
-            title_label.wrap = true;
-            title_label.wrap_mode = Pango.WrapMode.WORD;
+            title_label.get_style_context ().add_class ("title-4");
             title_label.margin_top = 20;
             title_label.margin_bottom = 6;
-            title_label.margin_left = 12;
-            title_label.halign = Gtk.Align.START;
-            title_label.set_property ("xalign", 0);
+            title_label.margin_start = 12;
+            title_label.halign = Gtk.Align.CENTER;
 
             date_label = new Gtk.Label ("");
             date_label.margin_bottom = 12;
-            date_label.margin_left = 12;
-            date_label.halign = Gtk.Align.START;
-            title_label.set_property ("xalign", 0);
+            date_label.margin_start = 12;
+            date_label.halign = Gtk.Align.CENTER;
 
             play_button = new Gtk.Button.with_label ("Play this episode");
-            queue_button = new Gtk.Button.from_icon_name ("list-add-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
+            play_button.clicked.connect (() => { play(); });
+            queue_button = new Gtk.Button.from_icon_name ("list-add-symbolic");
             queue_button.has_tooltip = true;
             queue_button.tooltip_text = _ ("Add this episode to the up next list");
+            queue_button.clicked.connect(() => { enqueue(); });
 
             var button_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 5);
-            button_box.pack_start (play_button, false, false, 0);
-            button_box.pack_start (queue_button, false, false, 0);
+            button_box.append (play_button);
+            button_box.append (queue_button);
             button_box.margin_bottom = 20;
-            button_box.margin_left = 12;
+            button_box.margin_start = 12;
+            button_box.halign = Gtk.Align.CENTER;
 
             var summary_label = new Gtk.Label (_ ("<b>Summary</b>"));
             summary_label.use_markup = true;
-            summary_label.margin_left = 12;
+            summary_label.margin_start = 12;
             summary_label.margin_bottom = 6;
             summary_label.halign = Gtk.Align.START;
 
-            content_box.pack_start (controls_box, false, false, 0);
-            content_box.pack_start (title_label, false, false, 0);
-            content_box.pack_start (date_label, false, false, 0);
-            content_box.pack_start (button_box, false, false, 0);
-            content_box.pack_start (summary_label, false, false, 0);
-            content_box.pack_start (shownotes_label, true, true, 0);
+            content_box.append (separator);
+            content_box.append (title_label);
+            content_box.append (date_label);
+            content_box.append (button_box);
+            content_box.append (summary_label);
+            content_box.append (shownotes_label);
 
-            this.add (content_box);
+            var scrolled = new Gtk.ScrolledWindow();
+            scrolled.set_child(content_box);
+
+            this.append (scrolled);
+            this.append (controls_box);
+
+            mark_as_new.connect(() => {
+                show_mark_as_played_button();
+            });
+
+            mark_as_played.connect(() => {
+                show_mark_as_new_button();
+            });
+
+        }
+
+        public void set_episode(Episode e) {
+            episode = e;
+            set_title(e.title);
+            set_html(e.description);
+            check_attributes();
+        }
+
+        public void check_attributes () {
+            if(episode.current_download_status == DownloadStatus.DOWNLOADED) {
+                hide_download_button();
+            } else {
+                show_download_button();
+            }
+
+            if(episode.status == EpisodeStatus.PLAYED) {
+                show_mark_as_new_button();
+            } else {
+                show_mark_as_played_button();
+            }
         }
 
         public void set_html (string html) {
             this.shownotes_label.label = html;
             shownotes_label.use_markup = true;
-            show_all ();
         }
 
         public void show_download_button () {
-            this.download_button.set_no_show_all (false);
             download_button.show ();
+            delete_button.hide();
         }
 
         public void hide_download_button () {
-            this.download_button.set_no_show_all (true);
             download_button.hide ();
+            delete_button.show ();
         }
 
         public void set_title (string title) {
@@ -197,29 +228,14 @@ using Granite;
         }
 
         public void show_mark_as_new_button () {
-            mark_as_played_button.no_show_all = true;
             mark_as_played_button.hide ();
-
-            mark_as_new_button.no_show_all = false;
             mark_as_new_button.show ();
         }
 
         public void show_mark_as_played_button () {
-            mark_as_played_button.no_show_all = false;
             mark_as_played_button.show ();
-
-            mark_as_new_button.no_show_all = true;
             mark_as_new_button.hide ();
         }
 
-        public void show_internet_archive_button () {
-            internet_archive_button.set_no_show_all (false);
-            internet_archive_button. show ();
-        }
-
-        public void hide_internet_archive_button () {
-            internet_archive_button.set_no_show_all (true);
-            internet_archive_button. hide ();
-        }
     }
 }

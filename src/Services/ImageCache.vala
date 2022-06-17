@@ -1,26 +1,23 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-n
-  END LICENSE
-
-  Additional contributors/authors:
-
-  * Akshay Shekher <voldyman666@gmail.com>
-
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * Additional contributors/authors:
+ *     Akshay Shekher <voldyman666@gmail.com>
+ *
+ */
 
 namespace Vocal {
 
@@ -41,8 +38,7 @@ namespace Vocal {
             state.is_loaded = false;
             cache = new Gee.HashMap<uint, File> ();
 
-            var home_dir = GLib.Environment.get_home_dir ();
-            var cache_directory = Constants.CACHE_DIR.replace ("~", home_dir);
+            var cache_directory = GLib.Environment.get_user_cache_dir ();
 
             soup_client = new SoupClient ();
             cacher = new DiskCacher (cache_directory);
@@ -56,12 +52,12 @@ namespace Vocal {
         public ImageCache () {}
 
         // Get image and cache it
-        public async Gdk.Pixbuf get_image (string url) {
+        public async Gdk.Pixbuf get_image_async (string url) {
             uint url_hash = url.hash ();
             Gdk.Pixbuf pixbuf;
 
             if (!state.is_loaded) {
-                state.load_complete.connect (() => { get_image.callback (); });
+                state.load_complete.connect (() => { get_image_async.callback (); });
                 yield;
             }
 
@@ -80,6 +76,7 @@ namespace Vocal {
 
             return pixbuf;
         }
+
 
         private async Gdk.Pixbuf? load_image_async (string url) {
             Gdk.Pixbuf pixbuf = null;
@@ -106,11 +103,11 @@ namespace Vocal {
             public async Gee.HashMap<uint, File> get_cached_files () {
                 Gee.HashMap<uint, File> files = new Gee.HashMap<uint, File> ();
 
-                if (!cache_location.query_exists ()) {
-                    cache_location.make_directory_with_parents ();
-                }
-
                 try {
+
+                    if (!cache_location.query_exists ()) {
+                        cache_location.make_directory_with_parents ();
+                    }
                     FileEnumerator enumerator = yield
                         cache_location.enumerate_children_async ("standard::*",
                                                                 FileQueryInfoFlags.NONE,
@@ -134,14 +131,18 @@ namespace Vocal {
                 var file_loc = "%s/%ud.png".printf (this.location, hashed_name);
                 var cfile = File.new_for_path (file_loc);
 
-                FileIOStream fiostream;
-                if (cfile.query_exists ()) {
-                    fiostream = yield cfile.replace_readwrite_async (null, false, FileCreateFlags.NONE);
-                } else {
-                    fiostream = yield cfile.create_readwrite_async (FileCreateFlags.NONE);
+                try {
+                    FileIOStream fiostream;
+                    if (cfile.query_exists ()) {
+                        fiostream = yield cfile.replace_readwrite_async (null, false, FileCreateFlags.NONE);
+                    } else {
+                        fiostream = yield cfile.create_readwrite_async (FileCreateFlags.NONE);
+                    }
+                    // switch to async version later, currently the bindings have a bug
+                    pixbuf.save_to_stream (fiostream.get_output_stream (), "png");
+                } catch (Error e) {
+                    warning (e.message);
                 }
-                // switch to async version later, currently the bindings have a bug
-                pixbuf.save_to_stream (fiostream.get_output_stream (), "png");
 
                 return cfile;
             }

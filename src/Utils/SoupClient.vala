@@ -1,22 +1,47 @@
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+
 namespace Vocal {
 public class SoupClient {
-    private Soup.Session soup_session = null;
 
     public SoupClient () {
-        soup_session = new Soup.Session ();
-        soup_session.user_agent = Constants.USER_AGENT;
+
     }
 
     public string request_as_string(HttpMethod method, string url) throws Error {
+
+        var soup_session = new Soup.Session ();
+        soup_session.user_agent = Constants.USER_AGENT;
         var message = new Soup.Message (method.to_string (), url);
 
-        soup_session.send_message (message);
-        check_response_headers (message);
+        var response = soup_session.send (message);
 
-        return (string) message.response_body.data;
+        DataInputStream dis = new DataInputStream (@response);
+
+        size_t len;
+		string str = dis.read_upto ("\0", 1, out len);
+        check_response_headers (message);
+        return str;
     }
 
     public InputStream request (HttpMethod method, string url) throws Error {
+
+        var soup_session = new Soup.Session ();
+        soup_session.user_agent = Constants.USER_AGENT;
         if (!valid_http_uri (url)) {
             throw new PublishingError.PROTOCOL_ERROR ("%s is not a valid URI. Should be http or https", url);
         }
@@ -55,31 +80,15 @@ public class SoupClient {
                 // resource was created in response to a PUT or POST
                 break;
 
-            case Soup.Status.CANT_RESOLVE:
-            case Soup.Status.CANT_RESOLVE_PROXY:
-                throw new PublishingError.NO_ANSWER (
-                    "Unable to resolve %s (error code %u)",
-                    message.get_uri ().to_string (false),
-                    message.status_code
-                );
-
-            case Soup.Status.CANT_CONNECT:
-            case Soup.Status.CANT_CONNECT_PROXY:
-                throw new PublishingError.NO_ANSWER (
-                    "Unable to connect to %s (error code %u)",
-                    message.get_uri ().to_string (false),
-                    message.status_code
-                );
-
             default:
                 // status codes below 100 are used by Soup, 100 and above are defined HTTP codes
                 if (message.status_code >= 100) {
                     throw new PublishingError.NO_ANSWER ("Service %s returned HTTP status code %u %s",
-                    message.get_uri ().to_string (false), message.status_code, message.reason_phrase);
+                    message.get_uri ().to_string (), message.status_code, message.reason_phrase);
                 } else {
                     throw new PublishingError.NO_ANSWER (
                         "Failure communicating with %s (error code %u)",
-                        message.get_uri ().to_string (false),
+                        message.get_uri ().to_string (),
                         message.status_code
                     );
                 }

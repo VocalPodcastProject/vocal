@@ -1,31 +1,26 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-
-  Additional contributors/authors:
-
-  * Artem Anufrij <artem.anufrij@live.de>
-
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * Additional contributors/authors:
+ *     Artem Anufrij <artem.anufrij@live.de>
+ *
+ */
 
 
 using Gtk;
 using GLib;
-using Granite;
 
 namespace Vocal {
 
@@ -45,49 +40,30 @@ namespace Vocal {
         /*
          * Constructor for CoverArt given an image path and a podcast
          */
-        public CoverArt (string path, Podcast podcast, bool? show_mimetype = false) {
+        public CoverArt (Podcast podcast, bool? show_mimetype = false) {
 
             this.podcast = podcast;
-            this.margin = 10;
+            this.margin_top = 10;
+            this.margin_bottom = 10;
+            this.margin_start = 10;
+            this.margin_end = 10;
             this.orientation = Gtk.Orientation.VERTICAL;
 
+            image = new Gtk.Image();
+            count_overlay = new Gtk.Overlay ();
 
-            try {
-
-                // Load the actual cover art
-                var file = GLib.File.new_for_uri (path.replace ("%27", "'"));
-
-                var icon = new GLib.FileIcon (file);
-
-                var image = new Gtk.Image.from_gicon (icon, Gtk.IconSize.DIALOG);
-                image.pixel_size = COVER_SIZE;
-                image.set_no_show_all (false);
-                image.show ();
-
-                count_overlay = new Gtk.Overlay ();
-
-                // Partially set up the overlays
-                count_overlay.add (image);
-
-            } catch (Error e) {
-                warning ("Unable to load podcast cover art.");
-            }
-
-
-            if (count_overlay == null)
-                count_overlay = new Gtk.Overlay ();
+            image.overflow = Gtk.Overflow.HIDDEN;
+            count_overlay.set_child (image);
 
             // Create a label to display the number of new episodes
             count_label = new Gtk.Label ("");
             count_label.use_markup = true;
-            count_label.set_alignment (1, 0);
-            count_label.get_style_context ().add_class ("coverart-overlay");
             count_label.halign = Gtk.Align.END;
             count_label.valign = Gtk.Align.START;
             count_label.width_chars = 2;
             count_label.xalign = 0.50f;
             count_label.margin_top = 3;
-            count_label.margin_right = 3;
+            count_label.margin_end = 3;
 
             // Add a tooltip
             this.tooltip_text = podcast.name.replace ("%27", "'");
@@ -95,8 +71,41 @@ namespace Vocal {
             // Set up the overlays
 
             count_overlay.add_overlay (count_label);
+            count_label.get_style_context().add_class("badge");
+            this.append(count_overlay);
 
-            this.pack_start (count_overlay, false, false, 0);
+
+
+            if(VocalSettings.get_default_instance().theme_preference == "dark") {
+                count_label.get_style_context().add_class("badge-dark");
+            } else {
+               count_label.get_style_context().add_class("badge-light");
+            }
+
+
+
+            VocalSettings.get_default_instance().changed.connect((key) => {
+                if(key == "theme-preference") {
+                    if(VocalSettings.get_default_instance().theme_preference == "dark") {
+                        count_label.get_style_context().remove_class("badge-light");
+                        count_label.get_style_context().add_class("badge-dark");
+                    } else {
+                        count_label.get_style_context().remove_class("badge-dark");
+                        count_label.get_style_context().add_class("badge-light");
+                    }
+                } else if (key == "show-name-label") {
+                    if (VocalSettings.get_default_instance ().show_name_label) {
+                        image.get_style_context().remove_class("squircle");
+                        image.get_style_context().add_class("squircle-top");
+                        podcast_name_label.visible = true;
+                    } else {
+                        image.get_style_context().remove_class("squircle-top");
+                        image.get_style_context().add_class("squircle");
+                        podcast_name_label.visible = false;
+                    }
+                }
+            });
+
 
             this.valign = Align.START;
             string podcast_name = GLib.Uri.unescape_string (podcast.name);
@@ -109,55 +118,82 @@ namespace Vocal {
             podcast_name_label.wrap = true;
             podcast_name_label.use_markup = true;
             podcast_name_label.max_width_chars = 15;
-            this.pack_start (podcast_name_label, false, false, 12);
+            this.append (podcast_name_label);
 
             if (!VocalSettings.get_default_instance ().show_name_label) {
-                podcast_name_label.no_show_all = true;
+                image.get_style_context().add_class("squircle");
                 podcast_name_label.visible = false;
+            } else {
+                image.get_style_context().add_class("squircle-top");
             }
 
-            show_all ();
+            load_art.begin((obj, res) => {
+                load_art.end(res);
+            });
+
         }
 
         /*
          * Creates a pixbuf given an InputStream
          */
-        public Gdk.Pixbuf create_cover_image (InputStream input_stream) {
-            var cover_image = new Gdk.Pixbuf.from_stream (input_stream);
+        public Gdk.Pixbuf? create_cover_image (InputStream input_stream) {
+            try {
+                var cover_image = new Gdk.Pixbuf.from_stream (input_stream);
 
-            if (cover_image.height == cover_image.width)
-                cover_image = cover_image.scale_simple (COVER_SIZE, COVER_SIZE, Gdk.InterpType.BILINEAR);
+                if (cover_image.height == cover_image.width)
+                    cover_image = cover_image.scale_simple (COVER_SIZE, COVER_SIZE, Gdk.InterpType.BILINEAR);
 
-            if (cover_image.height > cover_image.width) {
+                if (cover_image.height > cover_image.width) {
 
-                int new_height = COVER_SIZE * cover_image.height / cover_image.width;
-                int new_width = COVER_SIZE;
-                int offset = (new_height - new_width) / 2;
+                    int new_height = COVER_SIZE * cover_image.height / cover_image.width;
+                    int new_width = COVER_SIZE;
+                    int offset = (new_height - new_width) / 2;
 
-                cover_image = new Gdk.Pixbuf.subpixbuf (
-                    cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR),
-                    0,
-                    offset,
-                    COVER_SIZE,
-                    COVER_SIZE
-                );
+                    cover_image = new Gdk.Pixbuf.subpixbuf (
+                        cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR),
+                        0,
+                        offset,
+                        COVER_SIZE,
+                        COVER_SIZE
+                    );
 
-            } else if (cover_image.height < cover_image.width) {
+                } else if (cover_image.height < cover_image.width) {
 
-                int new_height = COVER_SIZE;
-                int new_width = COVER_SIZE * cover_image.width / cover_image.height;
-                int offset = (new_width - new_height) / 2;
+                    int new_height = COVER_SIZE;
+                    int new_width = COVER_SIZE * cover_image.width / cover_image.height;
+                    int offset = (new_width - new_height) / 2;
 
-                cover_image = new Gdk.Pixbuf.subpixbuf (
-                    cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR),
-                    offset,
-                    0,
-                    COVER_SIZE,
-                    COVER_SIZE
-                );
+                    cover_image = new Gdk.Pixbuf.subpixbuf (
+                        cover_image.scale_simple (new_width, new_height, Gdk.InterpType.BILINEAR),
+                        offset,
+                        0,
+                        COVER_SIZE,
+                        COVER_SIZE
+                    );
+                }
+
+                return cover_image;
+            }catch (Error e) {
+                warning (e.message);
+                return null;
             }
+        }
 
-            return cover_image;
+        private async void load_art() {
+
+            GLib.Idle.add(load_art.callback);
+
+            ImageCache image_cache = new ImageCache ();
+            image_cache.get_image_async.begin(podcast.remote_art_uri, (obj,res) => {
+                var pixbuf = image_cache.get_image_async.end(res);
+                if (pixbuf != null) {
+                    image.clear ();
+                    image.gicon = pixbuf;
+                    image.pixel_size = 200;
+                    image.show();
+                }
+            });
+            yield;
         }
 
         /*
@@ -165,7 +201,6 @@ namespace Vocal {
          */
         public void hide_count () {
             if (count_label != null) {
-                count_label.set_no_show_all (true);
                 count_label.hide ();
             }
         }
@@ -184,7 +219,6 @@ namespace Vocal {
          */
         public void show_count () {
             if (count_label != null) {
-                count_label.set_no_show_all (false);
                 count_label.show ();
             }
         }
@@ -195,7 +229,6 @@ namespace Vocal {
          */
         public void show_name_label () {
             if (podcast_name_label != null) {
-                podcast_name_label.no_show_all = false;
                 podcast_name_label.visible = true;
             }
         }
@@ -205,7 +238,6 @@ namespace Vocal {
          */
          public void hide_name_label () {
              if (podcast_name_label != null) {
-                 podcast_name_label.no_show_all = true;
                 podcast_name_label.visible = false;
             }
          }

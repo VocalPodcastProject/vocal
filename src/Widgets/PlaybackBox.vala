@@ -1,83 +1,96 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 
 using Gtk;
 
 namespace Vocal {
-    public class PlaybackBox : Gtk.HBox {
+    public class PlaybackBox : Gtk.Box {
 
         public signal void scale_changed ();        // Fired when the scale changes (when the user seeks position)
+        public signal void rate_changed(double rate);
+        public signal void volume_changed(double vol);
+        public signal void position_changed(double pos);
 
-        public Gtk.Label episode_label;
-        public Gtk.Label podcast_label;
-        public Gtk.EventBox artwork;
-        public Gtk.Image artwork_image;
-        private Gtk.ProgressBar progress_bar;
+        public Gtk.Label now_playing;
+        public Gtk.Button info;
+        private Gtk.Label info_label;
         private Gtk.Scale scale;
         private Gtk.Grid scale_grid;
         private Gtk.Label left_time;
         private Gtk.Label right_time;
+        private Gtk.Scale volume_scale;
         public Gtk.Button volume_button;
+
+        public QueueBox queue_box;
+
+        private double rate;
 
         /*
          * Default constructor for a PlaybackBox
          */
         public PlaybackBox () {
 
-            this.get_style_context ().add_class ("seek-bar");
-            
-            this.halign = Gtk.Align.START;
+            this.orientation = Gtk.Orientation.VERTICAL;
+            this.halign = Gtk.Align.FILL;
+            this.hexpand = true;
 
-            this.width_request = 300;
-            
-            artwork = new Gtk.EventBox ();
-            
-            // Create the show notes button
-            if (Utils.check_elementary ()) {
-                artwork_image = new Gtk.Image.from_icon_name (
-                    "help-info-symbolic",
-                    Gtk.IconSize.SMALL_TOOLBAR
-                );
-            } else {
-                artwork_image = new Gtk.Image.from_icon_name (
-                    "dialog-information-symbolic",
-                    Gtk.IconSize.SMALL_TOOLBAR
-                );
-            }
-            artwork_image.tooltip_text = _ ("View the shownotes for this episode or check the queue");
-            artwork_image.margin_right = 12;
-            artwork_image.margin_left = 12;
-            artwork_image.halign = Gtk.Align.END;
-            
-            this.episode_label = new Gtk.Label ("");
-            this.episode_label.set_ellipsize (Pango.EllipsizeMode.END);
-            this.episode_label.xalign = 0.0f;
-            this.episode_label.get_style_context ().add_class ("h3");
-            this.episode_label.width_chars = 10;
-            
-            this.podcast_label = new Gtk.Label ("");
-            this.podcast_label.set_ellipsize (Pango.EllipsizeMode.END);
-            this.podcast_label.xalign = 0.0f;
-            podcast_label.width_chars = 10;
-            
-            this.progress_bar = new Gtk.ProgressBar ();
+            this.get_style_context().add_class("toolbar");
+
+            info = new Gtk.Button.from_icon_name ("dialog-information-symbolic");
+            info.tooltip_text = _ ("View the shownotes for this episode or check the queue");
+
+            info_label = new Gtk.Label("Description");
+
+            var info_popover = new Gtk.Popover();
+            info_popover.set_parent(info);
+            info_popover.set_autohide(true);
+            var info_box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+            info_box.append(info_label);
+            info_popover.set_child(info_box);
+
+            info.clicked.connect(() => {
+                info_popover.popup();
+            });
+
+            rate = 1.0;
+            var rate_button = new Gtk.Button.with_label ("1x");
+            rate_button.clicked.connect( () => {
+                if (rate == 1.0) {
+                    rate = 1.25;
+                    rate_button.label = "1.25x";
+                    rate_changed (1.25);
+                } else if (rate == 1.25) {
+                    rate = 1.5;
+                    rate_button.label = "1.5x";
+                    rate_changed (1.5);
+                } else if (rate == 1.5) {
+                    rate = 2.0;
+                    rate_button.label = "2x";
+                    rate_changed (2.0);
+                } else {
+                    rate = 1.0;
+                    rate_button.label = "1x";
+                    rate_changed(1.0);
+                }
+            });
+
+            now_playing = new Gtk.Label("<b>Episode Title</b> from <b>Podcast Name</b>");
+            now_playing.use_markup = true;
+            now_playing.margin_top = 12;
 
             scale = new Gtk.Scale.with_range (Gtk.Orientation.HORIZONTAL, 0, 1, 0.1);
             scale.set_value (0.0);
@@ -85,19 +98,18 @@ namespace Vocal {
             scale.draw_value = false;
             scale.width_request = 100;
             scale.get_style_context ().add_class ("seekbar");
+            scale.halign = Gtk.Align.FILL;
             left_time = new Gtk.Label ("0:00");
             right_time = new Gtk.Label ("0:00");
             left_time.width_chars = 6;
             right_time.width_chars = 6;
-
-            scale.change_value.connect (on_slide);
 
             // Create the scale, and attach the time labels to the appropriate sides
 
             scale_grid = new Gtk.Grid ();
             scale_grid.valign = Gtk.Align.CENTER;
 
-            left_time.margin_right = right_time.margin_left = 3;
+            left_time.margin_end = right_time.margin_start = 3;
 
             scale_grid.attach (left_time, 0, 0, 1, 1);
             scale_grid.attach (scale, 1, 0, 1, 1);
@@ -105,31 +117,53 @@ namespace Vocal {
 
             this.hexpand = false;
 
-            // Add the components to the box
-            
-            var label_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 3);
-            label_box.add (episode_label);
-            label_box.add (podcast_label);
-            label_box.valign = Gtk.Align.CENTER;
-            label_box.halign = Gtk.Align.START;
-            
-            volume_button = new Gtk.Button.from_icon_name ("audio-volume-high-symbolic", Gtk.IconSize.SMALL_TOOLBAR);
-            volume_button.relief = Gtk.ReliefStyle.NONE;
-            volume_button.margin_right = 12;
-            
-            artwork.add (artwork_image);
-            this.add (artwork);
-            this.add (label_box);
-            this.add (scale_grid);
-            this.add (volume_button);
-        }
+            scale.change_value.connect((scroll, new_value) => {
+                position_changed(new_value);
+                return true;
+            });
 
-        public override void get_preferred_width (out int minimum_width, out int natural_width) {
-            base.get_preferred_width (out minimum_width, out natural_width);
-            minimum_width = 300;
-            if (natural_width < 600) {
-                natural_width = 600;
-            }
+            // Add the components to the box
+
+            volume_button = new Gtk.Button.from_icon_name ("audio-volume-high-symbolic");
+            volume_button.margin_end = 12;
+
+            var volume_popover = new Gtk.Popover();
+            volume_popover.set_parent(volume_button);
+            volume_scale = new Gtk.Scale.with_range (Gtk.Orientation.VERTICAL, 0, 1, 0.1);
+            volume_scale.height_request = 150;
+            volume_scale.set_value (0.0);
+            volume_scale.hexpand = true;
+            volume_scale.draw_value = false;
+            volume_scale.inverted = true;
+            volume_popover.set_child(volume_scale);
+
+            volume_scale.value_changed.connect(() => {
+                volume_changed(volume_scale.get_value ());
+            });
+
+            volume_button.clicked.connect(() => {
+                volume_popover.popup();
+            });
+
+            var queue_button = new Gtk.Button.from_icon_name("view-list-symbolic");
+            var queue_popover = new Gtk.Popover();
+            queue_popover.set_parent(queue_button);
+            queue_box = new QueueBox();
+            queue_popover.set_child(queue_box);
+            queue_button.clicked.connect(() => {
+                queue_popover.popup ();
+            });
+
+            this.append(now_playing);
+            var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+            hbox.append(info);
+            hbox.append(rate_button);
+            hbox.append(scale_grid);
+            hbox.append(volume_button);
+            hbox.append(queue_button);
+            this.append(hbox);
+
+            hide_info_title();
         }
 
         /*
@@ -140,34 +174,29 @@ namespace Vocal {
         }
 
         /*
-         * Called when the user slides the slider in order to change position in the stream
-         */
-        private bool on_slide (ScrollType scroll, double new_value) {
-            scale.set_value (new_value);
-            scale_changed ();
-            return false;
-        }
-
-        /*
          * Sets the information for the current episode
          */
         public void set_info_title (string episode, string podcast_name) {
-           	this.episode_label.label = episode;
-           	this.podcast_label.label = podcast_name;
+           	now_playing.set_text("<b>%s</b> from <b>%s</b>".printf (episode, podcast_name));
+           	now_playing.use_markup = true;
+           	show_info_title ();
         }
 
-        /*
-         * Sets the progress information for the current stream to be displayed
-         */
-        public void set_progress (
-            double progress,
-            int mins_remaining,
-            int secs_remaining,
-            int mins_elapsed,
-            int secs_elapsed
-        ) {
+        public void set_description(string description) {
+            info_label.set_text (description);
+        }
 
-            scale.set_value (progress);
+        public void set_position (uint64 position, uint64 duration) {
+            this.scale.set_value((double)((double)position / (double)duration));
+
+            int total_secs_remaining = (int) ((duration - position) / 1000000000);
+            int total_secs_elapsed = (int) ((position) / 1000000000);
+
+            int secs_remaining = total_secs_remaining % 60;
+            int secs_elapsed = total_secs_elapsed % 60;
+
+            int mins_remaining = total_secs_remaining / 60;
+            int mins_elapsed = total_secs_elapsed / 60;
 
             // Set the labels on either side of the scale
             if (mins_remaining > 59) {
@@ -189,51 +218,26 @@ namespace Vocal {
             }
 
             // Show the left and right labels
-            this.left_time.set_no_show_all (false);
+            this.left_time.visible = false;
             left_time.show ();
 
-            this.right_time.set_no_show_all (false);
+            this.right_time.visible = false;
             right_time.show ();
 
-            this.scale.set_no_show_all (false);
+            this.scale.visible = false;
             scale.show ();
         }
-        
-        public void show_artwork_image () {
-            if (artwork_image != null) {
-                artwork_image.set_no_show_all (false);
-                artwork_image.show ();
-            }
+
+        public void hide_info_title() {
+            now_playing.hide();
         }
 
-        public void hide_artwork_image () {
-            if (artwork_image != null) {
-                artwork_image.set_no_show_all (true);
-                artwork_image.hide ();
-            }
-        }
-        
-        public void set_artwork_image_image (string uri) {
-        	info ("Setting artwork button to: " + uri);
-        	artwork_image.clear ();
-        	var artwork = GLib.File.new_for_uri (uri);
-            var icon = new GLib.FileIcon (artwork);
-            artwork_image.gicon = icon;
-        	artwork_image.pixel_size = 40;
-        }
-        
-        public void show_volume_button () {
-            if (volume_button != null) {
-                volume_button.set_no_show_all (false);
-                volume_button.show ();
-            }
+        public void show_info_title() {
+            now_playing.show();
         }
 
-        public void hide_volume_button () {
-            if (volume_button != null) {
-                volume_button.set_no_show_all (true);
-                volume_button.hide ();
-            }
+        public void set_volume (double val) {
+            volume_scale.set_value(val);
         }
     }
 }

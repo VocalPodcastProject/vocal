@@ -1,21 +1,18 @@
-/***
-  BEGIN LICENSE
-
-  Copyright (C) 2014-2015 Nathan Dyer <mail@nathandyer.me>
-  This program is free software: you can redistribute it and/or modify it
-  under the terms of the GNU Lesser General Public License version 3, as
-  published by the Free Software Foundation.
-
-  This program is distributed in the hope that it will be useful, but
-  WITHOUT ANY WARRANTY; without even the implied warranties of
-  MERCHANTABILITY, SATISFACTORY QUALITY, or FITNESS FOR A PARTICULAR
-  PURPOSE.  See the GNU General Public License for more details.
-
-  You should have received a copy of the GNU General Public License along
-  with this program.  If not, see <http://www.gnu.org/licenses>
-
-  END LICENSE
-***/
+/* Copyright 2014-2022 Nathan Dyer and Vocal Project Contributors
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 [DBus (name = "org.gnome.SettingsDaemon.MediaKeys")]
 public interface GnomeMediaKeys : GLib.Object {
@@ -26,27 +23,13 @@ public interface GnomeMediaKeys : GLib.Object {
 
 public class Utils {
 
-    public static bool check_elementary () {
-        string output;
-        output = GLib.Environment.get_variable ("XDG_CURRENT_DESKTOP");
-        string icon_name = Gtk.Settings.get_default ().gtk_icon_theme_name;
-
-        if (output != null && output.contains ("Pantheon") && icon_name.contains ("elementary")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
     /*
      * A convenience method that sends a generic notification with a message and title
-     * (assuming libnotify is enabled)
      */
-    public static void send_generic_notification (string message, string? title = "Vocal") {
-#if HAVE_LIBNOTIFY
-        var notification = new Notify.Notification (title, message, "vocal");
-        notification.show ();
-#endif
+    public static void send_generic_notification (GLib.Application application, string message, string? title = "Vocal") {
+        var notification = new GLib.Notification(title);
+        notification.set_body(message);
+        application.send_notification(null, notification);
     }
 
     /*
@@ -71,11 +54,15 @@ public class Utils {
             if (msg.status_code == Soup.Status.FOUND) {
                 new_url = msg.response_headers.get_one ("Location");
                 /* Finish processing request */
-                session.cancel_message (msg, Soup.Status.CANCELLED);
+                session.abort();
             }
         });
 
-        session.send_message (msg);
+        try {
+            session.send (msg);
+        } catch (Error e) {
+            warning (e.message);
+        }
 
         if (new_url == null) {
            new_url = "%s".printf (resource);
@@ -84,10 +71,17 @@ public class Utils {
         return new_url;
     }
 
+    public static void set_margins (Gtk.Widget w, int margin) {
+        w.margin_top = margin;
+        w.margin_bottom = margin;
+        w.margin_start = margin;
+        w.margin_end = margin;
+    }
+
     /*
      * Strips a string of HTML tags, except for ones that are useful in markup
      */
-    public static string html_to_markup (string original) {
+    public static string? html_to_markup (string original) {
 
         string markup = GLib.Uri.unescape_string (original);
 
@@ -95,67 +89,70 @@ public class Utils {
             markup = original;
         }
 
-        markup = markup.replace ("&", "&amp;");
+        try {
 
-        // Simplify (keep only href attribute) & preserve anchor tags.
-        Regex simpleLinks = new Regex ("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
-                                      RegexCompileFlags.CASELESS | RegexCompileFlags.DOTALL);
-        markup = simpleLinks.replace (markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
+            markup = markup.replace ("&", "&amp;");
 
-        // Replace <br> tags with line breaks.
-        Regex lineBreaks = new Regex ("<br[\\s\\/]*?>", RegexCompileFlags.CASELESS);
-        markup = lineBreaks.replace (markup, -1, 0, "\n");
+            // Simplify (keep only href attribute) & preserve anchor tags.
+            Regex simpleLinks = new Regex ("<a (.*?(href[\\s=]*?\".*?\").*?)>(.*?)<[\\s\\/]*?a[\\s>]*",
+                                          RegexCompileFlags.CASELESS | RegexCompileFlags.DOTALL);
+            markup = simpleLinks.replace (markup, -1, 0, "?a? \\2?a-end?\\3 ?/a?");
 
-        markup = markup.replace ("<a", "?a?");
-        markup = markup.replace ("</a>", "?/a?");
+            // Replace <br> tags with line breaks.
+            Regex lineBreaks = new Regex ("<br[\\s\\/]*?>", RegexCompileFlags.CASELESS);
+            markup = lineBreaks.replace (markup, -1, 0, "\n");
 
-        // Preserve bold tags
-        markup = markup.replace ("<b>", "?b?");
-        markup = markup.replace ("</b>", "?/b?");
+            markup = markup.replace ("<a", "?a?");
+            markup = markup.replace ("</a>", "?/a?");
 
-        int nextOpenBracketIndex = 0;
-        int nextCloseBracketIndex = 0;
-        while (nextOpenBracketIndex >= 0) {
-            nextOpenBracketIndex = markup.index_of ("<", 0);
-            nextCloseBracketIndex = markup.index_of (">", nextOpenBracketIndex) + 1;
-            if (
-                nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
-                && nextCloseBracketIndex >= 0
-                && nextOpenBracketIndex <= markup.length
-                && nextCloseBracketIndex <= markup.length
-            ) {
-                markup = markup.splice (nextOpenBracketIndex, nextCloseBracketIndex);
-                nextOpenBracketIndex = 0;
-                nextCloseBracketIndex = 0;
-            } else {
-                nextOpenBracketIndex = -1;
+            // Preserve bold tags
+            markup = markup.replace ("<b>", "?b?");
+            markup = markup.replace ("</b>", "?/b?");
+
+            int nextOpenBracketIndex = 0;
+            int nextCloseBracketIndex = 0;
+            while (nextOpenBracketIndex >= 0) {
+                nextOpenBracketIndex = markup.index_of ("<", 0);
+                nextCloseBracketIndex = markup.index_of (">", nextOpenBracketIndex) + 1;
+                if (
+                    nextOpenBracketIndex < nextCloseBracketIndex && nextOpenBracketIndex >= 0
+                    && nextCloseBracketIndex >= 0
+                    && nextOpenBracketIndex <= markup.length
+                    && nextCloseBracketIndex <= markup.length
+                ) {
+                    markup = markup.splice (nextOpenBracketIndex, nextCloseBracketIndex);
+                    nextOpenBracketIndex = 0;
+                    nextCloseBracketIndex = 0;
+                } else {
+                    nextOpenBracketIndex = -1;
+                }
             }
+
+            Regex hrefs = new Regex("href='(.+?)'>");
+            markup = hrefs.replace_eval(markup, -1, 0, 0, (match_info, result) => {
+                var str = match_info.fetch(1);
+
+                str = str.replace("href='", "");
+                str = str.substring(0, -3);
+
+                result.append("href='%s'>".printf(Markup.escape_text(str)));
+                return false;
+            });
+
+            // Preserve hyperlinks
+            markup = markup.replace ("?a?", "<a");
+            markup = markup.replace ("?a-end?", ">");
+            markup = markup.replace ("?/a?", "</a>");
+
+            // Preserve bold tags
+            markup = markup.replace ("?b?", "<b>");
+            markup = markup.replace ("?/b?", "</b>");
+
+            return markup;
+        } catch (Error e) {
+            warning (e.message);
+            return null;
         }
-
-        Regex hrefs = new Regex("href='(.+?)'>");
-        markup = hrefs.replace_eval(markup, -1, 0, 0, (match_info, result) => {
-            var str = match_info.fetch(1);
-
-            str = str.replace("href='", "");
-            str = str.substring(0, -3);
-            
-            result.append("href='%s'>".printf(Markup.escape_text(str)));
-            return false;
-        });
-
-        // Preserve hyperlinks
-        markup = markup.replace ("?a?", "<a");
-        markup = markup.replace ("?a-end?", ">");
-        markup = markup.replace ("?/a?", "</a>");
-
-        // Preserve bold tags
-        markup = markup.replace ("?b?", "<b>");
-        markup = markup.replace ("?/b?", "</b>");
-
-        if (markup != null && markup.length > 0)
-            return markup;
-        else
-            return markup;
 
     }
 
@@ -370,58 +367,6 @@ const string CLOSE = """
         }
 
         return str;
-    }
-
-    public static async bool upload_to_internet_archive (
-        string local_uri,
-        string title,
-        string podcast,
-        string description
-    ) {
-
-        info ("Uploading to internet archive");
-        string container = Uri.escape_string (podcast.replace (" ", "-").replace (":", "").down ());
-        if (container[container.len () - 1] == '-') {
-            container = container.substring (0, container.len () - 1);
-        }
-        string episode = Uri.escape_string (
-            title.replace (" ", "-").down () + local_uri.substring (local_uri.last_index_of ("."))
-        );
-        info (container);
-        info (episode);
-        var session = new Soup.Session ();
-        var message = new Soup.Message ("PUT","http://s3.us.archive.org/%s/%s".printf (container, episode));
-
-        SourceFunc callback = upload_to_internet_archive.callback;
-
-        ThreadFunc<void*> run = () => {
-            uint8[] file_contents;
-            GLib.FileUtils.get_data (local_uri, out file_contents);
-            string mime_type = get_mime_type_for_file (local_uri);
-            message.set_request (mime_type, Soup.MemoryUse.STATIC, file_contents);
-            var settings = VocalSettings.get_default_instance ();
-            string accesskey = settings.archive_access_key;
-            string secretkey = settings.archive_secret_key;
-            message.request_headers.append ("x-archive-auto-make-bucket", "1");
-            message.request_headers.append ("x-archive-meta-title", podcast);
-            message.request_headers.append ("x-archive-meta-description", description);
-            message.request_headers.append ("authorization", "LOW %s:%s".printf (accesskey, secretkey));
-            session.send_message (message);
-            Idle.add ((owned) callback);
-            return null;
-        };
-        Thread.create<void*> (run, false);
-
-        yield;
-
-        info ("archive.org request status code: %u", message.status_code);
-        info ((string) message.response_body.data);
-        if (message.status_code == 200) {
-            return true;
-        } else {
-            return false;
-        }
-
     }
 
     public static string get_mime_type_for_file (string file_uri) {

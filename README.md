@@ -2,6 +2,13 @@
 
 ## The podcast client for the modern free desktop.
 
+### IMPORTANT NEWS
+
+**Vocal is currently being re-written for GTK and libadwaita**. A stable 4.0 release is planned for late June, or early July. Prior to this stable release, please hold off on submitting any issue reports or pull requests, as we work to get everything tidied up and things are rapidly changing. We will gladly accept issue reports and PRs as soon as the new stable release is ready. Thanks for your patience as we complete this near-total rewrite!
+
+<hr>
+
+
 ![](screenshot1.png)
 
 Vocal is a powerful, fast, and intuitive application that helps users find new podcasts, manage their libraries, and enjoy the best that indepedent audio and video publishing has to offer. Vocal features full support for both episode downloading and streaming, native system integration, iTunes store search and top 100 charts (with international results support), iTunes link parsing, OPML importing and exporting, and so much more. Plus, it has great smart features like automatically keeping your library clean from old files, and the ability to set custom skip intervals.

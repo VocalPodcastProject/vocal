@@ -1023,8 +1023,10 @@ namespace Vocal {
                     episode.guid = val;
                 } else if (col_name == "link") {
                     episode.link = val;
+                } else if (col_name == "duration") {
+                    episode.duration = val;
                 }
-            }
+             }
 
             return episode;
         }
@@ -1169,7 +1171,8 @@ namespace Vocal {
                 download_status     TEXT,
                 play_status         TEXT,
                 guid                TEXT,
-                link                TEXT
+                link                TEXT,
+                duration            TEXT
               );
 
               CREATE UNIQUE INDEX episode_guid ON Episode (guid, link, podcast_uri);
@@ -1260,8 +1263,8 @@ namespace Vocal {
             assert (episode.podcast_uri != null && episode.podcast_uri != "");
 
             string query = "INSERT OR REPLACE INTO Episode " +
-                           " (title, podcast_uri, uri, local_uri, released, description, latest_position, download_status, play_status, guid, link) " +
-                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11);";
+                           " (title, podcast_uri, uri, local_uri, released, description, latest_position, download_status, play_status, guid, link, duration) " +
+                           " VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, ?9, ?10, ?11, ?12);";
 
             Sqlite.Statement stmt;
             int ec = db.prepare_v2 (query, query.length, out stmt);
@@ -1291,6 +1294,7 @@ namespace Vocal {
             stmt.bind_text (9, played_text);
             stmt.bind_text (10, episode.guid);
             stmt.bind_text (11, episode.link);
+            stmt.bind_text (12, episode.duration);
 
             ec = stmt.step ();
 

@@ -46,6 +46,7 @@ namespace Vocal {
 
         private Gtk.Label title_label;
         private Gtk.Label date_label;
+        private Gtk.Label size_and_duration_label;
         private Gtk.Box controls_box;
         private Gtk.Label shownotes_label;
 
@@ -124,6 +125,7 @@ namespace Vocal {
             controls_box.append (delete_button);
             controls_box.append (share_button);
 
+
             var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
             separator.height_request = 2;
             Utils.set_margins(separator, 12);
@@ -139,6 +141,10 @@ namespace Vocal {
             date_label.margin_bottom = 12;
             date_label.margin_start = 12;
             date_label.halign = Gtk.Align.CENTER;
+
+            size_and_duration_label = new Gtk.Label ("");
+            size_and_duration_label.halign = Gtk.Align.START;
+            controls_box.prepend (size_and_duration_label);
 
             play_button = new Gtk.Button.with_label ("Play this episode");
             play_button.clicked.connect (() => { play(); });
@@ -202,6 +208,10 @@ namespace Vocal {
             } else {
                 show_mark_as_played_button();
             }
+
+            int64 size = Utils.get_file_size(episode.uri);
+
+            size_and_duration_label.label = "Size: %dMB Duration: %s".printf((int)(size / 1048576), episode.duration);
         }
 
         public void set_html (string html) {

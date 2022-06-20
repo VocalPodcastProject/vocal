@@ -34,8 +34,6 @@ namespace Vocal {
             return player;
         }
 
-
-
         public bool playing = false;
         private Gst.Player p;
 
@@ -136,6 +134,10 @@ namespace Vocal {
 
 		public void set_percentage (double pos) {
             p.seek((Gst.ClockTime)(p.duration * pos));
+		}
+
+		public uint64 get_duration() {
+		    return p.duration;
 		}
 
 

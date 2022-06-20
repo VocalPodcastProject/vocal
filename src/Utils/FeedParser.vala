@@ -200,6 +200,9 @@ namespace Vocal {
                         } else if (next_item_in_queue == "link") {
                             i++;
                             episode.link = queue[i];
+                        } else if (next_item_in_queue == "duration") {
+                            i++;
+                            episode.duration = queue[i];
                         }
                     }
 

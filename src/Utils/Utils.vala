@@ -325,6 +325,19 @@ public class Utils {
         return output.printf (podcastName, albumArt, episodeTitle, audioSource);
     }
 
+    public static int64 get_file_size(string uri) {
+        var file = GLib.File.new_for_uri (uri);
+
+        try {
+            GLib.FileInfo info = file.query_info("*", FileQueryInfoFlags.NONE);
+            return info.get_size ();
+        } catch (Error error) {
+            stderr.printf (@"$(error.message)\n");
+        }
+
+        return 0;
+    }
+
     /*
      * Takes HTML (most likely from show notes) and sets the background color, font family, and
      * font size so that it looks good in the podcast view.

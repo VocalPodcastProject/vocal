@@ -22,9 +22,10 @@ namespace Vocal {
     public class Player {
 
         public signal void position_updated (uint64 pos, uint64 duration);
-        public signal void track_changed (string episode_title, string podcast_name, string artwork_uri, uint64 duration);
+        public signal void track_changed (string episode_title, string podcast_name, string artwork_uri, uint64 duration, string? description);
         public signal void playback_status_changed (string status);
         public signal void additional_plugins_required (Gst.Message message);
+        public signal void end_of_stream();
 
         private static Player? player = null;
         public static Player? get_default () {
@@ -55,6 +56,8 @@ namespace Vocal {
                     playback_status_changed("Stopped");
                 }
             });
+
+            p.end_of_stream.connect(() => { end_of_stream(); });
         }
 
 
@@ -112,7 +115,7 @@ namespace Vocal {
 
             this.current_episode = episode;
             set_uri(episode.playback_uri);
-            track_changed(episode.title, episode.parent.name, episode.parent.remote_art_uri, p.duration);
+            track_changed(episode.title, episode.parent.name, episode.parent.remote_art_uri, p.duration, episode.description);
         }
 
         /*

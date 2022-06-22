@@ -158,9 +158,12 @@ namespace Vocal {
             podcast_view.play_episode_requested.connect((episode) => {
                 controller.player.set_episode(episode);
                 controller.player.play();
-                playbackbox.set_info_title(episode.title, episode.parent.name);
-                playbackbox.set_description(episode.description);
+            });
 
+            controller.player.track_changed.connect ((episode_title, podcast_name, artwork_uri, duration, description) => {
+                playbackbox.set_info_title(episode_title, podcast_name);
+                playbackbox.set_description(description);
+                playbackbox.show_info_title();
             });
 
             podcast_view.download_episode_requested.connect((episode) => {
@@ -260,6 +263,17 @@ namespace Vocal {
 
             controller.player.position_updated.connect((p, d) => {
                playbackbox.set_position(p, d);
+            });
+
+            controller.player.end_of_stream.connect(() => {
+                Episode next_episode = controller.library.get_next_episode_in_queue();
+                if(next_episode != null) {
+                    controller.player.pause();
+                    controller.player.set_episode(next_episode);
+                    controller.player.play();
+                } else {
+                    playbackbox.hide_info_title();
+                }
             });
 
             controller.library.queue_changed.connect (() => {

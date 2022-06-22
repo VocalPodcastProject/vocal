@@ -31,7 +31,7 @@ namespace Vocal {
         private PlaybackBox playbackbox;
 
         private Gtk.Button download_button;
-        private Gtk.ListBox downloads_list;
+        private Gtk.Box downloads_list;
         private GLib.List<DownloadDetailBox> active_downloads;
 
         private Adw.ViewStack all_viewstack;
@@ -166,18 +166,11 @@ namespace Vocal {
                 playbackbox.show_info_title();
             });
 
-            podcast_view.download_episode_requested.connect((episode) => {
-                download_button.show();
-                var download_box = controller.library.download_episode(episode);
-                active_downloads.append(download_box);
-                downloads_list.append(download_box);
-            });
+            podcast_view.download_episode_requested.connect(download_episode);
 
             podcast_view.download_all_requested.connect( () => {
                 foreach (Episode e in podcast_view.podcast.episodes) {
-                    var download_box = controller.library.download_episode(e);
-                    active_downloads.append(download_box);
-                    downloads_list.append(download_box);
+                    download_episode (e);
                 }
             });
 
@@ -385,7 +378,7 @@ namespace Vocal {
             download_popover.set_parent(download_button);
             download_popover.set_autohide(true);
 
-            downloads_list = new Gtk.ListBox();
+            downloads_list = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
             active_downloads = new GLib.List<DownloadDetailBox>();
             download_popover.set_child(downloads_list);
 
@@ -460,9 +453,24 @@ namespace Vocal {
         }
 
         public void download_episode (Episode e) {
+            download_button.show();
             var download_box = controller.library.download_episode(e);
             active_downloads.append(download_box);
             downloads_list.append(download_box);
+
+            download_box.ready_for_removal.connect(() => {
+
+                active_downloads.remove(download_box);
+                downloads_list.remove(download_box);
+
+                if(active_downloads.length() < 1) {
+                    download_button.hide();
+                }
+
+                if(podcast_view.current_episode == e) {
+                    podcast_view.shownotes.check_attributes ();
+                }
+            });
         }
 
 
@@ -724,23 +732,6 @@ namespace Vocal {
         public void hide_name_labels() {
             foreach(CoverArt a in all_art) {
                 a.hide_name_label();
-            }
-        }
-
-        public void on_download_finished(Episode e) {
-            foreach(DownloadDetailBox b in active_downloads) {
-                if (b.episode == e) {
-                    downloads_list.remove(b);
-                    active_downloads.remove(b);
-                }
-            }
-
-            if(active_downloads.length() < 1) {
-                download_button.hide();
-            }
-
-            if(podcast_view.current_episode == e) {
-                podcast_view.shownotes.check_attributes ();
             }
         }
 

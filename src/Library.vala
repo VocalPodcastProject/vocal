@@ -759,9 +759,6 @@ namespace Vocal {
                 downloaded_episode.current_download_status = DownloadStatus.DOWNLOADED;
                 mark_episode_as_downloaded (downloaded_episode);
             }
-
-            download_finished (downloaded_episode);
-
         }
 
         /*

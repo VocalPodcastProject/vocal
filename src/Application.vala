@@ -133,7 +133,6 @@ namespace Vocal {
 
                 // Connect the library's signals
                 //library.import_status_changed.connect (window.on_import_status_changed);
-                library.download_finished.connect (window.on_download_finished);
 
                 if (!first_run) {
 

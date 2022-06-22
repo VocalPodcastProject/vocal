@@ -25,7 +25,7 @@ namespace Vocal {
         public signal void download_has_completed_successfully (string title, string parent_name);
 
         // Fired when the box is ready for removal (usually when the download completes)
-        public signal void ready_for_removal (DownloadDetailBox box);
+        public signal void ready_for_removal ();
 
         public signal void new_percentage_available ();        // Fired when a new download percentage is available
 
@@ -121,7 +121,7 @@ namespace Vocal {
             cancel_button.tooltip_text = "Cancel Download";
             cancel_button.clicked.connect (() => {
                 cancel_requested (episode);
-                ready_for_removal (this);
+                ready_for_removal ();
             });
             progress_box.append (progress_bar);
             progress_box.append (cancel_button);
@@ -174,7 +174,7 @@ namespace Vocal {
                 this.percentage = 1.0;
                 new_percentage_available ();
                 download_has_completed_successfully (episode_title, parent_podcast_name);
-                ready_for_removal (this);
+                ready_for_removal ();
                 signal_has_been_sent = true;
                 return;
             }

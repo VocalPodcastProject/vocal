@@ -20,7 +20,6 @@ namespace Vocal {
     public class SearchResultsView : Gtk.Box {
 
         public signal void on_new_subscription (string url);
-
         public signal void episode_selected (Podcast podcast, Episode episode);
         public signal void podcast_selected (Podcast podcast);
 
@@ -34,10 +33,6 @@ namespace Vocal {
         private Gtk.ListBox local_episodes_listbox;
         private Gtk.ListBox local_podcasts_listbox;
         private Gtk.FlowBox cloud_results_flowbox;
-
-        private Gee.ArrayList<Widget> local_episodes_widgets;
-        private Gee.ArrayList<Widget> local_podcasts_widgets;
-        private Gee.ArrayList<Widget> cloud_results_widgets;
 
         private Gtk.Box content_box;
         private Gtk.Spinner spinner;
@@ -128,15 +123,11 @@ namespace Vocal {
             Utils.set_margins(local_episodes_listbox, 12);
             Utils.set_margins(local_podcasts_listbox, 12);
 
-            //local_episodes_listbox.button_press_event.connect (on_episode_activated);
-            //local_podcasts_listbox.button_press_event.connect (on_podcast_activated);
+            local_episodes_listbox.row_activated.connect (on_episode_activated);
+            local_podcasts_listbox.row_activated.connect (on_podcast_activated);
             local_episodes_listbox.hexpand = true;
             local_podcasts_listbox.hexpand = true;
             cloud_results_flowbox.hexpand = true;
-
-            local_episodes_widgets = new Gee.ArrayList<Gtk.Widget> ();
-            local_podcasts_widgets = new Gee.ArrayList<Gtk.Widget> ();
-            cloud_results_widgets = new Gee.ArrayList<Gtk.Widget> ();
 
             no_local_episodes_label = new Gtk.Label (_ ("No matching episodes found in your library."));
             no_local_podcasts_label = new Gtk.Label (_ ("No matching podcasts found in your library."));
@@ -189,10 +180,6 @@ namespace Vocal {
         }
 
         private void reset () {
-            local_episodes_widgets.clear ();
-            local_podcasts_widgets.clear ();
-            cloud_results_widgets.clear ();
-
             local_episodes_listbox.select_all();
             local_podcasts_listbox.select_all();
             cloud_results_flowbox.select_all();
@@ -224,19 +211,15 @@ namespace Vocal {
                 a.subscribe_button_clicked.connect ((url) => {
                     on_new_subscription (url);
                 });
-                cloud_results_widgets.add (a);
+                cloud_results_flowbox.append (a);
             }
 
             yield;
 
-            foreach (Widget w in cloud_results_widgets) {
-                cloud_results_flowbox.append (w);
-            }
-
-            if (cloud_results_widgets.size < 1) {
-                cloud_results_revealer.reveal_child = false;
-            } else {
+            if (cloud_results_flowbox.get_child_at_index(0) != null) {
                 cloud_results_revealer.reveal_child = true;
+            } else {
+                cloud_results_revealer.reveal_child = false;
             }
 
             hide_spinner ();
@@ -266,7 +249,6 @@ namespace Vocal {
             // Actually load and show the results
             foreach (Podcast p in p_matches) {
                 SearchResultBox srb = new SearchResultBox (p, null);
-                local_podcasts_widgets.add (srb);
                 local_podcasts_listbox.append (srb);
             }
 
@@ -289,7 +271,6 @@ namespace Vocal {
 
                 if (parent != null) {
                     SearchResultBox srb = new SearchResultBox (parent, e);
-                    local_episodes_widgets.add (srb);
                     local_episodes_listbox.append (srb);
                 }
             }
@@ -308,27 +289,19 @@ namespace Vocal {
         /*
          * Called when a matching episode is selected by the user
          */
-        private bool on_episode_activated () {
-            /*
-            var row = local_episodes_listbox.get_row_at_y ((int)button.y);
-            int index = row.get_index ();
-            SearchResultBox selected = local_episodes_widgets[index] as SearchResultBox;
+        private void on_episode_activated (Gtk.ListBoxRow row) {
+            SearchResultBox selected = row.get_child() as SearchResultBox;
             episode_selected (selected.get_podcast (), selected.get_episode ());
-            */
-            return false;
+            warning(selected.get_podcast().name);
         }
 
         /*
          * Called when a matching podcast is selected by the user
          */
-        private bool on_podcast_activated () {
-            /*
-            var row = local_podcasts_listbox.get_row_at_y ((int)button.y);
-            int index = row.get_index ();
-            SearchResultBox selected = local_podcasts_widgets[index] as SearchResultBox;
+        private void on_podcast_activated (Gtk.ListBoxRow row) {
+            SearchResultBox selected = row.get_child() as SearchResultBox;
             podcast_selected (selected.get_podcast ());
-            */
-            return false;
+            warning(selected.get_podcast().name);
         }
 
         private void hide_spinner () {
@@ -337,7 +310,6 @@ namespace Vocal {
         }
 
         private void show_spinner () {
-            warning("Show spinner");
             spinner.start();
             spinner.show ();
         }

@@ -232,29 +232,53 @@ namespace Vocal {
 
             GLib.Idle.add(this.set_podcast.callback);
 
-            this.podcast = p;
-            reset_episode_list ();
+            if(this.podcast != p) {
 
-            title.set_text(p.name);
-            description.set_text(p.description);
+                this.podcast = p;
+                current_episode = null;
+                reset_episode_list ();
 
-            ImageCache image_cache = new ImageCache ();
-            image_cache.get_image_async.begin (p.remote_art_uri, (obj, res) => {
-                Gdk.Pixbuf pixbuf = image_cache.get_image_async.end (res);
-                if (pixbuf != null) {
-                    art.clear ();
-                    art.gicon = pixbuf;
-                    art.pixel_size = 150;
-                    art.show();
+                title.set_text(p.name);
+                description.set_text(p.description);
+
+                ImageCache image_cache = new ImageCache ();
+                image_cache.get_image_async.begin (p.remote_art_uri, (obj, res) => {
+                    Gdk.Pixbuf pixbuf = image_cache.get_image_async.end (res);
+                    if (pixbuf != null) {
+                        art.clear ();
+                        art.gicon = pixbuf;
+                        art.pixel_size = 150;
+                        art.show();
+                    }
+                });
+
+                yield;
+
+                populate_episodes.begin ((obj, res) => {
+                    populate_episodes.end(res);
+                    if(current_episode == null) {
+                        on_row_activated(listbox.get_first_child () as Gtk.ListBoxRow);
+                    } else {
+                        highlight_episode (current_episode);
+                    }
+                });
+            } else {
+                yield;
+            }
+        }
+
+        public void highlight_episode (Episode e) {
+            current_episode = e;
+            bool found = false;
+            int i = 0;
+            while (!found && listbox.get_row_at_index(i) != null) {
+                EpisodeDetailBox edb = listbox.get_row_at_index(i).child as EpisodeDetailBox;
+                if(edb.episode.title == e.title) {
+                    found = true;
+                    listbox.row_activated(listbox.get_row_at_index(i));
                 }
-            });
-
-            yield;
-
-            populate_episodes.begin ((obj, res) => {
-                populate_episodes.end(res);
-                on_row_activated(listbox.get_first_child () as Gtk.ListBoxRow);
-            });
+                i++;
+            }
         }
 
         private void on_row_activated (Gtk.ListBoxRow row) {

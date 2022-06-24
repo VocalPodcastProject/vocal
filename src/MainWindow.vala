@@ -34,6 +34,7 @@ namespace Vocal {
         private Gtk.Box downloads_list;
         private GLib.List<DownloadDetailBox> active_downloads;
 
+        private Adw.ViewStack viewstack;
         private Adw.ViewStack all_viewstack;
         private Gtk.ScrolledWindow all_scrolled;
 
@@ -134,7 +135,7 @@ namespace Vocal {
                 return true;
             });
 
-            var viewstack = new Adw.ViewStack();
+            viewstack = new Adw.ViewStack();
 
             all_viewstack = new Adw.ViewStack();
             all_flowbox = new Gtk.FlowBox ();
@@ -186,6 +187,7 @@ namespace Vocal {
                 directory_view.load_top_podcasts.end(res);
             });
             var search_box = new SearchResultsView(app.library);
+
             viewstack.add_titled (all_viewstack, "Library", "Library");
             viewstack.add_titled (new_episodes_view, "New Episodes", "Fresh");
             viewstack.add_titled (directory_view, "Directory", "Directory");
@@ -442,6 +444,17 @@ namespace Vocal {
 
             hide_infobar();
 
+            search_box.podcast_selected.connect((podcast) => {
+                controller.highlighted_podcast = podcast;
+                show_details(podcast);
+            });
+
+            search_box.episode_selected.connect((podcast, episode) => {
+                controller.highlighted_podcast = podcast;
+                show_details(podcast);
+                podcast_view.highlight_episode(episode);
+            });
+
             controller.update_status_changed.connect((currently_updating) => {
                 if (!currently_updating) {
                     populate_views.begin((obj, res) => {
@@ -603,6 +616,7 @@ namespace Vocal {
         }
 
         private void show_details (Podcast podcast) {
+            viewstack.set_visible_child(all_viewstack);
             all_viewstack.set_visible_child(podcast_view);
             podcast_view.set_podcast.begin(podcast, (obj, res) => {
                 podcast_view.set_podcast.end(res);

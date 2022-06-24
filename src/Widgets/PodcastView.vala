@@ -239,7 +239,7 @@ namespace Vocal {
                 reset_episode_list ();
 
                 title.set_text(p.name);
-                description.set_text(p.description);
+                description.set_text(Utils.html_to_markup (p.description));
 
                 ImageCache image_cache = new ImageCache ();
                 image_cache.get_image_async.begin (p.remote_art_uri, (obj, res) => {

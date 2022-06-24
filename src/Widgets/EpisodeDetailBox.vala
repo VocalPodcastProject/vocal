@@ -312,3 +312,4 @@ namespace Vocal {
         }
     }
 }
+

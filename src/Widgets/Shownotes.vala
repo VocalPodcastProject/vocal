@@ -192,7 +192,7 @@ namespace Vocal {
         public void set_episode(Episode e) {
             episode = e;
             set_title(e.title);
-            set_html(e.description);
+            set_description(e.description);
             check_attributes();
         }
 
@@ -214,8 +214,8 @@ namespace Vocal {
             size_and_duration_label.label = "Size: %dMB Duration: %s".printf((int)(size / 1048576), episode.duration);
         }
 
-        public void set_html (string html) {
-            this.shownotes_label.label = html;
+        public void set_description (string description) {
+            this.shownotes_label.label = Utils.html_to_markup (description);
             shownotes_label.use_markup = true;
         }
 

@@ -19,7 +19,7 @@ namespace Vocal {
 
     public class SearchResultsView : Gtk.Box {
 
-        public signal void on_new_subscription (string url);
+        public signal void new_subscription (string url);
         public signal void episode_selected (Podcast podcast, Episode episode);
         public signal void podcast_selected (Podcast podcast);
 
@@ -209,7 +209,7 @@ namespace Vocal {
             foreach (DirectoryEntry c in c_matches) {
                 DirectoryArt a = new DirectoryArt (c.itunesUrl, c.title, c.artist, c.summary, c.artworkUrl600);
                 a.subscribe_button_clicked.connect ((url) => {
-                    on_new_subscription (url);
+                    new_subscription (url);
                 });
                 cloud_results_flowbox.append (a);
             }
@@ -292,7 +292,6 @@ namespace Vocal {
         private void on_episode_activated (Gtk.ListBoxRow row) {
             SearchResultBox selected = row.get_child() as SearchResultBox;
             episode_selected (selected.get_podcast (), selected.get_episode ());
-            warning(selected.get_podcast().name);
         }
 
         /*
@@ -301,7 +300,6 @@ namespace Vocal {
         private void on_podcast_activated (Gtk.ListBoxRow row) {
             SearchResultBox selected = row.get_child() as SearchResultBox;
             podcast_selected (selected.get_podcast ());
-            warning(selected.get_podcast().name);
         }
 
         private void hide_spinner () {

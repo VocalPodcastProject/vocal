@@ -101,6 +101,7 @@ namespace Vocal {
                 });
 
                 window.directory_view.new_subscription.connect(add_podcast_feed);
+                window.search_box.new_subscription.connect(add_podcast_feed);
 
                 // Set up the MPRIS playback functionality
                 MPRIS mpris = new MPRIS (this);
@@ -319,25 +320,21 @@ namespace Vocal {
                 return;
             }
 
-            info ("Adding feed %s", feed);
             currently_importing = true;
+
+            string add_feed = feed;
 
             // Was the RSS feed an iTunes URL? If so, find the actual RSS feed address
             if (feed.contains ("itunes.apple.com") || feed.contains("podcasts.apple.com")) {
-                string actual_rss = itunes.get_rss_from_itunes_url (feed);
-                if (actual_rss != null) {
-                    feed = actual_rss;
-                } else {
-                    return;
-                }
+                add_feed = itunes.get_rss_from_itunes_url (feed);
             }
 
             var win = this.active_window as MainWindow;
-            win.show_infobar("Adding new podcast: <b>" + feed + "</b>", Gtk.MessageType.INFO);
+            win.show_infobar("Adding new podcast: <b>" + add_feed + "</b>", Gtk.MessageType.INFO);
 
             bool success = false;
 
-            library.async_add_podcast_from_file.begin (feed, (obj, res) => {
+            library.async_add_podcast_from_file.begin (add_feed, (obj, res) => {
                 success = library.async_add_podcast_from_file.end (res);
                 currently_importing = false;
 

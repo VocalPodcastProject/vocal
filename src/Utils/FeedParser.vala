@@ -291,6 +291,7 @@ namespace Vocal {
          * Parses a given XML file and returns a new podcast object if able to parse it properly
          */
         public Podcast? get_podcast_from_file (string path) throws GLib.Error {
+
             /*
                 For reference: podcast rss feeds typically have the structure:
                 0. Rss

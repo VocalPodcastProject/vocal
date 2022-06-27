@@ -38,6 +38,8 @@ namespace Vocal {
         public QueueBox queue_box;
 
         private double rate;
+        private int last_secs_elapsed = 0;
+        private bool can_update = true;
 
         /*
          * Default constructor for a PlaybackBox
@@ -96,9 +98,10 @@ namespace Vocal {
             scale.set_value (0.0);
             scale.hexpand = true;
             scale.draw_value = false;
-            scale.width_request = 100;
+            scale.width_request = 75;
             scale.get_style_context ().add_class ("seekbar");
             scale.halign = Gtk.Align.FILL;
+
             left_time = new Gtk.Label ("0:00");
             right_time = new Gtk.Label ("0:00");
             left_time.width_chars = 6;
@@ -166,6 +169,7 @@ namespace Vocal {
             hide_info_title();
         }
 
+
         /*
          * Returns the percentage that the progress bar has been filled
          */
@@ -187,45 +191,56 @@ namespace Vocal {
         }
 
         public void set_position (uint64 position, uint64 duration) {
-            this.scale.set_value((double)((double)position / (double)duration));
 
-            int total_secs_remaining = (int) ((duration - position) / 1000000000);
-            int total_secs_elapsed = (int) ((position) / 1000000000);
+            if (can_update) {
 
-            int secs_remaining = total_secs_remaining % 60;
-            int secs_elapsed = total_secs_elapsed % 60;
+                this.scale.set_value((double)((double)position / (double)duration));
 
-            int mins_remaining = total_secs_remaining / 60;
-            int mins_elapsed = total_secs_elapsed / 60;
+                int total_secs_remaining = (int) ((duration - position) / 1000000000);
+                int total_secs_elapsed = (int) ((position) / 1000000000);
 
-            // Set the labels on either side of the scale
-            if (mins_remaining > 59) {
-                int hours_remaining = mins_remaining / 60;
-                mins_remaining = mins_remaining % 60;
-                right_time.set_text ("%02d:%02d:%02d".printf (hours_remaining, mins_remaining, secs_remaining));
+                if (total_secs_elapsed == last_secs_elapsed) {
+                    last_secs_elapsed = total_secs_elapsed;
+                    return;
+                }
+
+                last_secs_elapsed = total_secs_elapsed;
+
+                int secs_remaining = total_secs_remaining % 60;
+                int secs_elapsed = total_secs_elapsed % 60;
+
+                int mins_remaining = total_secs_remaining / 60;
+                int mins_elapsed = total_secs_elapsed / 60;
+
+                // Set the labels on either side of the scale
+                if (mins_remaining > 59) {
+                    int hours_remaining = mins_remaining / 60;
+                    mins_remaining = mins_remaining % 60;
+                    right_time.set_text ("%02d:%02d:%02d".printf (hours_remaining, mins_remaining, secs_remaining));
+                }
+                else {
+                    right_time.set_text ("%02d:%02d".printf (mins_remaining, secs_remaining));
+                }
+
+                if (mins_elapsed > 59) {
+                    int hours_elapsed = mins_elapsed / 60;
+                    mins_elapsed = mins_elapsed % 60;
+                    left_time.set_text ("%02d:%02d:%02d".printf (hours_elapsed, mins_elapsed, secs_elapsed));
+                }
+                else {
+                    left_time.set_text ("%02d:%02d".printf (mins_elapsed, secs_elapsed));
+                }
+
+                // Show the left and right labels
+                this.left_time.visible = false;
+                left_time.show ();
+
+                this.right_time.visible = false;
+                right_time.show ();
+
+                this.scale.visible = false;
+                scale.show ();
             }
-            else {
-                right_time.set_text ("%02d:%02d".printf (mins_remaining, secs_remaining));
-            }
-
-            if (mins_elapsed > 59) {
-                int hours_elapsed = mins_elapsed / 60;
-                mins_elapsed = mins_elapsed % 60;
-                left_time.set_text ("%02d:%02d:%02d".printf (hours_elapsed, mins_elapsed, secs_elapsed));
-            }
-            else {
-                left_time.set_text ("%02d:%02d".printf (mins_elapsed, secs_elapsed));
-            }
-
-            // Show the left and right labels
-            this.left_time.visible = false;
-            left_time.show ();
-
-            this.right_time.visible = false;
-            right_time.show ();
-
-            this.scale.visible = false;
-            scale.show ();
         }
 
         public void hide_info_title() {

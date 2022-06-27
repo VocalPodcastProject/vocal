@@ -38,10 +38,12 @@ namespace Vocal {
         private Adw.ViewStack all_viewstack;
         private Gtk.ScrolledWindow all_scrolled;
 
+
         private Gtk.InfoBar infobar;
         private Gtk.Label infobar_label;
 
         public DirectoryView directory_view;
+        public SearchResultsView search_box;
 
         public MainWindow (Vocal.Application app) {
             Object (application: app);
@@ -186,7 +188,7 @@ namespace Vocal {
             directory_view.load_top_podcasts.begin((obj,res) => {
                 directory_view.load_top_podcasts.end(res);
             });
-            var search_box = new SearchResultsView(app.library);
+            search_box = new SearchResultsView(app.library);
 
             viewstack.add_titled (all_viewstack, "Library", "Library");
             viewstack.add_titled (new_episodes_view, "New Episodes", "Fresh");

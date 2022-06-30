@@ -26,6 +26,7 @@ namespace Vocal {
         public signal void go_back ();
         public signal void play_episode_requested (Episode episode);
         public signal void add_all_new_to_queue (GLib.List<Episode> episodes);
+        public signal void mark_all_as_played (GLib.List<Episode> episodes);
 
         public NewEpisodesView (Application cont) {
             controller = cont;
@@ -48,9 +49,9 @@ namespace Vocal {
             new_episodes_scrolled.vexpand = true;
             new_episodes_listbox = new Gtk.ListBox ();
             new_episodes_listbox.get_style_context().add_class ("boxed-list");
+
             var add_all_to_queue_button = new Gtk.Button.with_label (_ ("Add all new episodes to the queue"));
             add_all_to_queue_button.halign = Gtk.Align.CENTER;
-            Utils.set_margins (add_all_to_queue_button, 12);
             add_all_to_queue_button.clicked.connect (() => {
                 GLib.List<Episode> episodes = new GLib.List<Episode> ();
                 for (int x = 0; ; x++) {
@@ -60,11 +61,33 @@ namespace Vocal {
                 }
                 add_all_new_to_queue (episodes);
             });
+
+
+            var mark_all_as_played_button = new Gtk.Button.with_label(_ ("Mark all as played"));
+            mark_all_as_played_button.clicked.connect(() => {
+                GLib.List<Episode> episodes = new GLib.List<Episode> ();
+                for (int x = 0; ; x++) {
+                    var e = (Episode) episodeListModel.get_item (x);
+                    if (e == null) { break; } // No more items
+                    episodes.append (e);
+                }
+                mark_all_as_played (episodes);
+
+                populate_episodes_list ();
+            });
+
             this.orientation = Gtk.Orientation.VERTICAL;
 
             new_episodes_scrolled.set_child (new_episodes_listbox);
             this.append(new_episodes_scrolled);
-            this.append(add_all_to_queue_button);
+
+            var button_box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
+            button_box.halign = Gtk.Align.CENTER;
+            Utils.set_margins(button_box, 12);
+            button_box.append(add_all_to_queue_button);
+            button_box.append(mark_all_as_played_button);
+
+            this.append(button_box);
             new_episodes_listbox.activate_on_single_click = false;
             new_episodes_listbox.row_activated.connect (on_row_activated);
 

@@ -184,6 +184,24 @@ namespace Vocal {
             });
 
             new_episodes_view = new NewEpisodesView(app);
+            new_episodes_view.add_all_new_to_queue.connect((episodes) => {
+                foreach (Episode e in episodes) {
+                    controller.library.enqueue_episode(e);
+                }
+            });
+
+            new_episodes_view.mark_all_as_played.connect((episodes) => {
+                foreach( Episode e in episodes) {
+                    controller.library.mark_episode_as_played(e);
+                }
+
+                populate_views.begin((obj, res) => {
+                    populate_views.end(res);
+                });
+            });
+
+
+
             directory_view = new DirectoryView(new iTunesProvider());
             directory_view.load_top_podcasts.begin((obj,res) => {
                 directory_view.load_top_podcasts.end(res);

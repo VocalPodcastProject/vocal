@@ -267,6 +267,30 @@ namespace Vocal {
             }
         }
 
+        private GLib.ListStore sort_podcasts (bool newest_first) {
+
+            GLib.ListStore elm = new GLib.ListStore ( typeof (Episode) );
+
+            foreach (Episode e in podcast.episodes) {
+                elm.insert_sorted (e, (a, b) => {
+                    var e1 = (Episode) a;
+                    var e2 = (Episode) b;
+                    if (e2.datetime_released == null) {
+                        if (e1.datetime_released == null) {
+                            return 0;
+                        }
+                        return -1;
+                    }
+                    if (newest_first) {
+                        return e2.datetime_released.compare (e1.datetime_released);
+                    } else {
+                        return e1.datetime_released.compare (e2.datetime_released);
+                    }
+                });
+            }
+            return elm;
+        }
+
         public void highlight_episode (Episode e) {
             current_episode = e;
             bool found = false;
@@ -298,15 +322,16 @@ namespace Vocal {
         private async void populate_episodes () {
             GLib.Idle.add(this.populate_episodes.callback);
 
-            foreach (Episode e in podcast.episodes) {
+            var liststore = sort_podcasts(controller.settings.newest_episodes_first);
+
+            for (int x = 0; ; x++) {
+                var e = (Episode) liststore.get_item (x);
+                if (e == null) { break; } // No more items
                 var episode_box = new EpisodeDetailBox (e, controller, false);
-                episodes.append(episode_box);
-                if(controller.settings.newest_episodes_first) {
-                    listbox.append(episode_box);
-                } else {
-                    listbox.prepend(episode_box);
-                }
+                episodes.append (episode_box);
+                listbox.append (episode_box);
             }
+
             yield;
         }
 

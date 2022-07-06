@@ -26,6 +26,7 @@ namespace Vocal {
         public signal void playback_status_changed (string status);
         public signal void additional_plugins_required (Gst.Message message);
         public signal void end_of_stream();
+        public signal void update_episode_position(Episode episode, uint64 position);
 
         private static Player? player = null;
         public static Player? get_default () {
@@ -112,6 +113,11 @@ namespace Vocal {
          * Sets the episode that is currently being played
          */
         public void set_episode (Episode episode) {
+
+            // Tell the controller we need to save the episode position
+            if(current_episode != null)
+                update_episode_position(current_episode, p.position);
+
             p.pause();
             p.stop();
             this.current_episode = episode;
@@ -120,10 +126,12 @@ namespace Vocal {
             } else {
                 set_uri(episode.playback_uri);
                 track_changed(episode.title, episode.parent.name, episode.parent.remote_art_uri, p.duration, episode.description);
-                p.play();
             }
 
-
+            // Start back at last played position
+            if(episode.last_played_position > 0) {
+                set_position(episode.last_played_position);
+            }
         }
 
         /*
@@ -138,9 +146,12 @@ namespace Vocal {
         /*
          * Sets the currently playing media position, in seconds
          */
-		public void set_position (double position) {
-		    var new_pos = (uint64) (p.duration * position);
-            p.seek(new_pos);
+		public void set_position (uint64 position) {
+		    p.seek(position);
+		}
+
+		public uint64 get_position () {
+		    return p.position;
 		}
 
 		public void set_percentage (double pos) {

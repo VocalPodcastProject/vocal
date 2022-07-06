@@ -42,6 +42,9 @@ namespace Vocal {
         // Fired when the queue changes
         public signal void queue_changed ();
 
+        // Fired after library has been refilled
+        public signal void library_ready ();
+
         public ArrayList<Podcast> podcasts;        // Holds all the podcasts in the library
 
         private Sqlite.Database db;                // The database
@@ -851,6 +854,8 @@ namespace Vocal {
             recount_unplayed ();
 
             yield;
+
+            library_ready();
         }
 
         public ArrayList<Podcast> find_matching_podcasts (string term) {
@@ -1007,9 +1012,9 @@ namespace Vocal {
                     }
                 }
                 else if (col_name == "latest_position") {
-                    int64 position = 0;
-                    if (int64.try_parse (val, out position)) {
-                        episode.last_played_position = (int)position;
+                    uint64 position = 0;
+                    if (uint64.try_parse (val, out position)) {
+                        episode.last_played_position = position;
                     }
                 }
                 else if (col_name == "parent_podcast_name") {

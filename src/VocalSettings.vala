@@ -140,6 +140,13 @@ namespace Vocal {
             set { settings.set_string("last-played-media", value);}
         }
 
+        public string last_queue_contents {
+            owned get {
+               return  settings.get_string("last-queue-contents");
+            }
+            set { settings.set_string("last-queue-contents", value);}
+        }
+
         public string theme_preference {
             owned get {
                return  settings.get_string("theme-preference");

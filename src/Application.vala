@@ -51,7 +51,6 @@ namespace Vocal {
 
         /* References, pointers, and containers */
 
-        public Episode current_episode;
         public Podcast highlighted_podcast;
 
         /* Miscellaneous global variables */
@@ -70,7 +69,7 @@ namespace Vocal {
                 { "quit", this.quit }
             };
             this.add_action_entries (action_entries, this);
-            this.set_accels_for_action ("app.quit", {"<primary>q"});
+            this.set_accels_for_action ("quit", {"<primary>q"});
         }
 
         public override void activate () {
@@ -82,7 +81,9 @@ namespace Vocal {
                 player = Vocal.Player.get_default ();
                 itunes = new iTunesProvider ();
                 library = new Library (this);
+                library.library_ready.connect(post_creation_sequence);
                 library.run_database_update_check ();
+                player.update_episode_position.connect(update_episode_position);
 
                 gpodder_client = gpodderClient.get_default_instance (this);
 
@@ -92,6 +93,11 @@ namespace Vocal {
                 // IMPORTANT NOTE: the player, library, and iTunes provider MUST exist before the MainWindow is created
                 win = new Vocal.MainWindow (this);
                 var window = win as MainWindow;
+
+                var actions = window.list_actions();
+                foreach (string action in actions) {
+                    warning (action);
+                }
 
                 // Connect signals
                 window.add_podcast.connect(() => {
@@ -136,20 +142,8 @@ namespace Vocal {
                 //library.import_status_changed.connect (window.on_import_status_changed);
 
                 if (!first_run) {
-
                     window.populate_views.begin ((obj, res) => {
                         window.populate_views.end(res);
-
-                        // Autoclean the library if necessary
-                        if (settings.autoclean_library) {
-                            info ("Performing library autoclean.");
-                            library.autoclean_library.begin ((obj,res) => {
-                                library.autoclean_library.end(res);
-                            });
-                        }
-
-                        info ("Controller initialization finished. Running post-creation sequence.");
-                        post_creation_sequence ();
                     });
 
                 } else {
@@ -167,6 +161,17 @@ namespace Vocal {
         }
 
         private void post_creation_sequence () {
+            warning ("Post creation");
+
+            restore_state();
+
+            // Autoclean the library if necessary
+            if (settings.autoclean_library) {
+                info ("Performing library autoclean.");
+                library.autoclean_library.begin ((obj,res) => {
+                    library.autoclean_library.end(res);
+                });
+            }
 
             // Set up the updating mechanism to trigger every 5 minutes
 
@@ -189,6 +194,15 @@ namespace Vocal {
                     return true;
                 });
             }
+
+            // Automatically save state every 5 seconds
+            GLib.Timeout.add (5000, () => {
+
+                save_state ();
+
+                return true;
+            });
+
 
 
             /*
@@ -409,5 +423,89 @@ namespace Vocal {
             }
         }
 
+        private void update_episode_position (Episode e, uint64 position) {
+            e.last_played_position = position;
+            library.set_episode_playback_position(e);
+        }
+
+        private void restore_state() {
+
+            var win = active_window as MainWindow;
+
+            // Restore playing episode
+            if (settings.last_played_media != null && settings.last_played_media.length > 1) {
+
+                // Split the media into two different strings
+                string[] fields = settings.last_played_media.split (",");
+                bool found = false;
+                foreach (Podcast podcast in library.podcasts) {
+                    if (!found) {
+                        if (podcast.name == fields[0]) {
+                            found = true;
+
+                            // Attempt to find the matching episode, set it as the current episode, and display the information in the box
+                            foreach (Episode episode in podcast.episodes) {
+                                if (episode.title == fields[01]) {
+                                    win.playbackbox.set_info_title(episode.title, episode.parent.name);
+                                    win.playbackbox.set_description(episode.description);
+                                    player.set_episode (episode);
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+
+            if (settings.last_queue_contents != null && settings.last_queue_contents.length > 1) {
+                // Items are separated by semicolons
+                string[] items = settings.last_queue_contents.split (";");
+                foreach (string item in items) {
+
+                    warning ("New item: " + item);
+
+                    // Get podcast and episode names
+                    string[] fields = item.split (",");
+                    bool found = false;
+                    foreach (Podcast podcast in library.podcasts) {
+                        if (!found) {
+                            if (podcast.name == fields[0]) {
+                                found = true;
+                                // Attempt to find the matching episode, set it as the current episode, and display the information in the box
+                                foreach (Episode episode in podcast.episodes) {
+                                    if (episode.title == fields[1]) {
+                                        warning (episode.title);
+                                        library.enqueue_episode (episode);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        private void save_state () {
+
+            // Save window geometry
+            settings.window_width = active_window.get_width();
+            settings.window_height = active_window.get_height();
+
+            // Write episode changes to db
+            if(player.current_episode != null && player.get_position() > 0) {
+                player.current_episode.last_played_position = player.get_position();
+                library.set_episode_playback_position(player.current_episode);
+
+                // Save current episode and queue
+                settings.last_played_media = player.current_episode.parent.name + "," + player.current_episode.title;
+                string queue_contents = "";
+                foreach(Episode e in library.queue) {
+                    queue_contents += e.parent.name + "," + e.title + ";";
+                }
+                settings.last_queue_contents = queue_contents;
+            }
+        }
     }
 }
+

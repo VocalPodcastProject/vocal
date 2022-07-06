@@ -29,9 +29,6 @@ int main (string[] args) {
     // Set the media role
     GLib.Environ.set_variable ({"PULSE_PROP_media.role"}, "audio", "true");
 
-    //var player = new StreamPlayer ();
-    //player.play ("https://www.podtrac.com/pts/redirect.mp3/feeds.soundcloud.com/stream/1254477532-scott-johnson-27-tms-2281-recreational-catnip.mp3?download=true");
-
     var app = new Vocal.Application ();
     return app.run (args);
 }

@@ -27,7 +27,7 @@ namespace Vocal {
         public string description = "";                 // the description/shownotes
         public string uri = "";                         // the remote location for the media file
         public string local_uri = "";                   // the local location for the media file, if any
-        public int last_played_position;             	// the latest position that has been played, in seconds
+        public uint64 last_played_position;             // the latest position that has been played
         public string date_released;                    // when the episode was released, in string form
         public string duration;                         // how long the episode is
 

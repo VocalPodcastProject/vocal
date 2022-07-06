@@ -28,7 +28,7 @@ namespace Vocal {
         private Gtk.FlowBox all_flowbox;
         private PodcastView podcast_view;
         private NewEpisodesView new_episodes_view;
-        private PlaybackBox playbackbox;
+        public PlaybackBox playbackbox;
 
         private Gtk.Button download_button;
         private Gtk.Box downloads_list;
@@ -60,7 +60,7 @@ namespace Vocal {
                 style_manager.color_scheme = Adw.ColorScheme.PREFER_LIGHT;
             }
 
-            this.set_default_size(750, 450);
+            this.set_default_size(controller.settings.window_width, controller.settings.window_height);
 
             var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
             this.set_content(box);
@@ -96,9 +96,6 @@ namespace Vocal {
                     border-bottom: 0.5px solid #8a9580;
                 }
 
-                .toolbar {
-
-                }
                 .squircle {
                     border-radius: 15px;
                 }
@@ -273,7 +270,7 @@ namespace Vocal {
             });
 
             playbackbox.position_changed.connect((pos) => {
-                controller.player.set_position(pos);
+                controller.player.set_percentage(pos);
             });
 
             controller.player.position_updated.connect((p, d) => {
@@ -509,6 +506,10 @@ namespace Vocal {
 
         public async void populate_views () {
 
+            GLib.Idle.add(populate_views.callback);
+
+            yield;
+
             if (!controller.currently_repopulating) {
 
                 info ("Populating the main podcast view.");
@@ -523,52 +524,10 @@ namespace Vocal {
                     all_art.clear ();
                 }
 
-                //TODO: Move this to the controller
-
-                info ("Restoring last played media.");
-                /* If the program was just launched, check to see what the last played media was
-                if (controller.newly_launched) {
-
-                    if (controller.settings.last_played_media != null && controller.settings.last_played_media.length > 1) {
-
-                        // Split the media into two different strings
-                        string[] fields = controller.settings.last_played_media.split (",");
-                        bool found = false;
-                        foreach (Podcast podcast in controller.library.podcasts) {
-
-                            if (!found) {
-                                if (podcast.name == fields[1]) {
-                                    found = true;
-
-                                    // Attempt to find the matching episode, set it as the current episode, and display the information in the box
-                                    foreach (Episode episode in podcast.episodes) {
-                                        if (episode.title == fields[0]) {
-                                            controller.current_episode = episode;
-                                            //toolbar.playback_box.set_info_title (controller.current_episode.title.replace ("%27", "'"), controller.current_episode.parent.name.replace ("%27", "'"));
-                                            //toolbar.playback_box.set_artwork_image_image (controller.current_episode.parent.coverart_uri);
-                                            //controller.track_changed (controller.current_episode.title, controller.current_episode.parent.name, controller.current_episode.parent.coverart_uri, (uint64) controller.player.duration);
-
-                                            try {
-
-                                                controller.player.set_episode (controller.current_episode);
-                                                //controller.player.set_position (controller.current_episode.last_played_position);
-                                                //artwork_popover.set_notes_text (episode.description);
-
-                                            } catch (Error e) {
-                                                warning (e.message);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                */
-
                 info ("Refilling library.");
                 controller.library.refill_library.begin ((obj,res) => {
                     controller.library.refill_library.end(res);
+
                     // Clear flags since we have an established controller.library at this point
                     controller.newly_launched = false;
                     controller.first_run = false;
@@ -576,7 +535,6 @@ namespace Vocal {
                     if(controller.library.podcasts.size > 0) {
                         all_viewstack.set_visible_child(all_scrolled);
                     }
-
 
                     foreach (Podcast podcast in controller.library.podcasts) {
                         CoverArt a = new CoverArt (podcast, true);
@@ -601,7 +559,6 @@ namespace Vocal {
 
                         all_art.add (a);
                         all_flowbox.append(a);
-
                     }
 
 
@@ -618,9 +575,8 @@ namespace Vocal {
                         playbackbox.set_description(episode.description);
                     });
                 });
-
-                yield;
             }
+
         }
 
         public void show_library() {
@@ -659,7 +615,7 @@ namespace Vocal {
          */
         public void export_podcasts () {
             //Create a new file chooser dialog and allow the user to import the save configuration
-            var file_chooser = new Gtk.FileChooserDialog ("Save Subscriptions to XML File",
+            var file_chooser = new Gtk.FileChooserDialog ("Save Subscriptions to OPML File",
                           this,
                           Gtk.FileChooserAction.SAVE,
                           _ ("Cancel"), Gtk.ResponseType.CANCEL,
@@ -705,11 +661,11 @@ namespace Vocal {
             controller.currently_importing = true;
             Gtk.FileChooserDialog file_chooser = null;
 
-            file_chooser = new Gtk.FileChooserDialog ("Save Subscriptions to XML File",
+            file_chooser = new Gtk.FileChooserDialog ("Import from OPML File",
                       this,
                       Gtk.FileChooserAction.OPEN,
                       _ ("Cancel"), Gtk.ResponseType.CANCEL,
-                      _ ("Save"), Gtk.ResponseType.ACCEPT);
+                      _ ("Open"), Gtk.ResponseType.ACCEPT);
 
             var all_files_filter = new Gtk.FileFilter ();
             all_files_filter.set_filter_name (_ ("All files"));
@@ -809,3 +765,4 @@ namespace Vocal {
         }
     }
 }
+

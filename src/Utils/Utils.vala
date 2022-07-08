@@ -317,7 +317,7 @@ public class Utils {
     }
 
     public static string get_shareable_link_for_episode (Vocal.Episode e) {
-        string output = "http://needleandthread.co/apps/vocal/simpleshare.html?podcastName=%s&artUri=%s&episodeTitle=%s&mediaUri=%s";  // vala-lint=line-length
+        string output = "http://vocalproject.net/simpleshare.html?type=episode&podcastName=%s&artUri=%s&episodeTitle=%s&mediaUri=%s";  // vala-lint=line-length
         string podcastName = GLib.Uri.escape_string (e.parent.name);
         string albumArt = e.parent.remote_art_uri;
         string episodeTitle = GLib.Uri.escape_string (e.title);

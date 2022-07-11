@@ -106,6 +106,7 @@ namespace Vocal {
                     if (pixbuf != null) {
                         image.clear ();
                         image.gicon = pixbuf;
+                        image.get_style_context().add_class("squircle");
                         image.show();
                     }
                 });
@@ -114,6 +115,7 @@ namespace Vocal {
                 image.margin_end = 12;
                 image.pixel_size = 75;
                 image.overflow = Gtk.Overflow.HIDDEN;
+                image.valign = Gtk.Align.CENTER;
                 image.get_style_context().add_class("squircle");
                 unplayed_box.append(image);
             }

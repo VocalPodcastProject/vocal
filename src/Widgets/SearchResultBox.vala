@@ -83,6 +83,8 @@ namespace Vocal {
                         image.clear ();
                         image.gicon = pixbuf;
                         image.pixel_size = 64;
+                        image.overflow = Gtk.Overflow.HIDDEN;
+                        image.get_style_context().add_class("squircle");
                         image.show();
                     }
                 });

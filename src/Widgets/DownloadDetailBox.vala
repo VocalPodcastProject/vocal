@@ -66,6 +66,9 @@ namespace Vocal {
                 if (pixbuf != null) {
                     image.clear ();
                     image.gicon = pixbuf;
+                    image.overflow = Gtk.Overflow.HIDDEN;
+                    image.valign = Gtk.Align.CENTER;
+                    image.get_style_context().add_class("squircle");
                     image.show();
                 }
             });

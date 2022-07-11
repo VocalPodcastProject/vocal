@@ -28,11 +28,12 @@ namespace Vocal {
 
         public QueueListRow (Episode episode) {
             this.episode = episode;
-
             box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 10);
-            box.margin_start = 10;
-            box.margin_end = 10;
             this.set_child (box);
+            box.margin_start = 12;
+            box.margin_end = 12;
+            box.margin_top = 6;
+            box.margin_bottom = 6;
 
             // Load the actual cover art
             var image = new Gtk.Image();
@@ -57,10 +58,14 @@ namespace Vocal {
                     35
                 ) + "..."
             );
+            title_label.max_width_chars = 30;
+            title_label.halign = Gtk.Align.START;
+            title_label.hexpand = true;
             box.append (title_label);
 
             Gtk.Button remove_button = new Gtk.Button.from_icon_name ("process-stop-symbolic");
             remove_button.set_tooltip_text (_ ("Remove episode from queue"));
+            remove_button.valign = Gtk.Align.CENTER;
 
             remove_button.clicked.connect (() => { remove_episode (episode); });
 

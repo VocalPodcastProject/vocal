@@ -39,10 +39,10 @@ namespace Vocal {
 
             scrolled_window = new Gtk.ScrolledWindow ();
             scrolled_window.set_size_request (400, 50);
+            scrolled_window.hscrollbar_policy = Gtk.PolicyType.NEVER;
 
-            scrolled_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 15);
+            scrolled_box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
             scrolled_window.set_child (scrolled_box);
-
             scrolled_box.append (label);
 
             this.append (scrolled_window);

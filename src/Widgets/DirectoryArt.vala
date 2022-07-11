@@ -112,7 +112,12 @@ namespace Vocal {
             });
             subscribe_button.valign = Gtk.Align.START;
 
-            details_box.append(summary_label);
+            var summary_scrolled = new Gtk.ScrolledWindow();
+            summary_label.width_request = 300;
+            summary_scrolled.child = summary_label;
+            summary_scrolled.hscrollbar_policy = Gtk.PolicyType.NEVER;
+
+            details_box.append(summary_scrolled);
             details_box.append(subscribe_button);
 
             var hor_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 0);

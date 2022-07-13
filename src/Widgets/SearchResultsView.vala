@@ -63,7 +63,7 @@ namespace Vocal {
             title_label.justify = Gtk.Justification.CENTER;
             title_label.hexpand = false;
             title_label.use_markup = true;
-            title_label.get_style_context ().add_class ("h2");
+            title_label.get_style_context ().add_class ("title-2");
 
             var local_episodes_label = new Gtk.Label (_ ("Episodes from Your Library"));
             var local_podcasts_label = new Gtk.Label (_ ("Podcasts from Your Library"));
@@ -73,6 +73,8 @@ namespace Vocal {
             local_episodes_label.margin_start = 12;
             local_podcasts_label.margin_end = 12;
             local_podcasts_label.margin_start = 12;
+            cloud_results_label.margin_start = 12;
+            cloud_results_label.margin_start = 12;
 
             local_episodes_label.get_style_context ().add_class ("title-3");
             local_episodes_label.set_property ("xalign", 0);
@@ -87,19 +89,24 @@ namespace Vocal {
             search_entry = new Gtk.SearchEntry ();
             search_entry.valign = Gtk.Align.CENTER;
             search_entry.halign = Gtk.Align.CENTER;
-            search_entry.margin_top  = 6;
-            search_entry.margin_bottom = 6;
+            search_entry.margin_top  = 12;
+            search_entry.margin_bottom = 12;
+            search_entry.max_width_chars = 40;
+            search_entry.placeholder_text= "Search Your Library and Online Sources";
             search_entry.activate.connect (() => {
                 this.search_term = search_entry.text;
                 title_label.label = _ ("Search Results for <i>%s</i>".printf (search_term));
                 reset ();
                 show_spinner ();
+
                 load_from_itunes.begin ((obj, res) => {
                     load_from_itunes.end(res);
+                    hide_spinner();
                 });
                 load_local_results.begin ((obj, res) => {
                     load_local_results.end(res);
                 });
+
             });
 
             this.append (search_entry);
@@ -109,6 +116,7 @@ namespace Vocal {
             var scrolled = new Gtk.ScrolledWindow ();
             scrolled.vexpand = true;
             content_box.append (title_label);
+            content_box.append (spinner);
             scrolled.set_child (content_box);
             this.append (scrolled);
 
@@ -131,10 +139,12 @@ namespace Vocal {
 
             no_local_episodes_label = new Gtk.Label (_ ("No matching episodes found in your library."));
             no_local_podcasts_label = new Gtk.Label (_ ("No matching podcasts found in your library."));
-            no_local_episodes_label.halign = Gtk.Align.CENTER;
-            no_local_podcasts_label.halign = Gtk.Align.CENTER;
-            no_local_episodes_label.get_style_context ().add_class ("title-3");
-            no_local_podcasts_label.get_style_context ().add_class ("title-3");
+            no_local_episodes_label.halign = Gtk.Align.START;
+            no_local_podcasts_label.halign = Gtk.Align.START;
+            no_local_episodes_label.margin_start = 12;
+            no_local_podcasts_label.margin_start = 12;
+            no_local_episodes_label.get_style_context ().add_class ("title-4");
+            no_local_podcasts_label.get_style_context ().add_class ("title-4");
 
 
             local_podcasts_revealer = new Gtk.Revealer ();
@@ -180,18 +190,18 @@ namespace Vocal {
         }
 
         private void reset () {
-            local_episodes_listbox.select_all();
-            local_podcasts_listbox.select_all();
-            cloud_results_flowbox.select_all();
-            foreach (Gtk.Widget a in local_episodes_listbox.get_selected_rows ()) {
-                local_episodes_listbox.remove (a);
+
+            while (local_episodes_listbox.get_row_at_index(0) != null) {
+                local_episodes_listbox.remove(local_episodes_listbox.get_row_at_index(0));
             }
-            foreach (Gtk.Widget b in local_podcasts_listbox.get_selected_rows ()) {
-                local_podcasts_listbox.remove (b);
+
+            while (local_podcasts_listbox.get_row_at_index(0) != null) {
+                local_podcasts_listbox.remove(local_podcasts_listbox.get_row_at_index(0));
             }
-            foreach (Gtk.Widget c in cloud_results_flowbox.get_selected_children ()) {
-                cloud_results_flowbox.remove (c);
+            while (cloud_results_flowbox.get_child_at_index(0) != null) {
+                cloud_results_flowbox.remove(cloud_results_flowbox.get_child_at_index(0));
             }
+
             local_podcasts_revealer.reveal_child = false;
             local_episodes_revealer.reveal_child = false;
             cloud_results_revealer.reveal_child = false;
@@ -203,7 +213,8 @@ namespace Vocal {
         private async void load_from_itunes () {
 
             GLib.Idle.add(load_from_itunes.callback);
-            show_spinner ();
+
+            yield;
 
             Gee.ArrayList<DirectoryEntry> c_matches = itunes.search_by_term (search_term);
             foreach (DirectoryEntry c in c_matches) {
@@ -214,15 +225,11 @@ namespace Vocal {
                 cloud_results_flowbox.append (a);
             }
 
-            yield;
-
             if (cloud_results_flowbox.get_child_at_index(0) != null) {
                 cloud_results_revealer.reveal_child = true;
             } else {
                 cloud_results_revealer.reveal_child = false;
             }
-
-            hide_spinner ();
 
         }
 
@@ -232,6 +239,9 @@ namespace Vocal {
         private async void load_local_results () {
 
             GLib.Idle.add(load_local_results.callback);
+
+            yield;
+
             Gee.ArrayList<Podcast> p_matches = new Gee.ArrayList<Podcast> ();
             Gee.ArrayList<Episode> e_matches = new Gee.ArrayList<Episode> ();
 
@@ -244,14 +254,6 @@ namespace Vocal {
                 e_matches.add_all (library.find_matching_episodes (search_term));
             }
 
-            yield;
-
-            // Actually load and show the results
-            foreach (Podcast p in p_matches) {
-                SearchResultBox srb = new SearchResultBox (p, null);
-                local_podcasts_listbox.append (srb);
-            }
-
             if (p_matches.size == 0) {
                 show_no_local_podcasts ();
                 hide_local_podcasts_listbox ();
@@ -260,6 +262,24 @@ namespace Vocal {
                 hide_no_local_podcasts ();
                 show_local_podcasts_listbox ();
             }
+
+            local_podcasts_revealer.reveal_child = true;
+
+            // Actually load and show the results
+            foreach (Podcast p in p_matches) {
+                SearchResultBox srb = new SearchResultBox (p, null);
+                local_podcasts_listbox.append (srb);
+            }
+
+            if (e_matches.size == 0) {
+                show_no_local_episodes ();
+                hide_local_episodes_listbox ();
+            } else {
+                hide_no_local_episodes ();
+                show_local_episodes_listbox ();
+            }
+
+            local_episodes_revealer.reveal_child = true;
 
             foreach (Episode e in e_matches) {
                 Podcast parent = null;
@@ -275,15 +295,7 @@ namespace Vocal {
                 }
             }
 
-            if (e_matches.size == 0) {
-                show_no_local_episodes ();
-                hide_local_episodes_listbox ();
-            } else {
-                hide_no_local_episodes ();
-                show_local_episodes_listbox ();
-            }
-            local_podcasts_revealer.reveal_child = true;
-            local_episodes_revealer.reveal_child = true;
+
         }
 
         /*

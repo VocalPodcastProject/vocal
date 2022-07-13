@@ -38,12 +38,7 @@ namespace Vocal {
          * Constructor for a box that contains a search result. SRs can be for a library episode, a library podcast, or
          * content on the iTunes Store
          */
-        public SearchResultBox (
-            Podcast? podcast,
-            Episode? episode,
-            string? details = null,
-            string? subscribe_url = null
-        ) {
+        public SearchResultBox (Podcast? podcast, Episode? episode, string? details = null, string? subscribe_url = null) {
 
             this.episode = episode;
             this.podcast = podcast;
@@ -51,6 +46,9 @@ namespace Vocal {
             this.subscribe_url = subscribe_url;
 
             this.orientation = Gtk.Orientation.VERTICAL;
+
+            this.margin_top = 6;
+            this.margin_bottom = 6;
 
             // If it's an iTunes URL, find its matching generic RSS URL and set that for the subscribe link
             if (subscribe_url != null && subscribe_url.contains ("itunes.apple")) {
@@ -62,10 +60,24 @@ namespace Vocal {
 
             var content_box = new Gtk.Box (Gtk.Orientation.HORIZONTAL, 5);
 
+            var image = new Gtk.Image();
+            ImageCache image_cache = new ImageCache ();
+            image_cache.get_image_async.begin (podcast.remote_art_uri, (obj, res) => {
+                Gdk.Pixbuf pixbuf = image_cache.get_image_async.end (res);
+                if (pixbuf != null) {
+                    image.clear ();
+                    image.gicon = pixbuf;
+                    image.pixel_size = 64;
+                    image.overflow = Gtk.Overflow.HIDDEN;
+                    image.get_style_context().add_class("squircle");
+                    image.show();
+                }
+            });
+
+            content_box.append(image);
+
             // Do we only have a podcast?
             if (episode == null) {
-
-
                 var label = new Gtk.Label (podcast.name.replace ("%27", "'"));
                 label.set_property ("xalign", 0);
                 label.ellipsize = Pango.EllipsizeMode.END;
@@ -74,23 +86,6 @@ namespace Vocal {
 
             // If not, then we have an episode, which requires more info to be displayed
             } else {
-
-                var image = new Gtk.Image();
-                ImageCache image_cache = new ImageCache ();
-                image_cache.get_image_async.begin (podcast.remote_art_uri, (obj, res) => {
-                    Gdk.Pixbuf pixbuf = image_cache.get_image_async.end (res);
-                    if (pixbuf != null) {
-                        image.clear ();
-                        image.gicon = pixbuf;
-                        image.pixel_size = 64;
-                        image.overflow = Gtk.Overflow.HIDDEN;
-                        image.get_style_context().add_class("squircle");
-                        image.show();
-                    }
-                });
-
-                content_box.append(image);
-
                 var box = new Gtk.Box (Gtk.Orientation.VERTICAL, 12);
                 box.hexpand = true;
                 box.margin_top = 6;

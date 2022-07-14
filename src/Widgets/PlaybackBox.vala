@@ -24,6 +24,7 @@ namespace Vocal {
         public signal void rate_changed(double rate);
         public signal void volume_changed(double vol);
         public signal void position_changed(double pos);
+        public signal void remove_episode_from_queue (Episode e);
 
         public Gtk.Label now_playing;
         public Gtk.Button info;
@@ -152,6 +153,9 @@ namespace Vocal {
             var queue_popover = new Gtk.Popover();
             queue_popover.set_parent(queue_button);
             queue_box = new QueueBox();
+            queue_box.remove_episode.connect((e) => {
+               remove_episode_from_queue(e);
+            });
             queue_popover.set_child(queue_box);
             queue_button.clicked.connect(() => {
                 queue_popover.popup ();

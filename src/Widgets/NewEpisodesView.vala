@@ -124,7 +124,6 @@ namespace Vocal {
             new_episodes_listbox.bind_model (elm, (item) => {
                 return new EpisodeDetailBox ((Episode) item, controller, true);
             });
-
         }
 
 
@@ -135,3 +134,4 @@ namespace Vocal {
         }
     }
 }
+

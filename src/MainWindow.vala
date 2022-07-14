@@ -273,6 +273,10 @@ namespace Vocal {
                 controller.player.set_percentage(pos);
             });
 
+            playbackbox.remove_episode_from_queue.connect((e) => {
+               controller.library.remove_episode_from_queue(e);
+            });
+
             controller.player.position_updated.connect((p, d) => {
                playbackbox.set_position(p, d);
             });

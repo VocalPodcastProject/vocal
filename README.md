@@ -4,7 +4,7 @@
 
 ### IMPORTANT NEWS
 
-**Vocal is currently being re-written for GTK and libadwaita**. A stable 4.0 release is planned for late June, or early July. Prior to this stable release, please hold off on submitting any issue reports or pull requests, as we work to get everything tidied up and things are rapidly changing. We will gladly accept issue reports and PRs as soon as the new stable release is ready. Thanks for your patience as we complete this near-total rewrite!
+**Vocal is currently being re-written for GTK and libadwaita**. A stable 4.0 release is planned to be released soon (we're putting the finishing touches on it). Prior to this stable release, please hold off on submitting any issue reports or pull requests, as we work to get everything tidied up and things are rapidly changing. We will gladly accept issue reports and PRs as soon as the new stable release is ready. Thanks for your patience as we complete this near-total rewrite!
 
 Want to know more about our big changes? [Please see here: https://gist.github.com/nathandyer/75bed6cfa0a7aaf0ae3a5f75c007e9b0](https://gist.github.com/nathandyer/75bed6cfa0a7aaf0ae3a5f75c007e9b0)
 <hr>

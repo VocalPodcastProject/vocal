@@ -121,12 +121,10 @@ namespace Vocal {
             p.pause();
             p.stop();
             this.current_episode = episode;
-            if (episode.playback_uri.contains("http")) {
-                stream_episode(episode.playback_uri);
-            } else {
-                set_uri(episode.playback_uri);
-                track_changed(episode.title, episode.parent.name, episode.parent.remote_art_uri, p.duration, episode.description);
-            }
+
+            set_uri(episode.playback_uri);
+            track_changed(episode.title, episode.parent.name, episode.parent.remote_art_uri, p.duration, episode.description);
+
 
             // Start back at last played position
             if(episode.last_played_position > 0) {
@@ -175,45 +173,6 @@ namespace Vocal {
          */
         public double get_volume () {
             return p.volume;
-        }
-
-        private void stream_episode (string uri) {
-
-            // The move to libsoup3.0 made streaming mega-crashy
-            // Switching to file-based streaming as a result
-
-            GLib.File remote_file = GLib.File.new_for_uri (uri);
-
-            remote_file.query_exists ();
-
-            string path = GLib.Environment.get_user_cache_dir () + "/stream";
-
-            GLib.File local_file = GLib.File.new_for_path (path);
-
-            bool exists = local_file.query_exists ();
-            if (exists) {
-                try {
-                    local_file.delete ();
-                    local_file = GLib.File.new_for_path (path);
-                } catch (Error e) {
-                    warning ("Unable to delete file.");
-                }
-            }
-
-
-
-            FileProgressCallback callback = streaming_delegate;
-            GLib.Cancellable cancellable = new GLib.Cancellable ();
-
-            remote_file.copy_async.begin (local_file, FileCopyFlags.OVERWRITE, 0, cancellable, callback, (obj, res) => {
-	            try {
-		            remote_file.copy_async.end (res);
-
-	            } catch (Error e) {
-		            warning ("Error: %s\n", e.message);
-	            }
-
-            });
         }
 
         /*

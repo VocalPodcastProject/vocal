@@ -138,9 +138,6 @@ namespace Vocal {
                     mediakeys.GrabMediaPlayerKeys ("vocal", 0);
                 } catch (Error e) { warning (e.message); }
 
-                // Connect the library's signals
-                //library.import_status_changed.connect (window.on_import_status_changed);
-
                 if (!first_run) {
                     window.populate_views.begin ((obj, res) => {
                         window.populate_views.end(res);
@@ -204,11 +201,11 @@ namespace Vocal {
             });
 
 
-
-            /*
         	// Get new subscriptions from gpodder.net
-		    if (!library.empty () && settings.gpodder_username != "") {
-		    	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
+        	//
+        	/*
+		    if (!library.empty () && settings.gpodder_username != "" && settings.gpodder_username.length > 1) {
+		    	win.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
 		    	var loop = new MainLoop();
             	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
 
@@ -254,7 +251,6 @@ namespace Vocal {
 	    	} else {
 	    	*/
             	//on_update_request ();
-
         	//}
         	//
 
@@ -463,8 +459,6 @@ namespace Vocal {
                 string[] items = settings.last_queue_contents.split (";");
                 foreach (string item in items) {
 
-                    warning ("New item: " + item);
-
                     // Get podcast and episode names
                     string[] fields = item.split (",");
                     bool found = false;
@@ -475,7 +469,6 @@ namespace Vocal {
                                 // Attempt to find the matching episode, set it as the current episode, and display the information in the box
                                 foreach (Episode episode in podcast.episodes) {
                                     if (episode.title == fields[1]) {
-                                        warning (episode.title);
                                         library.enqueue_episode (episode);
                                     }
                                 }
@@ -508,4 +501,3 @@ namespace Vocal {
         }
     }
 }
-

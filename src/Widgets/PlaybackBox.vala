@@ -54,9 +54,11 @@ namespace Vocal {
             this.get_style_context().add_class("toolbar");
 
             info = new Gtk.Button.from_icon_name ("dialog-information-symbolic");
-            info.tooltip_text = _ ("View the shownotes for this episode or check the queue");
+            info.tooltip_text = _ ("View the show notes for this episode");
 
             info_label = new Gtk.Label("Description");
+            info_label.max_width_chars = 40;
+            info_label.wrap = true;
 
             var info_popover = new Gtk.Popover();
             info_popover.set_parent(info);
@@ -191,7 +193,8 @@ namespace Vocal {
         }
 
         public void set_description(string description) {
-            info_label.set_text (description);
+            info_label.set_text (Utils.html_to_markup (description));
+            info_label.use_markup = true;
         }
 
         public void set_position (uint64 position, uint64 duration) {

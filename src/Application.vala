@@ -158,102 +158,99 @@ namespace Vocal {
         }
 
         private void post_creation_sequence () {
-            warning ("Post creation");
+            if(newly_launched) {
+                newly_launched = false;
 
-            restore_state();
+                warning ("Post creation");
 
-            // Autoclean the library if necessary
-            if (settings.autoclean_library) {
-                info ("Performing library autoclean.");
-                library.autoclean_library.begin ((obj,res) => {
-                    library.autoclean_library.end(res);
-                });
-            }
+                restore_state();
 
-            // Set up the updating mechanism to trigger every 5 minutes
+                // Autoclean the library if necessary
+                if (settings.autoclean_library) {
+                    info ("Performing library autoclean.");
+                    library.autoclean_library.begin ((obj,res) => {
+                        library.autoclean_library.end(res);
+                    });
+                }
 
-            // Set minutes elapsed to zero since the app is just now starting up
-            minutes_elapsed_in_period = 0;
+                // Set up the updating mechanism to trigger every 5 minutes
 
-            // Automatically check for new episodes
-            if (settings.update_interval != 0) {
+                // Set minutes elapsed to zero since the app is just now starting up
+                minutes_elapsed_in_period = 0;
 
-                //Increase count and check for match every 5 minutes
-                GLib.Timeout.add (300000, () => {
+                // Automatically check for new episodes
+                if (settings.update_interval != 0) {
 
-                    // The update interval increases/decreases by a step of 5 each time, so eventually
-                    // the current count will equal the update interval. When that happens, update.
-                    minutes_elapsed_in_period += 5;
-                    if (minutes_elapsed_in_period == settings.update_interval) {
-                        on_update_request ();
-                    }
+                    //Increase count and check for match every 5 minutes
+                    GLib.Timeout.add (300000, () => {
+
+                        // The update interval increases/decreases by a step of 5 each time, so eventually
+                        // the current count will equal the update interval. When that happens, update.
+                        minutes_elapsed_in_period += 5;
+                        if (minutes_elapsed_in_period == settings.update_interval) {
+                            on_update_request ();
+                        }
+
+                        return true;
+                    });
+                }
+
+                // Automatically save state every 5 seconds
+                GLib.Timeout.add (5000, () => {
+
+                    save_state ();
 
                     return true;
                 });
+
+
+            	// Get new subscriptions from gpodder.net
+		        if (!library.empty () && settings.gpodder_username != "" && settings.gpodder_username.length > 1) {
+		            var window = this.active_window as MainWindow;
+		        	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), Gtk.MessageType.INFO);
+
+                	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
+	                    string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
+            			library.add_from_OPML.begin (cloud_subs_opml, true, true, (obj, res) => {
+            			    library.add_from_OPML.end (res);
+
+            			    // Next, get any episode updates
+	                        window.show_infobar (_("Updating episode playback positions from your other devices…"), Gtk.MessageType.INFO);
+	                        gpodder_client.get_episode_updates_async.begin ((obj, res) => {
+
+	                        	bool? success = gpodder_client.get_episode_updates_async.end (res);
+
+	                        	// If necessary, remove podcasts from library that are missing in
+	                        	if (settings.gpodder_remove_deleted_podcasts) {
+
+	                        		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), Gtk.MessageType.INFO);
+
+	                        		// TODO: use a singleton pattern so there's only one instance
+	                        		FeedParser feed_parser = new FeedParser ();
+	                        		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
+	                        		foreach (Podcast p in library.podcasts) {
+	                        			bool found = false;
+	                        			foreach (string feed in cloud_feeds) {
+	                        				if (p.feed_uri == feed) {
+	                        					found = true;
+                        					}
+	                        			}
+	                        			if (!found) {
+	                        				// Remove podcast
+	                        				library.remove_podcast (p);
+	                        			}
+	                        		}
+	                        	}
+
+	                        	// Now update the actual feeds and quit the loop
+					            on_update_request ();
+	                        });
+            			});
+                    });
+	        	} else {
+                	on_update_request ();
+            	}
             }
-
-            // Automatically save state every 5 seconds
-            GLib.Timeout.add (5000, () => {
-
-                save_state ();
-
-                return true;
-            });
-
-
-        	// Get new subscriptions from gpodder.net
-        	//
-        	/*
-		    if (!library.empty () && settings.gpodder_username != "" && settings.gpodder_username.length > 1) {
-		    	win.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
-		    	var loop = new MainLoop();
-            	gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
-
-		                string cloud_subs_opml = gpodder_client.get_subscriptions_list_async.end (res);
-            			library.add_from_OPML (cloud_subs_opml, true, true);
-
-		                // Next, get any episode updates
-		                window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
-		                gpodder_client.get_episode_updates_async.begin ((obj, res) => {
-
-		                	bool? success = gpodder_client.get_episode_updates_async.end (res);
-
-		                	// If necessary, remove podcasts from library that are missing in
-		                	if (settings.gpodder_remove_deleted_podcasts) {
-
-		                		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
-
-		                		// TODO: use a singleton pattern so there's only one instance
-		                		FeedParser feed_parser = new FeedParser ();
-		                		string[] cloud_feeds = feed_parser.parse_feeds_from_OPML (cloud_subs_opml, true);
-		                		foreach (Podcast p in library.podcasts) {
-		                			bool found = false;
-		                			foreach (string feed in cloud_feeds) {
-		                				if (p.feed_uri == feed) {
-		                					found = true;
-	                					}
-		                			}
-		                			if (!found) {
-		                				// Remove podcast
-		                				library.remove_podcast (p);
-		                			}
-		                		}
-		                	}
-
-		                	// Now update the actual feeds and quit the loop
-						    on_update_request ();
-				            loop.quit();
-		                });
-
-                });
-                loop.run();
-
-	    	} else {
-	    	*/
-            	//on_update_request ();
-        	//}
-        	//
-
         }
 
         private void on_about_action () {
@@ -326,6 +323,7 @@ namespace Vocal {
          * Does the actual adding of podcast feeds
          */
         public void add_podcast_feed (string feed) {
+            var window = this.active_window as MainWindow;
             if (feed.length == 0) {
                 return;
             }
@@ -354,23 +352,17 @@ namespace Vocal {
                         win.populate_views.end(res);
                     });
 
-                    /*
-
                 	// Send update to gpodder API if necessary
-                	if (settings.gpodder_username != "") {
+                	if (settings.gpodder_username != "" && settings.gpodder_username.length > 1) {
 
                 		info (_("Uploading subscriptions to gpodder.net."));
-		            	var gpodder_loop = new MainLoop ();
-		            	window.show_infobar (_("Uploading subscriptions to gpodder.net…"), MessageType.INFO);
+
+		            	window.show_infobar (_("Uploading subscriptions to gpodder.net…"), Gtk.MessageType.INFO);
 		                gpodder_client.upload_subscriptions_async.begin ((obj, res) => {
 	                        gpodder_client.upload_subscriptions_async.end (res);
 	                        window.hide_infobar ();
-		                    gpodder_loop.quit ();
 		                });
-		                gpodder_loop.run ();
 	                }
-
-	                */
 
                     win.hide_infobar();
 

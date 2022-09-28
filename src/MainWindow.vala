@@ -326,7 +326,7 @@ namespace Vocal {
             var add_podcast_label = new Gtk.Label("Add podcast");
             var import_podcast_label = new Gtk.Label("Import podcasts");
             var export_podcast_label = new Gtk.Label("Export podcasts");
-            var sync_label = new Gtk.Label("Set Up Sync");
+            var sync_label = new Gtk.Label("Library Synchronization");
             var settings_label = new Gtk.Label("Preferences");
             var about_label = new Gtk.Label("About");
             var donate_label = new Gtk.Label("Buy the Developer a Coffee");

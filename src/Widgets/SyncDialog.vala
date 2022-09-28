@@ -216,8 +216,13 @@ namespace Vocal {
             remove_podcast_label.wrap = true;
             remove_podcast_label.max_width_chars = 30;
             remove_podcast_label.justify = Gtk.Justification.RIGHT;
+            remove_podcast_label.hexpand = true;
+            remove_podcast_label.halign = Gtk.Align.END;
+
             var remove_podcast_switch = new Gtk. Switch ();
             remove_podcast_switch.valign = Gtk.Align.CENTER;
+            remove_podcast_switch.hexpand = true;
+            remove_podcast_switch.halign = Gtk.Align.END;
 
             remove_podcast_switch.active = controller.settings.gpodder_remove_deleted_podcasts;
             remove_podcast_switch.activate.connect ( () => {
@@ -264,7 +269,8 @@ namespace Vocal {
         }
 
         private void on_full_sync_clicked () {
-        	//controller.window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
+            var window = controller.active_window as MainWindow;
+        	window.show_infobar (_("Checking for new podcast subscriptions from your other devices…"), MessageType.INFO);
         	var loop = new MainLoop();
         	controller.gpodder_client.get_subscriptions_list_async.begin ((obj, res) => {
 
@@ -274,7 +280,7 @@ namespace Vocal {
     			});
 
                 // Next, get any episode updates
-                //controller.window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
+                window.show_infobar (_("Updating episode playback positions from your other devices…"), MessageType.INFO);
                 controller.gpodder_client.get_episode_updates_async.begin ((obj, res) => {
 
                 	controller.gpodder_client.get_episode_updates_async.end (res);
@@ -282,7 +288,7 @@ namespace Vocal {
                 	// If necessary, remove podcasts from library that are missing in
                 	if (controller.settings.gpodder_remove_deleted_podcasts) {
 
-                		//controller.window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
+                		window.show_infobar (_("Cleaning up old subscriptions no longer in your gpodder.net account…"), MessageType.INFO);
 
                 		// TODO: use a singleton pattern so there's only one instance
                 		FeedParser feed_parser = new FeedParser ();
@@ -306,10 +312,10 @@ namespace Vocal {
                 	}
 
                 	// Update all the episode statuses
-                	//controller.window.show_infobar (_("Uploading all episode positions to gpodder.net…"), MessageType.INFO);
+                	window.show_infobar (_("Uploading all episode positions to gpodder.net…"), MessageType.INFO);
                 	controller.gpodder_client.update_all_episode_positions_async.begin ((obj, res) => {
                 		controller.gpodder_client.update_all_episode_positions_async.end (res);
-                		//controller.window.hide_infobar ();
+                		window.hide_infobar ();
                 		loop.quit ();
                 	});
                 });
